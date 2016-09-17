@@ -43,3 +43,4 @@ fp/*.js
 !src/fp/*.js
 testing/*.js
 !src/testing/*.js
+.npmrc

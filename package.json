@@ -1,5 +1,5 @@
 {
-  "name": "futility",
+  "name": "f-utility",
   "version": "1.0.0",
   "description": "utility / futility / useful? / pointfree?",
   "main": "index.js",
@@ -23,15 +23,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brekk/futility.git"
+    "url": "git+https://github.com/brekk/f-utility.git"
   },
   "keywords": [],
   "author": "brekk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/brekk/futility/issues"
+    "url": "https://github.com/brekk/f-utility/issues"
   },
-  "homepage": "https://github.com/brekk/futility#readme",
+  "homepage": "https://github.com/brekk/f-utility#readme",
   "dependencies": {
     "folktale": "^1.0.0-SNAPSHOT",
     "lodash": "^4.15.0"
