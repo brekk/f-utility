@@ -18,7 +18,8 @@
     "report": "istanbul report",
     "transpile": "babel src -d .",
     "build": "npm run cover",
-    "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'"
+    "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
