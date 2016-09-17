@@ -14,9 +14,9 @@
     "test-core": "npm run transpile && npm run test-es6",
     "test-faucet": "npm run test-core | ./node_modules/.bin/faucet",
     "test-log": "npm run test-core > test-output.log",
-    "cover": "nyc --exclude=node_modules --statements 100 --lines 100 --functions 100 --branches 90 -x=lib/**/*.js -x=tests/**/*.js --r=lcov --r=json --r=html --r=text --r=text-summary npm run test-faucet",
+    "cover": "nyc --exclude=node_modules --statements 100 --lines 100 --functions 100 --branches 90 -x=./**/*.js -x=tests/**/*.js --r=lcov --r=json --r=html --r=text --r=text-summary npm run test-faucet",
     "report": "istanbul report",
-    "transpile": "babel src -d lib",
+    "transpile": "babel src -d .",
     "build": "npm run cover",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'"
   },

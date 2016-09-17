@@ -26,6 +26,7 @@ export const namespace = curry(function _namespace(pkg, parts) {
  * @uses _debug
  * @uses namespace
  * @function debug
+ * @curried
  * @param {string} pkg - root path
  * @param {Array.string} parts - additional parts to add to the namespace
  * @return {function} debugInstance
