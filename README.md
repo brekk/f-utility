@@ -1,2 +1,2 @@
-# futulity
+# futility
 utilities
