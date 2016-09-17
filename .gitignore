@@ -35,8 +35,11 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
-lib
-./core
-./dev
-./fp
-./testing
+core/*.js
+!src/core/*.js
+dev/*.js
+!src/dev/*.js
+fp/*.js
+!src/fp/*.js
+testing/*.js
+!src/testing/*.js
