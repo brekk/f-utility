@@ -1,2 +1,3 @@
 # futility
-utilities
+
+A collection of common utilities
