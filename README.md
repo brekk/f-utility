@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/brekk/futility/tree/master.svg?style=shield&circle-token=55f2885e65a163dee6ea47f7aa1c71c81b0d552c)](https://circleci.com/gh/brekk/futility/tree/master)
+[![CircleCI](https://circleci.com/gh/brekk/futility.svg?style=shield&circle-token=a9ccfc426e684dc0537090caee2e300a4ad52c78)](https://circleci.com/gh/brekk/futility/tree/master)
 
 # futility
 
