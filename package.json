@@ -1,6 +1,6 @@
 {
   "name": "f-utility",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "utility / futility / useful? / pointfree?",
   "main": "index.js",
   "nyc": {
