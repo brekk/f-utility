@@ -48,7 +48,7 @@ export const wrapWithLog = curry(function _wrapWithLog(
   // impure
   return function _debugWrapper() {
     log(`# input`, arguments)
-    const outcome = fn(arguments)
+    const outcome = fn(...arguments)
     log(`# output`, outcome)
     return outcome
   }
