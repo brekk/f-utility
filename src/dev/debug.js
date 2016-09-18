@@ -1,8 +1,6 @@
 import _debug from 'debug'
 import curry from 'lodash/fp/curry'
-// import flow from 'lodash/fp/flow'
-
-const join = curry(function _join(delim, array) { return array.join(delim) })
+import {join} from '../fp/array'
 
 /**
  * Simple pattern for generating `"a:b:c"` from `("a", ["b": "c"])`.
@@ -85,5 +83,3 @@ export const namespaceAndAnnotate = curry(function _namespaceAndAnnotate(
  * @partiallyApplied namespaceAndAnnotate
  */
 export const annotate = namespaceAndAnnotate(_debug)
-
-export default annotate
