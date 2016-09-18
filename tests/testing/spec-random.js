@@ -75,7 +75,7 @@ test(`random.pick should take unwrapped values from objects`, (t) => {
   t.true(values(input).indexOf(picked) > -1)
   const output = iterate(3, () => random.pick(input))
   const [a, b, c] = output
-  t.true((a === b) && (a === c))
+  t.false((a === b) && (a === c))
 })
 
 test(`random.grab should take wrapped values from arrays`, (t) => {
