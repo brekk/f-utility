@@ -62,6 +62,23 @@ export const promiseToTask = (promise) => {
 
 /**
  * @namespace util.Task
+ * @function taskToPromise
+ * @desc convert a Task into a Promise
+ * @param {Task} task - a task
+ * @return {Promise} promise
+ */
+export const taskToPromise = (task) => {
+  return new Promise(function _taskToPromise(resolve, reject) {
+    if (task && task.fork) {
+      task.fork(reject, resolve)
+      return
+    }
+    return reject(`Unable to find fork method on supposed Task.`)
+  })
+}
+
+/**
+ * @namespace util.Task
  * @function taskify
  * @desc convert a node-style callback into a function which returns a Task
  * @param {function} func - a function which takes a node-style callback as its last param

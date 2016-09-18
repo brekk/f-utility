@@ -10,10 +10,10 @@
   },
   "scripts": {
     "test": "npm run lint && npm run build",
-    "test-es6": "ava --esnext ./tests/**/spec-*.js",
+    "test-es6": "ava",
     "test-core": "npm run transpile && npm run test-es6",
     "test-log": "npm run test-core > test-output.log",
-    "cover": "nyc --exclude=node_modules --exclude=tests --r=lcov --r=json --r=html --r=text --r=text-summary npm run test-core",
+    "cover": "nyc npm run test-core",
     "report": "istanbul report",
     "transpile": "babel src -d .",
     "build": "npm run cover",
@@ -23,6 +23,33 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brekk/f-utility.git"
+  },
+  "nyc": {
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 90,
+    "reporter": [
+      "lcov",
+      "json",
+      "html",
+      "text",
+      "text-summary"
+    ],
+    "exclude": [
+      "node_modules",
+      "tests",
+      "src/core/fs.js"
+    ],
+    "include": [
+      "src/*.js",
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "all": true,
+    "check-coverage": true
   },
   "ava": {
     "babel": "inherit",
@@ -37,8 +64,7 @@
       "src/*.js",
       "src/**/*.js"
     ],
-    "concurrency": 10,
-    "failFast": true
+    "concurrency": 10
   },
   "keywords": [],
   "author": "brekk",

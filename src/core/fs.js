@@ -1,4 +1,6 @@
+/* istanbul ignore next */
 import fs from 'fs'
+/* istanbul ignore next */
 import flow from 'lodash/fp/flow'
 
 /**

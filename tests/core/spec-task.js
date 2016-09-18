@@ -14,6 +14,7 @@ import {
   taskify,
   taskifyPromise,
   promiseToTask,
+  taskToPromise,
   writeFile,
   writeData,
   sequence
@@ -32,24 +33,25 @@ const randomPromise = (bool, eventualValue) => () => {
 }
 
 test(`Task.reject should always fail synchronous input task`, (t) => {
-  t.plan(2)
+  t.plan(4)
   t.is(typeof rejectTask, `function`, `Task.reject should be a function.`)
   const word = random.word(6)
   const rejecter = () => new TypeError(word)
   const output = rejectTask(rejecter())
-  output.fork((x) => {
-    t.is(x.message, word, `Task should return the correct error`)
-  })
+  t.is(typeof output, `object`)
+  t.is(typeof output.fork, `function`)
+  const p = taskToPromise(output)
+  t.throws(p)
 })
 
 test(`Task.resolve should always pass synchronous input task`, (t) => {
-  t.plan(2)
+  t.plan(4)
   t.is(typeof resolveTask, `function`, `Task.resolve should be a function.`)
   const word = random.word(6)
   const output = resolveTask(word)
-  output.fork((e) => {
-    throw e
-  }, (x) => {
+  t.is(typeof output, `object`)
+  t.is(typeof output.fork, `function`)
+  return taskToPromise(output).then((x) => {
     t.is(x, word, `Task.resolve should return the correct value`)
   })
 })
@@ -64,74 +66,76 @@ const nodeStyleCBFunction = curry((errorWord, val, fn) => {
 
 test(`Task.taskify should convert a node-style callback function to a Task-producing function`,
   (t) => {
-    t.plan(3)
+    t.plan(2)
     t.is(typeof taskify, `function`)
-    const errorWord = random.word(10)
-    const hook = nodeStyleCBFunction(errorWord)
-    const assert = {
-      aboutFailure: (e) => {
-        t.is(e.message, errorWord)
-      },
-      aboutSuccess: (o) => {
-        t.is(o, errorWord)
-      }
-    }
-    const failer = hook(true)
-    const taskStyleFailer = taskify(failer)
-    taskStyleFailer().fork(assert.aboutFailure, trace(`invalid success`))
+    const word = random.word(10)
+    const hook = nodeStyleCBFunction(word)
     const succeeder = hook(false)
     const taskStyleSucceeder = taskify(succeeder)
-    taskStyleSucceeder().fork(trace(`invalid failure`), assert.aboutSuccess)
+    return taskToPromise(taskStyleSucceeder()).then((o) => t.is(o, word))
   }
 )
 
-test.cb(
-  `Task.taskifyPromise should take a promise-returning function and make it return a Task`,
+test(`Task.taskify's resulting function should throw when the original callback would`, (t) => {
+  t.plan(2)
+  t.is(typeof taskify, `function`)
+  const word = random.word(10)
+  const hook = nodeStyleCBFunction(word)
+  const failer = hook(true)
+  const taskStyleFailer = taskify(failer)
+  t.throws(taskToPromise(taskStyleFailer()))
+})
+test(
+  `Task.taskifyPromise should take a good promise-returning function and make it return a Task`,
   (t) => {
-    t.plan(3)
+    t.plan(4)
     t.is(typeof taskifyPromise, `function`)
     const goodWord = random.word(10)
-    const badWord = random.word(10)
     const willPass = () => Promise.resolve(goodWord)
-    const willFail = () => Promise.reject(badWord)
-    taskifyPromise(willPass)().fork(t.fail, (word) => {
+    const task = taskifyPromise(willPass)()
+    t.is(typeof task, `object`)
+    t.is(typeof task.fork, `function`)
+    const p = taskToPromise(task)
+    return p.then((word) => {
       t.is(word, goodWord)
     })
-    taskifyPromise(willFail)().fork((word) => {
-      t.is(word, badWord)
-      t.end()
-    }, t.fail)
+  }
+)
+test(
+  `Task.taskifyPromise should take a bad promise-returning function and make it return a Task`,
+  (t) => {
+    t.plan(1)
+    const badWord = random.word(10)
+    const willFail = () => Promise.reject(badWord)
+    t.throws(taskToPromise(taskifyPromise(willFail)()))
   }
 )
 
-test.cb(`Task.promise should provide a task-interface given a promise`, (t) => {
-  t.plan(4)
-  t.is(typeof promiseToTask, `function`, `Task.promiseToTask should be a function`)
+test(`Task.taskToPromise should fail to convert non tasks`, (t) => {
+  t.plan(1)
+  t.throws(taskToPromise({}))
+})
+
+test(`Task.promiseToTask should not convert an invalid promise`, (t) => {
+  t.plan(2)
+  t.is(typeof promiseToTask, `function`)
+  t.throws(() => promiseToTask({}).fork((e) => { throw e }))
+})
+test(`Task.promiseToTask should convert an existing Promise into a Task`, (t) => {
+  t.plan(3)
   const word = random.word(10)
-  const alwaysPass = randomPromise(true, word)
-  const alwaysFail = randomPromise(false, word)
-  t.throws(
-    () => promiseToTask(false).fork((e) => { throw e }, id),
-    `Expected to be given a promise.`,
-    `Task.promiseToTask should throw when it receives not-a-promise.`
-  )
-  const alwaysPassTask = promiseToTask(alwaysPass())
-  console.log(`alwaysPassTask`, alwaysPassTask)
-  const alwaysFailTask = promiseToTask(alwaysFail())
-  alwaysPassTask.fork(id, (x) => {
-    t.is(x, word)
-  })
-  alwaysFailTask.fork((e) => {
-    t.is(e.message, word)
-    t.end()
-  }, id)
+  const x = Promise.resolve(word)
+  const t1 = promiseToTask(x)
+  t.is(typeof t1, `object`)
+  t.is(typeof t1.fork, `function`)
+  return taskToPromise(t1).then((value) => t.is(value, word)).catch(t.fail)
 })
 
 const crapout = curry((t, e) => {
   t.fail(`This method should be able to write a local file. ${e.toString()}`)
 })
 
-test.cb(`Task.writeFile should provide a task-interface for file writing`, (t) => {
+test(`Task.writeFile should provide a task-interface for file writing`, (t) => {
   t.plan(5)
   t.is(typeof writeFile, `function`, `Task.writeFile should be a function.`)
   const inputData = random.word(10)
@@ -143,24 +147,25 @@ test.cb(`Task.writeFile should provide a task-interface for file writing`, (t) =
     t.truthy(o)
     const value = fs.readFileSync(filename, `utf8`)
     t.is(value, inputData)
-    t.end()
   }
-  fileWritten.fork(crapout(t), success)
+  return taskToPromise(fileWritten).then(success)
 })
 
-test.cb(`Task.writeFile should know how to fold in existing Task values`, (t) => {
+test(`Task.writeFile should know how to fold in existing Task values`, (t) => {
   t.plan(2)
   const forkData = `butts`
   const filename = `./fixture2.txt`
   // const priorValue = fs.readFileSync(filename, `utf8`)
-  writeFile(filename, new Task((_, res) => {
-    res(forkData)
-  })).fork(crapout(t), (o) => {
+  const consumer = (o) => {
     t.truthy(o)
     const value = fs.readFileSync(filename, `utf8`)
     t.is(value, forkData)
-    t.end()
-  })
+  }
+  return taskToPromise(
+    writeFile(filename, new Task((_, res) => {
+      res(forkData)
+    })
+  )).then(consumer)
 })
 
 test.cb(`Task.writeData should be a curried wrapper for rejection`, (t) => {
@@ -180,32 +185,33 @@ const delayedTask = (input) => new Task((_, resolve) => {
   }, 1e2)
 })
 
-test.cb(`Task.sequence should provide a sequential interface for consuming a list of tasks`,
+test(`Task.sequence should provide a sequential interface for consuming a list of tasks`,
   (t) => {
-    t.plan(6)
+    t.plan(2)
     t.is(typeof sequence, `function`, `Task.sequence should be a function.`)
     const errorToThrow = `Expected to be given a list of tasks with fork methods.`
     t.throws(() => sequence([]).fork((e) => { throw e }), errorToThrow, `Should throw given [].`)
-    const words = {
-      one: random.word(10),
-      two: random.word(10),
-      three: random.word(10)
-    }
-    const input = [
-      delayedTask(words.one),
-      delayedTask(words.two),
-      delayedTask(words.three)
-    ]
-    const sequenceTask = sequence(input)
-    t.truthy(sequenceTask, `Task.sequence should return a Task`)
-    t.truthy(sequenceTask.fork, `Task.sequence should return a Task with a fork method`)
-    const fail = (e) => {
-      t.fail(`This case should not occur: ${e}`)
-    }
-    const succeed = (output) => {
-      t.truthy(output)
-      t.deepEqual(output, toArray(words))
-    }
-    sequenceTask.fork(fail, succeed)
   }
 )
+
+test(`Task.sequence should provide an interface for consuming sequential tasks`, (t) => {
+  t.plan(4)
+  const words = {
+    one: random.word(10),
+    two: random.word(10),
+    three: random.word(10)
+  }
+  const input = [
+    delayedTask(words.one),
+    delayedTask(words.two),
+    delayedTask(words.three)
+  ]
+  const sequenceTask = sequence(input)
+  t.truthy(sequenceTask, `Task.sequence should return a Task`)
+  t.truthy(sequenceTask.fork, `Task.sequence should return a Task with a fork method`)
+  const succeed = (output) => {
+    t.truthy(output)
+    t.deepEqual(output, toArray(words))
+  }
+  return taskToPromise(sequenceTask).then(succeed)
+})
