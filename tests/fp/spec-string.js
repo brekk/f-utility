@@ -1,32 +1,32 @@
-import test from 'tape'
+import test from 'ava'
 import {split, trim, trimmer} from '../../src/fp/string'
 
-test(`string.split must be an fp version of str.prototype.split`, (assert) => {
+test(`string.split must be an fp version of str.prototype.split`, (t) => {
   const delim = `,`
   const input = `a,b,c`
-  assert.plan(3)
-  assert.equal(typeof split, `function`)
+  t.plan(3)
+  t.is(typeof split, `function`)
   const partial = split(delim)
-  assert.equal(typeof partial, `function`)
+  t.is(typeof partial, `function`)
   const output = partial(input)
-  assert.same(output, `abc`.split(``))
-  assert.end()
+  t.deepEqual(output, `abc`.split(``))
+  
 })
 
-test(`string.trim must be an fp version of str.prototype.trim`, (assert) => {
+test(`string.trim must be an fp version of str.prototype.trim`, (t) => {
   const input = `   a    `
-  assert.plan(2)
-  assert.equal(typeof trim, `function`)
+  t.plan(2)
+  t.is(typeof trim, `function`)
   const output = trim(input)
-  assert.equal(output, `a`)
-  assert.end()
+  t.is(output, `a`)
+  
 })
 
-test(`string.trimmer must be mapped form of string.trim`, (assert) => {
+test(`string.trimmer must be mapped form of string.trim`, (t) => {
   const input = [`   a    `, `   b`, `  c      `, `d    `]
-  assert.plan(2)
-  assert.equal(typeof trimmer, `function`)
+  t.plan(2)
+  t.is(typeof trimmer, `function`)
   const output = trimmer(input)
-  assert.same(output, `abcd`.split(``))
-  assert.end()
+  t.deepEqual(output, `abcd`.split(``))
+  
 })

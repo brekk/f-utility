@@ -44,3 +44,4 @@ fp/*.js
 testing/*.js
 !src/testing/*.js
 .npmrc
+fixture*
