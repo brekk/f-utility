@@ -10,20 +10,35 @@
   },
   "scripts": {
     "test": "npm run lint && npm run build",
-    "test-es6": "babel-tape-runner \"tests/**/spec-*.js\"",
+    "test-es6": "ava --esnext ./tests/**/spec-*.js",
     "test-core": "npm run transpile && npm run test-es6",
-    "test-faucet": "npm run test-core | ./node_modules/.bin/faucet",
     "test-log": "npm run test-core > test-output.log",
-    "cover": "nyc --exclude=node_modules --statements 100 --lines 100 --functions 100 --branches 90 -x=./**/*.js -x=tests/**/*.js --r=lcov --r=json --r=html --r=text --r=text-summary npm run test-faucet",
+    "cover": "nyc --exclude=node_modules --exclude=tests --r=lcov --r=json --r=html --r=text --r=text-summary npm run test-core",
     "report": "istanbul report",
     "transpile": "babel src -d .",
     "build": "npm run cover",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'",
-    "prepublish": "npm run build"
+    "publish": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brekk/f-utility.git"
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": [
+      "babel-register"
+    ],
+    "files": [
+      "tests/*.js",
+      "tests/**/*.js"
+    ],
+    "source": [
+      "src/*.js",
+      "src/**/*.js"
+    ],
+    "concurrency": 10,
+    "failFast": true
   },
   "keywords": [],
   "author": "brekk",
@@ -37,15 +52,18 @@
     "lodash": "^4.15.0"
   },
   "devDependencies": {
+    "ava": "^0.16.0",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-eslint": "^6.1.2",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-es2015-destructuring": "^6.9.0",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-2": "^6.13.0",
     "babel-register": "^6.14.0",
-    "babel-tape-runner": "^2.0.1",
     "chalk": "^1.1.3",
     "eslint": "^3.5.0",
     "eslint-config-standard": "^6.0.0",
@@ -58,7 +76,6 @@
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
     "must": "^0.13.2",
-    "nyc": "^8.1.0",
-    "tape": "^4.6.0"
+    "nyc": "^8.1.0"
   }
 }

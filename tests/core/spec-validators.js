@@ -1,4 +1,4 @@
-import test from 'tape'
+import test from 'ava'
 
 import id from 'lodash/fp/identity'
 import keys from 'lodash/fp/keys'
@@ -36,94 +36,94 @@ const getInvalid = curry((obj, toOmit) => {
 })
 const getInvalidInput = getInvalid(inputs)
 
-test(`isType.string should be a type assertion method`, (assert) => {
-  assert.plan(7)
-  assert.equal(typeof isType, `object`)
-  assert.equal(typeof isType.string, `function`)
-  assert.ok(isType.string(``))
-  assert.notOk(isType.string(null))
-  assert.notOk(isType.string(1))
-  assert.notOk(isType.string(false))
-  assert.notOk(isType.string({}))
-  assert.end()
+test(`isType.string should be a type assertion method`, (t) => {
+  t.plan(7)
+  t.is(typeof isType, `object`)
+  t.is(typeof isType.string, `function`)
+  t.truthy(isType.string(``))
+  t.falsy(isType.string(null))
+  t.falsy(isType.string(1))
+  t.falsy(isType.string(false))
+  t.falsy(isType.string({}))
+  
 })
-test(`isType.number should be a type assertion method`, (assert) => {
-  assert.plan(5)
-  assert.equal(typeof isType.number, `function`)
-  assert.ok(isType.number(1))
-  assert.notOk(isType.number(null))
-  assert.notOk(isType.number({}))
-  assert.notOk(isType.number(false))
-  assert.end()
+test(`isType.number should be a type assertion method`, (t) => {
+  t.plan(5)
+  t.is(typeof isType.number, `function`)
+  t.truthy(isType.number(1))
+  t.falsy(isType.number(null))
+  t.falsy(isType.number({}))
+  t.falsy(isType.number(false))
+  
 })
-test(`isType.object should be a type assertion method`, (assert) => {
-  assert.plan(5)
-  assert.equal(typeof isType.object, `function`)
-  assert.ok(isType.object({}))
-  assert.ok(isType.object(null))
-  assert.notOk(isType.object(1))
-  assert.notOk(isType.object(false))
-  assert.end()
+test(`isType.object should be a type assertion method`, (t) => {
+  t.plan(5)
+  t.is(typeof isType.object, `function`)
+  t.truthy(isType.object({}))
+  t.truthy(isType.object(null))
+  t.falsy(isType.object(1))
+  t.falsy(isType.object(false))
+  
 })
-test(`isType.boolean should be a type assertion method`, (assert) => {
-  assert.plan(6)
-  assert.equal(typeof isType.boolean, `function`)
-  assert.ok(isType.boolean(true))
-  assert.ok(isType.boolean(false))
-  assert.notOk(isType.boolean(null))
-  assert.notOk(isType.boolean({}))
-  assert.notOk(isType.boolean(-222))
-  assert.end()
+test(`isType.boolean should be a type assertion method`, (t) => {
+  t.plan(6)
+  t.is(typeof isType.boolean, `function`)
+  t.truthy(isType.boolean(true))
+  t.truthy(isType.boolean(false))
+  t.falsy(isType.boolean(null))
+  t.falsy(isType.boolean({}))
+  t.falsy(isType.boolean(-222))
+  
 })
-test(`isType.fn should be a type assertion method`, (assert) => {
-  assert.plan(5)
-  assert.equal(typeof isType.fn, `function`)
+test(`isType.fn should be a type assertion method`, (t) => {
+  t.plan(5)
+  t.is(typeof isType.fn, `function`)
   const noop = () => null
-  assert.ok(isType.fn(noop))
-  assert.notOk(isType.fn(null))
-  assert.notOk(isType.fn({}))
-  assert.notOk(isType.fn(-222))
-  assert.end()
+  t.truthy(isType.fn(noop))
+  t.falsy(isType.fn(null))
+  t.falsy(isType.fn({}))
+  t.falsy(isType.fn(-222))
+  
 })
-test(`isType.array should be a type assertion method`, (assert) => {
-  assert.plan(6)
-  assert.equal(typeof isType.array, `function`)
-  assert.ok(isType.array([]))
-  assert.notOk(isType.array(null))
-  assert.notOk(isType.array({}))
-  assert.notOk(isType.array(-222))
-  assert.notOk(isType.array(false))
-  assert.end()
-})
-
-test(`isValid should be an object whose methods are null-safe type assertions`, (assert) => {
-  assert.plan(6)
-  assert.equal(typeof isValid, `object`)
-  assert.equal(typeof isValid.string, `function`)
-  assert.equal(typeof isValid.number, `function`)
-  assert.equal(typeof isValid.object, `function`)
-  assert.equal(typeof isValid.fn, `function`)
-  assert.equal(typeof isValid.array, `function`)
-  assert.end()
+test(`isType.array should be a type assertion method`, (t) => {
+  t.plan(6)
+  t.is(typeof isType.array, `function`)
+  t.truthy(isType.array([]))
+  t.falsy(isType.array(null))
+  t.falsy(isType.array({}))
+  t.falsy(isType.array(-222))
+  t.falsy(isType.array(false))
+  
 })
 
-const testMethod = curry((methodName, assert) => {
+test(`isValid should be an object whose methods are null-safe type assertions`, (t) => {
+  t.plan(6)
+  t.is(typeof isValid, `object`)
+  t.is(typeof isValid.string, `function`)
+  t.is(typeof isValid.number, `function`)
+  t.is(typeof isValid.object, `function`)
+  t.is(typeof isValid.fn, `function`)
+  t.is(typeof isValid.array, `function`)
+  
+})
+
+const testMethod = curry((methodName, t) => {
   // const isntArray = methodName !== `array`
   const method = isValid[methodName]
   const failee = getInvalidInput(methodName)()
   const failureObj = method(failee)
-  assert.plan(7)
-  assert.ok(failureObj)
-  assert.ok(failureObj.isFailure)
-  assert.ok(failureObj.value)
-  assert.same(failureObj.value, [`Expected typeof thing to equal '${methodName}'.`])
+  t.plan(7)
+  t.truthy(failureObj)
+  t.truthy(failureObj.isFailure)
+  t.truthy(failureObj.value)
+  t.deepEqual(failureObj.value, [`Expected typeof thing to equal '${methodName}'.`])
   const value = inputs[methodName]
   const rawValue = value()
   const successObj = method(rawValue)
-  assert.ok(successObj)
-  assert.notOk(successObj.isFailure)
-  assert.same(successObj.value, rawValue)
-  assert.end()
+  t.truthy(successObj)
+  t.falsy(successObj.isFailure)
+  t.deepEqual(successObj.value, rawValue)
+  
 })
 test(`isValid.object should test objects`, testMethod(`object`))
 test(`isValid.number should test numbers`, testMethod(`number`))
@@ -131,27 +131,27 @@ test(`isValid.boolean should test booleans`, testMethod(`boolean`))
 test(`isValid.fn should test functions`, testMethod(`fn`))
 test(`isValid.array should test arrays`, testMethod(`array`))
 
-test(`splitters should be function which expects a boolean and returns an object`, (assert) => {
-  assert.plan(6)
-  assert.equal(typeof splitters, `function`)
+test(`splitters should be function which expects a boolean and returns an object`, (t) => {
+  t.plan(6)
+  t.is(typeof splitters, `function`)
   const output = splitters(true)
-  assert.equal(typeof output.string, `function`)
-  assert.equal(typeof output.number, `function`)
-  assert.equal(typeof output.object, `function`)
-  assert.equal(typeof output.fn, `function`)
-  assert.equal(typeof output.array, `function`)
-  assert.end()
+  t.is(typeof output.string, `function`)
+  t.is(typeof output.number, `function`)
+  t.is(typeof output.object, `function`)
+  t.is(typeof output.fn, `function`)
+  t.is(typeof output.array, `function`)
+  
 })
 
-const assertAboutSplitter = curry((asIndicies, methodName, assert) => {
+const assertAboutSplitter = curry((asIndicies, methodName, t) => {
   const splitterObject = splitters(asIndicies)
   const method = splitterObject[methodName]
   const failee = getInvalidInput(methodName)()
   const valid = inputs[methodName]
   const output = method([valid, failee])
-  assert.plan(1)
-  assert.ok(output)
-  assert.end()
+  t.plan(1)
+  t.truthy(output)
+  
 })
 
 test(`isValidSplitter.object should validate a list of objects as indices`,

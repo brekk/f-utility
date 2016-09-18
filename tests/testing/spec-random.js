@@ -1,11 +1,13 @@
-import test from 'tape'
-import curry from 'lodash/fp/curry'
-import equals from 'lodash/fp/equals'
+import test from 'ava'
+// import curry from 'lodash/fp/curry'
+import map from 'lodash/fp/map'
+import keys from 'lodash/fp/keys'
+// import equals from 'lodash/fp/equals'
+import values from 'lodash/fp/values'
 import random from '../../src/testing/random'
 import {iterate} from '../../src/fp/iterate'
 import {mergePairs} from '../../src/fp/merge-pairs'
 
-const oneToAThousand = () => Math.floor(Math.random() * 1e3) + 1
 const characters = [
   `abcdefghijklmnopqrstuvwxyz`,
   `ABCDEFGHIJKLMNOPQRSTUVWXYZ`,
@@ -18,190 +20,104 @@ const charactersAsObjectList = mergePairs(characters.map((x, index) => {
   return [`_` + x, index]
 }))
 
-const aggregateValuesForFunction = curry(function _aggregateValues(
-  t, testingFn, args, assert, assertionsPerIteration
-) {
-  const doitHowManyTimes = oneToAThousand() // min 1
-  t.plan((doitHowManyTimes * assertionsPerIteration) + 1)
-  t.equal(typeof random, `function`)
-  const runner = iterate(doitHowManyTimes)
-  let last = -1
-  const randomTest = () => {
-    const x = Array.isArray(args) ?
-      testingFn(...args) :
-      testingFn(args)
-    assert(x, last)
-    last = x
-  }
-  runner(randomTest)
-  t.end()
-})
-
 test(`random should return a random number`, (t) => {
-  const innerPlan = 2
-  aggregateValuesForFunction(t, random, 1e5, (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.equal(typeof x, `number`)
-    t.notEqual(x, last)
-  }, innerPlan)
+  t.plan(2)
+  t.is(typeof random, `function`)
+  // we can get zeroes, so add one here
+  t.is(typeof random(5), `number`)
 })
 
 test(`random.shuffle should shuffle a list`, (t) => {
   t.plan(2)
-  t.equal(typeof random.shuffle, `function`)
+  t.is(typeof random.shuffle, `function`)
   const makeInteger = () => random(1e3)
   const total = 10
   const list = iterate(total, makeInteger)
   const shuffled = random.shuffle(list)
-  t.notSame(list, shuffled)
-  t.end()
+  t.notDeepEqual(list, shuffled)
 })
 
 test(`random.floor should return a random number floored`, (t) => {
-  const innerPlan = 2
-  aggregateValuesForFunction(t, random.floor, 1e5, (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.equal(typeof x, `number`)
-    t.notEqual(x, last)
-  }, innerPlan)
+  t.plan(2)
+  t.is(typeof random.floor, `function`)
+  const [a, b, c] = map(random.floor, [10, 10, 10])
+  // I think this should be highly unlikely that three invocations return the same value?
+  t.false((a === b) && (b === c))
 })
 
 test(`random.floorMin should return a random number floored with a minimum`, (t) => {
-  const innerPlan = 3
-  const addition = random.floor(100) + 5
-  const args = [addition, 1e5]
-  aggregateValuesForFunction(t, random.floorMin, args, (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.equal(typeof x, `number`)
-    t.ok(x > addition)
-    t.notEqual(x, last)
-  }, innerPlan)
+  t.plan(2)
+  t.is(typeof random.floorMin, `function`)
+  const [a, b, c] = map(random.floorMin, [10, 10, 10])
+  t.false((a === b) && (b === c))
 })
 
 test(`random.take should fail when given a non-boolean "isWrapped" value`, (t) => {
   t.plan(2)
-  t.equal(typeof random.take, `function`)
+  t.is(typeof random.take, `function`)
   t.throws(() => random.take(`whatever`, {}), `Expected useWrapped to be a boolean.`)
-  t.end()
 })
 
 test(`random.pick should take unwrapped values from arrays`, (t) => {
   const input = characters
-  const innerPlan = 2
-  let failures = 0
-  const threshold = 15
-  aggregateValuesForFunction(t, random.pick, [input], (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.ok(input.indexOf(x) > -1)
-    if (!equals(x, last)) {
-      t.notSame(x, last)
-    } else {
-      failures = failures + 1
-      // we're doing a thing here which *should* allow us to more reliably prove that this thing
-      // is relatively random from run to run, but given the small input set here, we need to have
-      // a failure threshold we can use to resolve test flake
-      if (failures > threshold) {
-        t.fail()
-      } else {
-        t.pass(`failed random.pick.arrays ${failures} times, still above threshold`)
-      }
-    }
-  }, innerPlan)
+  t.plan(3)
+  t.is(typeof random.pick, `function`)
+  const picked = random.pick(input)
+  t.true(input.indexOf(picked) > -1)
+  const [a, b, c] = iterate(3, () => random.pick(input))
+  t.false((a === b) && (b === c))
 })
 
 test(`random.pick should take unwrapped values from objects`, (t) => {
   const input = charactersAsObjectList
-  const innerPlan = 2
-  let failures = 0
-  const threshold = 15
-  aggregateValuesForFunction(t, random.pick, input, (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.ok(Object.values(input).indexOf(x) > -1)
-    if (!equals(x, last)) {
-      t.notSame(x, last)
-    } else {
-      failures = failures + 1
-      // we're doing a thing here which *should* allow us to more reliably prove that this thing
-      // is relatively random from run to run, but given the small input set here, we need to have
-      // a failure threshold we can use to resolve test flake
-      if (failures > threshold) {
-        t.fail()
-      } else {
-        t.pass(`failed random.pick.objects ${failures} times, still above threshold`)
-      }
-    }
-  }, innerPlan)
+  t.plan(2)
+  const picked = random.pick(input)
+  t.true(values(input).indexOf(picked) > -1)
+  const output = iterate(3, () => random.pick(input))
+  const [a, b, c] = output
+  t.false((a === b) && (a === c))
 })
 
 test(`random.grab should take wrapped values from arrays`, (t) => {
   const input = characters
-  const innerPlan = 1
-  let failures = 0
-  const threshold = 15
-  aggregateValuesForFunction(t, random.grab, [input], (x, last) => {
-    console.log(`inputs`, x[0], last[0])
-    // innerPlan should match the number of assertions here
-    if (!equals(x[0], last[0])) {
-      t.notSame(x[0], last[0])
-    } else {
-      failures = failures + 1
-      // we're doing a thing here which *should* allow us to more reliably prove that this thing
-      // is relatively random from run to run, but given the small input set here, we need to have
-      // a failure threshold we can use to resolve test flake
-      if (failures > threshold) {
-        t.fail()
-      } else {
-        t.pass(`failed random.grab.arrays ${failures} times, still above threshold`)
-      }
-    }
-  }, innerPlan)
+  t.plan(3)
+  t.is(typeof random.grab, `function`)
+  const picked = random.grab(input)
+  t.true(input.indexOf(picked[0]) > -1)
+  const [[a], [b], [c]] = iterate(3, () => random.grab(input))
+  t.false((a === b) && (b === c))
+})
+
+test(`random.word should throw when given a non number`, (t) => {
+  // t.plan(1)
+  t.throws(() => random.word(false))
+})
+
+test(`random.word should return a random concatenation of letters`, (t) => {
+  t.plan(3)
+  t.is(typeof random.word, `function`)
+  const length = random.floorMin(1, 50)
+  const invoked = random.word(length)
+  t.is(invoked.length, length)
+  t.is(typeof invoked, `string`)
 })
 
 test(`random.grab should take wrapped values from objects`, (t) => {
   const input = charactersAsObjectList
-  const innerPlan = 1
-  let failures = 0
-  const threshold = 15
-  aggregateValuesForFunction(t, random.grab, [input], (x, last) => {
-    // innerPlan should match the number of assertions here
-    if (!equals(x, last)) {
-      t.notSame(x, last)
-    } else {
-      failures = failures + 1
-      // we're doing a thing here which *should* allow us to more reliably prove that this thing
-      // is relatively random from run to run, but given the small input set here, we need to have
-      // a failure threshold we can use to resolve test flake
-      if (failures > threshold) {
-        t.fail()
-      } else {
-        t.pass(`failed random.grab.objects ${failures} times, still above threshold`)
-      }
-    }
-  }, innerPlan)
+  t.plan(4)
+  const picked = random.grab(input)
+  t.true(values(input).indexOf(values(picked)[0]) > -1)
+  t.true(keys(input).indexOf(keys(picked)[0]) > -1)
+  const [a, b, c] = iterate(3, () => random.grab(input))
+  t.notDeepEqual(keys(a), keys(b))
+  t.notDeepEqual(keys(b), keys(c))
 })
 
 test(`random.divvy should randomly take a given number of values from a list`, (t) => {
   t.plan(4)
-  t.equal(typeof random.divvy, `function`)
-  t.equal(typeof random.divvy(2), `function`)
-  t.equal(random.divvy(5, characters).length, 5)
+  t.is(typeof random.divvy, `function`)
+  t.is(typeof random.divvy(2), `function`)
+  t.is(random.divvy(5, characters).length, 5)
   const objectOutcome = random.divvy(5, charactersAsObjectList)
-  t.equal(objectOutcome.length, 5)
-  t.end()
-})
-
-test(`random.word should throw when given a non number`, (t) => {
-  t.plan(1)
-  t.throws(() => random.word(false))
-  t.end()
-})
-
-test(`random.word should return a random concatenation of letters`, (t) => {
-  const innerPlan = 2
-  const args = 10
-  aggregateValuesForFunction(t, random.word, args, (x, last) => {
-    // innerPlan should match the number of assertions here
-    t.equal(typeof x, `string`)
-    t.notEqual(x, last)
-  }, innerPlan)
+  t.is(objectOutcome.length, 5)
 })
