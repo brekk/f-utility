@@ -1,29 +1,8 @@
 {
   "name": "f-utility",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "utility / futility / useful? / pointfree?",
   "main": "index.js",
-  "nyc": {
-    "exclude": [
-      "node_modules"
-    ]
-  },
-  "scripts": {
-    "test": "npm run lint && npm run build",
-    "test-es6": "ava",
-    "test-core": "npm run transpile && npm run test-es6",
-    "test-log": "npm run test-core > test-output.log",
-    "cover": "nyc npm run test-core",
-    "report": "istanbul report",
-    "transpile": "babel src -d .",
-    "build": "npm run cover",
-    "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'",
-    "publish": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/brekk/f-utility.git"
-  },
   "nyc": {
     "lines": 95,
     "statements": 95,
@@ -50,6 +29,22 @@
     ],
     "all": true,
     "check-coverage": true
+  },
+  "scripts": {
+    "test": "npm run lint && npm run build",
+    "test-es6": "ava",
+    "test-core": "npm run transpile && npm run test-es6",
+    "test-log": "npm run test-core > test-output.log",
+    "cover": "nyc npm run test-core",
+    "report": "istanbul report",
+    "transpile": "babel src -d .",
+    "build": "npm run cover",
+    "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'",
+    "publish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brekk/f-utility.git"
   },
   "ava": {
     "babel": "inherit",
