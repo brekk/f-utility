@@ -17,5 +17,4 @@ test(`join should be an fp-version of array.prototype.join`, (t) => {
   t.is(out, joined)
   t.throws(() => join(null, null), `Expected joiner to be string.`)
   t.throws(() => join(`,`, null), `Expected array to be given.`)
-  
 })

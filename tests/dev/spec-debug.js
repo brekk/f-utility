@@ -1,6 +1,6 @@
 import test from 'ava'
 import _debug from 'debug'
-import random from '../../testing/random'
+import random from '../../src/testing/random'
 import {
   namespace,
   debug,
