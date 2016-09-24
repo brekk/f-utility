@@ -13,5 +13,8 @@ test(`xtrace must return the last of three potential arguments`, (t) => {
   // partially apply curried functions
   t.is(typeof xtrace(id), `function`)
   t.is(typeof xtrace(id, a), `function`)
-  
+})
+test(`xtrace must throw when given a non-function as the first parameter`, (t) => {
+  t.plan(1)
+  t.throws(() => xtrace(null, `a`, `b`), `Expected to be given log function.`)
 })

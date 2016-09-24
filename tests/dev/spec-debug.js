@@ -4,16 +4,27 @@ import random from '../../src/testing/random'
 import {
   namespace,
   debug,
+  makeTracer,
   wrapWithLog,
   namespaceAndAnnotate
 } from '../../src/dev/debug'
 
 test(`namespace is a curried string generator`, (t) => {
-  t.plan(4)
+  t.plan(5)
   t.is(typeof namespace, `function`)
   t.is(typeof namespace(`a`), `function`)
   t.is(namespace(`a`, [`b`, `c`]), `a:b:c`)
   t.is(namespace([`a`, `b`], [`c`, `d`]), `a:b:c:d`)
+  t.is(namespace(`a`, []), `a`)
+})
+test(`makeTracer should be 'debug' + trace`, (t) => {
+  t.plan(3)
+  t.is(typeof makeTracer, `function`)
+  t.is(typeof makeTracer(`a`), `function`)
+  const args = [`a`, [`b`, `c`]]
+  const output = makeTracer(args[0], args[1])
+  const endValue = random.word(10)
+  t.is(output(`d`, endValue), endValue)
 })
 test(`debug should be a convenience wrapper around the 'debug' module`, (t) => {
   t.plan(3)

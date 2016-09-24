@@ -1,6 +1,7 @@
 import _debug from 'debug'
 import curry from 'lodash/fp/curry'
 import {join} from '../fp/array'
+import {xtrace} from './trace'
 
 /**
  * Simple pattern for generating `"a:b:c"` from `("a", ["b": "c"])`.
@@ -31,6 +32,10 @@ export const namespace = curry(function _namespace(pkg, parts) {
  */
 export const debug = curry(function _makeDebugger(pkg, parts) {
   return _debug(namespace(pkg, parts))
+})
+
+export const makeTracer = curry(function _makeTracer(pkg, parts) {
+  return xtrace(debug(pkg, parts))
 })
 
 /**
