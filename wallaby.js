@@ -11,7 +11,8 @@ module.exports = function configureWallaby(wallaby) {
     ],
 
     env: {
-      type: `node`
+      type: `node`,
+      kind: `electron`
     },
 
     compilers: {
@@ -24,6 +25,7 @@ module.exports = function configureWallaby(wallaby) {
       require(`babel-polyfill`)
     },
 
-    debug: true
+    debug: true,
+    filesWithNoCoverageCalculated: [`src/core/fs.js`]
   }
 }
