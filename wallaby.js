@@ -11,7 +11,8 @@ module.exports = function configureWallaby(wallaby) {
     ],
 
     env: {
-      type: `node`
+      type: `node`,
+      kind: `electron`
     },
 
     compilers: {
