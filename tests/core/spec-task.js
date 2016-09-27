@@ -20,17 +20,17 @@ import {
   sequence
 } from '../../src/core/task'
 import random from '../../src/testing/random'
-import trace from '../../src/dev/trace'
+// import trace from '../../src/dev/trace'
 
-const randomPromise = (bool, eventualValue) => () => {
-  return new Promise((resolve, reject) => {
-    if (bool) {
-      resolve(eventualValue)
-      return
-    }
-    reject(new Error(eventualValue))
-  })
-}
+// const randomPromise = (bool, eventualValue) => () => {
+//   return new Promise((resolve, reject) => {
+//     if (bool) {
+//       resolve(eventualValue)
+//       return
+//     }
+//     reject(new Error(eventualValue))
+//   })
+// }
 
 test(`Task.reject should always fail synchronous input task`, (t) => {
   t.plan(4)
