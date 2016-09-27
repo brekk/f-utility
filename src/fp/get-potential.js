@@ -3,7 +3,6 @@ import reduce from 'lodash/fp/reduce'
 import curry from 'lodash/fp/curry'
 import clone from 'lodash/fp/clone'
 import flow from 'lodash/fp/flow'
-import {debug as makeDebugger} from '../dev/debug'
 
 export const VALUE_UNSET = `GET-POTENTIAL-INITIAL-VALUE`
 
