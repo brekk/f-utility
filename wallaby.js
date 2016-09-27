@@ -24,6 +24,7 @@ module.exports = function configureWallaby(wallaby) {
       require(`babel-polyfill`)
     },
 
-    debug: true
+    debug: true,
+    filesWithNoCoverageCalculated: [`src/core/fs.js`]
   }
 }

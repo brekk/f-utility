@@ -1,19 +1,9 @@
 import getOr from 'lodash/fp/getOr'
 import reduce from 'lodash/fp/reduce'
 import curry from 'lodash/fp/curry'
-// import map from 'lodash/fp/map'
 import clone from 'lodash/fp/clone'
 import flow from 'lodash/fp/flow'
-// import equals from 'lodash/fp/equals'
-// import _debug from 'debug'
-// const debug = _debug(`f-utility:fp/get-potential`)
 import {debug as makeDebugger} from '../dev/debug'
-
-const _debug = makeDebugger(`f-utility`)
-const debug = {
-  available: _debug([`available`]),
-  getPotential: _debug([`getPotential`])
-}
 
 export const VALUE_UNSET = `GET-POTENTIAL-INITIAL-VALUE`
 
@@ -28,14 +18,6 @@ export const available = curry(function _available(defaultValueOrFn, thing, stru
     structure.defaultValue = invoked
   }
   const test = getOr(VALUE_UNSET, x, clone(thing))
-  debug.available(`---`,
-    test,
-    `-->`,
-    thing[x],
-    `<--`,
-    x,
-    `--`,
-    thing)
   if (VALUE_UNSET !== test) {
     structure.match = test
     structure.matched = true
@@ -50,19 +32,12 @@ export const getPotential = curry(function _getPotential(
   const staticDefault = (typeof defaultValueOrFn !== `function`)
   const accessorIsArray = Array.isArray(accessors)
   const isSingularAccessor = (!accessorIsArray || accessors.length && accessors.length === 1)
-  debug.getPotential(`
-    staticDefault: ${staticDefault}
-    accessorIsArray: ${accessorIsArray}
-    isSingularAccessor: ${isSingularAccessor}
-  `)
   if (staticDefault && isSingularAccessor) {
-    debug.getPotential(`identical to getOr`)
     const singleAccessor = accessorIsArray ?
       accessors[0] :
       accessors
     return getOr(defaultValueOrFn, singleAccessor, copy)
   } else if (!staticDefault && isSingularAccessor) {
-    debug.getPotential(`dynamic default, singular accessor`)
     const matched = getOr(VALUE_UNSET, accessors, copy)
     // delay invocation of our function
     if (matched !== VALUE_UNSET) {
@@ -70,7 +45,6 @@ export const getPotential = curry(function _getPotential(
     }
     return defaultValueOrFn()
   }
-  debug.getPotential(`possibly dynamic default, many potential accessors`)
   // else if (staticDefault && !isSingularAccessor) {
   const out = flow(
     reduce(available(defaultValueOrFn, copy), {matched: false}),

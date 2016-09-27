@@ -1,6 +1,4 @@
-/* istanbul ignore next */
 import fs from 'fs'
-/* istanbul ignore next */
 import flow from 'lodash/fp/flow'
 
 /**
@@ -9,7 +7,6 @@ import flow from 'lodash/fp/flow'
  * @param {string} file - file path
  * @return {string} file contents
  */
-/* istanbul ignore next */
 export const readFile = (file) => fs.readFileSync(file, `utf8`)
 
 /**
@@ -19,7 +16,6 @@ export const readFile = (file) => fs.readFileSync(file, `utf8`)
  * @param {string} file - file path
  * @param {string} json
  */
-/* istanbul ignore next */
 export const json = flow(
   readFile,
   JSON.parse
