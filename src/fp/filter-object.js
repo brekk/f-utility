@@ -14,7 +14,7 @@ import {mergePairs} from "./merge-pairs"
  * @param {function} fn - a function which operates on [key, value] pairs
  * @param {object} object
  */
-export const filterKeysOfObject = curry(function _filterKeysOfObjects(
+export const filterObject = curry(function _filterKeysOfObjects(
   fn, obj
 ) {
   if (!isType.fn(fn)) {

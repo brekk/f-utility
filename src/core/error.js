@@ -8,6 +8,8 @@ import getOr from 'lodash/fp/getOr'
 import clone from 'lodash/fp/cloneDeep'
 // import {trace} from './functional-patterns'
 
+const UNFOUND = `__UNFOUND__`
+
 /**
  * Either throw a context-based error, or do nothing.
  * @function throwExpectation
@@ -19,8 +21,8 @@ import clone from 'lodash/fp/cloneDeep'
  * @return {null} nothing
  */
 export const throwExpectation = curry(function _expect(context, container, thing) {
-  const found = getOr(false, thing, container)
-  if (!found) {
+  const found = getOr(UNFOUND, thing, container)
+  if (found === UNFOUND) {
     throw new Error(`Expected to find ${thing} on ${context}.`)
   }
 })
@@ -35,8 +37,8 @@ export const throwExpectation = curry(function _expect(context, container, thing
  * @return {array} errorKeyValue triplet - [error, key, value]
  */
 export const returnExpectation = curry(function _return(context, container, thing) {
-  const found = getOr(false, thing, container)
-  if (!found) {
+  const found = getOr(UNFOUND, thing, container)
+  if (found === UNFOUND) {
     // null-safe
     return [true, thing, context]
   }
