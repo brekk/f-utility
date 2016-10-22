@@ -1,16 +1,16 @@
 import test from 'ava'
-import {filterKeysOfObject} from '../../src/fp/filter-object'
+import {filterObject} from '../../src/fp/filter-object'
 
 test(`filterKeys should throw when it receives a non-function filter`, (t) => {
   t.plan(3)
-  t.is(typeof filterKeysOfObject, `function`)
-  t.is(typeof filterKeysOfObject(() => {}), `function`)
-  t.throws(() => filterKeysOfObject(null, {}))
+  t.is(typeof filterObject, `function`)
+  t.is(typeof filterObject(() => {}), `function`)
+  t.throws(() => filterObject(null, {}))
 })
 
 test(`filterKeys should throw when it receives a non-object to filter`, (t) => {
   t.plan(1)
-  t.throws(() => filterKeysOfObject(() => true, null))
+  t.throws(() => filterObject(() => true, null))
 })
 
 test(`filterKeys should allow filtering of an object by its keys`, (t) => {
@@ -28,8 +28,8 @@ test(`filterKeys should allow filtering of an object by its keys`, (t) => {
     under: keyFilter(`_`),
     b: keyFilter(`b`)
   }
-  const output = filterKeysOfObject(filters.under, input)
+  const output = filterObject(filters.under, input)
   t.deepEqual(output, {_a: 1, _b: 2, _c: 3})
-  const output2 = filterKeysOfObject(filters.b, input)
+  const output2 = filterObject(filters.b, input)
   t.deepEqual(output2, {_b: 2, b: 5})
 })

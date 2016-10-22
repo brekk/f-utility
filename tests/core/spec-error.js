@@ -23,7 +23,7 @@ test(`throwExpectation must not throw when a given value is present on the given
   t.notThrows(() => throwExpectation(word, {a: 1}, `a`))
 })
 test(`returnExpectation must return an [error, key, value] triplet`, (t) => {
-  t.plan(5)
+  t.plan(6)
   t.is(typeof returnExpectation, `function`)
   t.is(typeof returnExpectation(1), `function`)
   t.is(typeof returnExpectation(1, 1), `function`)
@@ -40,6 +40,12 @@ test(`returnExpectation must return an [error, key, value] triplet`, (t) => {
   t.deepEqual(output, [false, match, value])
   const output2 = returnExpectation(context, container, `match`)
   t.deepEqual(output2, [true, `match`, context])
+  const output3 = returnExpectation(
+    context, {...container,
+      propertyWhichIsFalseButExists: false
+    }, `propertyWhichIsFalseButExists`
+  )
+  t.deepEqual(output3, [false, `propertyWhichIsFalseButExists`, false])
 })
 
 test(`structureErrors`, (t) => {
@@ -86,6 +92,7 @@ test(`signContract`, (t) => {
 })
 
 test(`contract`, (t) => {
+  t.plan(9)
   t.is(typeof contract, `function`)
   t.is(typeof contract(1), `function`)
   t.is(typeof contract(1, 1), `function`)
@@ -109,4 +116,17 @@ test(`contract`, (t) => {
     () => contract(false, context, container, `ab`.split(``)),
     `Unable to access [a,b] properties on context`
   )
+  t.notThrows(
+    () => contract(false, context, {
+      a: false,
+      b: false,
+      c: false
+    }, `abc`.split(``))
+  )
+  t.deepEqual(contract(false, context, {
+    a: false,
+    b: false,
+    c: false,
+    five: 5
+  }, [`b`, `five`]), {b: false, five: 5})
 })
