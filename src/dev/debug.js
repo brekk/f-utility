@@ -1,5 +1,5 @@
 import _debug from 'debug'
-import curry from 'lodash/fp/curry'
+import curry from 'ramda/src/curry'
 import {join} from '../fp/array'
 import {xtrace} from './trace'
 

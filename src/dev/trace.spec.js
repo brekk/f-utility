@@ -1,5 +1,5 @@
 import test from 'ava'
-import id from 'lodash/fp/identity'
+import id from 'ramda/src/identity'
 import random from '../../src/testing/random'
 import {xtrace} from '../../src/dev/trace'
 

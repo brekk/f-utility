@@ -1,5 +1,5 @@
-import curry from "lodash/fp/curry"
-import map from "lodash/fp/map"
+import curry from "ramda/src/curry"
+import map from "ramda/src/map"
 
 /**
  * @namespace util.string

@@ -1,8 +1,8 @@
-import getOr from 'lodash/fp/getOr'
-import reduce from 'lodash/fp/reduce'
-import curry from 'lodash/fp/curry'
-import clone from 'lodash/fp/clone'
-import flow from 'lodash/fp/flow'
+import propOr from 'ramda/src/propOr'
+import reduce from 'ramda/src/reduce'
+import curry from 'ramda/src/curry'
+import clone from 'ramda/src/clone'
+import flow from 'ramda/src/pipe'
 
 export const VALUE_UNSET = `GET-POTENTIAL-INITIAL-VALUE`
 
@@ -16,7 +16,7 @@ export const available = curry(function _available(defaultValueOrFn, thing, stru
       defaultValueOrFn
     structure.defaultValue = invoked
   }
-  const test = getOr(VALUE_UNSET, x, clone(thing))
+  const test = propOr(VALUE_UNSET, x, clone(thing))
   if (VALUE_UNSET !== test) {
     structure.match = test
     structure.matched = true
@@ -35,9 +35,9 @@ export const getPotential = curry(function _getPotential(
     const singleAccessor = accessorIsArray ?
       accessors[0] :
       accessors
-    return getOr(defaultValueOrFn, singleAccessor, copy)
+    return propOr(defaultValueOrFn, singleAccessor, copy)
   } else if (!staticDefault && isSingularAccessor) {
-    const matched = getOr(VALUE_UNSET, accessors, copy)
+    const matched = propOr(VALUE_UNSET, accessors, copy)
     // delay invocation of our function
     if (matched !== VALUE_UNSET) {
       return matched

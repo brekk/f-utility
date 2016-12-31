@@ -23,7 +23,7 @@ test(`filterKeys should allow filtering of an object by its keys`, (t) => {
     b: 5,
     c: 6
   }
-  const keyFilter = (lookup) => ([k, v]) => { return (k.indexOf(lookup) > -1) }
+  const keyFilter = (lookup) => ([k]) => { return (k.indexOf(lookup) > -1) }
   const filters = {
     under: keyFilter(`_`),
     b: keyFilter(`b`)
