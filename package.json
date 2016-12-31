@@ -4,12 +4,11 @@
   "description": "utility / futility / useful? / pointfree?",
   "main": "index.js",
   "nyc": {
-    "lines": 95,
-    "statements": 95,
-    "functions": 95,
-    "branches": 90,
+    "statements": 99,
+    "branches": 97,
+    "functions": 100,
+    "lines": 100,
     "reporter": [
-      "lcov",
       "json",
       "html",
       "text",
@@ -18,7 +17,9 @@
     "exclude": [
       "node_modules",
       "tests",
-      "src/core/fs.js"
+      "src/core/fs.js",
+      "src/**/*.spec.js",
+      "src/**/*.fixture.*"
     ],
     "include": [
       "src/*.js",
@@ -37,7 +38,7 @@
     "test-log": "npm run test-core > test-output.log",
     "cover": "nyc npm run test-core",
     "report": "istanbul report",
-    "transpile": "babel src -d .",
+    "transpile": "babel src -d . --ignore *.spec.js,*.fixture.*",
     "build": "npm run cover",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc src/** --rule 'no-console: 2'",
     "publish": "npm run build"
@@ -71,6 +72,7 @@
   },
   "homepage": "https://github.com/brekk/f-utility#readme",
   "dependencies": {
+    "folktale": "2.0.0-alpha2",
     "ramda": "^0.23.0",
     "ramda-fantasy": "^0.7.0"
   },

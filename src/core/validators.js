@@ -4,11 +4,9 @@ import cloneDeep from 'lodash/fp/cloneDeep'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
 
-// import Data from 'folktale/data'
+import Validation from 'folktale/data/validation'
 
-// const {Validation: {Failure, Success}} = Data
-const Failure = () => {}
-const Success = () => {}
+const {Failure, Success} = Validation
 
 /**
  * @namespace util.validation
@@ -127,7 +125,7 @@ export const isValidReducer = curry(function _isValidReducer(pullValue, list, st
   const getValue = (x) => list[x]
   const output = getOrPullValue(pullValue, getValue, structure.index)
   // const output = getValue(copy.index)
-  const copy = addValueToFailureOrSuccess(structure, item.isFailure, output)
+  const copy = addValueToFailureOrSuccess(structure, Failure.hasInstance(item), output)
   copy.index = structure.index + 1
   return copy
 })

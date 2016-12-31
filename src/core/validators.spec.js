@@ -7,9 +7,17 @@ import flow from 'lodash/fp/flow'
 import without from 'lodash/fp/without'
 import compact from 'lodash/fp/compact'
 
-// import Validation from 'data.validation'
+import Validation from 'folktale/data/validation'
+const {Failure} = Validation
 
-import {isType, isValid, splitters} from '../../src/core/validators'
+import {
+  isType,
+  isValid,
+  splitters,
+  // isValidReducer,
+  // pullFailuresAndSuccesses,
+  isValidSplitter
+} from '../../src/core/validators'
 import random from '../../src/testing/random'
 
 const inputs = {
@@ -112,14 +120,14 @@ const testMethod = curry((methodName, t) => {
   const failureObj = method(failee)
   t.plan(7)
   t.truthy(failureObj)
-  t.truthy(failureObj.isFailure)
+  t.truthy(Failure.hasInstance(failureObj))
   t.truthy(failureObj.value)
   t.deepEqual(failureObj.value, [`Expected typeof thing to equal '${methodName}'.`])
   const value = inputs[methodName]
   const rawValue = value()
   const successObj = method(rawValue)
   t.truthy(successObj)
-  t.falsy(successObj.isFailure)
+  t.falsy(Failure.hasInstance(successObj))
   t.deepEqual(successObj.value, rawValue)
 })
 
@@ -148,6 +156,15 @@ const assertAboutSplitter = curry((asIndicies, methodName, t) => {
   const output = method([valid, failee])
   t.plan(1)
   t.truthy(output)
+})
+
+test(`isValidSplitter`, (t) => {
+  // t.plan(4)
+  t.truthy(isValidSplitter)
+  t.is(typeof isValidSplitter, `function`)
+  t.is(typeof isValidSplitter(true), `function`)
+  t.is(typeof isValidSplitter(true, {}), `function`)
+  t.is(typeof isValidSplitter(true, {}, `string`), `object`)
 })
 
 test(`isValidSplitter.object should validate a list of objects as indices`,
