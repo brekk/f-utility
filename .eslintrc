@@ -36,49 +36,6 @@
     "space-before-function-paren": [2, "never"],
     "strict": 0,
     "no-shadow": [2, { "builtinGlobals": false, "hoist": "all" }],
-    "lodash-fp/use-fp": 2,
-    "lodash-fp/consistent-compose": [2, "flow"],
-    "lodash-fp/consistent-name": [2, "fp"],
-    "lodash-fp/no-argumentless-calls": 2,
-    "lodash-fp/no-chain": 2,
-    "lodash-fp/no-extraneous-args": 2,
-    "lodash-fp/no-extraneous-function-wrapping": 2,
-    "lodash-fp/no-extraneous-iteratee-args": 2,
-    "lodash-fp/no-for-each": 0,
-    "lodash-fp/no-partial-of-curried": 2,
-    "lodash-fp/no-single-composition": 2,
-    "lodash-fp/no-submodule-destructuring": 2,
-    "lodash-fp/no-unused-result": 2,
-    "lodash-fp/prefer-compact": 2,
-    "lodash-fp/prefer-get": 2,
-    "lodash-fp/prefer-identity": [2, {"arrowFunctions": true}],
-    "lodash-fp/preferred-alias": [
-      2,
-      {
-        "overrides": [
-          "map",
-          "all",
-          "allPass",
-          "any",
-          "anyPass",
-          "apply",
-          "set",
-          "get",
-          "first",
-          "last",
-          "filter",
-          "extend",
-          "equals",
-          "toPairs",
-          "toPairsIn",
-          "invert",
-          "pick",
-          "at",
-          "rest",
-          "flatten"
-        ]
-      }
-    ],
     "import/named": 2,
     "import/no-mutable-exports": 2,
     "import/order": 2,
@@ -89,5 +46,5 @@
     }]
   },
   "extends": ["standard"],
-  "plugins": ["babel", "lodash-fp", "import"]
+  "plugins": ["babel", "fp", "import"]
 }

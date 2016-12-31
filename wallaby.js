@@ -6,8 +6,8 @@ module.exports = function configureWallaby(wallaby) {
     ],
 
     tests: [
-      `tests/**/spec-*.js`,
-      `tests/spec-*.js`
+      `src/**/*.spec.js`,
+      `src/*.spec.js`
     ],
 
     env: {

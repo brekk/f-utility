@@ -52,8 +52,10 @@
       "babel-register"
     ],
     "files": [
-      "tests/*.js",
-      "tests/**/*.js"
+      "src/*.spec.js",
+      "src/*.fixture.*",
+      "src/**/*.spec.js",
+      "src/**/*.fixture.*"
     ],
     "source": [
       "src/*.js",
@@ -93,6 +95,7 @@
     "eslint-plugin-fp": "^2.2.0",
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-react": "^6.2.0",
     "eslint-plugin-standard": "^2.0.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",

@@ -10,7 +10,6 @@ test(`string.split must be an fp version of str.prototype.split`, (t) => {
   t.is(typeof partial, `function`)
   const output = partial(input)
   t.deepEqual(output, `abc`.split(``))
-  
 })
 
 test(`string.trim must be an fp version of str.prototype.trim`, (t) => {
@@ -19,7 +18,6 @@ test(`string.trim must be an fp version of str.prototype.trim`, (t) => {
   t.is(typeof trim, `function`)
   const output = trim(input)
   t.is(output, `a`)
-  
 })
 
 test(`string.trimmer must be mapped form of string.trim`, (t) => {
@@ -28,5 +26,4 @@ test(`string.trimmer must be mapped form of string.trim`, (t) => {
   t.is(typeof trimmer, `function`)
   const output = trimmer(input)
   t.deepEqual(output, `abcd`.split(``))
-  
 })

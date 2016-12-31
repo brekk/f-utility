@@ -4,9 +4,11 @@ import cloneDeep from 'lodash/fp/cloneDeep'
 import flow from 'lodash/fp/flow'
 import map from 'lodash/fp/map'
 
-import Data from 'folktale/data'
+// import Data from 'folktale/data'
 
-const {Validation: {Failure, Success}} = Data
+// const {Validation: {Failure, Success}} = Data
+const Failure = () => {}
+const Success = () => {}
 
 /**
  * @namespace util.validation

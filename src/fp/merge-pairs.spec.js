@@ -9,5 +9,4 @@ test(`mergePairs should assemble keypairs into an object`, (t) => {
   t.plan(2)
   t.is(typeof mergePairs, `function`)
   t.deepEqual(mergePairs(input), innerObject)
-  
 })
