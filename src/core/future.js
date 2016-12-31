@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import Future from 'ramda-fantasy/src/future'
+import Future from 'ramda-fantasy/src/Future'
 import reduce from 'lodash/fp/reduce'
 import filter from 'lodash/fp/filter'
 import curry from 'lodash/fp/curry'
