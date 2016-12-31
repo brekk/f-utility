@@ -1,11 +1,11 @@
-import curry from 'lodash/fp/curry'
-import flow from 'lodash/fp/flow'
-import map from 'lodash/fp/map'
-import reduce from 'lodash/fp/reduce'
-import merge from 'lodash/fp/merge'
-import getOr from 'lodash/fp/getOr'
+import curry from 'ramda/src/curry'
+import flow from 'ramda/src/pipe'
+import map from 'ramda/src/map'
+import reduce from 'ramda/src/reduce'
+import merge from 'ramda/src/merge'
+import propOr from 'ramda/src/propOr'
 // import {mergePairs} from './merge-pairs'
-import clone from 'lodash/fp/cloneDeep'
+import clone from 'ramda/src/clone'
 // import {trace} from './functional-patterns'
 
 const UNFOUND = `__UNFOUND__`
@@ -21,7 +21,7 @@ const UNFOUND = `__UNFOUND__`
  * @return {null} nothing
  */
 export const throwExpectation = curry(function _expect(context, container, thing) {
-  const found = getOr(UNFOUND, thing, container)
+  const found = propOr(UNFOUND, thing, container)
   if (found === UNFOUND) {
     throw new Error(`Expected to find ${thing} on ${context}.`)
   }
@@ -37,7 +37,7 @@ export const throwExpectation = curry(function _expect(context, container, thing
  * @return {array} errorKeyValue triplet - [error, key, value]
  */
 export const returnExpectation = curry(function _return(context, container, thing) {
-  const found = getOr(UNFOUND, thing, container)
+  const found = propOr(UNFOUND, thing, container)
   if (found === UNFOUND) {
     // null-safe
     return [true, thing, context]

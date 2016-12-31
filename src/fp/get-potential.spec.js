@@ -27,7 +27,7 @@ test(
 )
 
 test(
-  `getPotential should follow the same pattern as lodash/fp/getOr with static values`,
+  `getPotential should follow the same pattern as ramda/src/propOr with static values`,
   (t) => {
     t.plan(4)
     t.is(typeof getPotential, `function`)

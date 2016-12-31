@@ -1,5 +1,5 @@
 import test from 'ava'
-import toPairs from 'lodash/fp/toPairs'
+import toPairs from 'ramda/src/toPairs'
 import {mergePairs} from '../../src/fp/merge-pairs'
 
 const innerObject = {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import flow from 'lodash/fp/flow'
+import flow from 'ramda/src/pipe'
 
 /**
  * @namespace util.fs

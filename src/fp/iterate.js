@@ -1,7 +1,7 @@
-import rangeFinder from 'lodash/fp/range'
-import curry from 'lodash/fp/curry'
-import map from 'lodash/fp/map'
-import flow from 'lodash/fp/flow'
+import rangeFinder from 'ramda/src/range'
+import curry from 'ramda/src/curry'
+import map from 'ramda/src/map'
+import flow from 'ramda/src/pipe'
 
 export const ERROR_CODES = {
   expectInteger: `Expected to be given integer howMany.`,

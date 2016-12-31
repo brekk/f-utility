@@ -1,9 +1,9 @@
 import fs from 'fs'
 
 import Future from 'ramda-fantasy/src/Future'
-import reduce from 'lodash/fp/reduce'
-import filter from 'lodash/fp/filter'
-import curry from 'lodash/fp/curry'
+import reduce from 'ramda/src/reduce'
+import filter from 'ramda/src/filter'
+import curry from 'ramda/src/curry'
 import _debug from 'debug'
 const debug = _debug(`glass:util:future`)
 

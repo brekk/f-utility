@@ -1,5 +1,5 @@
-import reduce from "lodash/fp/reduce"
-import cloneDeep from "lodash/fp/cloneDeep"
+import reduce from "ramda/src/reduce"
+import cloneDeep from "ramda/src/clone"
 
 /**
  * @namespace util.mergePairs

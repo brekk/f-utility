@@ -3,8 +3,8 @@ import fs from 'fs'
 import test from 'ava'
 import Future from 'ramda-fantasy/src/Future'
 // import Future from 'data.future'
-import curry from 'lodash/fp/curry'
-import toArray from 'lodash/fp/toArray'
+import curry from 'ramda/src/curry'
+import toArray from 'lodash.toarray'
 
 import {
   rejectFuture,

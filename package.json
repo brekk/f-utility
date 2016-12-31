@@ -73,6 +73,8 @@
   "homepage": "https://github.com/brekk/f-utility#readme",
   "dependencies": {
     "folktale": "2.0.0-alpha2",
+    "lodash.compact": "^3.0.1",
+    "lodash.toarray": "^4.4.0",
     "ramda": "^0.23.0",
     "ramda-fantasy": "^0.7.0"
   },

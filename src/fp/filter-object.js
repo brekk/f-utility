@@ -1,7 +1,7 @@
-import curry from "lodash/fp/curry"
-import filter from "lodash/fp/filter"
-import flow from "lodash/fp/flow"
-import toPairs from "lodash/fp/toPairs"
+import curry from "ramda/src/curry"
+import filter from "ramda/src/filter"
+import flow from "ramda/src/pipe"
+import toPairs from "ramda/src/toPairs"
 // import _debug from 'debug'
 import {isType} from "../core/validators"
 import {mergePairs} from "./merge-pairs"

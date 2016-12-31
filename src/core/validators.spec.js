@@ -1,11 +1,11 @@
 import test from 'ava'
 
-import id from 'lodash/fp/identity'
-import keys from 'lodash/fp/keys'
-import curry from 'lodash/fp/curry'
-import flow from 'lodash/fp/flow'
-import without from 'lodash/fp/without'
-import compact from 'lodash/fp/compact'
+import id from 'ramda/src/identity'
+import keys from 'ramda/src/keys'
+import curry from 'ramda/src/curry'
+import flow from 'ramda/src/pipe'
+import without from 'ramda/src/without'
+import compact from 'lodash.compact'
 
 import Validation from 'folktale/data/validation'
 const {Failure} = Validation
@@ -164,7 +164,6 @@ test(`isValidSplitter`, (t) => {
   t.is(typeof isValidSplitter, `function`)
   t.is(typeof isValidSplitter(true), `function`)
   t.is(typeof isValidSplitter(true, {}), `function`)
-  t.is(typeof isValidSplitter(true, {}, `string`), `object`)
 })
 
 test(`isValidSplitter.object should validate a list of objects as indices`,

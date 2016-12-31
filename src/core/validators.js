@@ -1,8 +1,8 @@
-import curry from 'lodash/fp/curry'
-import reduce from 'lodash/fp/reduce'
-import cloneDeep from 'lodash/fp/cloneDeep'
-import flow from 'lodash/fp/flow'
-import map from 'lodash/fp/map'
+import curry from 'ramda/src/curry'
+import reduce from 'ramda/src/reduce'
+import cloneDeep from 'ramda/src/clone'
+import flow from 'ramda/src/pipe'
+import map from 'ramda/src/map'
 
 import Validation from 'folktale/data/validation'
 
@@ -100,14 +100,14 @@ const addValueToFailureOrSuccess = (container, isFailure, output) => {
 
 /**
  * @namespace util.validation
- * @function getOrPullValue
+ * @function propOrPullValue
  * @desc a simple ternary plus a function
  * @param {boolean} pullData - a boolean value
  * @param {function} puller - a function to call with value if pullData is true
  * @param {mixed} value - anything
  * @return {mixed} value or puller(value)
  */
-export const getOrPullValue = (pullData, puller, value) => {
+export const propOrPullValue = (pullData, puller, value) => {
   return pullData ? puller(value) : value
 }
 
@@ -123,7 +123,7 @@ export const getOrPullValue = (pullData, puller, value) => {
  */
 export const isValidReducer = curry(function _isValidReducer(pullValue, list, structure, item) {
   const getValue = (x) => list[x]
-  const output = getOrPullValue(pullValue, getValue, structure.index)
+  const output = propOrPullValue(pullValue, getValue, structure.index)
   // const output = getValue(copy.index)
   const copy = addValueToFailureOrSuccess(structure, Failure.hasInstance(item), output)
   copy.index = structure.index + 1

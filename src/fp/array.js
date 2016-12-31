@@ -1,4 +1,4 @@
-import curry from 'lodash/fp/curry'
+import curry from 'ramda/src/curry'
 import {isType} from '../core/validators'
 
 /**

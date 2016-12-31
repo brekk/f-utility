@@ -1,4 +1,4 @@
-import curry from 'lodash/fp/curry'
+import curry from 'ramda/src/curry'
 
 /**
  * The trace function, written with the logging function as the first param
