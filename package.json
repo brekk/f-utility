@@ -33,8 +33,9 @@
   },
   "scripts": {
     "test": "npm run lint && npm run build",
+    "make-tests-for-wallaby": "babel src -d ./tests --only *.spec.js,*.fixture.*",
     "test-es6": "ava",
-    "test-core": "npm run transpile && npm run test-es6",
+    "test-core": "npm run transpile && npm run make-tests-for-wallaby && npm run test-es6",
     "test-log": "npm run test-core > test-output.log",
     "cover": "nyc npm run test-core",
     "report": "istanbul report",
@@ -53,10 +54,10 @@
       "babel-register"
     ],
     "files": [
-      "src/*.spec.js",
-      "src/*.fixture.*",
-      "src/**/*.spec.js",
-      "src/**/*.fixture.*"
+      "tests/*.spec.js",
+      "tests/*.fixture.*",
+      "tests/**/*.spec.js",
+      "tests/**/*.fixture.*"
     ],
     "source": [
       "src/*.js",

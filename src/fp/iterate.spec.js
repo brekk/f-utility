@@ -27,7 +27,7 @@ test(`iterate should throw when 'cb' is not a function`, (t) => {
   t.throws(() => iterate(5, []), callbackAintNoFunction)
 })
 
-test(`iterate aggregate values by mapping over a range`, (t) => {
+test(`iterate aggregates values by mapping over a range`, (t) => {
   t.plan(3)
   const one = () => 1
   t.deepEqual(iterate(2, one), [1, 1])

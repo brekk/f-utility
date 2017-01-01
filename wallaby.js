@@ -1,13 +1,14 @@
 module.exports = function configureWallaby(wallaby) {
   return {
+    name: `F-Utility`,
     files: [
       `src/**/*.js`,
       `src/*.js`
     ],
 
     tests: [
-      `src/**/*.spec.js`,
-      `src/*.spec.js`
+      `tests/**/*.spec.js`,
+      `tests/*.spec.js`
     ],
 
     env: {
