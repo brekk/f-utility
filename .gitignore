@@ -45,3 +45,4 @@ testing/*.js
 !src/testing/*.js
 .npmrc
 fixture*
+tests
