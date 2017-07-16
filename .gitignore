@@ -46,3 +46,6 @@ testing/*.js
 .npmrc
 fixture*
 tests
+lib
+assets
+docs
