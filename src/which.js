@@ -24,7 +24,7 @@ export const which = curry((compare, fn, o) => {
  * array.some(fn) but curried and lazy
  * @method some
  * @param {function} predicate
- * @param {array} iterable
+ * @param {Array} iterable
  * @returns {boolean}
  * @public
  */
@@ -34,7 +34,7 @@ export const some = which(fastSome)
  * array.every(fn) but curried and lazy
  * @method every
  * @param {function} predicate
- * @param {array} iterable
+ * @param {Array} iterable
  * @returns {boolean}
  * @public
  */

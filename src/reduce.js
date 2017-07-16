@@ -6,7 +6,7 @@ import fastReduce from 'fast.js/reduce'
  * @method reduce
  * @param {function} fn - a reducer
  * @param {*} init - an initial value
- * @param {array} o - iterable
+ * @param {Array} o - iterable
  * @returns {*} mixed reduction
  */
 export const reduce = curry((fn, init, o) => fastReduce(o, fn, init))

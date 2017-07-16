@@ -56,7 +56,7 @@ module.exports = {
     },
     bundle: {
       description: `run the main bundle task`,
-      script: `rollup -c config/rollup.config.main.js`
+      script: `rollup -c config/commonjs.js`
     },
     build: {
       description: `convert files individually`,

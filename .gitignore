@@ -47,3 +47,5 @@ testing/*.js
 fixture*
 tests
 lib
+assets
+docs

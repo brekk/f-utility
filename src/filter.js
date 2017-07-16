@@ -5,8 +5,8 @@ import {flip} from './flip'
  * array.filter(fn) but curried and fast
  * @method filter
  * @param {function} predicate
- * @param {array} iterable
- * @returns {array} filtered iterable
+ * @param {Array} iterable
+ * @returns {Array} filtered iterable
  * @public
  */
 export const filter = flip(fastFilter)

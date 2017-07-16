@@ -60,7 +60,7 @@ export const grab = take(true)
  * @function allot
  * @param {number} howMany - how many values to take
  * @param {mixed} ofThing - array or object
- * @return {array} values
+ * @return {Array} values
  * @public
  */
 export const allot = curry(

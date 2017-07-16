@@ -1,8 +1,8 @@
 /**
  * Shuffle the contents of an array
  * @function shuffle
- * @param {array} list - an array to be shuffled
- * @return {array} shuffled
+ * @param {Array} list - an array to be shuffled
+ * @return {Array} shuffled
  */
 export const shuffle = (list) => {
   const newList = [...list]
