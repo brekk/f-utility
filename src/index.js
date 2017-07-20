@@ -1,4 +1,5 @@
 export * from 'katsu-curry'
+export * from 'katsu-curry/lib/utils/length'
 export {join} from './array'
 export {choice} from './choice'
 export {filter} from './filter'

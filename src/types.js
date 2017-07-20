@@ -16,5 +16,7 @@ export const isTypeof = curry(
 export const isBoolean = isTypeof(`boolean`)
 export const isNumber = isTypeof(`number`)
 export const isFunction = isTypeof(`function`)
+export const isString = isTypeof(`string`)
 export const isObject = isTypeof(`object`)
 export const isNil = (x) => x == null
+export const isArray = Array.isArray
