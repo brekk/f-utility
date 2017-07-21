@@ -14,6 +14,11 @@ export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
 
+const {keys: _keys, freeze: _freeze, assign: _assign} = Object
+export const keys = _keys
+export const freeze = _freeze
+export const assign = _assign
+
 export const length = _length
 export {
   isTypeof,
