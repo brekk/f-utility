@@ -14,9 +14,11 @@ export const iterate = curry((total, fn) => {
   if (typeof fn !== `function` || typeof count !== `number`) {
     return agg
   }
+  let last = null
   while (count > 0) {
     count--
-    agg.push(fn())
+    last = fn()
+    agg.push(last)
   }
   return agg
 })

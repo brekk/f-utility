@@ -1,5 +1,4 @@
 import test from 'ava'
-// import curry from 'ramda/src/curry'
 import {values, keys} from 'katsu-curry/lib/utils/object'
 import {map} from './map'
 import {iterate} from './iterate'
@@ -80,6 +79,10 @@ test(`word should return a random concatenation of letters`, (t) => {
   t.is(typeof word, `function`)
   const length = floorMin(1, 50)
   const invoked = word(length)
+  const parts = invoked.split(``)
+  const a = parts[0]
+  const b = parts[parts.length - 1]
+  t.not(a, b)
   t.is(invoked.length, length)
   t.is(typeof invoked, `string`)
   t.is(word().length, 5)
@@ -104,5 +107,7 @@ test(`allot should randomly take a given number of values from a list`, (t) => {
   t.is(typeof allot(2), `function`)
   t.is(allot(5, characters).length, 5)
   const objectOutcome = allot(5, charactersAsObjectList)
+  const [a, b] = Object.keys(objectOutcome)
+  t.not(a, b)
   t.is(objectOutcome.length, 5)
 })

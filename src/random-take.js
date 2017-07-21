@@ -1,4 +1,4 @@
-import {K, curry} from 'katsu-curry'
+import {curry} from 'katsu-curry'
 import {floor} from './random-floor'
 import {iterate} from './iterate'
 
@@ -14,7 +14,7 @@ const {keys} = Object
  */
 export const take = curry((encase, o) => {
   // ducktype: array-like with something in it
-  if (o && o.length && !!o[0]) {
+  if (o && o[0] && o.length) {
     const found = floor(o.length)
     const selection = o[found]
     return (
@@ -64,5 +64,7 @@ export const grab = take(true)
  * @public
  */
 export const allot = curry(
-  (howMany, ofThing) => iterate(howMany, K(pick(ofThing)))
+  (howMany, ofThing) => {
+    return iterate(howMany, () => grab(ofThing))
+  }
 )
