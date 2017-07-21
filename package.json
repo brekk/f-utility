@@ -72,7 +72,7 @@
     "entrust": "^0.0.2",
     "fantasy-land": "^3.3.0",
     "fast.js": "^0.1.1",
-    "katsu-curry": "^0.0.8"
+    "katsu-curry": "^0.0.9"
   },
   "devDependencies": {
     "ava": "^0.16.0",
