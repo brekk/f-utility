@@ -19,6 +19,17 @@ string.prototype.join but curried
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** joined
 
+## sort
+
+string.prototype.sort but curried
+
+**Parameters**
+
+-   `fn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** sorted
+
 ## choice
 
 takes a function that takes two parameters and returns a ternary result

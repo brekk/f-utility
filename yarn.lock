@@ -2979,9 +2979,9 @@ katsu-curry@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.0.7.tgz#43f58c2ef993356337c4328f8c8baaa6793569a3"
 
-katsu-curry@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.0.8.tgz#e45928668cda73754b74647737fb0002aa82c081"
+katsu-curry@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.0.9.tgz#7853c082bb2f2475eca721df2289a44ccdf4179f"
 
 kind-of@^3.0.2:
   version "3.2.2"

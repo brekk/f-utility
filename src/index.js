@@ -1,5 +1,5 @@
+import {length as _length} from 'katsu-curry/lib/utils/length'
 export * from 'katsu-curry'
-export * from 'katsu-curry/lib/utils/length'
 export {join} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
@@ -13,6 +13,13 @@ export {reject} from './reject'
 export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
+
+const {keys: _keys, freeze: _freeze, assign: _assign} = Object
+export const keys = _keys
+export const freeze = _freeze
+export const assign = _assign
+
+export const length = _length
 export {
   isTypeof,
   isBoolean,

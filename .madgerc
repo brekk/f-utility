@@ -20,8 +20,6 @@
     },
     "N": {
       "regular": true,
-      "shape": "polygon",
-      "sides": 4,
       "penwidth": 4
     }
   }

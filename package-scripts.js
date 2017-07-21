@@ -77,7 +77,7 @@ module.exports = {
     },
     care: {
       description: `run all the things`,
-      script: allNPS(`lint`, `test`, `bundle`, `build`, `readme`)
+      script: allNPS(`lint`, `test`, `bundle`, `build`, `readme`, `dependencies.graph2`)
     },
     precommit: `nps care`
   }
