@@ -16,6 +16,7 @@ module.exports = {
   moduleName: pkg.name,
   plugins: [
     progress(),
+    json(),
     commonjs({
       extensions: [`.js`],
       include: `node_modules/**`,
@@ -27,7 +28,6 @@ module.exports = {
       jsnext: true,
       main: true
     }),
-    json(),
     cleanup({
       comments: `none`
     }),

@@ -59,7 +59,9 @@ test(`index`, (t) => {
     `random`,
     `reduce`,
     `reject`,
+    `round`,
     `some`,
+    `sort`,
     `split`,
     `subtract`,
     `symmetricDifference`,
@@ -67,6 +69,7 @@ test(`index`, (t) => {
     `test`,
     `trim`,
     `triplet`,
+    `version`,
     `which`
   ])
   t.deepEqual(

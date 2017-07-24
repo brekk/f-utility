@@ -1,18 +1,31 @@
 import {length as _length} from 'katsu-curry/lib/utils/length'
+import pkg from '../package.json'
 export * from 'katsu-curry'
-export {join, difference, symmetricDifference} from './array'
+export {join, sort, symmetricDifference, difference} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
 export {flip} from './flip'
 export {fork} from './future'
 export {iterate} from './iterate'
 export {map} from './map'
-export {add, subtract, divide, multiply, pow} from './math'
+export {round, add, subtract, divide, multiply, pow} from './math'
 export {reduce} from './reduce'
 export {reject} from './reject'
 export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
+export {
+  isTypeof,
+  isBoolean,
+  isNumber,
+  isFunction,
+  isString,
+  isObject,
+  isNil,
+  isArray
+} from './types'
+
+export const {version} = pkg
 
 const {keys: _keys, freeze: _freeze, assign: _assign} = Object
 export const keys = _keys
@@ -20,7 +33,6 @@ export const freeze = _freeze
 export const assign = _assign
 
 export const length = _length
-export * from './types'
 export {
   which,
   some,
