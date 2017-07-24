@@ -1,5 +1,5 @@
 import {curry} from 'katsu-curry'
-import fastFilter from 'fast.js/filter'
+import {filter} from './filter'
 
 /**
  * array.filter((x) => !fn(x)) but curried and fast
@@ -8,4 +8,8 @@ import fastFilter from 'fast.js/filter'
  * @param {Array} iterable
  * @returns {Array} filtered iterable
  */
-export const reject = curry((fn, o) => fastFilter(o, (x) => !fn(x)))
+export const reject = curry(
+  (fn, o) => filter(
+    (x) => !fn(x), o
+  )
+)

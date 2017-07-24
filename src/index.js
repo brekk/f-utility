@@ -1,6 +1,6 @@
 import {length as _length} from 'katsu-curry/lib/utils/length'
 export * from 'katsu-curry'
-export {join} from './array'
+export {join, difference, symmetricDifference} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
 export {flip} from './flip'
@@ -20,14 +20,7 @@ export const freeze = _freeze
 export const assign = _assign
 
 export const length = _length
-export {
-  isTypeof,
-  isBoolean,
-  isNumber,
-  isFunction,
-  isObject,
-  isNil
-} from './types'
+export * from './types'
 export {
   which,
   some,

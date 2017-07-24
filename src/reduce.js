@@ -1,5 +1,5 @@
-import {curry} from 'katsu-curry'
 import fastReduce from 'fast.js/reduce'
+import {delegateFastTertiary} from './delegate-fast'
 
 /**
  * array.reduce but curried and fast
@@ -9,4 +9,5 @@ import fastReduce from 'fast.js/reduce'
  * @param {Array} o - iterable
  * @returns {*} mixed reduction
  */
-export const reduce = curry((fn, init, o) => fastReduce(o, fn, init))
+
+export const reduce = delegateFastTertiary(`reduce`, fastReduce)

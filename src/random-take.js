@@ -64,7 +64,5 @@ export const grab = take(true)
  * @public
  */
 export const allot = curry(
-  (howMany, ofThing) => {
-    return iterate(howMany, () => grab(ofThing))
-  }
+  (howMany, ofThing) => iterate(howMany, () => grab(ofThing))
 )
