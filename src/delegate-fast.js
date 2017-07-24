@@ -16,7 +16,7 @@ const willDelegate = curry(
  * @param {function} fn
  * @param {Array} functor
  * @returns {Array} mapped iterable
- * @protected
+ * @private
  */
 export const delegateFastBinary = curry(
   (method, fast, fn, functor) => {
@@ -35,7 +35,7 @@ export const delegateFastBinary = curry(
  * @param {*} initial
  * @param {Array} functor
  * @returns {Array} mapped iterable
- * @protected
+ * @private
  */
 export const delegateFastTertiary = curry(
   (method, fast, fn, initial, functor) => (
