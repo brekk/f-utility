@@ -3,75 +3,22 @@ import * as FUTILITY from './index'
 
 const zort = (x) => x.sort() // eslint-disable-line
 
-const {pipe, filter, isFunction, keys} = FUTILITY
+const {pipe, keys} = FUTILITY
 
 const keySort = pipe(keys, zort)
-const onlyFunctions = pipe(
-  filter(isFunction),
-  keys,
-  zort
-)
+// const onlyFunctions = pipe(
+//   filter(isFunction),
+//   keys,
+//   zort
+// )
 
 test(`index`, (t) => {
   const futilityKeys = keySort(FUTILITY)
-  t.deepEqual(
-    futilityKeys,
-    zort([
-      `$`,
-      `I`,
-      `K`,
-      `PLACEHOLDER`,
-      `add`,
-      `assign`,
-      `choice`,
-      `compose`,
-      `countNonPlaceholders`,
-      `curryObjectByCondition`,
-      `curryObjectKN`,
-      `curryObjectK`,
-      `curryObjectN`,
-      `curryPowder`,
-      `curry`,
-      `curryify`,
-      `divide`,
-      `every`,
-      `expectKArgs`,
-      `expectNArgs`,
-      `filter`,
-      `flip`,
-      `fork`,
-      `freeze`,
-      `isBoolean`,
-      `isFunction`,
-      `isNil`,
-      `isNumber`,
-      `isObject`,
-      `isTypeof`,
-      `iterate`,
-      `join`,
-      `length`,
-      `keys`,
-      `map`,
-      `multiply`,
-      `pipe`,
-      `pow`,
-      `random`,
-      `reduce`,
-      `reject`,
-      `some`,
-      `split`,
-      `subtract`,
-      `ternary`,
-      `test`,
-      `trim`,
-      `triplet`,
-      `which`
-    ])
-  )
-  const fns = onlyFunctions(FUTILITY)
-  t.deepEqual(fns, [
+  const expected = zort([
+    `$`,
     `I`,
     `K`,
+    `PLACEHOLDER`,
     `add`,
     `assign`,
     `choice`,
@@ -84,6 +31,7 @@ test(`index`, (t) => {
     `curryObjectN`,
     `curryPowder`,
     `curryify`,
+    `difference`,
     `divide`,
     `every`,
     `expectKArgs`,
@@ -92,11 +40,13 @@ test(`index`, (t) => {
     `flip`,
     `fork`,
     `freeze`,
+    `isArray`,
     `isBoolean`,
     `isFunction`,
     `isNil`,
     `isNumber`,
     `isObject`,
+    `isString`,
     `isTypeof`,
     `iterate`,
     `join`,
@@ -112,10 +62,15 @@ test(`index`, (t) => {
     `some`,
     `split`,
     `subtract`,
+    `symmetricDifference`,
     `ternary`,
     `test`,
     `trim`,
     `triplet`,
     `which`
   ])
+  t.deepEqual(
+    futilityKeys,
+    expected
+  )
 })

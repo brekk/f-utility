@@ -1,5 +1,5 @@
 import fastFilter from 'fast.js/filter'
-import {flip} from './flip'
+import {delegateFastBinary} from './delegate-fast'
 
 /**
  * array.filter(fn) but curried and fast
@@ -9,4 +9,4 @@ import {flip} from './flip'
  * @returns {Array} filtered iterable
  * @public
  */
-export const filter = flip(fastFilter)
+export const filter = delegateFastBinary(`filter`, fastFilter)

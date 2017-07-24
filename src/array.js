@@ -1,5 +1,6 @@
 import {e1} from 'entrust'
 import {curry} from 'katsu-curry'
+import {filter} from './filter'
 
 /**
  * string.prototype.join but curried
@@ -26,4 +27,18 @@ export const sort = curry((fn, functor) => {
   const copy = Array.from(functor)
   copy.sort(fn)
   return copy
+})
+
+export const difference = curry(
+  (bList, aList) => filter((x) => !bList.includes(x), aList)
+)
+
+export const symmetricDifference = curry((a, b) => {
+  const ab = difference(a, b)
+  const ba = difference(b, a)
+  return (
+    ab.length > ba.length ?
+    ab :
+    ba
+  )
 })
