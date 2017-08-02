@@ -68,7 +68,7 @@
   },
   "homepage": "https://github.com/brekk/f-utility#readme",
   "dependencies": {
-    "entrust": "^0.0.2",
+    "entrust": "^0.0.3",
     "fantasy-land": "^3.3.0",
     "fast.js": "^0.1.1",
     "katsu-curry": "^0.0.9"
