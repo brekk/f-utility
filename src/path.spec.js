@@ -1,8 +1,9 @@
 import test from 'ava'
 
-import {prop, propOr, path, pathOr} from './path'
+import {propIs, propEq, pathIs, pathEq, prop, propOr, path, pathOr} from './path'
 import {word} from './random-word'
 import {floorMin} from './random-floor'
+import {equals} from './math'
 
 test(`prop should grab a property from an object or return null`, (t) => {
   const x = floorMin(1, 1e5)
@@ -29,4 +30,34 @@ test(`path should grab a nested property from an object or return null`, (t) => 
   const z = floorMin(1, 1e5)
   t.is(path(`xyz`.split(``), {x: {y: {z}}}), z)
   t.is(path(`xyz`.split(``), {x: {y: {butts: z}}}), null)
+})
+
+test(`pathIs should grab a nested property from an object and then compare it`, (t) => {
+  const rando = floorMin(1, 1e5)
+  const isRandom = equals(rando)
+  const pathIsRandom = pathIs(isRandom)
+  t.truthy(pathIsRandom(`xyz`.split(``), {x: {y: {z: rando}}}))
+  t.falsy(pathIsRandom(`xyz`.split(``), {x: {y: {z: 100}}}))
+})
+
+test(`pathEq should grab a nested property from an object and then compare it with ===`, (t) => {
+  const rando = floorMin(1, 1e5)
+  const pathIsRandom = pathEq(rando)
+  t.truthy(pathIsRandom(`xyz`.split(``), {x: {y: {z: rando}}}))
+  t.falsy(pathIsRandom(`xyz`.split(``), {x: {y: {z: 100}}}))
+})
+
+test(`propIs should grab a nested property from an object and then compare it`, (t) => {
+  const rando = floorMin(1, 1e5)
+  const isRandom = equals(rando)
+  const propIsRandom = propIs(isRandom)
+  t.truthy(propIsRandom(`z`, {z: rando}))
+  t.falsy(propIsRandom(`z`, {z: 100}))
+})
+
+test(`propEq should grab a nested property from an object and then compare it`, (t) => {
+  const rando = floorMin(1, 1e5)
+  const propIsRandom = propEq(rando)
+  t.truthy(propIsRandom(`z`, {z: rando}))
+  t.falsy(propIsRandom(`z`, {z: 100}))
 })

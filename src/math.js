@@ -1,5 +1,7 @@
 import {curry} from 'katsu-curry'
 
+export const equals = curry((a, b) => a === b)
+
 /**
  * convenience method for Math.round
  * @method round

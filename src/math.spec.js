@@ -1,7 +1,7 @@
 import test from 'ava'
 import {pipe} from 'katsu-curry'
 
-import {add, subtract, divide, multiply, pow, round} from './math'
+import {equals, add, subtract, divide, multiply, pow, round} from './math'
 
 test(`math is like, mathy`, (t) => {
   const doNothing = pipe(
@@ -15,4 +15,9 @@ test(`math is like, mathy`, (t) => {
   )
   t.is(doNothing(100), 100)
   t.is(doNothing(-7), -7)
+})
+
+test(`equals is a function`, (t) => {
+  t.truthy(equals(100, 100))
+  t.falsy(equals(200, 100))
 })
