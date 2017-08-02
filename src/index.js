@@ -14,7 +14,7 @@ export {reject} from './reject'
 export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
-export {path, pathOr, prop, propOr} from './path'
+export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
   isTypeof,
   isBoolean,

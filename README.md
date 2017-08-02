@@ -13,6 +13,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.0.5_ - fixed `allot`, and the partially applied forms `grab` and `take`
 -   _3.0.7_ - fixed exports again
 -   _3.0.8_ - added `path`, `pathOr`, `prop`, and `propOr`
+-   _3.0.9_ - added `pathIs`, `pathEq`, `propIs`, `propEq` and `equals`
 
 # API
 
@@ -253,6 +254,54 @@ path(`c`, {z: `actual`}) // null
 ```
 
 Returns **any** a property or null
+
+## pathIs
+
+Grab a property from an object and compare it with a given function
+
+**Parameters**
+
+-   `is` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** an assertion function
+-   `lenses` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** a property
+-   `input` **any** an object to grab things from
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** a truthy value
+
+## pathEq
+
+Grab a property from an object and compare it with a given value via ===
+
+**Parameters**
+
+-   `equiv` **any** equivalent value
+-   `lenses` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** a property
+-   `input` **any** an object to grab things from
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** a truthy value
+
+## propEq
+
+Grab a property from an object and compare it with a given function
+
+**Parameters**
+
+-   `equiv` **any** equivalent value
+-   `property` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a property
+-   `input` **any** an object to grab things from
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** a truthy value
+
+## propEq
+
+Grab a property from an object and compare it with a given value via ===
+
+**Parameters**
+
+-   `equiv` **any** equivalent value
+-   `property` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a property
+-   `input` **any** an object to grab things from
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** a truthy value
 
 ## isTypeof
 
