@@ -14,6 +14,7 @@ export {reject} from './reject'
 export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
+export {keys, assign, freeze, merge} from './object'
 export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
   isTypeof,
@@ -27,11 +28,6 @@ export {
 } from './types'
 
 export const {version} = pkg
-
-const {keys: _keys, freeze: _freeze, assign: _assign} = Object
-export const keys = _keys
-export const freeze = _freeze
-export const assign = _assign
 
 export const length = _length
 export {

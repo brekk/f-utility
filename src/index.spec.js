@@ -62,6 +62,7 @@ const harness = (F) => {
       `keys`,
       `length`,
       `map`,
+      `merge`,
       `multiply`,
       `pathEq`,
       `pathIs`,
