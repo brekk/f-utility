@@ -5,7 +5,7 @@ import * as FUTILITY from './index'
 const harness = (F) => {
   const zort = (x) => x.sort() // eslint-disable-line
 
-  const {reject, isFunction, pipe, keys, map} = F
+  const {symmetricDifference, reject, isFunction, pipe, keys, map} = F
 
   const keySort = pipe(keys, zort)
   const nonFunctions = (x) => pipe(
@@ -63,6 +63,10 @@ const harness = (F) => {
       `length`,
       `map`,
       `multiply`,
+      `path`,
+      `pathOr`,
+      `prop`,
+      `propOr`,
       `pipe`,
       `pow`,
       `random`,
@@ -81,6 +85,8 @@ const harness = (F) => {
       `version`,
       `which`
     ])
+    const sillyPowerAssert = symmetricDifference(expected, futilityKeys)
+    t.deepEqual(sillyPowerAssert, [])
     t.deepEqual(
       futilityKeys,
       expected

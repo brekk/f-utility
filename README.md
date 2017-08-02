@@ -2,7 +2,17 @@
 
 # f-utility
 
-A collection of common, sometimes functional utilities.
+A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-curry`
+
+### Changelog
+
+-   _3.0.0_ - a complete re-imagining of the codebase
+-   _3.0.1_ - fixed exported functions
+-   _3.0.2_ - fixed functor delegation
+-   _3.0.4_ - added `sort`, `keys`, `freeze`, `assign`, and `length`
+-   _3.0.5_ - fixed `allot`, and the partially applied forms `grab` and `take`
+-   _3.0.7_ - fixed exports again
+-   _3.0.8_ - added `path`, `pathOr`, `prop`, and `propOr`
 
 # API
 
@@ -165,6 +175,84 @@ a ternary statement, but curried and lazy and where each case is a function
 -   `o` **mixed** input
 
 Returns **any** anything
+
+## pathOr
+
+Grab a nested value from an object or return a default
+
+**Parameters**
+
+-   `def` **any** a default value
+-   `lenses` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>** a list of nested properties
+-   `input` **any** an object to grab things from
+
+**Examples**
+
+```javascript
+import {pathOr} from 'f-utility'
+pathOr(`default`, [`a`, `b`, `c`], {a: {b: {c: `actual`}}}) // `actual`
+pathOr(`default`, [`a`, `b`, `c`], {x: {y: {z: `actual`}}}) // `default`
+```
+
+Returns **any** a nested value or default
+
+## path
+
+Grab a nested value from an object
+
+**Parameters**
+
+-   `lenses` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>** a list of nested properties
+-   `input` **any** an object to grab things from
+
+**Examples**
+
+```javascript
+import {path} from 'f-utility'
+pathOr([`a`, `b`, `c`], {a: {b: {c: `actual`}}}) // `actual`
+pathOr([`a`, `b`, `c`], {x: {y: {z: `actual`}}}) // null
+```
+
+Returns **any** a nested value or null
+
+## propOr
+
+Grab a property from an object or return a default
+
+**Parameters**
+
+-   `def` **any** a default value
+-   `property` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a property
+-   `input` **any** an object to grab things from
+
+**Examples**
+
+```javascript
+import {propOr} from 'f-utility'
+pathOr(`default`, `c`, {c: `actual`}) // `actual`
+pathOr(`default`, `c`, {z: `actual`}) // `default`
+```
+
+Returns **any** a property or default
+
+## prop
+
+Grab a property from an object or return null
+
+**Parameters**
+
+-   `property` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a property
+-   `input` **any** an object to grab things from
+
+**Examples**
+
+```javascript
+import {prop} from 'f-utility'
+path(`c`, {c: `actual`}) // `actual`
+path(`c`, {z: `actual`}) // null
+```
+
+Returns **any** a property or null
 
 ## isTypeof
 
