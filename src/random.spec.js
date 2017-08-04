@@ -1,5 +1,4 @@
 import test from 'ava'
-import {values, keys} from 'katsu-curry/lib/utils/object'
 import {map} from './map'
 import {iterate} from './iterate'
 import {random} from './random'
@@ -7,6 +6,8 @@ import {shuffle} from './random-shuffle'
 import {floor, floorMin} from './random-floor'
 import {pick, grab, allot} from './random-take'
 import {word, wordSource} from './random-word'
+
+const {values, keys} = Object
 
 const characters = [
   `abcdefghijklmnopqrstuvwxyz`,
