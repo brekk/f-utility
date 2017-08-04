@@ -14,7 +14,8 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.0.7_ - fixed exports again
 -   _3.0.8_ - added `path`, `pathOr`, `prop`, and `propOr`
 -   _3.0.9_ - added `merge`, `pathIs`, `pathEq`, `propIs`, `propEq` and `equals`
--   _3.0.10_ - added `chain`
+-   _3.1.0_ - updated `katsu-curry`, whose public API changed
+-   _3.1.1_ - added `chain`
 
 # API
 
