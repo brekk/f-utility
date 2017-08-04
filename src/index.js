@@ -1,6 +1,18 @@
-import {length as _length} from 'katsu-curry/lib/utils/length'
-import pkg from '../package.json'
-export * from 'katsu-curry'
+import {length as _length} from 'katsu-curry/utils/length'
+import * as pkg from '../package.json'
+export {
+  pipe,
+  compose,
+  $,
+  PLACEHOLDER,
+  curryify,
+  curry,
+  curryObjectK,
+  curryObjectN,
+  curryObjectKN,
+  K,
+  I
+} from 'katsu-curry'
 export {join, sort, symmetricDifference, difference} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
