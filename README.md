@@ -14,6 +14,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.0.7_ - fixed exports again
 -   _3.0.8_ - added `path`, `pathOr`, `prop`, and `propOr`
 -   _3.0.9_ - added `merge`, `pathIs`, `pathEq`, `propIs`, `propEq` and `equals`
+-   _3.0.10_ - added `chain`
 
 # API
 
@@ -25,8 +26,8 @@ string.prototype.join but curried
 
 **Parameters**
 
--   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `list` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+-   `list` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** joined
 
@@ -36,8 +37,8 @@ string.prototype.sort but curried
 
 **Parameters**
 
--   `fn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `fn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** sorted
 
@@ -47,7 +48,7 @@ takes a function that takes two parameters and returns a ternary result
 
 **Parameters**
 
--   `cnFn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `cnFn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
 -   `a` **any** anything
 -   `b` **any** anything
 
@@ -59,8 +60,8 @@ array.filter(fn) but curried and fast
 
 **Parameters**
 
--   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
@@ -80,9 +81,9 @@ a delegatee last function for Future.fork ing
 
 **Parameters**
 
--   `badPath` **fn** 
--   `goodPath` **fn** 
--   `future` **Future** 
+-   `badPath` **fn**
+-   `goodPath` **fn**
+-   `future` **Future**
 
 Returns **any** the result of the fork
 
@@ -103,10 +104,21 @@ functor.map(fn) but curried and fast (though will delegate to the functor)
 
 **Parameters**
 
--   `fn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `fn` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** mapped iterable
+
+## chain
+
+functor.chain(fn) but curried and fast
+
+**Parameters**
+
+-   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** flat mapped iterable
 
 ## reduce
 
@@ -126,8 +138,8 @@ array.filter((x) => !fn(x)) but curried and fast
 
 **Parameters**
 
--   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
@@ -137,10 +149,10 @@ string.split(x) but delegatee last
 
 **Parameters**
 
--   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
 -   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to split
 
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>**
 
 ## trim
 
@@ -309,7 +321,7 @@ returns boolean based on type
 
 **Parameters**
 
--   `type` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `type` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
 -   `x` **any** anything
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether x is typeof type
@@ -320,10 +332,10 @@ array.some(fn) but curried and lazy
 
 **Parameters**
 
--   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**
 
 ## every
 
@@ -331,10 +343,10 @@ array.every(fn) but curried and lazy
 
 **Parameters**
 
--   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)**
 
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**
 
 ## random
 

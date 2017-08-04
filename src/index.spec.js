@@ -1,5 +1,6 @@
 import test from 'ava'
 import * as BUNDLE from '../f-utility'
+import * as WEBPACKED from '../index'
 import * as FUTILITY from './index'
 
 const harness = (F) => {
@@ -98,3 +99,4 @@ const harness = (F) => {
 }
 harness(FUTILITY)
 harness(BUNDLE)
+harness(WEBPACKED)
