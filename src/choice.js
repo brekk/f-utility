@@ -8,6 +8,7 @@ import {curry} from 'katsu-curry'
  * @param {*} b - anything
  * @returns {*} result
  * @public
+ * @example
  * import {choice} from 'f-utility'
  * const max = choice((a, b) => a > b)
  * max(500, 20) // 500
