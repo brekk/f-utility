@@ -7,6 +7,9 @@ import {curry} from 'katsu-curry'
  * @param {function} fn - a function to invoke x times
  * @returns {Array} aggregated values from invoking a given function
  * @public
+ * @example
+ * import {iterate} from 'f-utility'
+ * iterate(5, () => `x`) // [`x`, `x`, `x`, `x`, `x`]
  */
 export const iterate = curry((total, fn) => {
   let count = total

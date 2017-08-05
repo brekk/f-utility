@@ -8,5 +8,13 @@ import {curry} from 'katsu-curry'
  * @param {function} bFn - b function
  * @param {mixed} o - input
  * @returns {*} anything
+ * @public
+ * @example
+ * import {triplet} from 'f-utility'
+ * const test = (x) => x % 2 === 0
+ * const double = (x) => x * 2
+ * const half = (x) => x / 2
+ * triplet(test, double, half, 100) // 200
+ * triplet(test, double, half, 5) // 2.5
  */
 export const triplet = curry((cnFn, bFn, aFn, o) => cnFn(o) ? aFn(o) : bFn(o))
