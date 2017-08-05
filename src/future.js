@@ -3,8 +3,8 @@ import {e2} from 'entrust'
 /**
  * a delegatee last function for Future.fork ing
  * @method fork
- * @param {fn} badPath
- * @param {fn} goodPath
+ * @param {function} badPath - a function
+ * @param {function} goodPath - a function
  * @param {Future} future
  * @returns {*} the result of the fork
  * @public
