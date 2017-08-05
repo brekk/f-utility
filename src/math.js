@@ -24,6 +24,10 @@ export const equal = equals
  * @param {number} x - a number
  * @returns {number} rounded number
  * @public
+ * @example
+ * import {round} from 'f-utility'
+ * round(10.3) // 10
+ * round(10.9) // 11
  */
 export const {round} = Math
 
@@ -34,6 +38,9 @@ export const {round} = Math
  * @param {number} b - b number
  * @returns {number} sum
  * @public
+ * @example
+ * import {add} from 'f-utility'
+ * add(4, 2) // 6
  */
 export const add = curry((a, b) => b + a)
 
@@ -44,6 +51,9 @@ export const add = curry((a, b) => b + a)
  * @param {number} b - b number
  * @returns {number} subtracted
  * @public
+ * @example
+ * import {subtract} from 'f-utility'
+ * subtract(4, 2) // -2
  */
 export const subtract = curry((a, b) => b - a)
 
@@ -54,6 +64,9 @@ export const subtract = curry((a, b) => b - a)
  * @param {number} b - b number
  * @returns {number} multiplied
  * @public
+ * @example
+ * import {multiply} from 'f-utility'
+ * multiply(4, 2) // 8
  */
 export const multiply = curry((a, b) => b * a)
 
@@ -64,6 +77,9 @@ export const multiply = curry((a, b) => b * a)
  * @param {number} b - b number
  * @returns {number} divided
  * @public
+ * @example
+ * import {divide} from 'f-utility'
+ * divide(4, 2) // 0.5
  */
 export const divide = curry((a, b) => b / a)
 
@@ -74,5 +90,8 @@ export const divide = curry((a, b) => b / a)
  * @param {number} b - b number
  * @returns {number} b to the power of a
  * @public
+ * @example
+ * import {pow} from 'f-utility'
+ * pow(4, 2) // 16
  */
 export const pow = curry((a, b) => Math.pow(b, a))

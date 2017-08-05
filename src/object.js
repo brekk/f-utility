@@ -8,6 +8,9 @@ const {keys: _keys, freeze: _freeze, assign: _assign} = Object
  * @param {Object} a - an object
  * @returns {Array} - an array of keys
  * @public
+ * @example
+ * import {keys} from 'f-utility'
+ * keys({a: 1, b: 2}) // [`a`, `b`]
  */
 export const keys = _keys
 
@@ -18,6 +21,10 @@ export const keys = _keys
  * @param {Object} a - an object
  * @returns {Object} - a frozen object
  * @public
+ * @example
+ * import {freeze} from 'f-utility'
+ * const immutable = freeze({a: 1, b: 2})
+ * immutable.a = 5 // throws error
  */
 export const freeze = _freeze
 
@@ -28,6 +35,9 @@ export const freeze = _freeze
  * @param {Object} a - any number of objects
  * @returns {Object} - a merged object
  * @public
+ * @example
+ * import {assign} from 'f-utility'
+ * assign({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  */
 export const assign = _assign
 
@@ -38,5 +48,8 @@ export const assign = _assign
  * @param {Object} b - object b
  * @returns {Object} c - the results of merging a and b
  * @public
+ * @example
+ * import {merge} from 'f-utility'
+ * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  */
 export const merge = curry((a, b) => assign({}, a, b))
