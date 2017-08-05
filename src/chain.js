@@ -5,8 +5,8 @@ import {delegateFastBinary} from './delegate-fast'
  * functor.chain(fn) but curried and fast
  * @method chain
  * @param {function} predicate
- * @param {Array} iterable
- * @returns {Array} flat mapped iterable
+ * @param {Array|Monad} iterable
+ * @returns {Array|Monad} flat mapped iterable
  * @public
  * @example
  * import {chain} from 'f-utility'

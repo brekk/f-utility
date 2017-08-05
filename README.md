@@ -56,7 +56,7 @@ import {sort} from 'f-utility'
 sort((x) => x % 2, [1,2,3,4,5,6,7,8]) // [ 0, 2, 4, 6, 8, 9, 7, 5, 3, 1 ]
 ```
 
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** sorted
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** sorted
 
 ## difference
 
@@ -217,7 +217,7 @@ functor.chain(fn) but curried and fast
 **Parameters**
 
 -   `predicate` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
--   `iterable` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+-   `iterable` **([Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) | Monad)** 
 
 **Examples**
 
@@ -229,7 +229,7 @@ const a = flatSplit([`chain`, `is`, `flatMap`])
 console.log(a) // [ 'c', 'h', 'a', 'i', 'n', 'i', 's', 'f', 'l', 'a', 't', 'M', 'a', 'p' ]
 ```
 
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** flat mapped iterable
+Returns **([Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) | Monad)** flat mapped iterable
 
 ## equals
 
@@ -353,7 +353,7 @@ isntID(ID) // false
 isntID(123) // true
 ```
 
-Returns **any** mixed
+Returns **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** function
 
 ## not1
 
@@ -369,12 +369,12 @@ return the result of inverting a unary function
 ```javascript
 import {not, equal} from 'f-utility'
 const ID = 12345
-const isntID = not2(equal, ID)
+const isntID = not1(equal, ID)
 isntID(ID) // false
 isntID(123) // true
 ```
 
-Returns **any** mixed
+Returns **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** inverted function
 
 ## not2
 
@@ -386,7 +386,7 @@ return the result of inverting a binary function
 -   `a` **any** a parameter to pass to the function
 -   `b` **any** a parameter to pass to the function
 
-Returns **any** mixed
+Returns **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** inverted function
 
 ## not3
 
@@ -399,7 +399,7 @@ return the result of inverting a tertiary function
 -   `b` **any** a parameter to pass to the function
 -   `c` **any** a parameter to pass to the function
 
-Returns **any** mixed
+Returns **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** inverted function
 
 ## reduce
 

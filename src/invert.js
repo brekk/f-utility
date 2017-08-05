@@ -1,4 +1,4 @@
-import {curry, pipe} from 'f-utility'
+import {curry, pipe} from 'katsu-curry'
 
 /**
  * @method invert
@@ -18,7 +18,7 @@ export const invert = (x) => !x
  * return the result of inverting a nullary function
  * @method not
  * @param {function} fn - a function to invert the result of
- * @returns {*} mixed
+ * @returns {function} function
  * @public
  * @example
  * import {not, equal} from 'f-utility'
@@ -37,12 +37,12 @@ export const not = (fn) => pipe(
  * @method not1
  * @param {function} fn - a function to invert the result of
  * @param {*} a - a parameter to pass to the function
- * @returns {*} mixed
+ * @returns {function} inverted function
  * @public
  * @example
  * import {not, equal} from 'f-utility'
  * const ID = 12345
- * const isntID = not2(equal, ID)
+ * const isntID = not1(equal, ID)
  * isntID(ID) // false
  * isntID(123) // true
  */
@@ -57,7 +57,7 @@ export const not1 = curry((fn, a) => pipe(
  * @param {function} fn - a function to invert the result of
  * @param {*} a - a parameter to pass to the function
  * @param {*} b - a parameter to pass to the function
- * @returns {*} mixed
+ * @returns {function} inverted function
  * @public
  */
 export const not2 = curry((fn, a, b) => pipe(
@@ -72,7 +72,7 @@ export const not2 = curry((fn, a, b) => pipe(
  * @param {*} a - a parameter to pass to the function
  * @param {*} b - a parameter to pass to the function
  * @param {*} c - a parameter to pass to the function
- * @returns {*} mixed
+ * @returns {function} inverted function
  * @public
  */
 export const not3 = curry((fn, a, b, c) => pipe(

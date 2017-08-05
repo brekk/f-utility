@@ -20,7 +20,7 @@ export const join = e1(`join`)
  * @method sort
  * @param {function} fn
  * @param {Array} functor
- * @returns {string} sorted
+ * @returns {Array} sorted
  * @public
  * @example
  * import {sort} from 'f-utility'
