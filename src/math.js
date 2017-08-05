@@ -1,13 +1,29 @@
 import {curry} from 'katsu-curry'
 
+/**
+ * === comparison
+ * @method equals
+ * @param {*} a - anything
+ * @param {*} b - anything
+ * @returns {boolean} whether a triple-equals b
+ * @public
+ * @alias equal
+ * @example
+ * import {equals} from 'f-utility'
+ * const SAFE_ID = 123456
+ * const equalsID = equals(SAFE_ID)
+ * equalsID(200) // false
+ * equalsID(SAFE_ID) // true
+ */
 export const equals = curry((a, b) => a === b)
+export const equal = equals
 
 /**
  * convenience method for Math.round
  * @method round
  * @param {number} x - a number
  * @returns {number} rounded number
- * @private
+ * @public
  */
 export const {round} = Math
 
@@ -17,7 +33,7 @@ export const {round} = Math
  * @param {number} a - a number
  * @param {number} b - b number
  * @returns {number} sum
- * @private
+ * @public
  */
 export const add = curry((a, b) => b + a)
 
@@ -27,7 +43,7 @@ export const add = curry((a, b) => b + a)
  * @param {number} a - a number
  * @param {number} b - b number
  * @returns {number} subtracted
- * @private
+ * @public
  */
 export const subtract = curry((a, b) => b - a)
 
@@ -37,7 +53,7 @@ export const subtract = curry((a, b) => b - a)
  * @param {number} a - a number
  * @param {number} b - b number
  * @returns {number} multiplied
- * @private
+ * @public
  */
 export const multiply = curry((a, b) => b * a)
 
@@ -47,7 +63,7 @@ export const multiply = curry((a, b) => b * a)
  * @param {number} a - a number
  * @param {number} b - b number
  * @returns {number} divided
- * @private
+ * @public
  */
 export const divide = curry((a, b) => b / a)
 
@@ -57,6 +73,6 @@ export const divide = curry((a, b) => b / a)
  * @param {number} a - a number
  * @param {number} b - b number
  * @returns {number} b to the power of a
- * @private
+ * @public
  */
 export const pow = curry((a, b) => Math.pow(b, a))

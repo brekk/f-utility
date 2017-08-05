@@ -4,6 +4,14 @@ import {e1, e2} from 'entrust'
 const has = curry((x, y) => !!y[x])
 const {isArray} = Array
 
+/**
+ * functor-last curried goodness
+ * @method willDelegate
+ * @param {string} method
+ * @param {*} functor
+ * @returns {boolean} should we delegate?
+ * @private
+ */
 const willDelegate = curry(
   (method, functor) => (
     has(method, functor) && !isArray(functor)
@@ -11,7 +19,7 @@ const willDelegate = curry(
 )
 
 /**
- * functor last curried goodness
+ * functor-last curried goodness
  * @method delegateFastBinary
  * @param {function} fn
  * @param {Array} functor
@@ -29,7 +37,7 @@ export const delegateFastBinary = curry(
 )
 
 /**
- * functor last curried goodness
+ * functor-last curried goodness
  * @method delegateFastTertiary
  * @param {function} fn
  * @param {*} initial

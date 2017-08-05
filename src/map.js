@@ -16,6 +16,10 @@ const flMap = e1(FL.map)
  * @param {Array} functor
  * @returns {Array} mapped iterable
  * @public
+ * @example
+ * import {map} from 'f-utility'
+ * const add1 = map((x) => x + 1)
+ * add1([1,2,3]) // [2,3,4]
  */
 export const map = curry(
   (fn, functor) => {

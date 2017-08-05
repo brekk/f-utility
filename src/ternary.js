@@ -7,5 +7,9 @@ import {curry} from 'katsu-curry'
  * @param {*} a - anything
  * @param {*} b - anything
  * @returns {mixed} a / b
+ * @example
+ * import {ternary} from `f-utility`
+ * ternary(true, `a`, `b`) // `a`
+ * ternary(false, `a`, `b`) // `b`
  */
 export const ternary = curry((cn, b, a) => cn ? a : b)

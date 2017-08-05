@@ -9,6 +9,9 @@ import {filter} from './filter'
  * @param {Array} list
  * @returns {string} joined
  * @public
+ * @example
+ * import {join} from 'f-utility'
+ * join(`x`, [1,2,3]) // `1x2x3`
  */
 export const join = e1(`join`)
 
@@ -19,6 +22,9 @@ export const join = e1(`join`)
  * @param {Array} functor
  * @returns {string} sorted
  * @public
+ * @example
+ * import {sort} from 'f-utility'
+ * sort((x) => x % 2, [1,2,3,4,5,6,7,8]) // [ 0, 2, 4, 6, 8, 9, 7, 5, 3, 1 ]
  */
 // we can't just invert things with entrust, as sort is a mutating method
 // export const sort = e1(`sort`)
@@ -29,10 +35,33 @@ export const sort = curry((fn, functor) => {
   return copy
 })
 
+/**
+ * get the difference between two arrays
+ * @method difference
+ * @param {Array} bList - an array
+ * @param {Array} aList - an array
+ * @returns {Array} filtered array with differences between the two arrays
+ * @public
+ * @example
+ * import {difference} from 'f-utility'
+ * difference([1,2,3], [2,4,6]) // [4, 6]
+ * difference([2,4,6], [1,2,3]) // [1, 3]
+ */
 export const difference = curry(
   (bList, aList) => filter((x) => !bList.includes(x), aList)
 )
 
+/**
+ * get both the differences between two arrays, and if one difference is longer, return it
+ * @method symmetricDifference
+ * @param {Array} a - an array
+ * @param {Array} b - an array
+ * @returns {Array} filtered array with differences between the two arrays
+ * @public
+ * @example
+ * import {symmetricDifference} from 'f-utility'
+ * difference([1,2,3], [1,2]) // [3]
+ */
 export const symmetricDifference = curry((a, b) => {
   const ab = difference(a, b)
   const ba = difference(b, a)
