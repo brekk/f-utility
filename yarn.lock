@@ -2133,16 +2133,6 @@ extsprintf@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
 
-f-utility@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/f-utility/-/f-utility-3.1.1.tgz#856adc2d12e085b4039c8f093b03f266a5467e77"
-  dependencies:
-    entrust "^0.0.3"
-    fantasy-land "^3.3.0"
-    fast.js "^0.1.1"
-    flatmap-fast "^3.0.0"
-    katsu-curry "^0.1.1"
-
 fantasy-combinators@0.0.1, fantasy-combinators@0.0.x:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/fantasy-combinators/-/fantasy-combinators-0.0.1.tgz#d18388aed94be790ac4069031f5ea018345e33a1"
