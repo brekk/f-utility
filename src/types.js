@@ -80,22 +80,6 @@ export const isFunction = isTypeof(`function`)
 export const isString = isTypeof(`string`)
 
 /**
- * test whether something is an object
- * @method isObject
- * @param {*} x - anything
- * @returns {boolean} - true if the input is a object
- * @public
- * @example
- * import {isObject} from 'f-utility'
- * isObject(true) // false
- * isObject(1) // false
- * isObject(`a`) // false
- * isObject([`a`]) // false
- * isObject({}) // true
- */
-export const isObject = isTypeof(`object`)
-
-/**
  * test whether something is null-ish
  * @method isNil
  * @param {*} x - anything
@@ -112,6 +96,22 @@ export const isObject = isTypeof(`object`)
  * isNil(undefined) // true
  */
 export const isNil = (x) => x == null
+
+/**
+ * test whether something is an object -- no longer recognizes `null` as an object
+ * @method isObject
+ * @param {*} x - anything
+ * @returns {boolean} - true if the input is a object
+ * @public
+ * @example
+ * import {isObject} from 'f-utility'
+ * isObject(true) // false
+ * isObject(1) // false
+ * isObject(`a`) // false
+ * isObject([`a`]) // false
+ * isObject({}) // true
+ */
+export const isObject = (x) => (!isNil(x) && isTypeof(`object`, x))
 
 /**
  * test whether something is null-ish

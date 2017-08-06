@@ -6,7 +6,7 @@ test(`types!`, (t) => {
   t.truthy(isBoolean(false))
   t.truthy(isNumber(100))
   t.truthy(isObject({}))
-  t.truthy(isObject(null))
+  t.falsy(isObject(null))
   t.truthy(isFunction(() => {}))
   t.truthy(isNil(null))
   t.truthy(isNil(undefined))
