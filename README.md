@@ -229,7 +229,7 @@ a delegatee last function for Either.fold ing
 
 -   `badPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
 -   `goodPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
--   `an` **(Right | Left)** Either
+-   `either` **(Right | Left)** an Either
 
 **Examples**
 

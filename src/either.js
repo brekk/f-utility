@@ -5,7 +5,7 @@ import {e2} from 'entrust'
  * @method fold
  * @param {function} badPath - a function
  * @param {function} goodPath - a function
- * @param {Right|Left} an Either
+ * @param {Right|Left} either - an Either
  * @returns {*} the result of the fold
  * @public
  * @example
