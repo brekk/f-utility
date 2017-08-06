@@ -17,9 +17,12 @@ const {
 const filterSpecs = [
   `jayin "_.toPairs(x)`,
   `.map(([k, v]) => ([k,`,
-  `_.map(v, (y) => y.indexOf('node_modules') > -1 ? y.substr(y.indexOf('node_modules') + 13) : y)`,
+  `_.map(v, (y) => y.indexOf('node_modules') > -1 ?`,
+  `'✪' + y.substr(y.indexOf('node_modules') + 13) :`,
+  ` y)`,
   `]))`,
   `.filter(([k, v]) => !(k.indexOf('spec') > -1))`,
+  `.filter(([k, v]) => !(k.indexOf('f-utility') > -1))`,
   `.reduce((agg, [k, v]) => Object.assign({}, agg, {[k]: v}), {})"`
 ].join(``)
 
@@ -31,12 +34,16 @@ module.exports = {
         description: `check dependencies`
       },
       graph: {
-        script: `madge src --image dependencies.svg`,
-        description: `generate a visual dependency graph`
-      },
-      graph2: {
         script: `madge src --json | ${filterSpecs} | madge --stdin --image dependencies.svg`,
         description: `generate a visual dependency graph`
+      },
+      graphjson: {
+        script: `madge src --json | ${filterSpecs} | madge --stdin --json`,
+        description: `generate a visual dependency graph in json`
+      },
+      graphdot: {
+        script: `madge src --json | ${filterSpecs} | madge --stdin --dot`,
+        description: `generate a visual dependency graph in dot`
       }
     },
     readme: {
@@ -77,7 +84,7 @@ module.exports = {
     },
     care: {
       description: `run all the things`,
-      script: allNPS(`lint`, `bundle`, `build`, `test`, `readme`, `dependencies.graph2`)
+      script: allNPS(`lint`, `bundle`, `build`, `test`, `readme`, `dependencies.graph`)
     },
     precommit: `nps care`
   }
