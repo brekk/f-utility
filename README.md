@@ -18,7 +18,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.1.1_ - added `chain`
 -   _3.2.0_ - added `invert`, `not`, `not1`, `not2`, `not3` and updated documentation
 -   _3.2.1_ - added `toPairs` / `entries` and `fromPairs`
--   _3.2.2_ - added `ap`, `fold`
+-   _3.2.2_ - added `ap`, `fold`, and `isDistinctObject`
 
 # API
 
