@@ -18,6 +18,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.1.1_ - added `chain`
 -   _3.2.0_ - added `invert`, `not`, `not1`, `not2`, `not3` and updated documentation
 -   _3.2.1_ - added `toPairs` / `entries` and `fromPairs`
+-   _3.2.2_ - added `ap`, `fold`, and `isDistinctObject`
 
 # API
 
@@ -219,6 +220,28 @@ add1([1,2,3]) // [2,3,4]
 ```
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** mapped iterable
+
+## fold
+
+a delegatee last function for Either.fold ing
+
+**Parameters**
+
+-   `badPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
+-   `goodPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
+-   `either` **(Right | Left)** an Either
+
+**Examples**
+
+```javascript
+import {I, I, pipe, fold} from 'f-utility'
+import {Left, Right} from 'fantasy-eithers'
+const saferDivide = (a, b) => (b !== 0 ? Right(a / b) : Left(`Cannot divide by zero`))
+fold(I, I, saferDivide(1, 2)) // 0.5
+fold(I, I, saferDivide(1, 0)) // `Cannot divide by zero`
+```
+
+Returns **any** the result of the fold
 
 ## chain
 
@@ -924,27 +947,6 @@ isString(() => {}) // false
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is a string
 
-## isObject
-
-test whether something is an object
-
-**Parameters**
-
--   `x` **any** anything
-
-**Examples**
-
-```javascript
-import {isObject} from 'f-utility'
-isObject(true) // false
-isObject(1) // false
-isObject(`a`) // false
-isObject([`a`]) // false
-isObject({}) // true
-```
-
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is a object
-
 ## isNil
 
 test whether something is null-ish
@@ -968,9 +970,31 @@ isNil(undefined) // true
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is null-ish
 
+## isObject
+
+test whether something is an object
+
+**Parameters**
+
+-   `x` **any** anything
+
+**Examples**
+
+```javascript
+import {isObject} from 'f-utility'
+isObject(true) // false
+isObject(1) // false
+isObject(`a`) // false
+isObject([`a`]) // true
+isObject({}) // true
+isObject(null) // true
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is a object
+
 ## isArray
 
-test whether something is null-ish
+test whether something is an array
 
 **Parameters**
 
@@ -989,7 +1013,30 @@ isArray(null) // false
 isArray(undefined) // false
 ```
 
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is null-ish
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is an array
+
+## isDistinctObject
+
+test whether something is a non-null object which isn't an array
+
+**Parameters**
+
+-   `x` **any** anything
+
+**Examples**
+
+```javascript
+import {isDistinctObject} from 'f-utility'
+isDistinctObject(true) // false
+isDistinctObject(1) // false
+isDistinctObject(`a`) // false
+isDistinctObject([`a`]) // false
+isDistinctObject({}) // true
+isDistinctObject(null) // false
+isDistinctObject(undefined) // false
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is an object that isn't an array and isn't null
 
 ## some
 
