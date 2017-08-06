@@ -28,7 +28,7 @@ export {reject} from './reject'
 export {split, trim} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
-export {keys, assign, freeze, merge} from './object'
+export {keys, assign, freeze, merge, entries, fromPairs, toPairs} from './object'
 export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
   isTypeof,

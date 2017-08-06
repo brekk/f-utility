@@ -1,4 +1,6 @@
-import {curry} from 'katsu-curry'
+import {curry, pipe} from 'katsu-curry'
+import {reduce} from './reduce'
+import {map} from './map'
 const {keys: _keys, freeze: _freeze, assign: _assign} = Object
 
 /**
@@ -53,3 +55,47 @@ export const assign = _assign
  * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  */
 export const merge = curry((a, b) => assign({}, a, b))
+
+/**
+ * Object.entries shim
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
+ * @method entries
+ * @param {Object} o - an object
+ * @returns {Array} - an array of tuples [key, value] pairs
+ * @public
+ * @example
+ * import {entries} from 'f-utility'
+ * entries({a: 1, b: 2}) // [[`a`, 1], [`b`, 2]]
+ */
+export const entries = (o) => pipe(
+  keys,
+  map((k) => ([k, o[k]]))
+)(o)
+
+/**
+ * An alias of `entries`
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
+ * @method toPairs
+ * @param {Object} o - an object
+ * @returns {Array} - an array of tuples [key, value] pairs
+ * @public
+ * @example
+ * import {toPairs} from 'f-utility'
+ * toPairs({a: 1, b: 2}) // [[`a`, 1], [`b`, 2]]
+ */
+export const toPairs = entries
+
+/**
+ * convert a list of key value pairs into an object
+ * @method fromPairs
+ * @param {Array} - a list of [key, value] pairs
+ * @returns {Object} merged results
+ * @public
+ * @example
+ * import {fromPairs} from 'f-utility'
+ * fromPairs([[`a`, 1], [`b`, 2]]) // {a: 1, b: 2}
+ */
+export const fromPairs = reduce(
+  (agg, [k, v]) => merge(agg, {[k]: v}),
+  {}
+)

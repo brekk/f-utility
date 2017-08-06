@@ -105,6 +105,15 @@ takes a function that takes two parameters and returns a ternary result
 -   `a` **any** anything
 -   `b` **any** anything
 
+**Examples**
+
+```javascript
+import {choice} from 'f-utility'
+const max = choice((a, b) => a > b)
+max(500, 20) // 500
+max(20, 500) // 500
+```
+
 Returns **any** result
 
 ## filter
@@ -151,8 +160,8 @@ a delegatee last function for Future.fork ing
 
 **Parameters**
 
--   `badPath` **fn** 
--   `goodPath` **fn** 
+-   `badPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
+-   `goodPath` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function
 -   `future` **Future** 
 
 **Examples**
@@ -260,6 +269,14 @@ convenience method for Math.round
 
 -   `x` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 
+**Examples**
+
+```javascript
+import {round} from 'f-utility'
+round(10.3) // 10
+round(10.9) // 11
+```
+
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** rounded number
 
 ## add
@@ -270,6 +287,13 @@ add things
 
 -   `a` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 -   `b` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b number
+
+**Examples**
+
+```javascript
+import {add} from 'f-utility'
+add(4, 2) // 6
+```
 
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** sum
 
@@ -282,6 +306,13 @@ subtract things
 -   `a` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 -   `b` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b number
 
+**Examples**
+
+```javascript
+import {subtract} from 'f-utility'
+subtract(4, 2) // -2
+```
+
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** subtracted
 
 ## multiply
@@ -292,6 +323,13 @@ multiply things
 
 -   `a` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 -   `b` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b number
+
+**Examples**
+
+```javascript
+import {multiply} from 'f-utility'
+multiply(4, 2) // 8
+```
 
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** multiplied
 
@@ -304,6 +342,13 @@ divide things
 -   `a` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 -   `b` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b number
 
+**Examples**
+
+```javascript
+import {divide} from 'f-utility'
+divide(4, 2) // 0.5
+```
+
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** divided
 
 ## pow
@@ -314,6 +359,13 @@ exponentiate things
 
 -   `a` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number
 -   `b` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b number
+
+**Examples**
+
+```javascript
+import {pow} from 'f-utility'
+pow(4, 2) // 16
+```
 
 Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** b to the power of a
 
@@ -527,6 +579,13 @@ Object.keys
 
 -   `a` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object
 
+**Examples**
+
+```javascript
+import {keys} from 'f-utility'
+keys({a: 1, b: 2}) // [`a`, `b`]
+```
+
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of keys
 
 ## freeze
@@ -537,6 +596,14 @@ Object.freeze
 **Parameters**
 
 -   `a` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object
+
+**Examples**
+
+```javascript
+import {freeze} from 'f-utility'
+const immutable = freeze({a: 1, b: 2})
+immutable.a = 5 // throws error
+```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a frozen object
 
@@ -549,6 +616,13 @@ Object.assign
 
 -   `a` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** any number of objects
 
+**Examples**
+
+```javascript
+import {assign} from 'f-utility'
+assign({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
+```
+
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a merged object
 
 ## merge
@@ -560,7 +634,67 @@ object.assign but enforced as a binary function
 -   `a` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object a
 -   `b` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object b
 
+**Examples**
+
+```javascript
+import {merge} from 'f-utility'
+merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
+```
+
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** c - the results of merging a and b
+
+## entries
+
+Object.entries shim
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries>
+
+**Parameters**
+
+-   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object
+
+**Examples**
+
+```javascript
+import {entries} from 'f-utility'
+entries({a: 1, b: 2}) // [[`a`, 1], [`b`, 2]]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of tuples [key, value] pairs
+
+## toPairs
+
+An alias of `entries`
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries>
+
+**Parameters**
+
+-   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object
+
+**Examples**
+
+```javascript
+import {toPairs} from 'f-utility'
+toPairs({a: 1, b: 2}) // [[`a`, 1], [`b`, 2]]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of tuples [key, value] pairs
+
+## fromPairs
+
+convert a list of key value pairs into an object
+
+**Parameters**
+
+-   `Array`  a list of [key, value] pairs
+
+**Examples**
+
+```javascript
+import {fromPairs} from 'f-utility'
+fromPairs([[`a`, 1], [`b`, 2]]) // {a: 1, b: 2}
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** merged results
 
 ## pathOr
 
