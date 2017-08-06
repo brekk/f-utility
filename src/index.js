@@ -40,7 +40,8 @@ export {
   isString,
   isObject,
   isNil,
-  isArray
+  isArray,
+  isDistinctObject
 } from './types'
 
 export const {version} = pkg

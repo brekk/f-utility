@@ -55,6 +55,7 @@ const harness = (F) => {
       `invert`,
       `isArray`,
       `isBoolean`,
+      `isDistinctObject`,
       `isFunction`,
       `isNil`,
       `isNumber`,
