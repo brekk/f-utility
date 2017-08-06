@@ -972,7 +972,7 @@ Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 ## isObject
 
-test whether something is an object -- no longer recognizes `null` as an object
+test whether something is an object
 
 **Parameters**
 
@@ -985,15 +985,16 @@ import {isObject} from 'f-utility'
 isObject(true) // false
 isObject(1) // false
 isObject(`a`) // false
-isObject([`a`]) // false
+isObject([`a`]) // true
 isObject({}) // true
+isObject(null) // true
 ```
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is a object
 
 ## isArray
 
-test whether something is null-ish
+test whether something is an array
 
 **Parameters**
 
@@ -1012,7 +1013,30 @@ isArray(null) // false
 isArray(undefined) // false
 ```
 
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is null-ish
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is an array
+
+## isDistinctObject
+
+test whether something is a non-null object which isn't an array
+
+**Parameters**
+
+-   `x` **any** anything
+
+**Examples**
+
+```javascript
+import {isDistinctObject} from 'f-utility'
+isDistinctObject(true) // false
+isDistinctObject(1) // false
+isDistinctObject(`a`) // false
+isDistinctObject([`a`]) // false
+isDistinctObject({}) // true
+isDistinctObject(null) // false
+isDistinctObject(undefined) // false
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the input is an object that isn't an array and isn't null
 
 ## some
 

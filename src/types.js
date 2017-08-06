@@ -98,7 +98,7 @@ export const isString = isTypeof(`string`)
 export const isNil = (x) => x == null
 
 /**
- * test whether something is an object -- no longer recognizes `null` as an object
+ * test whether something is an object
  * @method isObject
  * @param {*} x - anything
  * @returns {boolean} - true if the input is a object
@@ -108,16 +108,17 @@ export const isNil = (x) => x == null
  * isObject(true) // false
  * isObject(1) // false
  * isObject(`a`) // false
- * isObject([`a`]) // false
+ * isObject([`a`]) // true
  * isObject({}) // true
+ * isObject(null) // true
  */
-export const isObject = (x) => (!isNil(x) && isTypeof(`object`, x))
+export const isObject = isTypeof(`object`)
 
 /**
- * test whether something is null-ish
+ * test whether something is an array
  * @method isArray
  * @param {*} x - anything
- * @returns {boolean} - true if the input is null-ish
+ * @returns {boolean} - true if the input is an array
  * @public
  * @example
  * import {isArray} from 'f-utility'
@@ -130,3 +131,21 @@ export const isObject = (x) => (!isNil(x) && isTypeof(`object`, x))
  * isArray(undefined) // false
  */
 export const isArray = Array.isArray
+
+/**
+ * test whether something is a non-null object which isn't an array
+ * @method isDistinctObject
+ * @param {*} x - anything
+ * @returns {boolean} - true if the input is an object that isn't an array and isn't null
+ * @public
+ * @example
+ * import {isDistinctObject} from 'f-utility'
+ * isDistinctObject(true) // false
+ * isDistinctObject(1) // false
+ * isDistinctObject(`a`) // false
+ * isDistinctObject([`a`]) // false
+ * isDistinctObject({}) // true
+ * isDistinctObject(null) // false
+ * isDistinctObject(undefined) // false
+ */
+export const isDistinctObject = (x) => !isNil(x) && isObject(x) && !isArray(x)
