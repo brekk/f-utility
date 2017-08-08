@@ -84,6 +84,7 @@ const harness = (F) => {
       `propOr`,
       `prop`,
       `random`,
+      `range`,
       `reduce`,
       `reject`,
       `round`,
