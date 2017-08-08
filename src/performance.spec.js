@@ -16,9 +16,7 @@ test.cb(`f-utility/map should be faster than ramda/map`, (t) => {
     (output) => {
       log(output.stdout)
       const lines = output.stdout.split(`\n`)
-      log(lines, `<<<<<<`)
       const speeds = lines.map(getSpeed)
-      console.log(`speeds`, speeds)
       const [naiveCurry, ramdaMap, fUtilityMap, entrustMap] = speeds
       t.truthy(ramdaMap < entrustMap)
       t.truthy(naiveCurry < ramdaMap)
