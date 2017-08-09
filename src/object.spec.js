@@ -1,12 +1,18 @@
-import test from 'ava'
+/* global test */
 import {pipe} from 'katsu-curry'
+import {t} from './test-helpers'
 
 import {map} from './map'
-import {merge, toPairs, fromPairs} from './object'
+import {values, merge, toPairs, fromPairs} from './object'
 import {word} from './random-word'
 import {floorMin} from './random-floor'
 
-test(`merge`, (t) => {
+test(`values`, () => {
+  const output = values({a: 1, b: 2, c: 3})
+  t.deepEqual(output, [1, 2, 3])
+})
+
+test(`merge`, () => {
   const [a, b] = map(word, [1, 1])
   const [x, y] = map(floorMin, [1e3, 1e3])
   const aObject = {[a]: x}
@@ -14,7 +20,7 @@ test(`merge`, (t) => {
   t.deepEqual(merge(aObject, bObject), {...aObject, ...bObject})
 })
 
-test(`toPairs / fromPairs`, (t) => {
+test(`toPairs / fromPairs`, () => {
   const doubleEvenValues = pipe(
     toPairs,
     map(([k, v]) => [k, v % 2 === 0 ? v * 2 : v]),

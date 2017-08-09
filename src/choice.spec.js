@@ -1,7 +1,8 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {choice} from './choice'
 
-test(`choice should be a curried binary fn whose initial input takes the comparison items`, (t) => {
+test(`choice should be a curried binary fn whose initial input takes the comparison items`, () => {
   const comparison = (x, y) => x === 5 || y === 2
   const a = 10
   const b = 2

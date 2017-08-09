@@ -1,9 +1,10 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {pipe} from 'katsu-curry'
 
 import {equals, add, subtract, divide, multiply, pow, round} from './math'
 
-test(`math is like, mathy`, (t) => {
+test(`math is like, mathy`, () => {
   const doNothing = pipe(
     divide(10),
     add(5),
@@ -17,7 +18,7 @@ test(`math is like, mathy`, (t) => {
   t.is(doNothing(-7), -7)
 })
 
-test(`equals is a function`, (t) => {
+test(`equals is a function`, () => {
   t.truthy(equals(100, 100))
   t.falsy(equals(200, 100))
 })

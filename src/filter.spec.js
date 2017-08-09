@@ -1,9 +1,10 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {filter} from './filter'
 
 const mod2 = (x) => !(x % 2)
 
-test(`filter`, (t) => {
+test(`filter`, () => {
   t.is(typeof filter, `function`)
   const flt = filter(mod2)
   t.deepEqual(flt([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), [0, 2, 4, 6, 8])
@@ -11,7 +12,7 @@ test(`filter`, (t) => {
   t.deepEqual(flt(inputO), {a: 0, c: 2, e: 4})
 })
 
-test(`filter should delegate to a given functor's method, if present`, (t) => {
+test(`filter should delegate to a given functor's method, if present`, () => {
   function MyFunctor(x) {
     if (!(this instanceof MyFunctor)) {
       return new MyFunctor(x)

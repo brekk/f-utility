@@ -1,14 +1,15 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {reduce} from './reduce'
 
-test(`reduce`, (t) => {
+test(`reduce`, () => {
   const out = reduce((a, b) => a.concat(b), [], [[`a`], [`b`, `c`], [`d`, `e`]])
   t.deepEqual(out, `abcde`.split(``))
 })
 
 const mod2 = (agg, i) => (!(i % 2) ? agg.concat(i) : agg)
 
-test(`reduce should delegate to a given functor's method, if present`, (t) => {
+test(`reduce should delegate to a given functor's method, if present`, () => {
   function MyFunctor(x) {
     if (!(this instanceof MyFunctor)) {
       return new MyFunctor(x)

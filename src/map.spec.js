@@ -1,11 +1,12 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {pipe, I} from 'katsu-curry'
 import mapR from 'ramda/src/map'
 import {Left} from 'fantasy-eithers'
 import FL from 'fantasy-land'
 import {map} from './map'
 
-test(`map`, (t) => {
+test(`map`, () => {
   t.is(typeof map, `function`)
   t.is(typeof map(I), `function`)
   const double = (x) => x * 2
@@ -32,7 +33,7 @@ const doubleX = pipe(
 const ourDoubler = map(doubleX)
 const theirDoubler = mapR(doubleX)
 
-test(`map should work like ramda's map`, (t) => {
+test(`map should work like ramda's map`, () => {
   const toUpper = (x) => x.toUpperCase()
   const ours = map(toUpper)
   const theirs = map(toUpper)
@@ -44,7 +45,7 @@ test(`map should work like ramda's map`, (t) => {
   t.deepEqual(theirDoubler(immutable), immutable)
   t.deepEqual(ourDoubler(immutable), immutable)
 })
-test(`map should delegate to fantasy-land map, if present`, (t) => {
+test(`map should delegate to fantasy-land map, if present`, () => {
   function MyFunctor(x) {
     if (!(this instanceof MyFunctor)) {
       return new MyFunctor(x)

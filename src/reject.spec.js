@@ -1,7 +1,8 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {reject} from './reject'
 
-test(`reject`, (t) => {
+test(`reject`, () => {
   t.is(typeof reject, `function`)
   const sieve = (x) => (x % 2)
   const flt = reject(sieve)

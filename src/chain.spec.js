@@ -1,8 +1,9 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {I} from 'katsu-curry'
 import {chain} from './chain'
 
-test(`chain`, (t) => {
+test(`chain`, () => {
   t.is(typeof chain, `function`)
   t.is(typeof chain(I), `function`)
   const double = (x) => x.map((y) => y * 2)

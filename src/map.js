@@ -1,13 +1,6 @@
 import fastMap from 'fast.js/map'
 import {curry} from 'katsu-curry'
-import FL from 'fantasy-land'
-import {e1} from 'entrust'
-
-const has = curry((x, y) => !!y[x])
-const hasMap = has(`map`)
-const hasFLMap = has(FL.map)
-const _map = e1(`map`)
-const flMap = e1(FL.map)
+// import FL from 'fantasy-land'
 
 /**
  * functor.map(fn) but curried and fast (though will delegate to the functor)
@@ -23,9 +16,8 @@ const flMap = e1(FL.map)
  */
 export const map = curry(
   (fn, functor) => {
-    // if it's an array we wanna pass to fastMap
-    if (hasMap(functor) && !Array.isArray(functor)) return _map(fn, functor)
-    if (hasFLMap(functor)) return flMap(fn, functor)
+    if (functor && !Array.isArray(functor) && functor.map) return functor.map(fn)
+    // if (functor && functor[FL.map]) return functor[FL.map](fn)
     return fastMap(functor, fn)
   }
 )
