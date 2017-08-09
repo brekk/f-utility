@@ -1,6 +1,6 @@
 /* global test */
-import {t} from './test-helpers'
 import * as BUNDLE from '../f-utility'
+import {t} from './test-helpers'
 import * as FUTILITY from './index'
 
 const harness = (F) => {

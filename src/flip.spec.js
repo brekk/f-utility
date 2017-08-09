@@ -1,6 +1,6 @@
 /* global test */
-import {t} from './test-helpers'
 import {pipe} from 'katsu-curry'
+import {t} from './test-helpers'
 import {flip} from './flip'
 import {divide} from './math'
 
