@@ -1,11 +1,13 @@
 // const {curry} = require(`katsu-curry`)
-const testPerf = require(`testperf`)
-const {array} = require(`fast.js`)
-const {map: fastMap} = array
-const rMap = require(`ramda/src/map`)
-const rCurry = require(`ramda/src/curry`)
-const {e1} = require(`entrust`)
+// const testPerf = require(`testperf`)
+import testPerf from 'testperf'
+// const {array} = require(`fast.js`)
+import {array} from 'fast.js'
+import rMap from 'ramda/src/map'
+import rCurry from 'ramda/src/curry'
+import {e1} from 'entrust'
 const {map: fMap} = require(`../f-utility`)
+const {map: fastMap} = array
 
 const entrustMap = e1(`map`)
 

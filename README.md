@@ -20,6 +20,8 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.2.1_ - added `toPairs` / `entries` and `fromPairs`
 -   _3.2.2_ - added `ap`, `fold`
 -   _3.2.3_ - added `isDistinctObject`
+-   _3.2.4_ - added `range`, speed improvements
+-   _3.3.0_ - optimizations
 
 # API
 
