@@ -1,6 +1,9 @@
-/* global test */
+/* global test, expect */
 import execa from 'execa'
+import bluebird from 'bluebird'
 import {t} from './test-helpers'
+const {Promise} = bluebird
+console.log(`TTTTTT`, t)
 
 // 0  1  2    3     4     5
 // // => name took: speed milliseconds.
@@ -15,15 +18,25 @@ const cwd = process.cwd()
 const {log: _log} = console
 const log = _log.bind(console)
 
-test(`f-utility/map wants to be faster than ramda/map`, () => {
-  execa.shell(`node ${cwd}/map-performance.fixture.js`).then(
+test(`f-utility/map wants to be faster than ramda/map`, (done) => {
+  expect.assertions(12)
+  return new Promise((resolve, reject) => setTimeout(() => execa(
+    `${cwd}/node_modules/.bin/babel-node`, [`${cwd}/src/map-performance.fixture.js`]
+  ).then(
     (output) => {
       log(output.stdout)
       const lines = output.stdout.split(`\n`)
-      const speeds = lines.map(getSpeed).reduce((agg, [k, v]) => {
-        return Object.assign({}, agg, {[k]: v})
-      }, {})
+      log(`lines`, lines)
+      const speedArr = lines.map(getSpeed)
+      log(`speedArr`, speedArr)
+      const speeds = {}
+      speedArr.forEach(([k, v]) => {
+        log(`k`, k, `v`, v)
+        speeds[k] = v
+      })
+      log(`speeds`, speeds)
       const {fastjs, entrust, futility, ramda, ramdaFastJS} = speeds
+      log(`tt the artist`, t)
       // fast is fast
       t.truthy(fastjs < entrust)
       t.truthy(fastjs < futility)
@@ -44,13 +57,13 @@ test(`f-utility/map wants to be faster than ramda/map`, () => {
       t.truthy(entrust > fastjs)
       t.truthy(entrust > ramdaFastJS)
       t.truthy(entrust > ramdaFastJS)
-      t.end()
+      done()
+      resolve(output.stdout)
     }
   )
   .catch(
     (e) => {
-      log(e)
-      t.fail()
+      reject(e)
     }
-  )
+  ), 2000))
 })

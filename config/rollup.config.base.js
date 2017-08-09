@@ -32,7 +32,7 @@ module.exports = {
       comments: `none`
     }),
     babili({
-      removeConsole: true
+      // removeConsole: true
     })
   ]
 }
