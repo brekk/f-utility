@@ -3441,9 +3441,15 @@ katsu-curry@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.0.7.tgz#43f58c2ef993356337c4328f8c8baaa6793569a3"
 
-katsu-curry@^0.3.0, katsu-curry@^0.3.1:
+katsu-curry@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.3.1.tgz#7fe513bfd7da383819c9114dc0a1673bb87d1954"
+  dependencies:
+    fast.js "^0.1.1"
+
+katsu-curry@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.4.0.tgz#9dd3c6aafd252ae12aa96b39dc8f91299f542126"
   dependencies:
     fast.js "^0.1.1"
 
