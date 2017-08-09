@@ -1,9 +1,10 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {pipe} from 'katsu-curry'
 import {flip} from './flip'
 import {divide} from './math'
 
-test(`flip should invert parameters for the first two parameters of a given function`, (t) => {
+test(`flip should invert parameters for the first two parameters of a given function`, () => {
   const half = divide(2)
   const twoOver = flip(divide)(2)
   const halfThenOverTwo = pipe(half, twoOver)

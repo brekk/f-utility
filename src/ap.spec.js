@@ -1,4 +1,5 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {pipe, curry, I} from 'katsu-curry'
 import E from 'fantasy-eithers'
 // import {$, sideEffect} from 'xtrace'
@@ -8,7 +9,7 @@ import {map} from './map'
 
 // const trace = sideEffect(console.log, $, (e) => e.r || e.l || e, $)
 
-test(`ap should allow for inverted mapping`, (t) => {
+test(`ap should allow for inverted mapping`, () => {
   // const a = (b) => ({a: b})
   const abc = curry((a, b, c) => ({a, b, c}))
   const A = E.of(`alpha`)

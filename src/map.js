@@ -16,7 +16,7 @@ import {curry} from 'katsu-curry'
  */
 export const map = curry(
   (fn, functor) => {
-    if (functor && functor.map && !Array.isArray(functor)) return functor.map(fn)
+    if (functor && !Array.isArray(functor) && functor.map) return functor.map(fn)
     // if (functor && functor[FL.map]) return functor[FL.map](fn)
     return fastMap(functor, fn)
   }

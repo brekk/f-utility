@@ -17,6 +17,17 @@ const {keys: _keys, freeze: _freeze, assign: _assign} = Object
 export const keys = _keys
 
 /**
+ * @method values
+ * @param {Object} x - input
+ * @returns {Strings[]} values - an array of properties
+ * @public
+ * @example
+ * import {values} from 'f-utility'
+ * values({a:1, b: 2, c: 3}) // [1, 2, 3]
+ */
+export const values = (x) => keys(x).map((y) => x[y])
+
+/**
  * Object.freeze
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
  * @method freeze

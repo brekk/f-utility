@@ -64,10 +64,13 @@ module.exports = {
     },
     test: {
       description: `run all tests with coverage`,
-      script: `nyc nps test.unit`,
+      script: [
+        `jest src/*.spec.js --coverage`,
+        `--coveragePathIgnorePatterns test-helpers.js f-utility.js`
+      ].join(` `),
       unit: {
         description: `run unit tests`,
-        script: `ava src/*.spec.js`
+        script: `jest src/*.spec.js`
       }
     },
     docs: {

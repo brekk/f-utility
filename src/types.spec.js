@@ -1,4 +1,5 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import {$} from 'katsu-curry'
 import {map} from './map'
 import {freeze} from './object'
@@ -25,7 +26,7 @@ const allTypes = freeze({
 
 const apply = map($, allTypes)
 
-test(`types - isString!`, (t) => {
+test(`types - isString!`, () => {
   const strings = apply(isString)
   t.deepEqual(strings, {
     booleanTrue: false,
@@ -45,7 +46,7 @@ test(`types - isString!`, (t) => {
     array: false
   })
 })
-test(`types - isNil!`, (t) => {
+test(`types - isNil!`, () => {
   const nils = apply(isNil)
   t.deepEqual(nils, {
     booleanTrue: false,
@@ -65,7 +66,7 @@ test(`types - isNil!`, (t) => {
     array: false
   })
 })
-test(`types - isBoolean!`, (t) => {
+test(`types - isBoolean!`, () => {
   const bools = apply(isBoolean)
   t.deepEqual(bools, {
     booleanTrue: true,
@@ -85,7 +86,7 @@ test(`types - isBoolean!`, (t) => {
     array: false
   })
 })
-test(`types - isNumber!`, (t) => {
+test(`types - isNumber!`, () => {
   const numbers = apply(isNumber)
   t.deepEqual(numbers, {
     booleanTrue: false,
@@ -105,7 +106,7 @@ test(`types - isNumber!`, (t) => {
     array: false
   })
 })
-test(`types - isObject!`, (t) => {
+test(`types - isObject!`, () => {
   const objects = apply(isObject)
   t.deepEqual(objects, {
     booleanTrue: false,
@@ -125,7 +126,7 @@ test(`types - isObject!`, (t) => {
     array: true
   })
 })
-test(`types - isFunction!`, (t) => {
+test(`types - isFunction!`, () => {
   const functions = apply(isFunction)
   t.deepEqual(functions, {
     booleanTrue: false,
@@ -146,7 +147,7 @@ test(`types - isFunction!`, (t) => {
   })
 })
 
-test(`types - isDistinctObject!`, (t) => {
+test(`types - isDistinctObject!`, () => {
   const distincts = apply(isDistinctObject)
   t.deepEqual(distincts, {
     booleanTrue: false,

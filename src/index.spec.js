@@ -1,4 +1,5 @@
-import test from 'ava'
+/* global test */
+import {t} from './test-helpers'
 import * as BUNDLE from '../f-utility'
 import * as FUTILITY from './index'
 
@@ -20,7 +21,7 @@ const harness = (F) => {
     zort
   )(x)
 
-  test(`index`, (t) => {
+  test(`index`, () => {
     t.is(typeof F, `object`)
     const futilityKeys = keySort(F)
     const expected = zort([
