@@ -1,6 +1,6 @@
 /* global test */
-import {t} from './test-helpers'
 import execa from 'execa'
+import {t} from './test-helpers'
 
 // 0  1  2    3     4     5
 // // => name took: speed milliseconds.

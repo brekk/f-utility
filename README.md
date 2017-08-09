@@ -613,6 +613,21 @@ keys({a: 1, b: 2}) // [`a`, `b`]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of keys
 
+## values
+
+**Parameters**
+
+-   `x` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** input
+
+**Examples**
+
+```javascript
+import {values} from 'f-utility'
+values({a:1, b: 2, c: 3}) // [1, 2, 3]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Strings>** values - an array of properties
+
 ## freeze
 
 Object.freeze
