@@ -78,12 +78,13 @@ test(`grab should take wrapped values from arrays`, () => {
 
 test(`word should return a random concatenation of letters`, () => {
   t.is(typeof word, `function`)
-  const length = floorMin(1, 50)
+  const length = floorMin(3, 50)
   const invoked = word(length)
   const parts = invoked.split(``)
   const a = parts[0]
   const b = parts[parts.length - 1]
-  t.falsy(a === b)
+  const c = parts[parts.length - 2]
+  t.falsy(a === b && b === c)
   t.is(invoked.length, length)
   t.is(typeof invoked, `string`)
   t.is(word().length, 5)

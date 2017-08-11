@@ -24,8 +24,8 @@ test(`filter should delegate to a given functor's method, if present`, () => {
     return MyFunctor(this.value.reduce(
       (agg, x) => (
         fn(x) ?
-        agg.concat(x) :
-        agg
+          agg.concat(x) :
+          agg
       ),
       []
     ))

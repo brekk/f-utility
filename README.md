@@ -22,6 +22,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.2.3_ - added `isDistinctObject`
 -   _3.2.4_ - added `range`, speed improvements
 -   _3.3.0_ - optimizations
+-   _3.3.1_ - updated `ap` spec, added `dont-break` for better safety in future upgrades
 
 # API
 
@@ -223,6 +224,29 @@ add1([1,2,3]) // [2,3,4]
 ```
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** mapped iterable
+
+## ap
+
+Apply a list of functions to a list of values
+
+**Parameters**
+
+-   `applicative` **([function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;functions>)** a single function or array of applicatives
+-   `functor` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of values
+
+**Examples**
+
+```javascript
+import {ap} from 'f-utility'
+ap([
+  (x) => x.toUppercase(),
+  (x) => `${x} batteries`
+ ],
+ `abc`.split(``)
+) // [`A`, `B`, `C`, `a batteries`, `b batteries`, `c batteries`]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** a concatenated list of all applicatives applied to all values
 
 ## fold
 

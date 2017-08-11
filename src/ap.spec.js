@@ -6,6 +6,7 @@ import {t} from './test-helpers'
 import {ap} from './ap'
 import {fold} from './either'
 import {map} from './map'
+import {add, multiply} from './math'
 
 // const trace = sideEffect(console.log, $, (e) => e.r || e.l || e, $)
 
@@ -32,4 +33,19 @@ test(`ap should allow for inverted mapping`, () => {
     fold(I, I)
   )(abc)
   t.deepEqual(output, {a: `alpha`, b: `beta`, c: `gamma`, d: `delta`})
+})
+
+test(`ap should apply list a functions to a list of values`, () => {
+  const output = ap([multiply(3), add(6)], [1, 2, 3])
+  t.deepEqual(output, [3, 6, 9, 7, 8, 9])
+  const output2 = ap([(x) => x.toUpperCase(), (x) => x + ` battery`], `abc`.split(``))
+  t.deepEqual(output2, [`A`, `B`, `C`, `a battery`, `b battery`, `c battery`]) // stutter
+})
+test(`ap should apply list a functions to a list of values`, () => {
+  const output = ap([multiply(3), add(6)], [1, 2, 3])
+  t.deepEqual(output, [3, 6, 9, 7, 8, 9])
+  const output2 = ap([(x) => x.toUpperCase(), (x) => x + ` battery`], `abc`.split(``))
+  t.deepEqual(output2, [`A`, `B`, `C`, `a battery`, `b battery`, `c battery`]) // stutter
+  const output3 = ap(multiply, I)
+  t.deepEqual(output3(2), 4)
 })

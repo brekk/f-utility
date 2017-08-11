@@ -1,5 +1,12 @@
 import {length as _length} from 'katsu-curry/utils/length'
 import * as pkg from '../package.json'
+
+import {random as _random} from './random'
+import * as f from './random-floor'
+import * as t from './random-take'
+import * as w from './random-word'
+import * as s from './random-shuffle'
+
 export {
   pipe,
   compose,
@@ -53,11 +60,5 @@ export {
   some,
   every
 } from './which'
-
-import {random as _random} from './random'
-import * as f from './random-floor'
-import * as t from './random-take'
-import * as w from './random-word'
-import * as s from './random-shuffle'
 
 export const random = Object.assign(_random, f, t, w, s)
