@@ -67,7 +67,7 @@ export const symmetricDifference = curry((a, b) => {
   const ba = difference(b, a)
   return (
     ab.length > ba.length ?
-    ab :
-    ba
+      ab :
+      ba
   )
 })

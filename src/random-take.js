@@ -32,8 +32,8 @@ export const take = curry((encase, o) => {
     const selection = o[found]
     return (
       !encase ?
-      selection :
-      [selection]
+        selection :
+        [selection]
     )
   }
   // for objects
@@ -43,10 +43,10 @@ export const take = curry((encase, o) => {
   const value = o[key]
   return (
     !encase ?
-    value :
-    {
-      [key]: value
-    }
+      value :
+      {
+        [key]: value
+      }
   )
 })
 

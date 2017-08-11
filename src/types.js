@@ -14,7 +14,7 @@ import {curry} from 'katsu-curry'
  */
 export const isTypeof = curry(
   /* istanbul ignore next */
-  (type, x) => (type === typeof x)
+  (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
 )
 
 /**

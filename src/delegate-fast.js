@@ -30,8 +30,8 @@ export const delegateFastBinary = curry(
   (method, fast, fn, functor) => {
     return (
       willDelegate(method, functor) ?
-      e1(method, fn, functor) :
-      fast(functor, fn)
+        e1(method, fn, functor) :
+        fast(functor, fn)
     )
   }
 )
@@ -48,7 +48,7 @@ export const delegateFastBinary = curry(
 export const delegateFastTertiary = curry(
   (method, fast, fn, initial, functor) => (
     willDelegate(method, functor) ?
-    e2(method, fn, initial, functor) :
-    fast(functor, fn, initial)
+      e2(method, fn, initial, functor) :
+      fast(functor, fn, initial)
   )
 )
