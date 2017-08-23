@@ -751,7 +751,7 @@ convert a list of key value pairs into an object
 
 **Parameters**
 
--   `Array`  a list of [key, value] pairs
+-   `null-null` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** a list of [key, value] pairs
 
 **Examples**
 
@@ -1124,7 +1124,7 @@ Simple wrap for round( x \* random )
 
 **Parameters**
 
--   `x` **\[[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)](default 1)** a number
+-   `x` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** a number (optional, default `1`)
 
 **Examples**
 
@@ -1289,7 +1289,7 @@ generate a "word" of some known length
 
 **Parameters**
 
--   `x` **\[[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)](default 5)** how many characters should be used?
+-   `x` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** how many characters should be used? (optional, default `5`)
 
 **Examples**
 

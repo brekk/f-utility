@@ -2,7 +2,7 @@
 import execa from 'execa'
 import {t} from './test-helpers'
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20e3 // eslint-disable-line fp/no-mutation
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 25e3 // eslint-disable-line fp/no-mutation
 global.Promise = require.requireActual(`bluebird`) // eslint-disable-line fp/no-mutation
 
 // 0  1  2    3     4     5
@@ -44,7 +44,7 @@ test(`f-utility/map wants to be faster than ramda/map`, (done) => {
           t.truthy(ramdaFastJS < futility)
           // f-utility is sometimes faster than ramda
           // in individual runs, this passes
-          t.truthy(Math.abs(futility - ramda) < 500)
+          t.truthy(Math.abs(futility - ramda) < 550)
           // t.truthy(ramda < futility)
           // ramda is slower than fast
           t.truthy(ramda > fastjs)
