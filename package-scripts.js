@@ -22,6 +22,8 @@ const filterSpecs = [
   ` y)`,
   `]))`,
   `.filter(([k, v]) => !(k.indexOf('spec') > -1))`,
+  `.filter(([k, v]) => !(k.indexOf('test') > -1))`,
+  `.filter(([k, v]) => !(k.indexOf('fixture') > -1))`,
   `.filter(([k, v]) => !(k.indexOf('f-utility') > -1))`,
   `.reduce((agg, [k, v]) => Object.assign({}, agg, {[k]: v}), {})"`
 ].join(``)
