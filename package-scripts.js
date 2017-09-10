@@ -47,21 +47,21 @@ module.exports = {
         svg: {
           script: series(
             `nps dependencies.graph.base`,
-            `cat base-graph.json | madge --stdin --image dependencies.svg`
+            `cat dependency-graph.json | madge --stdin --image dependencies.svg`
           ),
           description: `generate a visual dependency graph`
         },
         json: {
           script: series(
             `nps dependencies.graph.base`,
-            `cat base-graph.json | madge --stdin --json`
+            `cat dependency-graph.json | madge --stdin --json`
           ),
           description: `generate a visual dependency graph in json`
         },
         dot: {
           script: series(
             `nps dependencies.graph.base`,
-            `cat base-graph.json | madge --stdin --dot`
+            `cat dependency-graph.json | madge --stdin --dot`
           ),
           description: `generate a visual dependency graph in dot`
         }
