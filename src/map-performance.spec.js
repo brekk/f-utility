@@ -53,7 +53,7 @@ test(`f-utility/map wants to be faster than ramda/map`, (done) => {
           // f-utility is sometimes faster than ramda
           // in individual runs, this passes
           // t.truthy(Math.abs(futility - ramda) < 1000)
-          t.truthy(ramda < futility)
+          t.truthy(Math.abs(ramda - futility) < 1500)
           done()
           resolve(output.stdout)
         }
