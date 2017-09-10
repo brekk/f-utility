@@ -1,13 +1,9 @@
-// const curry = require(`ramda/src/curry`)
+const {name} = require(`./package.json`)
 const utils = require(`nps-utils`)
-// const {version} = require(`./package.json`)
 
-// const prepend = curry((toPrepend, file) => `echo "${toPrepend} $(cat ${file})" > ${file}`)
-// const append = curry((toAppend, file) => `echo "${toAppend}" >> ${file}`)
-// const createWithText = curry((text, file) => `echo "${text}" > ${file}`)
 const {
-  concurrent: all
-  // series,
+  concurrent: all,
+  series
   // mkdirp
 } = utils
 const {
@@ -18,36 +14,61 @@ const filterSpecs = [
   `jayin "_.toPairs(x)`,
   `.map(([k, v]) => ([k,`,
   `_.map(v, (y) => y.indexOf('node_modules') > -1 ?`,
-  `'✪' + y.substr(y.indexOf('node_modules') + 13) :`,
+  `'Ⓜ ' + y.substr(y.indexOf('node_modules') + 13) :`,
   ` y)`,
   `]))`,
+  `.filter(([k, v]) => !(k.indexOf('test-helpers') > -1))`,
   `.filter(([k, v]) => !(k.indexOf('spec') > -1))`,
-  `.filter(([k, v]) => !(k.indexOf('f-utility') > -1))`,
+  `.filter(([k, v]) => !(k.indexOf('${name}') > -1))`,
   `.reduce((agg, [k, v]) => Object.assign({}, agg, {[k]: v}), {})"`
 ].join(``)
 
 module.exports = {
   scripts: {
     dependencies: {
+      script: series(
+        `nps dependencies.graph.base`,
+        allNPS(
+          `dependencies.graph.svg`,
+          `dependencies.graph.dot`,
+          `dependencies.graph.json`
+        )
+      ),
+      description: `regenerate all dependencies`,
       check: {
         script: `depcheck`,
         description: `check dependencies`
       },
       graph: {
-        script: `madge src --json | ${filterSpecs} | madge --stdin --image dependencies.svg`,
-        description: `generate a visual dependency graph`
-      },
-      graphjson: {
-        script: `madge src --json | ${filterSpecs} | madge --stdin --json`,
-        description: `generate a visual dependency graph in json`
-      },
-      graphdot: {
-        script: `madge src --json | ${filterSpecs} | madge --stdin --dot`,
-        description: `generate a visual dependency graph in dot`
+        base: {
+          script: `madge src --json | ${filterSpecs} > dependency-graph.json`,
+          desciption: `generate the base graph as a json file`
+        },
+        svg: {
+          script: series(
+            `nps dependencies.graph.base`,
+            `cat base-graph.json | madge --stdin --image dependencies.svg`
+          ),
+          description: `generate a visual dependency graph`
+        },
+        json: {
+          script: series(
+            `nps dependencies.graph.base`,
+            `cat base-graph.json | madge --stdin --json`
+          ),
+          description: `generate a visual dependency graph in json`
+        },
+        dot: {
+          script: series(
+            `nps dependencies.graph.base`,
+            `cat base-graph.json | madge --stdin --dot`
+          ),
+          description: `generate a visual dependency graph in dot`
+        }
       }
     },
     readme: {
-      script: `documentation readme README.md -s "API" src/index.js`,
+      script: `documentation readme README.md -s "API" src/*/*.js`,
       description: `regenerate the readme`
     },
     lint: {
@@ -58,7 +79,7 @@ module.exports = {
         description: `lint js files`
       },
       jsdoc: {
-        script: `documentation lint src/index.js`,
+        script: `documentation lint src/*/*.js`,
         description: `lint jsdoc in files`
       }
     },
@@ -66,7 +87,7 @@ module.exports = {
       description: `run all tests with coverage`,
       script: [
         `jest src/*.spec.js --coverage`,
-        `--coveragePathIgnorePatterns test-helpers.js f-utility.js`
+        `--coveragePathIgnorePatterns test-helpers.js ${name}.js`
       ].join(` `),
       unit: {
         description: `run unit tests`,
@@ -75,11 +96,11 @@ module.exports = {
     },
     docs: {
       description: `auto regen the docs`,
-      script: `documentation build src/** -f html -o docs -a private -a public -a protected`
+      script: `documentation build src/**/*.js -f html -o docs -a private -a public -a protected`
     },
     bundle: {
       description: `run the main bundle task`,
-      script: `rollup -c config/commonjs.js`
+      script: `rollup -c rollup/config.commonjs.js`
     },
     build: {
       description: `convert files individually`,
@@ -87,7 +108,7 @@ module.exports = {
     },
     care: {
       description: `run all the things`,
-      script: allNPS(`lint`, `bundle`, `build`, `test`, `readme`, `dependencies.graph`)
+      script: allNPS(`lint`, `bundle`, `build`, `test`, `readme`, `dependencies`)
     },
     precommit: `nps care`
   }

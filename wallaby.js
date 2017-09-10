@@ -1,9 +1,12 @@
+const pkg = require('./package.json')
 module.exports = function configureWallaby(wallaby) {
   return {
-    name: `F-Utility`,
+    name: pkg.name,
     files: [
       `src/**/*.js`,
-      `src/*.js`
+      `!src/**/*.spec.js`,
+      `src/*.js`,
+      `!src/*.spec.js`
     ],
 
     tests: [
@@ -20,13 +23,15 @@ module.exports = function configureWallaby(wallaby) {
       '**/*.js': wallaby.compilers.babel()
     },
 
-    testFramework: `ava`,
+    testFramework: `jest`,
 
     setup: function setupWallaby() {
       require(`babel-polyfill`)
     },
 
     debug: true,
-    filesWithNoCoverageCalculated: [`src/core/fs.js`]
+    filesWithNoCoverageCalculated: [
+      `src/core/fs.js`
+    ]
   }
 }

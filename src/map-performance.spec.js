@@ -44,8 +44,8 @@ test(`f-utility/map wants to be faster than ramda/map`, (done) => {
           t.truthy(ramdaFastJS < futility)
           // f-utility is sometimes faster than ramda
           // in individual runs, this passes
-          t.truthy(Math.abs(futility - ramda) < 500)
-          // t.truthy(ramda < futility)
+          // t.truthy(Math.abs(futility - ramda) < 1000)
+          t.truthy(ramda < futility)
           // ramda is slower than fast
           t.truthy(ramda > fastjs)
           // entrust is slow
