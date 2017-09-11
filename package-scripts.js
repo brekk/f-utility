@@ -92,6 +92,10 @@ module.exports = {
       unit: {
         description: `run unit tests`,
         script: `jest src/*.spec.js`
+      },
+      dependencies: {
+        description: `test downstream dependencies for potential breakages`,
+        script: `dont-break`
       }
     },
     docs: {
@@ -108,7 +112,9 @@ module.exports = {
     },
     care: {
       description: `run all the things`,
-      script: allNPS(`lint`, `bundle`, `build`, `test`, `readme`, `dependencies`)
+      script: allNPS(
+        `lint`, `bundle`, `build`, `test`, `readme`, `dependencies`, `test.dependencies`
+      )
     },
     precommit: `nps care`
   }
