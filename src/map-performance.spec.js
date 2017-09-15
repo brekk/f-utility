@@ -18,7 +18,7 @@ const cwd = process.cwd()
 const {log: _log} = console
 const log = _log.bind(console)
 
-test(`f-utility/map wants to be faster than ramda/map`, (done) => {
+test.skip(`f-utility/map wants to be faster than ramda/map`, (done) => {
   t.plan(13)
   return new global.Promise((resolve, reject) => {
     setImmediate(() => {
