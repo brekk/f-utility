@@ -22,7 +22,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.2.3_ - added `isDistinctObject`
 -   _3.2.4_ - added `range`, speed improvements
 -   _3.3.0_ - optimizations
--   _3.3.1_ - updated `ap` spec, added `dont-break` for better safety in future upgrades
+-   _3.3.1_ - updated `ap` spec, added bunch of string prototype methods, and added `dont-break` for better safety in future upgrades
 
 # API
 
