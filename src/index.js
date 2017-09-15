@@ -20,7 +20,7 @@ export {
   K,
   I
 } from 'katsu-curry'
-export {join, sort, symmetricDifference, difference} from './array'
+export {concat, join, sort, symmetricDifference, difference} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
 export {flip} from './flip'
@@ -34,7 +34,23 @@ export {equals, equal, round, add, subtract, divide, multiply, pow} from './math
 export {invert, not, not1, not2, not3} from './invert'
 export {reduce} from './reduce'
 export {reject} from './reject'
-export {split, trim} from './string'
+export {
+  charAt,
+  codePointAt,
+  endsWith,
+  indexOf,
+  lastIndexOf,
+  match,
+  padEnd,
+  padStart,
+  repeat,
+  replace,
+  search,
+  split,
+  startsWith,
+  substr,
+  trim
+} from './string'
 export {ternary} from './ternary'
 export {triplet} from './triplet'
 export {range} from './range'

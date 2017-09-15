@@ -16,6 +16,14 @@ import {filter} from './filter'
 export const join = e1(`join`)
 
 /**
+ * return a new array with some other stuff added to it
+ * @method concat
+ * @param {*} - an array or whatever
+ * @returns a new array
+ */
+export const concat = e1(`concat`)
+
+/**
  * string.prototype.sort but curried
  * @method sort
  * @param {function} fn

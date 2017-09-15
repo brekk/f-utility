@@ -1,6 +1,6 @@
 /* global test */
 import {t} from './test-helpers'
-import {symmetricDifference, difference, join, sort} from './array'
+import {concat, symmetricDifference, difference, join, sort} from './array'
 
 test(`join should be a delegatee last version of array.join(x)`, () => {
   const letters = `abcde`.split(``)
@@ -22,4 +22,8 @@ test(`symmetricDifference should give a difference between two arrays`, () => {
   t.deepEqual(symmetricDifference(abcde, abc), de)
   t.deepEqual(symmetricDifference(abcde, [``]), abcde)
   t.deepEqual(difference(abcde, [``]), [``])
+})
+
+test(`concat`, () => {
+  t.deepEqual(concat(`utts`.split(``), [`b`]), `butts`.split(``))
 })
