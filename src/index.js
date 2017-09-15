@@ -20,7 +20,7 @@ export {
   K,
   I
 } from 'katsu-curry'
-export {join, sort, symmetricDifference, difference} from './array'
+export {concat, join, sort, symmetricDifference, difference} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
 export {flip} from './flip'

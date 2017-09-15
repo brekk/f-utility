@@ -34,6 +34,7 @@ const harness = (F) => {
       `choice`,
       `codePointAt`,
       `compose`,
+      `concat`,
       `curry`,
       `curryify`,
       `curryObjectK`,
