@@ -1,6 +1,10 @@
-[![CircleCI](https://circleci.com/gh/brekk/f-utility.svg?style=shield&circle-token=a9ccfc426e684dc0537090caee2e300a4ad52c78)](https://circleci.com/gh/brekk/f-utility/tree/master)
-
 # f-utility
+
+[![CircleCI](https://circleci.com/gh/brekk/f-utility.svg?style=shield&circle-token=a9ccfc426e684dc0537090caee2e300a4ad52c78)](https://circleci.com/gh/brekk/f-utility/tree/master)
+[![npm](https://img.shields.io/npm/dw/f-utility.svg)](https://github.com/brekk/f-utility)
+[![npm](https://img.shields.io/npm/l/f-utility.svg)](https://www.npmjs.com/package/f-utility)
+[![npm](https://img.shields.io/github/tag/brekk/f-utility.svg)](https://github.com/brekk/f-utility)
+[![Libraries.io for GitHub](https://img.shields.io/librariesio/github/brekk/f-utility.svg)](https://github.com/brekk/f-utility)
 
 A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-curry`
 
@@ -75,9 +79,10 @@ return a new array with some other stuff added to it
 
 **Parameters**
 
--   `null-null` **any** an array or whatever
+-   `null-null` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array
+-   `null-null` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** another array
 
-Returns **any** a new array
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** combined array
 
 ## sort
 
