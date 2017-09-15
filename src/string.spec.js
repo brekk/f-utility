@@ -58,14 +58,16 @@ test(`match`, () => {
   weirdThing.input = `butts`
   t.deepEqual(match(/t/, `butts`), weirdThing)
 })
-test(`padEnd`, () => {
-  t.is(typeof padEnd, `function`)
-  t.is(padEnd(4, `x`, `y`), `yxxx`)
-})
-test(`padStart`, () => {
-  t.is(typeof padStart, `function`)
-  t.is(padStart(4, `x`, `y`), `xxxy`)
-})
+if (``.padEnd) {
+  test(`padEnd`, () => {
+    t.is(typeof padEnd, `function`)
+    t.is(padEnd(4, `x`, `y`), `yxxx`)
+  })
+  test(`padStart`, () => {
+    t.is(typeof padStart, `function`)
+    t.is(padStart(4, `x`, `y`), `xxxy`)
+  })
+}
 test(`repeat`, () => {
   t.is(typeof repeat, `function`)
   t.is(repeat(3, `x`, ``), `xxx`)
