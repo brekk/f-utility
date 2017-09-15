@@ -68,7 +68,7 @@ module.exports = {
       }
     },
     readme: {
-      script: `documentation readme README.md -s "API" src/*/*.js`,
+      script: `documentation readme README.md -s "API" src/*.js`,
       description: `regenerate the readme`
     },
     lint: {
@@ -100,7 +100,7 @@ module.exports = {
     },
     docs: {
       description: `auto regen the docs`,
-      script: `documentation build src/**/*.js -f html -o docs -a private -a public -a protected`
+      script: `documentation build src/*.js -f html -o docs -a private -a public -a protected`
     },
     bundle: {
       description: `run the main bundle task`,
