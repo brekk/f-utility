@@ -4,7 +4,6 @@
 [![npm](https://img.shields.io/npm/dw/f-utility.svg)](https://github.com/brekk/f-utility)
 [![npm](https://img.shields.io/npm/l/f-utility.svg)](https://www.npmjs.com/package/f-utility)
 [![npm](https://img.shields.io/github/tag/brekk/f-utility.svg)](https://github.com/brekk/f-utility)
-[![Libraries.io for GitHub](https://img.shields.io/librariesio/github/brekk/f-utility.svg)](https://github.com/brekk/f-utility)
 
 A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-curry`
 
@@ -1042,18 +1041,6 @@ trim(`     20932 `) // `20932`
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
 
-## replace
-
-string.replace but delegatee last
-<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
-
-**Parameters**
-
--   `null-null` **(regex | [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String))** a string or a regular expression
--   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
-
 ## split
 
 string.split(x) but delegatee last
@@ -1071,6 +1058,18 @@ split(`x`, `1x2x3`) // [`1`, `2`, `3`]
 ```
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
+
+## replace
+
+string.replace but delegatee last
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
+
+**Parameters**
+
+-   `null-null` **(regex | [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String))** a string or a regular expression
+-   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
 
 ## ternary
 
