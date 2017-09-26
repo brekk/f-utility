@@ -1024,6 +1024,23 @@ reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
+## trim
+
+string.trim() but delegatee last
+
+**Parameters**
+
+-   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to trim
+
+**Examples**
+
+```javascript
+import {trim} from `f-utility`
+trim(`     20932 `) // `20932`
+```
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
+
 ## split
 
 string.split(x) but delegatee last
@@ -1041,23 +1058,6 @@ split(`x`, `1x2x3`) // [`1`, `2`, `3`]
 ```
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
-
-## trim
-
-string.trim() but delegatee last
-
-**Parameters**
-
--   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to trim
-
-**Examples**
-
-```javascript
-import {trim} from `f-utility`
-trim(`     20932 `) // `20932`
-```
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
 
 ## replace
 
