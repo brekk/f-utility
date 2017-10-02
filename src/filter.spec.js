@@ -1,5 +1,5 @@
 /* global test */
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {filter} from './filter'
 
 const mod2 = (x) => !(x % 2)

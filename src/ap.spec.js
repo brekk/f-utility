@@ -1,7 +1,7 @@
 /* global test */
 import {pipe, curry, I} from 'katsu-curry'
 import E from 'fantasy-eithers'
-import {t} from './test-helpers'
+import {t} from 'germs'
 // import {$, sideEffect} from 'xtrace'
 import {ap} from './ap'
 import {fold} from './either'

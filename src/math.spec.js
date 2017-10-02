@@ -1,6 +1,6 @@
 /* global test */
 import {pipe} from 'katsu-curry'
-import {t} from './test-helpers'
+import {t} from 'germs'
 
 import {equals, add, subtract, divide, multiply, pow, round} from './math'
 

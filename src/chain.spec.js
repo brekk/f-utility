@@ -1,6 +1,6 @@
 /* global test */
 import {I} from 'katsu-curry'
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {chain} from './chain'
 
 test(`chain`, () => {

@@ -1,5 +1,5 @@
 /* global test */
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {reduce} from './reduce'
 
 test(`reduce`, () => {
