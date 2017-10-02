@@ -1,5 +1,5 @@
 /* global test */
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {map} from './map'
 import {iterate} from './iterate'
 import {random} from './random'

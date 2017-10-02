@@ -1,6 +1,6 @@
 /* global test */
 import {pipe} from 'katsu-curry'
-import {t} from './test-helpers'
+import {t} from 'germs'
 
 import {map} from './map'
 import {values, merge, toPairs, fromPairs} from './object'

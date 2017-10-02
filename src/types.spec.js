@@ -1,6 +1,6 @@
 /* global test */
 import {$} from 'katsu-curry'
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {map} from './map'
 import {freeze} from './object'
 import {floorMin} from './random-floor'

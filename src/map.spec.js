@@ -3,7 +3,7 @@ import {pipe, I} from 'katsu-curry'
 import mapR from 'ramda/src/map'
 import {Left} from 'fantasy-eithers'
 import FL from 'fantasy-land'
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {map} from './map'
 
 test(`map`, () => {

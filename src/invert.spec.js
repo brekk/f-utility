@@ -1,6 +1,6 @@
 /* global test */
 import {curry} from 'katsu-curry'
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {invert, not, not1, not2, not3} from './invert'
 import {equal} from './math'
 

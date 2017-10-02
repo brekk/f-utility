@@ -1,5 +1,5 @@
 /* global test */
-import {t} from './test-helpers'
+import {t} from 'germs'
 
 import {propIs, propEq, pathIs, pathEq, prop, propOr, path, pathOr} from './path'
 import {word} from './random-word'

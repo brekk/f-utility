@@ -1,5 +1,5 @@
 /* global test */
-import {t} from './test-helpers'
+import {t} from 'germs'
 import {concat, symmetricDifference, difference, join, sort} from './array'
 
 test(`join should be a delegatee last version of array.join(x)`, () => {
