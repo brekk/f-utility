@@ -1024,24 +1024,6 @@ reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
-## split
-
-string.split(x) but delegatee last
-
-**Parameters**
-
--   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to split
-
-**Examples**
-
-```javascript
-import {split} from `f-utility`
-split(`x`, `1x2x3`) // [`1`, `2`, `3`]
-```
-
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
-
 ## trim
 
 string.trim() but delegatee last
@@ -1070,6 +1052,24 @@ string.replace but delegatee last
 -   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
+
+## split
+
+string.split(x) but delegatee last
+
+**Parameters**
+
+-   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to split
+
+**Examples**
+
+```javascript
+import {split} from `f-utility`
+split(`x`, `1x2x3`) // [`1`, `2`, `3`]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
 
 ## ternary
 
