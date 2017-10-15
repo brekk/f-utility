@@ -43,10 +43,6 @@
       "test-helpers.js"
     ],
     "mapCoverage": true,
-    "moduleNameMapper": {
-      "@app": "<rootDir>/src/index.js",
-      "@math/(.*)": "<rootDir>/src/math/$1.js"
-    },
     "moduleFileExtensions": [
       "js",
       "json"
