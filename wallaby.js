@@ -3,17 +3,21 @@ const pkg = require(`./package.json`)
 module.exports = function configureWallaby() {
   return {
     name: pkg.name,
+    debug: true,
     files: [
-      `src/*.js`
+      `src/*.js`,
+      `!src/*.spec.js`
     ],
 
     tests: [
-      `src/*.spec.js`
+      `src/*.spec.js`,
+      // wallaby doesn't know about this yet
+      `!src/bundle.spec.js`
     ],
 
     env: {
       type: `node`,
-      runner: `electron`
+      runner: `node`
     },
 
     // compilers: {
