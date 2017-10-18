@@ -50,3 +50,5 @@ lib
 assets
 docs
 .DS_Store
+.idea
+.tern-project

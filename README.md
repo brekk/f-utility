@@ -138,6 +138,28 @@ difference([1,2,3], [1,2]) // [3]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered array with differences between the two arrays
 
+## alterIndex
+
+alter the index of a given array input
+
+**Parameters**
+
+-   `index` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the index to alter
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** the function to describe the alteration
+-   `input` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** the input array
+
+**Examples**
+
+```javascript
+import {alterIndex} from 'f-utility'
+const input = `abcde`.split(``)
+alterIndex(0, () => `butts`, input) // [`butts`, `b`, `c`, `d`, `e`]
+// also works with negative indicies
+alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** an altered copy of the original array
+
 ## chain
 
 functor.chain(fn) but curried and fast
@@ -659,6 +681,78 @@ fromPairs([[`a`, 1], [`b`, 2]]) // {a: 1, b: 2}
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** merged results
 
+## mapTuple
+
+a simple object tuple-mapper
+
+**Parameters**
+
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over [key, value] tuples
+-   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
+
+**Examples**
+
+```javascript
+import {mapTuple} from 'f-utility'
+const input = {
+  a: 1,
+  b: 2,
+  c: 3
+}
+const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
+mapTuple(fn, input) // {A: 2, B: 4, C: 6}
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a mapped object
+
+## mapValues
+
+a simple object value-only tuple-mapper
+
+**Parameters**
+
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over values only
+-   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
+
+**Examples**
+
+```javascript
+import {mapValues} from 'f-utility'
+const input = {
+  a: 1,
+  b: 2,
+  c: 3
+}
+const fn = (v) => (v * 2)
+mapValues(fn, input) // {a: 2, b: 4, c: 6}
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a mapped object
+
+## mapKeys
+
+a simple object key-only tuple-mapper
+
+**Parameters**
+
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over values only
+-   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
+
+**Examples**
+
+```javascript
+import {mapKeys} from 'f-utility'
+const input = {
+  a: 1,
+  b: 2,
+  c: 3
+}
+const fn = (v) => `__${v}`
+mapKeys(fn, input) // {__a: 1, __b: 2, __c: 3}
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a mapped object
+
 ## pathOr
 
 Grab a nested value from an object or return a default
@@ -1024,6 +1118,18 @@ reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
+## replace
+
+string.replace but delegatee last
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
+
+**Parameters**
+
+-   `null-null` **(regex | [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String))** a string or a regular expression
+-   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
+
 ## trim
 
 string.trim() but delegatee last
@@ -1040,18 +1146,6 @@ trim(`     20932 `) // `20932`
 ```
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
-
-## replace
-
-string.replace but delegatee last
-<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
-
-**Parameters**
-
--   `null-null` **(regex | [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String))** a string or a regular expression
--   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
 
 ## split
 

@@ -1,6 +1,14 @@
 /* global test */
 import {t} from 'germs'
-import {concat, symmetricDifference, difference, join, sort} from './array'
+import {
+  concat,
+  symmetricDifference,
+  difference,
+  join,
+  sort,
+  alterIndex,
+  alterLastIndex
+} from './array'
 
 test(`join should be a delegatee last version of array.join(x)`, () => {
   const letters = `abcde`.split(``)
@@ -26,4 +34,21 @@ test(`symmetricDifference should give a difference between two arrays`, () => {
 
 test(`concat`, () => {
   t.deepEqual(concat(`utts`.split(``), [`b`]), `butts`.split(``))
+})
+
+test(`alterIndex`, () => {
+  t.is(typeof alterIndex, `function`)
+  const output = alterIndex(1, () => `x`, `abc`.split(``))
+  t.deepEqual(output, `axc`.split(``))
+})
+
+test(`alterIndex with negative index`, () => {
+  const output = alterIndex(-2, () => `x`, `abc`.split(``))
+  t.deepEqual(output, `axc`.split(``))
+})
+
+test(`alterLastIndex`, () => {
+  t.is(typeof alterLastIndex, `function`)
+  const output = alterLastIndex(() => `x`, `abc`.split(``))
+  t.deepEqual(output, `abx`.split(``))
 })

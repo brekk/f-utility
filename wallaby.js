@@ -1,37 +1,64 @@
-const pkg = require('./package.json')
-module.exports = function configureWallaby(wallaby) {
+const pkg = require(`./package.json`)
+
+module.exports = function configureWallaby() {
   return {
     name: pkg.name,
+    debug: true,
     files: [
-      `src/**/*.js`,
-      `!src/**/*.spec.js`,
       `src/*.js`,
       `!src/*.spec.js`
     ],
 
     tests: [
-      `tests/**/*.spec.js`,
-      `tests/*.spec.js`
+      `src/*.spec.js`,
+      // wallaby doesn't know about this yet
+      `!src/bundle.spec.js`
     ],
 
     env: {
       type: `node`,
-      kind: `electron`
+      runner: `node`
     },
 
-    compilers: {
-      '**/*.js': wallaby.compilers.babel()
+    // compilers: {
+    //   '**/*.js': wallaby.compilers.babel()
+    // },
+    preprocessors: {
+      '**/*.js': (file) => require(`babel-core`).transform(
+        file.content, {
+          sourceMap: true,
+          presets: [`es2015`],
+          plugins: [`transform-object-rest-spread`]
+        }
+      )
     },
 
     testFramework: `jest`,
 
-    setup: function setupWallaby() {
-      require(`babel-polyfill`)
+    setup: function setupWallaby(w) {
+      require(`babel-polyfill`) // eslint-disable-line fp/no-unused-expression
+      w.testFramework.configure({
+        "modulePaths": [
+          `src`
+        ],
+        "moduleDirectories": [
+          `node_modules`,
+          `src`
+        ],
+        "mapCoverage": true,
+        "moduleFileExtensions": [
+          `js`,
+          `json`
+        ],
+        "testMatch": [
+          `**/*.spec.(jsx|js)`
+        ]
+      })
     },
 
     debug: true,
     filesWithNoCoverageCalculated: [
-      `src/core/fs.js`
+      // `src/core/fs.js`
     ]
   }
 }

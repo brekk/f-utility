@@ -1,9 +1,8 @@
 /* global test */
 import {t} from 'germs'
-import * as BUNDLE from '../f-utility'
 import * as FUTILITY from './index'
 
-const harness = (F) => {
+export const harness = (F) => {
   const zort = (x) => x.sort() // eslint-disable-line
 
   const {symmetricDifference, reject, isFunction, pipe, keys, map} = F
@@ -126,4 +125,3 @@ const harness = (F) => {
   })
 }
 harness(FUTILITY)
-harness(BUNDLE)

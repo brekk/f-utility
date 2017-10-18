@@ -80,3 +80,33 @@ export const symmetricDifference = curry((a, b) => {
       ba
   )
 })
+
+/**
+ * alter the index of a given array input
+ * @method alterIndex
+ * @param {number} index - the index to alter
+ * @param {Function} fn - the function to describe the alteration
+ * @param {Array} input - the input array
+ * @returns {Array} an altered copy of the original array
+ * @public
+ * @example
+ * import {alterIndex} from 'f-utility'
+ * const input = `abcde`.split(``)
+ * alterIndex(0, () => `butts`, input) // [`butts`, `b`, `c`, `d`, `e`]
+ * // also works with negative indicies
+ * alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
+ */
+
+export const alterIndex = curry((index, fn, input) => {
+  const copy = Array.from(input)
+  const relativeIndex = (
+    index > 0 ?
+      index :
+      copy.length - Math.abs(index)
+  )
+  copy[relativeIndex] = fn(copy[relativeIndex])
+  return copy
+})
+
+export const alterFirstIndex = alterIndex(0)
+export const alterLastIndex = alterIndex(-1)
