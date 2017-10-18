@@ -144,7 +144,7 @@ alter the index of a given array input
 
 **Parameters**
 
--   `index` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the index to alter
+-   `index` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the index to alter
 -   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** the function to describe the alteration
 -   `input` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** the input array
 
@@ -687,6 +687,7 @@ a simple object tuple-mapper
 
 **Parameters**
 
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over [key, value] tuples
 -   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
 
 **Examples**
@@ -706,10 +707,11 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ## mapValues
 
-a simple object tuple-mapper
+a simple object value-only tuple-mapper
 
 **Parameters**
 
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over values only
 -   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
 
 **Examples**
@@ -729,10 +731,11 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ## mapKeys
 
-a simple object tuple-mapper
+a simple object key-only tuple-mapper
 
 **Parameters**
 
+-   `fn` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a function which maps over values only
 -   `o` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** object
 
 **Examples**

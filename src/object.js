@@ -114,7 +114,8 @@ export const fromPairs = reduce(
 
 /**
  * a simple object tuple-mapper
- * @method mapTuple - a function which maps over key, value tuples
+ * @method mapTuple
+ * @param {Function} fn - a function which maps over [key, value] tuples
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public
@@ -135,8 +136,9 @@ export const mapTuple = curry((fn, o) => pipe(
 )(o))
 
 /**
- * a simple object tuple-mapper
- * @method mapValues - a function which maps over values only
+ * a simple object value-only tuple-mapper
+ * @method mapValues
+ * @param {Function} fn - a function which maps over values only
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public
@@ -156,8 +158,9 @@ export const mapValues = curry((fn, o) => mapTuple(
 ))
 
 /**
- * a simple object tuple-mapper
- * @method mapKeys - a function which maps over values only
+ * a simple object key-only tuple-mapper
+ * @method mapKeys
+ * @param {Function} fn - a function which maps over values only
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public

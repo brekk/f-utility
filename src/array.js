@@ -84,7 +84,7 @@ export const symmetricDifference = curry((a, b) => {
 /**
  * alter the index of a given array input
  * @method alterIndex
- * @param {Number} index - the index to alter
+ * @param {number} index - the index to alter
  * @param {Function} fn - the function to describe the alteration
  * @param {Array} input - the input array
  * @returns {Array} an altered copy of the original array
