@@ -19,6 +19,78 @@ export const equals = curry((a, b) => a === b)
 export const equal = equals
 
 /**
+ * > comparison but inverted
+ * @method greaterThan
+ * @alias gt
+ * @param {*} b - anything
+ * @param {*} a - anything
+ * @returns {boolean} whether a > b
+ * @public
+ * @alias equal
+ * @example
+ * import {greaterThan, gt} from 'f-utility'
+ * gt(100, 99) // false
+ * gt(100, 100) // false
+ * gt(100, 101) // true
+ */
+export const greaterThan = curry((b, a) => a > b)
+export const gt = greaterThan
+
+/**
+ * >= comparison but inverted
+ * @method greaterThanOrEqualTo
+ * @alias gte
+ * @param {*} b - anything
+ * @param {*} a - anything
+ * @returns {boolean} whether a > b
+ * @public
+ * @alias equal
+ * @example
+ * import {greaterThanOrEqualTo, gte} from 'f-utility'
+ * gte(100, 99) // false
+ * gte(100, 100) // true
+ * gte(100, 101) // true
+ */
+export const greaterThanOrEqualTo = curry((b, a) => a >= b)
+export const gte = greaterThanOrEqualTo
+
+/**
+ * < comparison but inverted
+ * @method lessThan
+ * @alias lt
+ * @param {*} b - anything
+ * @param {*} a - anything
+ * @returns {boolean} whether a > b
+ * @public
+ * @alias equal
+ * @example
+ * import {lessThan, lt} from 'f-utility'
+ * lt(100, 99) // true
+ * lt(100, 100) // false
+ * lt(100, 101) // false
+ */
+export const lessThan = curry((b, a) => a < b)
+export const lt = lessThan
+
+/**
+ * < comparison but inverted
+ * @method lessThanOrEqualTo
+ * @alias lte
+ * @param {*} b - anything
+ * @param {*} a - anything
+ * @returns {boolean} whether a > b
+ * @public
+ * @alias equal
+ * @example
+ * import {lessThanOrEqualTo, lte} from 'f-utility'
+ * lte(100, 99) // true
+ * lte(100, 100) // true
+ * lte(100, 101) // false
+ */
+export const lessThanOrEqualTo = curry((b, a) => a <= b) // reverse arrow!
+export const lte = lessThanOrEqualTo
+
+/**
  * convenience method for Math.round
  * @method round
  * @param {number} x - a number
