@@ -17,10 +17,21 @@ export {
   curryObjectK,
   curryObjectN,
   curryObjectKN,
+  remap,
+  remapArray,
   K,
   I
 } from 'katsu-curry'
-export {concat, join, sort, symmetricDifference, difference} from './array'
+export {
+  concat,
+  join,
+  sort,
+  symmetricDifference,
+  difference,
+  alterIndex,
+  alterFirstIndex,
+  alterLastIndex
+} from './array'
 export {choice} from './choice'
 export {filter} from './filter'
 export {flip} from './flip'
@@ -54,7 +65,19 @@ export {
 export {ternary} from './ternary'
 export {triplet} from './triplet'
 export {range} from './range'
-export {keys, assign, freeze, merge, entries, fromPairs, toPairs} from './object'
+export {
+  keys,
+  assign,
+  freeze,
+  merge,
+  entries,
+  fromPairs,
+  toPairs,
+  mapTuple,
+  mapTuples,
+  mapValues,
+  mapKeys
+} from './object'
 export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
   isTypeof,

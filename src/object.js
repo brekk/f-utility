@@ -114,26 +114,27 @@ export const fromPairs = reduce(
 
 /**
  * a simple object tuple-mapper
- * @method mapTuple
+ * @method mapTuples
  * @param {Function} fn - a function which maps over [key, value] tuples
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public
  * @example
- * import {mapTuple} from 'f-utility'
+ * import {mapTuples} from 'f-utility'
  * const input = {
  *   a: 1,
  *   b: 2,
  *   c: 3
  * }
  * const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
- * mapTuple(fn, input) // {A: 2, B: 4, C: 6}
+ * mapTuples(fn, input) // {A: 2, B: 4, C: 6}
  */
-export const mapTuple = curry((fn, o) => pipe(
+export const mapTuples = curry((fn, o) => pipe(
   toPairs,
   map(fn),
   fromPairs
 )(o))
+export const mapTuple = mapTuples
 
 /**
  * a simple object value-only tuple-mapper
@@ -152,7 +153,7 @@ export const mapTuple = curry((fn, o) => pipe(
  * const fn = (v) => (v * 2)
  * mapValues(fn, input) // {a: 2, b: 4, c: 6}
  */
-export const mapValues = curry((fn, o) => mapTuple(
+export const mapValues = curry((fn, o) => mapTuples(
   ([k, v]) => ([k, fn(v)]),
   o
 ))
@@ -174,7 +175,7 @@ export const mapValues = curry((fn, o) => mapTuple(
  * const fn = (v) => `__${v}`
  * mapKeys(fn, input) // {__a: 1, __b: 2, __c: 3}
  */
-export const mapKeys = curry((fn, o) => mapTuple(
+export const mapKeys = curry((fn, o) => mapTuples(
   ([k, v]) => ([fn(k), v]),
   o
 ))

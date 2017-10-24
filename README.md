@@ -432,6 +432,86 @@ equalsID(SAFE_ID) // true
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether a triple-equals b
 
+## greaterThan
+
+> comparison but inverted
+
+**Parameters**
+
+-   `b` **any** anything
+-   `a` **any** anything
+
+**Examples**
+
+```javascript
+import {greaterThan, gt} from 'f-utility'
+gt(100, 99) // false
+gt(100, 100) // false
+gt(100, 101) // true
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether a > b
+
+## greaterThanOrEqualTo
+
+> = comparison but inverted
+
+**Parameters**
+
+-   `b` **any** anything
+-   `a` **any** anything
+
+**Examples**
+
+```javascript
+import {greaterThanOrEqualTo, gte} from 'f-utility'
+gte(100, 99) // false
+gte(100, 100) // true
+gte(100, 101) // true
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether a > b
+
+## lessThan
+
+&lt; comparison but inverted
+
+**Parameters**
+
+-   `b` **any** anything
+-   `a` **any** anything
+
+**Examples**
+
+```javascript
+import {lessThan, lt} from 'f-utility'
+lt(100, 99) // true
+lt(100, 100) // false
+lt(100, 101) // false
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether a > b
+
+## lessThanOrEqualTo
+
+&lt; comparison but inverted
+
+**Parameters**
+
+-   `b` **any** anything
+-   `a` **any** anything
+
+**Examples**
+
+```javascript
+import {lessThanOrEqualTo, lte} from 'f-utility'
+lte(100, 99) // true
+lte(100, 100) // true
+lte(100, 101) // false
+```
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** whether a > b
+
 ## round
 
 convenience method for Math.round
@@ -681,7 +761,7 @@ fromPairs([[`a`, 1], [`b`, 2]]) // {a: 1, b: 2}
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** merged results
 
-## mapTuple
+## mapTuples
 
 a simple object tuple-mapper
 
@@ -693,14 +773,14 @@ a simple object tuple-mapper
 **Examples**
 
 ```javascript
-import {mapTuple} from 'f-utility'
+import {mapTuples} from 'f-utility'
 const input = {
   a: 1,
   b: 2,
   c: 3
 }
 const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
-mapTuple(fn, input) // {A: 2, B: 4, C: 6}
+mapTuples(fn, input) // {A: 2, B: 4, C: 6}
 ```
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a mapped object
