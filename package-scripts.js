@@ -5,6 +5,7 @@ const allNPS = utils.concurrent.nps
 
 const GERMS = germs.build(pkg.name, {
   readme: `documentation readme -s API src/*.js`,
+  prepublishOnly: `nps care`,
   bundle: {
     description: `generate bundles`,
     script: allNPS(`bundle.commonjs`, `bundle.es6`, `bundle.browser`),

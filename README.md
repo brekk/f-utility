@@ -1198,17 +1198,23 @@ reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** filtered iterable
 
-## replace
+## split
 
-string.replace but delegatee last
-<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
+string.split(x) but delegatee last
 
 **Parameters**
 
--   `null-null` **(regex | [string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String))** a string or a regular expression
--   `null-null` **([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function))** a string or a function
+-   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to split
 
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
+**Examples**
+
+```javascript
+import {split} from `f-utility`
+split(`x`, `1x2x3`) // [`1`, `2`, `3`]
+```
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
 
 ## trim
 
@@ -1227,23 +1233,17 @@ trim(`     20932 `) // `20932`
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
 
-## split
+## replace
 
-string.split(x) but delegatee last
+string.replace but delegatee last
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
 
 **Parameters**
 
--   `delimiter` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `string` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** to split
+-   `null-null` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a string or a regular expression
+-   `null-null` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a string or a function
 
-**Examples**
-
-```javascript
-import {split} from `f-utility`
-split(`x`, `1x2x3`) // [`1`, `2`, `3`]
-```
-
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
 
 ## ternary
 

@@ -28,8 +28,8 @@ import {e0, e1, e2} from 'entrust'
  * string.replace but delegatee last
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
  * @method replace
- * @param {regex|string} - a string or a regular expression
- * @param {string|function} - a string or a function
+ * @param {string} - a string or a regular expression
+ * @param {function} - a string or a function
  * @returns {string} string with replacements
  */
 

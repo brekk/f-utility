@@ -12,7 +12,8 @@
     "test": "nps test",
     "build": "nps build",
     "care": "nps care",
-    "precommit": "nps precommit"
+    "precommit": "nps precommit",
+    "prepublishOnly": "nps prepublishOnly"
   },
   "repository": {
     "type": "git",
