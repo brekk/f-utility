@@ -4,6 +4,8 @@
   "description": "functional utilities",
   "reveal": true,
   "main": "f-utility.js",
+  "module": "f-utility.mjs",
+  "browser": "f-utility.browser.js",
   "scripts": {
     "docs": "nps docs",
     "dependencies": "nps dependencies",
