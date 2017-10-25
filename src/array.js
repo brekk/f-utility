@@ -100,7 +100,7 @@ export const symmetricDifference = curry((a, b) => {
 export const alterIndex = curry((index, fn, input) => {
   const copy = Array.from(input)
   const relativeIndex = (
-    index > 0 ?
+    index > -1 ?
       index :
       copy.length - Math.abs(index)
   )

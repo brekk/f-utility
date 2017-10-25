@@ -7,7 +7,8 @@ import {
   join,
   sort,
   alterIndex,
-  alterLastIndex
+  alterLastIndex,
+  alterFirstIndex
 } from './array'
 
 test(`join should be a delegatee last version of array.join(x)`, () => {
@@ -40,6 +41,16 @@ test(`alterIndex`, () => {
   t.is(typeof alterIndex, `function`)
   const output = alterIndex(1, () => `x`, `abc`.split(``))
   t.deepEqual(output, `axc`.split(``))
+})
+
+test(`alterFirstIndex, alterIndex zero`, () => {
+  t.is(typeof alterFirstIndex, `function`)
+  const input = `abc`.split(``)
+  const X = () => `x`
+  const output = alterIndex(0, X, input)
+  const output2 = alterFirstIndex(X, input)
+  t.deepEqual(output, `xbc`.split(``))
+  t.deepEqual(output2, output)
 })
 
 test(`alterIndex with negative index`, () => {
