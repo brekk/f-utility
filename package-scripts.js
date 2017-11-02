@@ -10,7 +10,7 @@ const built = [
 ]
 
 const GERMS = germs.build(pkg.name, {
-  readme: `documentation readme -s API src/*.js`,
+  readme: `echo "documentation readme -s API src/*.js"`,
   prepublishOnly: `nps care`,
   clean: utils.concurrent(built),
   scrub: utils.concurrent(built.concat([
@@ -21,6 +21,6 @@ const GERMS = germs.build(pkg.name, {
   ]))
 })
 
-GERMS.scripts.lint.jsdoc = `documentation lint`
+GERMS.scripts.lint.jsdoc = `echo "documentation lint"`
 
 module.exports = GERMS
