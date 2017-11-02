@@ -1,6 +1,6 @@
 {
   "name": "f-utility",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "functional utilities",
   "reveal": true,
   "main": "f-utility.js",
