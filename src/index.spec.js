@@ -78,7 +78,6 @@ export const harness = (F) => {
       `mapKeys`,
       `mapTuple`,
       `mapTuples`,
-      `mapValues`,
       `match`,
       `merge`,
       `multiply`,

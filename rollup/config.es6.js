@@ -10,6 +10,7 @@ const external = (
 module.exports = bundle({
   name: pkg.name,
   alias: {
+    
   },
   external,
   input: `src/index.js`,

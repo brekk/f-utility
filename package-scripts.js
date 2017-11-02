@@ -1,27 +1,24 @@
 const germs = require(`germs`)
 const pkg = require(`./package.json`)
 const utils = require(`nps-utils`)
-const allNPS = utils.concurrent.nps
+// const allNPS = utils.concurrent.nps
+//
+const built = [
+  `del coverage`,
+  `del lib`,
+  `del docs`
+]
 
 const GERMS = germs.build(pkg.name, {
   readme: `documentation readme -s API src/*.js`,
   prepublishOnly: `nps care`,
-  bundle: {
-    description: `generate bundles`,
-    script: allNPS(`bundle.commonjs`, `bundle.es6`, `bundle.browser`),
-    commonjs: {
-      description: `run the commonjs bundle task`,
-      script: `rollup -c rollup/config.commonjs.js`
-    },
-    es6: {
-      description: `run the es6 bundle task`,
-      script: `rollup -c rollup/config.es6.js`
-    },
-    browser: {
-      description: `run the browser bundle task`,
-      script: `rollup -c rollup/config.browser.js`
-    }
-  }
+  clean: utils.concurrent(built),
+  scrub: utils.concurrent(built.concat([
+    `del ./f-utility.*`,
+    `del dependenc*`,
+    `del yarn.lock`,
+    `del node_modules`
+  ]))
 })
 
 GERMS.scripts.lint.jsdoc = `documentation lint`

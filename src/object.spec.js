@@ -3,7 +3,7 @@ import {pipe} from 'katsu-curry'
 import {t} from 'germs'
 
 import {map} from './map'
-import {values, merge, toPairs, fromPairs, mapTuple, mapValues, mapKeys} from './object'
+import {values, merge, toPairs, fromPairs, mapTuple, mapKeys} from './object'
 import {word} from './random-word'
 import {floorMin} from './random-floor'
 
@@ -57,15 +57,4 @@ test(`mapKeys`, () => {
   const fn = (v) => `__${v}`
   const output = mapKeys(fn, input)
   t.deepEqual(output, {__a: 1, __b: 2, __c: 3})
-})
-
-test(`mapValues`, () => {
-  const input = {
-    a: 1,
-    b: 2,
-    c: 3
-  }
-  const fn = (k) => k * 2
-  const output = mapValues(fn, input)
-  t.deepEqual(output, {a: 2, b: 4, c: 6})
 })
