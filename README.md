@@ -1216,6 +1216,18 @@ split(`x`, `1x2x3`) // [`1`, `2`, `3`]
 
 Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;strings>** 
 
+## replace
+
+string.replace but delegatee last
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
+
+**Parameters**
+
+-   `null-null` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a string or a regular expression
+-   `null-null` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a string or a function
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
+
 ## trim
 
 string.trim() but delegatee last
@@ -1232,18 +1244,6 @@ trim(`     20932 `) // `20932`
 ```
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** trimmed
-
-## replace
-
-string.replace but delegatee last
-<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace>
-
-**Parameters**
-
--   `null-null` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** a string or a regular expression
--   `null-null` **[function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** a string or a function
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** string with replacements
 
 ## ternary
 

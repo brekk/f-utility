@@ -137,28 +137,6 @@ export const mapTuples = curry((fn, o) => pipe(
 export const mapTuple = mapTuples
 
 /**
- * a simple object value-only tuple-mapper
- * @method mapValues
- * @param {Function} fn - a function which maps over values only
- * @param {Object} o - object
- * @returns {Object} a mapped object
- * @public
- * @example
- * import {mapValues} from 'f-utility'
- * const input = {
- *   a: 1,
- *   b: 2,
- *   c: 3
- * }
- * const fn = (v) => (v * 2)
- * mapValues(fn, input) // {a: 2, b: 4, c: 6}
- */
-export const mapValues = curry((fn, o) => mapTuples(
-  ([k, v]) => ([k, fn(v)]),
-  o
-))
-
-/**
  * a simple object key-only tuple-mapper
  * @method mapKeys
  * @param {Function} fn - a function which maps over values only
