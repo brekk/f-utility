@@ -3,7 +3,17 @@ import {pipe} from 'katsu-curry'
 import {t} from 'germs'
 
 import {map} from './map'
-import {values, merge, toPairs, fromPairs, mapTuple, mapKeys} from './object'
+import {filter} from './filter'
+import {reject} from './reject'
+import {
+  augmentTuples,
+  values,
+  merge,
+  toPairs,
+  fromPairs,
+  mapTuple,
+  mapKeys
+} from './object'
 import {word} from './random-word'
 import {floorMin} from './random-floor'
 
@@ -35,6 +45,19 @@ test(`toPairs / fromPairs`, () => {
   }
   t.deepEqual(doubleEvenValues(input), expected)
   t.deepEqual(fromPairs([[1, 2], [`a`, `b`]]), {1: 2, a: `b`})
+})
+
+test(`augmentTuple`, () => {
+  const input = {
+    a: 1,
+    b: 2,
+    c: 3
+  }
+  const fn = (x) => x[1] % 2 !== 0
+  const output = augmentTuples(filter, fn, input)
+  const output2 = augmentTuples(reject, fn, input)
+  t.deepEqual(output, {a: 1, c: 3})
+  t.deepEqual(output2, {b: 2})
 })
 
 test(`mapTuple`, () => {

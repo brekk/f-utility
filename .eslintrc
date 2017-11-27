@@ -22,7 +22,7 @@
     "max-len": [1, 100, 2],
     "new-cap": [2, {"capIsNew": false}],
     "no-trailing-spaces": [2, { "skipBlankLines": true }],
-    "no-unused-vars": [2, {"vars": "all", "varsIgnorePattern": "^__style" }],
+    "no-unused-vars": [2, {"vars": "all", "varsIgnorePattern": "^_$" }],
     "object-curly-spacing": 0,
     "one-var": 0,
     "operator-linebreak": [2, "after"],

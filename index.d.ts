@@ -364,7 +364,14 @@ declare module 'f-utility' {
 
   export function mapKeys<T, U>(fn: (x: T) => U, x: object): U[];
   export function mapKeys<T, U>(fn: (x: T) => U): (x: object) => U[];
-  
+
+  interface AugmentTuple {
+    (hoc: any, fn: ([k, v]: [string, any]) => any, list: [string, any][]): any[];
+    (hoc: any, fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any[];
+    (hoc: any): (fn: ([k, v]: [string, any]) => any) => (list: [string, any][]) => any[];
+  }
+  export const augmentTuples: AugmentTuple
+
   interface MapTuple {
     (fn: ([k, v]: [string, any]) => any, list: [string, any][]): any[];
     (fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any[];
@@ -711,5 +718,5 @@ declare module 'f-utility' {
   export function triplet(test: AnyToBoolean): (a: UnaryAny, b: UnaryAny, x: any) => any
   export function triplet(test: AnyToBoolean, a: UnaryAny): (b: UnaryAny, x: any) => any
   export function triplet(test: AnyToBoolean, a: UnaryAny, b: UnaryAny): (x: any) => any
-  
+
 }
