@@ -365,20 +365,26 @@ declare module 'f-utility' {
   export function mapKeys<T, U>(fn: (x: T) => U, x: object): U[];
   export function mapKeys<T, U>(fn: (x: T) => U): (x: object) => U[];
 
-  interface AugmentTuple {
+  interface PairwiseTransformer {
     (hoc: any, fn: ([k, v]: [string, any]) => any, list: [string, any][]): any[];
     (hoc: any, fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any[];
     (hoc: any): (fn: ([k, v]: [string, any]) => any) => (list: [string, any][]) => any[];
   }
-  export const augmentTuples: AugmentTuple
+  export const pairwise: PairwiseTransformer
+  interface PairwiseObjectTransformer {
+    (hoc: any, fn: ([k, v]: [string, any]) => any, list: [string, any][]): any;
+    (hoc: any, fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any;
+    (hoc: any): (fn: ([k, v]: [string, any]) => any) => (list: [string, any][]) => any;
+  }
+  export const pairwiseObject: PairwiseTransformer
 
-  interface MapTuple {
-    (fn: ([k, v]: [string, any]) => any, list: [string, any][]): any[];
-    (fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any[];
+  interface PairwiseMap {
+    (fn: ([k, v]: [string, any]) => any, list: [string, any][]): any;
+    (fn: ([k, v]: [string, any]) => any): (list: [string, any][]) => any;
   }
 
-  export const mapTuple: MapTuple
-  export const mapTuples: MapTuple
+  export const mapTuple: PairwiseMap
+  export const mapTuples: PairwiseMap
 
   export function match(regex: RegExp, str: string): boolean;
   export function match(regex: RegExp): (str: string) => boolean;
