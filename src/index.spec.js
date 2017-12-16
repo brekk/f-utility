@@ -87,6 +87,8 @@ export const harness = (F) => {
       `not3`,
       `padEnd`,
       `padStart`,
+      `pairwise`,
+      `pairwiseObject`,
       `path`,
       `pathEq`,
       `pathIs`,

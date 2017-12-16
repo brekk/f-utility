@@ -6,7 +6,8 @@ import {map} from './map'
 import {filter} from './filter'
 import {reject} from './reject'
 import {
-  augmentTuples,
+  pairwise,
+  pairwiseObject,
   values,
   merge,
   toPairs,
@@ -47,17 +48,21 @@ test(`toPairs / fromPairs`, () => {
   t.deepEqual(fromPairs([[1, 2], [`a`, `b`]]), {1: 2, a: `b`})
 })
 
-test(`augmentTuple`, () => {
+test(`pairwise should perform higher-order operations on tuples`, () => {
   const input = {
     a: 1,
     b: 2,
     c: 3
   }
   const fn = (x) => x[1] % 2 !== 0
-  const output = augmentTuples(filter, fn, input)
-  const output2 = augmentTuples(reject, fn, input)
-  t.deepEqual(output, {a: 1, c: 3})
-  t.deepEqual(output2, {b: 2})
+  const output = pairwise(filter, fn, input)
+  const outputO = pairwiseObject(filter, fn, input)
+  const output2 = pairwise(reject, fn, input)
+  const output2O = pairwiseObject(reject, fn, input)
+  t.deepEqual(output, [[`a`, 1], [`c`, 3]])
+  t.deepEqual(output2, [[`b`, 2]])
+  t.deepEqual(outputO, {a: 1, c: 3})
+  t.deepEqual(output2O, {b: 2})
 })
 
 test(`mapTuple`, () => {

@@ -114,13 +114,13 @@ export const fromPairs = reduce(
 
 /**
  * modify a toPairs / fromPairs pipeline with a higher-order function
- * @method augmentTuples
+ * @method pairwise
  * @param {Function} fn - a function which maps over [key, value] tuples
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public
  * @example
- * import {filter, mapTuples, augmentTuples} from 'f-utility'
+ * import {filter, mapTuples, pairwiseObject} from 'f-utility'
  * const input = {
  *   a: 1,
  *   b: 2,
@@ -129,15 +129,17 @@ export const fromPairs = reduce(
  * const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
  * // we could map it
  * mapTuples(fn, input) // {A: 2, B: 4, C: 6}
- * // or we can use augmentTuples
- * augmentTuples(filter, ([k, v]) => v % 2 !== 0, input) // {a: 1, c: 3}
+ * // or we can use pairwiseObject
+ * pairwiseObject(filter, ([k, v]) => v % 2 !== 0, input) // {a: 1, c: 3}
  */
-export const augmentTuples = curry((hoc, fn, o) => pipe(
+export const pairwise = curry((hoc, fn, o) => pipe(
   toPairs,
-  hoc(fn),
+  hoc(fn)
+)(o))
+export const pairwiseObject = curry((hoc, fn, o) => pipe(
+  pairwise(hoc, fn),
   fromPairs
 )(o))
-export const augmentTuple = augmentTuples
 
 /**
  * a simple object tuple-mapper
@@ -156,7 +158,7 @@ export const augmentTuple = augmentTuples
  * const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
  * mapTuples(fn, input) // {A: 2, B: 4, C: 6}
  */
-export const mapTuples = augmentTuples(map)
+export const mapTuples = pairwiseObject(map)
 export const mapTuple = mapTuples
 
 /**

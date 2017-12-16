@@ -75,7 +75,9 @@ export {
   toPairs,
   mapTuple,
   mapTuples,
-  mapKeys
+  mapKeys,
+  pairwise,
+  pairwiseObject
 } from './object'
 export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
