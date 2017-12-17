@@ -102,6 +102,7 @@ export const harness = (F) => {
       `propOr`,
       `random`,
       `range`,
+      `relativeIndex`,
       `reduce`,
       `reject`,
       `remap`,

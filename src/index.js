@@ -30,7 +30,8 @@ export {
   difference,
   alterIndex,
   alterFirstIndex,
-  alterLastIndex
+  alterLastIndex,
+  relativeIndex
 } from './array'
 export {choice} from './choice'
 export {filter} from './filter'
