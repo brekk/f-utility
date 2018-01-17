@@ -1,4 +1,3 @@
-import {length as _length} from 'katsu-curry/utils/length'
 import * as pkg from '../package.json'
 
 import {random as _random} from './random'
@@ -95,7 +94,7 @@ export {
 
 export const {version} = pkg
 
-export const length = _length
+export {length} from './length'
 export {
   which,
   some,
