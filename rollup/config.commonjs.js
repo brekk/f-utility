@@ -31,6 +31,22 @@ module.exports = bundle({
           `remapArray`,
           `K`,
           `I`
+        ],
+        'node_modules/entrust/entrust.js': [
+          `e0`,
+          `e1`,
+          `e2`,
+          `e3`,
+          `e4`,
+          `e5`,
+          `e6`,
+          `e7`,
+          `e8`,
+          `e9`,
+          `e10`,
+          `eD`,
+          `eN`,
+          `custom`
         ]
       }
     })
