@@ -1,4 +1,3 @@
-import {length as _length} from 'katsu-curry/utils/length'
 import * as pkg from '../package.json'
 
 import {random as _random} from './random'
@@ -30,7 +29,8 @@ export {
   difference,
   alterIndex,
   alterFirstIndex,
-  alterLastIndex
+  alterLastIndex,
+  relativeIndex
 } from './array'
 export {choice} from './choice'
 export {filter} from './filter'
@@ -75,7 +75,9 @@ export {
   toPairs,
   mapTuple,
   mapTuples,
-  mapKeys
+  mapKeys,
+  pairwise,
+  pairwiseObject
 } from './object'
 export {path, pathOr, prop, propOr, pathEq, pathIs, propIs, propEq} from './path'
 export {
@@ -92,7 +94,7 @@ export {
 
 export const {version} = pkg
 
-export const length = _length
+export {length} from './length'
 export {
   which,
   some,

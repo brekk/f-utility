@@ -97,14 +97,27 @@ export const symmetricDifference = curry((a, b) => {
  * alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
  */
 
+// export const alterIndex = curry((index, fn, input) => {
+//   const copy = Array.from(input)
+//   const relativeIndex = (
+//     index > -1 ?
+//       index :
+//       copy.length - Math.abs(index)
+//   )
+//   copy[relativeIndex] = fn(copy[relativeIndex])
+//   return copy
+// })
+
+export const relativeIndex = curry((length, index) => (
+  index > -1 ?
+    index :
+    length - Math.abs(index)
+))
+
 export const alterIndex = curry((index, fn, input) => {
-  const copy = Array.from(input)
-  const relativeIndex = (
-    index > -1 ?
-      index :
-      copy.length - Math.abs(index)
-  )
-  copy[relativeIndex] = fn(copy[relativeIndex])
+  const i = relativeIndex(input.length, index)
+  const copy = [].concat(input)
+  copy[i] = fn(copy[i])
   return copy
 })
 
