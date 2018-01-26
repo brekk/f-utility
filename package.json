@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "entrust": "^0.0.16",
+    "entrust": "^0.0.17",
     "fantasy-land": "3.4.0",
     "fast.js": "^0.1.1",
     "flatmap-fast": "^3.0.0",
