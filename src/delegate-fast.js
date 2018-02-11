@@ -1,9 +1,12 @@
 import {curry} from 'katsu-curry'
 import {e1, e2} from 'entrust'
 
-const has = curry((x, y) => !!y[x])
+const has = (x, y) => !!y[x]
 const {isArray} = Array
 
+export const 𝘍willDelegate = (method, functor) => (
+  has(method, functor) && !isArray(functor)
+)
 /**
  * functor-last curried goodness
  * @method willDelegate
@@ -12,12 +15,15 @@ const {isArray} = Array
  * @returns {boolean} should we delegate?
  * @private
  */
-const willDelegate = curry(
-  (method, functor) => (
-    has(method, functor) && !isArray(functor)
-  )
-)
+const willDelegate = curry(𝘍willDelegate)
 
+export const 𝘍delegateFastBinary = (method, fast, fn, functor) => {
+  return (
+    willDelegate(method, functor) ?
+      e1(method, fn, functor) :
+      fast(functor, fn)
+  )
+}
 /**
  * functor-last curried goodness
  * @method delegateFastBinary
@@ -27,15 +33,14 @@ const willDelegate = curry(
  * @private
  */
 export const delegateFastBinary = curry(
-  (method, fast, fn, functor) => {
-    return (
-      willDelegate(method, functor) ?
-        e1(method, fn, functor) :
-        fast(functor, fn)
-    )
-  }
+  𝘍delegateFastBinary
 )
 
+export const 𝘍delegateFastTertiary = (method, fast, fn, initial, functor) => (
+  willDelegate(method, functor) ?
+    e2(method, fn, initial, functor) :
+    fast(functor, fn, initial)
+)
 /**
  * functor-last curried goodness
  * @method delegateFastTertiary
@@ -46,9 +51,5 @@ export const delegateFastBinary = curry(
  * @private
  */
 export const delegateFastTertiary = curry(
-  (method, fast, fn, initial, functor) => (
-    willDelegate(method, functor) ?
-      e2(method, fn, initial, functor) :
-      fast(functor, fn, initial)
-  )
+  𝘍delegateFastTertiary
 )

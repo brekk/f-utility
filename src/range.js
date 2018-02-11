@@ -1,6 +1,6 @@
 import {curry} from 'katsu-curry'
 
-export const range = curry((start, end) => {
+export const 𝘍range = (start, end) => {
   const agg = []
   const swap = start < end
   const [a, b] = (swap ? [start, end] : [end + 1, start + 1])
@@ -9,4 +9,5 @@ export const range = curry((start, end) => {
   }
   // return agg
   return (swap ? agg : agg.reverse())
-})
+}
+export const range = curry(𝘍range)

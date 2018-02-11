@@ -42,9 +42,6 @@
       "node_modules",
       "src"
     ],
-    "coveragePathIgnorePatterns": [
-      "test-helpers.js"
-    ],
     "mapCoverage": true,
     "moduleFileExtensions": [
       "js",
@@ -59,7 +56,7 @@
     "fantasy-land": "3.4.0",
     "fast.js": "^0.1.1",
     "flatmap-fast": "^3.0.0",
-    "katsu-curry": "^0.7.1"
+    "katsu-curry": "^0.7.4"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -99,6 +96,7 @@
     "jayin": "^0.0.3",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
+    "madge": "^3.0.1",
     "nps": "^5.7.1",
     "nps-utils": "^1.5.0",
     "ramda": "^0.25.0",

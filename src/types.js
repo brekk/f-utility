@@ -1,5 +1,6 @@
 import {curry} from 'katsu-curry'
 
+export const 𝘍isTypeof = (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
 /**
  * returns boolean based on type
  * @method isTypeof
@@ -13,8 +14,7 @@ import {curry} from 'katsu-curry'
  * isTypeof(`boolean`, `nope`) // false
  */
 export const isTypeof = curry(
-  /* istanbul ignore next */
-  (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
+  𝘍isTypeof
 )
 
 /**
@@ -149,3 +149,4 @@ export const isArray = Array.isArray
  * isDistinctObject(undefined) // false
  */
 export const isDistinctObject = (x) => !isNil(x) && isObject(x) && !isArray(x)
+export const isPOJO = isDistinctObject

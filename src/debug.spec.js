@@ -1,7 +1,6 @@
 /* global test */
 import {t} from 'germs'
-import * as FUTILITY from './index'
-console.log(`typeof F`, FUTILITY, typeof FUTILITY)
+import * as DEBUG from './debug'
 
 export const harness = (F) => {
   const zort = (x) => x.sort() // eslint-disable-line
@@ -136,4 +135,4 @@ export const harness = (F) => {
     t.deepEqual(nonMethods, [`version`])
   })
 }
-harness(FUTILITY)
+harness(DEBUG)

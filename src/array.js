@@ -36,13 +36,13 @@ export const concat = e1(`concat`)
  * sort((x) => x % 2, [1,2,3,4,5,6,7,8]) // [ 0, 2, 4, 6, 8, 9, 7, 5, 3, 1 ]
  */
 // we can't just invert things with entrust, as sort is a mutating method
-// export const sort = e1(`sort`)
-
-export const sort = curry((fn, functor) => {
+export const 𝘍sort = (fn, functor) => {
   const copy = Array.from(functor)
   copy.sort(fn)
   return copy
-})
+}
+// export const sort = e1(`sort`)
+export const sort = curry(𝘍sort)
 
 /**
  * get the difference between two arrays
@@ -56,9 +56,8 @@ export const sort = curry((fn, functor) => {
  * difference([1,2,3], [2,4,6]) // [4, 6]
  * difference([2,4,6], [1,2,3]) // [1, 3]
  */
-export const difference = curry(
-  (bList, aList) => filter((x) => !bList.includes(x), aList)
-)
+export const 𝘍difference = (bList, aList) => filter((x) => !bList.includes(x), aList)
+export const difference = curry(𝘍difference)
 
 /**
  * get both the differences between two arrays, and if one difference is longer, return it
@@ -71,7 +70,7 @@ export const difference = curry(
  * import {symmetricDifference} from 'f-utility'
  * difference([1,2,3], [1,2]) // [3]
  */
-export const symmetricDifference = curry((a, b) => {
+export const 𝘍symmetricDifference = (a, b) => {
   const ab = difference(a, b)
   const ba = difference(b, a)
   return (
@@ -79,7 +78,8 @@ export const symmetricDifference = curry((a, b) => {
       ab :
       ba
   )
-})
+}
+export const symmetricDifference = curry(𝘍symmetricDifference)
 
 /**
  * alter the index of a given array input
@@ -97,29 +97,21 @@ export const symmetricDifference = curry((a, b) => {
  * alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
  */
 
-// export const alterIndex = curry((index, fn, input) => {
-//   const copy = Array.from(input)
-//   const relativeIndex = (
-//     index > -1 ?
-//       index :
-//       copy.length - Math.abs(index)
-//   )
-//   copy[relativeIndex] = fn(copy[relativeIndex])
-//   return copy
-// })
-
-export const relativeIndex = curry((length, index) => (
+export const 𝘍relativeIndex = (length, index) => (
   index > -1 ?
     index :
     length - Math.abs(index)
-))
+)
 
-export const alterIndex = curry((index, fn, input) => {
+export const relativeIndex = curry(𝘍relativeIndex)
+
+export const 𝘍alterIndex = (index, fn, input) => {
   const i = relativeIndex(input.length, index)
   const copy = [].concat(input)
   copy[i] = fn(copy[i])
   return copy
-})
+}
+export const alterIndex = curry(𝘍alterIndex)
 
 export const alterFirstIndex = alterIndex(0)
 export const alterLastIndex = alterIndex(-1)
