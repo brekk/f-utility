@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {filter} from './filter'
 
 const mod2 = (x) => !(x % 2)

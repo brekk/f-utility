@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {triplet} from './triplet'
 import {divide, multiply} from './math'
 

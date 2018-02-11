@@ -89,7 +89,8 @@ export {
   isObject,
   isNil,
   isArray,
-  isDistinctObject
+  isDistinctObject,
+  isPOJO
 } from './types'
 
 export const {version} = pkg

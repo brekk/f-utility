@@ -7,7 +7,7 @@ import {custom} from 'entrust'
 import * as KATSU_DEBUG from 'katsu-curry/debug'
 
 import {𝘍ap} from './ap'
-import {𝘍isTypeof} from './types'
+import {𝘍isTypeof, isPOJO as isGDObject} from './types'
 import {𝘍which} from './which'
 import {𝘍choice} from './choice'
 import {𝘍iterate} from './iterate'
@@ -57,6 +57,12 @@ import {
   𝘍propIs,
   𝘍propEq
 } from './path'
+import {random as _random} from './random'
+import * as f from './random-floor'
+import * as t from './random-take'
+import * as w from './random-word'
+import * as s from './random-shuffle'
+export const random = Object.assign(_random, f, t, w, s)
 
 export const {curry, pipe} = KATSU_DEBUG
 
@@ -86,10 +92,9 @@ export {
 export {
   isNil,
   isArray,
-  isDistinctObject,
-  isPOJO
+  isDistinctObject
 } from './types'
-
+export const isPOJO = isGDObject
 export {
   round
 } from './math'
@@ -111,14 +116,16 @@ export const repeat = e1(`repeat`)
 export const search = e1(`search`)
 export const split = e1(`split`)
 
-export const endsWithLength = e2(`endsWith`)
-export const indexOfFromIndex = e2(`indexOf`)
-export const lastIndexOfFromIndex = e2(`lastIndexOf`)
+// const endsWithLength = e2(`endsWith`)
+// const indexOfFromIndex = e2(`indexOf`)
+// export const lastIndexOfFromIndex = e2(`lastIndexOf`)
 export const padEnd = e2(`padEnd`)
 export const padStart = e2(`padStart`)
 export const replace = e2(`replace`)
-export const startsWithFromPosition = e2(`startsWith`)
+// export const startsWithFromPosition = e2(`startsWith`)
 export const substr = e2(`substr`)
+
+// BINARY
 
 export const isTypeof = curry(𝘍isTypeof)
 export const isBoolean = isTypeof(`boolean`)
@@ -195,9 +202,13 @@ export const not3 = curry((fn, a, b, c) => pipe(
   invert
 ))
 
-export const propLength = prop(`length`)
-export const objectLength = pipe(Object.keys, propLength)
-export const length = (x) => (typeof x === `object` ? objectLength(x) : propLength(x))
+const propLength = prop(`length`)
+const objectLength = pipe(Object.keys, propLength)
+export const length = (x) => (
+  typeof x === `object` ?
+    objectLength(x) :
+    propLength(x)
+)
 
 export const which = curry(𝘍which)
 export const some = which(fastSome)

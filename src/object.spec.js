@@ -1,6 +1,6 @@
 /* global test */
 import {pipe} from 'katsu-curry'
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 
 import {map} from './map'
 import {filter} from './filter'
