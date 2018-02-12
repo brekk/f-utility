@@ -68,12 +68,12 @@ round.toString = () => `~(?)`
 export const random = Object.assign(_random, f, t, w, s)
 random.toString = () => `👾 (?)`
 export const {curry, pipe, compose} = KATSU_DEBUG
-pipe.toString = () => `🍡 (...?)`
-compose.toString = () => `🙃 🍡 (...?)`
+pipe.toString = () => `🍡 (?)`
+compose.toString = () => `🙃 🍡 (?)`
 curry.toString = () => `🍛 (?)`
 
 export const isDistinctObject = 𝘍isDistinctObject
-isDistinctObject.toString = () => `isTrueObject`
+isDistinctObject.toString = () => `isTrueObject(?)`
 export const isPOJO = isDistinctObject
 
 export const {
@@ -95,9 +95,9 @@ export {
   entries
 } from './object'
 export const toPairs = 𝘍toPairs
-toPairs.toString = () => `ᗒ(?)`
+toPairs.toString = () => `ᗕ(?)`
 export const fromPairs = 𝘍fromPairs
-fromPairs.toString = () => `ᗕ(?)`
+fromPairs.toString = () => `ᗒ(?)`
 export {
   isNil,
   isArray
@@ -153,7 +153,7 @@ export const indexOf = curry(𝘍indexOf)
 export const iterate = curry(𝘍iterate)
 export const lastIndexOf = curry(𝘍lastIndexOf)
 export const map = curry(𝘍map)
-map.toString = () => `map`
+map.toString = () => `map(?,?)`
 export const merge = curry(𝘍merge)
 export const multiply = curry(𝘍multiply)
 export const pairwise = curry(𝘍pairwise)
@@ -181,7 +181,7 @@ export const chain = curry(function 𝘍chain(fn, functor) {
   return 𝘍delegateFastBinary(`chain`, _flatMap, fn, functor)
 })
 export const flatMap = chain
-export const filter = curry(function 𝘍chain(fn, functor) {
+export const filter = curry(function 𝘍filter(fn, functor) {
   return 𝘍delegateFastBinary(`filter`, fastFilter, fn, functor)
 })
 
@@ -224,7 +224,7 @@ export const not3 = curry((fn, a, b, c) => pipe(
   fn(a, b, c),
   invert
 ))
-not3.toString = () => `❗️3(?,?,?)`
+not3.toString = () => `❗️3(?,?,?,?)`
 
 const propLength = prop(`length`)
 const objectLength = pipe(Object.keys, propLength)
@@ -233,9 +233,9 @@ export const length = (x) => (
     objectLength(x) :
     propLength(x)
 )
-length.toString = () => `length`
+length.toString = () => `length(?)`
 
-export const which = curry((compare, fn, o) => {
+export const which = curry(function 𝘍which(compare, fn, o) {
   // allows us to pass functions to compare first
   const arecomp = flip(compare)
   return triplet(

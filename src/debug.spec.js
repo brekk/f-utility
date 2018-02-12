@@ -179,5 +179,129 @@ export const harness = (F) => {
       expected
     )
   })
+  test(`toString`, () => {
+    t.is(F.map.toString(), `map(?,?)`)
+    t.is(F.curry.toString(), `🍛 (?)`)
+    t.is(F.round.toString(), `~(?)`)
+    t.is(F.random.toString(), `👾 (?)`)
+    t.is(F.toPairs.toString(), `ᗕ(?)`)
+    t.is(F.fromPairs.toString(), `ᗒ(?)`)
+    t.is(F.flip.toString(), `🙃 🍛 (?)`)
+    t.is(F.not.toString(), `❗️(?)`)
+    t.is(F.not1.toString(), `❗️1(?,?)`)
+    t.is(F.not2.toString(), `❗️2(?,?,?)`)
+    t.is(F.not3.toString(), `❗️3(?,?,?,?)`)
+    t.is(F.length.toString(), `length(?)`)
+    t.is(F.pipe.toString(), `🍡 (?)`)
+    t.is(F.compose.toString(), `🙃 🍡 (?)`)
+    t.is(F.isDistinctObject.toString(), `isTrueObject(?)`)
+    t.is(F.isPOJO.toString(), `isTrueObject(?)`)
+    t.is(F.chain.toString(), `curry(𝘍chain)(?,?)`)
+    t.is(F.filter.toString(), `curry(𝘍filter)(?,?)`)
+    t.is(F.reduce.toString(), `curry(𝘍reduce)(?,?,?)`)
+    t.is(F.which.toString(), `curry(𝘍which)(?,?,?)`)
+    t.is(F.some.toString(), `curry(𝘍which)(some)(?,?)`)
+    t.is(F.every.toString(), `curry(𝘍which)(every)(?,?)`)
+  })
+  test(`some`, () => {
+    t.truthy(F.some((x) => x === `j`, [`j`, `k`, `l`]))
+    t.falsy(F.some((x) => x === `j`, [`k`, `l`, `m`]))
+  })
+  test(`every`, () => {
+    t.truthy(F.every((x) => typeof x === `number`, [0, 1, 2, 3, 4]))
+    t.falsy(F.every((x) => typeof x === `number`, [0, 1, `twenty`, 3, 4]))
+  })
+
+  test(`mapKeys`, () => {
+    const input = {
+      a: 1,
+      b: 2,
+      c: 3
+    }
+    const fn = (v) => `__${v}`
+    const output = F.mapKeys(fn, input)
+    t.deepEqual(output, {__a: 1, __b: 2, __c: 3})
+  })
+  const mod2 = (x) => !(x % 2)
+  const {filter, chain, reduce, I} = F
+  test(`filter`, () => {
+    t.is(typeof filter, `function`)
+    const flt = filter(mod2)
+    t.deepEqual(flt([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), [0, 2, 4, 6, 8])
+    const inputO = {a: 0, b: 1, c: 2, d: 3, e: 4}
+    t.deepEqual(flt(inputO), {a: 0, c: 2, e: 4})
+  })
+
+  test(`filter should delegate to a given functor's method, if present`, () => {
+    function MyFunctor(x) {
+      if (!(this instanceof MyFunctor)) {
+        return new MyFunctor(x)
+      }
+      this.value = [].concat(x)
+      return this
+    }
+    MyFunctor.prototype.filter = function customFilter(fn) {
+      return MyFunctor(this.value.reduce(
+        (agg, x) => (
+          fn(x) ?
+            agg.concat(x) :
+            agg
+        ),
+        []
+      ))
+    }
+    const custom = MyFunctor([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+    const expected = MyFunctor([-4, -2, 0, 2, 4])
+    t.deepEqual(custom.filter(mod2), expected)
+    const filtered = filter(mod2, custom)
+    t.deepEqual(filtered, expected)
+  })
+
+  test(`chain`, () => {
+    t.is(typeof chain, `function`)
+    t.is(typeof chain(I), `function`)
+    const double = (x) => x.map((y) => y * 2)
+    const split = (x) => x.split(``)
+    const flatSplit = chain(split)
+    const flatDouble = chain(double)
+    const nine = [
+      [1, 2],
+      [3, 4, 5],
+      [6, 7, 8, 9]
+    ]
+    const nested = [
+      `alpha`,
+      `beta`,
+      `gamma`,
+      `omega`,
+      `whatever`
+    ]
+    t.deepEqual(flatSplit(nested), `alphabetagammaomegawhatever`.split(``))
+    t.deepEqual(flatDouble(nine), [2, 4, 6, 8, 10, 12, 14, 16, 18])
+  })
+  test(`reduce`, () => {
+    const out = reduce((a, b) => a.concat(b), [], [[`a`], [`b`, `c`], [`d`, `e`]])
+    t.deepEqual(out, `abcde`.split(``))
+  })
+
+  const mod2Reduce = (agg, i) => (!(i % 2) ? agg.concat(i) : agg)
+
+  test(`reduce should delegate to a given functor's method, if present`, () => {
+    function MyFunctor(x) {
+      if (!(this instanceof MyFunctor)) {
+        return new MyFunctor(x)
+      }
+      this.value = [].concat(x)
+      return this
+    }
+    MyFunctor.prototype.reduce = function customReduce(fn, init) {
+      return MyFunctor(this.value.reduce(fn, init))
+    }
+    const custom = MyFunctor([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+    const expected = MyFunctor([-4, -2, 0, 2, 4])
+    t.deepEqual(custom.reduce(mod2Reduce, []), expected)
+    const reduced = reduce(mod2Reduce, [], custom)
+    t.deepEqual(reduced, expected)
+  })
 }
 harness(DEBUG)

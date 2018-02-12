@@ -564,17 +564,17 @@ random$$1.toString = function () { return "👾 (?)"; };
 var curry = debug_6;
 var pipe = debug_1;
 var compose = debug_2;
-pipe.toString = function () { return "🍡 (...?)"; };
-compose.toString = function () { return "🙃 🍡 (...?)"; };
+pipe.toString = function () { return "🍡 (?)"; };
+compose.toString = function () { return "🙃 🍡 (?)"; };
 curry.toString = function () { return "🍛 (?)"; };
 var isDistinctObject$$1 = isDistinctObject$1;
-isDistinctObject$$1.toString = function () { return "isTrueObject"; };
+isDistinctObject$$1.toString = function () { return "isTrueObject(?)"; };
 var isPOJO = isDistinctObject$$1;
 var $ = debug_3;
 var toPairs$$1 = toPairs$1;
-toPairs$$1.toString = function () { return "ᗒ(?)"; };
+toPairs$$1.toString = function () { return "ᗕ(?)"; };
 var fromPairs$$1 = fromPairs$1;
-fromPairs$$1.toString = function () { return "ᗕ(?)"; };
+fromPairs$$1.toString = function () { return "ᗒ(?)"; };
 var entrust = entrust_14(curry);
 var e0 = entrust.e0;
 var e1 = entrust.e1;
@@ -613,7 +613,7 @@ var indexOf = curry(𝘍indexOf);
 var iterate = curry(𝘍iterate);
 var lastIndexOf = curry(𝘍lastIndexOf);
 var map = curry(𝘍map);
-map.toString = function () { return "map"; };
+map.toString = function () { return "map(?,?)"; };
 var merge = curry(𝘍merge);
 var multiply = curry(𝘍multiply);
 var pairwise = curry(𝘍pairwise);
@@ -640,7 +640,7 @@ var chain = curry(function 𝘍chain(fn, functor) {
   return 𝘍delegateFastBinary("chain", flatmapFast, fn, functor)
 });
 var flatMap = chain;
-var filter = curry(function 𝘍chain(fn, functor) {
+var filter = curry(function 𝘍filter(fn, functor) {
   return 𝘍delegateFastBinary("filter", filter$1, fn, functor)
 });
 var reduce = curry(function 𝘍reduce(fn, initial, functor) {
@@ -683,7 +683,7 @@ var not3 = curry(function (fn, a, b, c) { return pipe(
   fn(a, b, c),
   invert$$1
 ); });
-not3.toString = function () { return "❗️3(?,?,?)"; };
+not3.toString = function () { return "❗️3(?,?,?,?)"; };
 var propLength = prop("length");
 var objectLength = pipe(Object.keys, propLength);
 var length = function (x) { return (
@@ -691,8 +691,8 @@ var length = function (x) { return (
     objectLength(x) :
     propLength(x)
 ); };
-length.toString = function () { return "length"; };
-var which = curry(function (compare, fn, o) {
+length.toString = function () { return "length(?)"; };
+var which = curry(function 𝘍which(compare, fn, o) {
   var arecomp = flip(compare);
   return triplet(
     Array.isArray,
