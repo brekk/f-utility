@@ -2846,11 +2846,11 @@ enhanced-resolve@~3.4.1:
     object-assign "^4.0.1"
     tapable "^0.2.7"
 
-entrust@^0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/entrust/-/entrust-0.0.17.tgz#1ae4af47e789c8f6f0ccb41c26d80870ef8605af"
+entrust@^0.0.18:
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/entrust/-/entrust-0.0.18.tgz#b8706662568e2b55f0c605dcce4eb479c2bd056d"
   dependencies:
-    katsu-curry "^0.7.1"
+    katsu-curry "^0.7.4"
 
 env-variable@0.0.x:
   version "0.0.3"
@@ -5034,7 +5034,7 @@ jsx-ast-utils@^2.0.0, jsx-ast-utils@^2.0.1:
   dependencies:
     array-includes "^3.0.3"
 
-katsu-curry@^0.7.1, katsu-curry@^0.7.4:
+katsu-curry@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/katsu-curry/-/katsu-curry-0.7.4.tgz#9725dffa05018464902bfc0e27726d873c46757f"
   dependencies:
