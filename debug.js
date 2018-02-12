@@ -199,35 +199,35 @@ var isString$1 = isTypeof$1("string");
 var isNil = function (x) { return x == null; };
 var isObject$1 = isTypeof$1("object");
 var isArray = Array.isArray;
-var isDistinctObject = function (x) { return !isNil(x) && isObject$1(x) && !isArray(x); };
-var isPOJO$1 = isDistinctObject;
+var isDistinctObject$1 = function (x) { return !isNil(x) && isObject$1(x) && !isArray(x); };
 
 var has = function (x, y) { return !!y[x]; };
 var isArray$1 = Array.isArray;
 var 𝘍willDelegate = function (method, functor) { return (
   has(method, functor) && !isArray$1(functor)
 ); };
-var willDelegate = curry$1(𝘍willDelegate);
-var 𝘍delegateFastBinary = function (method, fast, fn, functor) {
+function 𝘍delegateFastBinary(method, fast, fn, functor) {
   return (
-    willDelegate(method, functor) ?
-      entrust_2(method, fn, functor) :
+    𝘍willDelegate(method, functor) ?
+      functor[method](fn) :
       fast(functor, fn)
   )
-};
-var delegateFastBinary$1 = curry$1(
+}
+var delegateFastBinary = curry$1(
   𝘍delegateFastBinary
 );
-var 𝘍delegateFastTertiary = function (method, fast, fn, initial, functor) { return (
-  willDelegate(method, functor) ?
-    entrust_3(method, fn, initial, functor) :
-    fast(functor, fn, initial)
-); };
-var delegateFastTertiary$1 = curry$1(
+function 𝘍delegateFastTertiary(method, fast, fn, initial, functor) {
+  return (
+    𝘍willDelegate(method, functor) ?
+      functor[method](fn, initial) :
+      fast(functor, fn, initial)
+  )
+}
+var delegateFastTertiary = curry$1(
   𝘍delegateFastTertiary
 );
 
-var reduce$6 = delegateFastTertiary$1("reduce", reduce$1);
+var reduce$6 = delegateFastTertiary("reduce", reduce$1);
 
 var map$3 = function fastMap (subject, fn, thisContext) {
   var length = subject.length,
@@ -276,28 +276,6 @@ var 𝘍ap = function (applicative, functor) {
   return reduce$6(function (agg, f) { return agg.concat(map$1(f, functor)); }, [], applicative)
 };
 
-var flip$1 = function (fn) { return curry$1(function (a, b) { return fn(b, a); }); };
-
-var 𝘍triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
-var triplet$1 = curry$1(𝘍triplet);
-
-var keys$1 = Object.keys;
-var 𝘍which = function (compare, fn, o) {
-  var arecomp = flip$1(compare);
-  return triplet$1(
-    Array.isArray,
-    arecomp(fn),
-    pipe$1(
-      keys$1,
-      arecomp(function (key) { return fn(o[key], key); })
-    ),
-    o
-  )
-};
-var which$1 = curry$1(𝘍which);
-var some$2 = which$1(some$1);
-var every$2 = which$1(every$1);
-
 var 𝘍choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
 
 var 𝘍iterate = function (total, fn) {
@@ -326,7 +304,7 @@ var 𝘍range = function (start, end) {
   return (swap ? agg : agg.reverse())
 };
 
-var filter$7 = delegateFastBinary$1("filter", filter$1);
+var filter$7 = delegateFastBinary("filter", filter$1);
 
 var 𝘍reject = function (fn, o) { return filter$7(
   function (x) { return !fn(x); }, o
@@ -334,21 +312,23 @@ var 𝘍reject = function (fn, o) { return filter$7(
 
 var 𝘍ternary = function (cn, b, a) { return cn ? a : b; };
 
+var 𝘍triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
+
 var _keys$1 = Object.keys;
 var _freeze = Object.freeze;
 var _assign$1 = Object.assign;
-var keys$2 = _keys$1;
+var keys$1 = _keys$1;
 
 var freeze = _freeze;
 var assign$1 = _assign$1;
 var 𝘍merge = function (a, b) { return assign$1({}, a, b); };
 var merge$2 = curry$1(𝘍merge);
 var entries = function (o) { return pipe$1(
-  keys$2,
+  keys$1,
   map$1(function (k) { return ([k, o[k]]); })
 )(o); };
-var toPairs = entries;
-var fromPairs = reduce$6(
+var toPairs$1 = entries;
+var fromPairs$1 = reduce$6(
   function (agg, ref) {
     var k = ref[0];
     var v = ref[1];
@@ -358,25 +338,16 @@ var fromPairs = reduce$6(
   {}
 );
 var 𝘍pairwise = function (hoc, fn, o) { return pipe$1(
-  toPairs,
+  toPairs$1,
   hoc(fn)
 )(o); };
 var pairwise$1 = curry$1(𝘍pairwise);
 var 𝘍pairwiseObject = function (hoc, fn, o) { return pipe$1(
   pairwise$1(hoc, fn),
-  fromPairs
+  fromPairs$1
 )(o); };
 var pairwiseObject$1 = curry$1(𝘍pairwiseObject);
-var mapTuples = pairwiseObject$1(map$1);
-var mapTuple = mapTuples;
-var 𝘍mapKeys = function (fn, o) { return mapTuples(
-  function (ref) {
-    var k = ref[0];
-    var v = ref[1];
-    return ([fn(k), v]);
-  },
-  o
-); };
+var mapTuples$1 = pairwiseObject$1(map$1);
 
 var invert$1 = function (x) { return !x; };
 
@@ -455,7 +426,7 @@ var equals$1 = curry$1(𝘍equals);
 
 
 
-var round = Math.round;
+var round$1 = Math.round;
 var 𝘍add = function (a, b) { return b + a; };
 
 var 𝘍subtract = function (a, b) { return b - a; };
@@ -514,7 +485,7 @@ var f = Object.freeze({
 	floorMin: floorMin
 });
 
-var keys$3 = Object.keys;
+var keys$2 = Object.keys;
 var take = curry$1(function (encase, o) {
   if (o && o[0] && o.length) {
     var found = floor(o.length);
@@ -525,7 +496,7 @@ var take = curry$1(function (encase, o) {
         [selection]
     )
   }
-  var ks = keys$3(o);
+  var ks = keys$2(o);
   var index = floor(ks.length);
   var key = ks[index];
   var value = o[key];
@@ -586,11 +557,24 @@ var s = Object.freeze({
 	shuffle: shuffle
 });
 
+var round$$1 = round$1;
+round$$1.toString = function () { return "~(?)"; };
 var random$$1 = Object.assign(random$1, f, t, w, s);
+random$$1.toString = function () { return "👾 (?)"; };
 var curry = debug_6;
 var pipe = debug_1;
 var compose = debug_2;
-var isPOJO$$1 = isPOJO$1;
+pipe.toString = function () { return "🍡 (...?)"; };
+compose.toString = function () { return "🙃 🍡 (...?)"; };
+curry.toString = function () { return "🍛 (?)"; };
+var isDistinctObject$$1 = isDistinctObject$1;
+isDistinctObject$$1.toString = function () { return "isTrueObject"; };
+var isPOJO = isDistinctObject$$1;
+var $ = debug_3;
+var toPairs$$1 = toPairs$1;
+toPairs$$1.toString = function () { return "ᗒ(?)"; };
+var fromPairs$$1 = fromPairs$1;
+fromPairs$$1.toString = function () { return "ᗕ(?)"; };
 var entrust = entrust_14(curry);
 var e0 = entrust.e0;
 var e1 = entrust.e1;
@@ -616,9 +600,6 @@ var isNumber = isTypeof("number");
 var isFunction = isTypeof("function");
 var isString = isTypeof("string");
 var isObject = isTypeof("object");
-var delegateFastBinary = curry(𝘍delegateFastBinary);
-var delegateFastTertiary = curry(𝘍delegateFastTertiary);
-var reduce = delegateFastTertiary("reduce", reduce$1);
 var add = curry(𝘍add);
 var alterIndex = curry(𝘍alterIndex);
 var ap = curry(𝘍ap);
@@ -632,7 +613,7 @@ var indexOf = curry(𝘍indexOf);
 var iterate = curry(𝘍iterate);
 var lastIndexOf = curry(𝘍lastIndexOf);
 var map = curry(𝘍map);
-var mapKeys = curry(𝘍mapKeys);
+map.toString = function () { return "map"; };
 var merge = curry(𝘍merge);
 var multiply = curry(𝘍multiply);
 var pairwise = curry(𝘍pairwise);
@@ -655,10 +636,31 @@ var subtract = curry(𝘍subtract);
 var symmetricDifference = curry(𝘍symmetricDifference);
 var ternary = curry(𝘍ternary);
 var triplet = curry(𝘍triplet);
-var chain = delegateFastBinary("chain", flatmapFast);
+var chain = curry(function 𝘍chain(fn, functor) {
+  return 𝘍delegateFastBinary("chain", flatmapFast, fn, functor)
+});
 var flatMap = chain;
-var filter = delegateFastBinary("filter", filter$1);
-var flip = function (fn) { return curry(function (a, b) { return fn(b, a); }); };
+var filter = curry(function 𝘍chain(fn, functor) {
+  return 𝘍delegateFastBinary("filter", filter$1, fn, functor)
+});
+var reduce = curry(function 𝘍reduce(fn, initial, functor) {
+  return 𝘍delegateFastTertiary("reduce", reduce$1, fn, initial, functor)
+});
+var mapTuples = pairwiseObject(map);
+var mapTuple = mapTuples;
+var 𝘍mapKeys = function (fn, o) { return mapTuples(
+  function (ref) {
+    var k = ref[0];
+    var v = ref[1];
+    return ([fn(k), v]);
+  },
+  o
+); };
+var mapKeys = curry(𝘍mapKeys);
+var flip = function (fn) { return curry(function 𝘍flip(a, b) {
+  return fn(b, a)
+}); };
+flip.toString = function () { return "🙃 🍛 (?)"; };
 var alterLastIndex = alterIndex(-1);
 var alterFirstIndex = alterIndex(0);
 var invert$$1 = invert$1;
@@ -666,18 +668,22 @@ var not = function (fn) { return pipe(
   fn,
   invert$$1
 ); };
+not.toString = function () { return "❗️(?)"; };
 var not1 = curry(function (fn, a) { return pipe(
   fn(a),
   invert$$1
 ); });
+not1.toString = function () { return "❗️1(?,?)"; };
 var not2 = curry(function (fn, a, b) { return pipe(
   fn(a, b),
   invert$$1
 ); });
+not2.toString = function () { return "❗️2(?,?,?)"; };
 var not3 = curry(function (fn, a, b, c) { return pipe(
   fn(a, b, c),
   invert$$1
 ); });
+not3.toString = function () { return "❗️3(?,?,?)"; };
 var propLength = prop("length");
 var objectLength = pipe(Object.keys, propLength);
 var length = function (x) { return (
@@ -685,14 +691,32 @@ var length = function (x) { return (
     objectLength(x) :
     propLength(x)
 ); };
-var which = curry(𝘍which);
+length.toString = function () { return "length"; };
+var which = curry(function (compare, fn, o) {
+  var arecomp = flip(compare);
+  return triplet(
+    Array.isArray,
+    arecomp(fn),
+    pipe(
+      Object.keys,
+      arecomp(function (key) { return fn(o[key], key); })
+    ),
+    o
+  )
+});
+some$1.toString = function () { return "some"; };
 var some = which(some$1);
+every$1.toString = function () { return "every"; };
 var every = which(every$1);
 
+exports.round = round$$1;
 exports.random = random$$1;
 exports.curry = curry;
-exports.compose = compose;
-exports.isPOJO = isPOJO$$1;
+exports.isDistinctObject = isDistinctObject$$1;
+exports.isPOJO = isPOJO;
+exports.$ = $;
+exports.toPairs = toPairs$$1;
+exports.fromPairs = fromPairs$$1;
 exports.trim = trim;
 exports.charAt = charAt;
 exports.codePointAt = codePointAt;
@@ -714,7 +738,6 @@ exports.isNumber = isNumber;
 exports.isFunction = isFunction;
 exports.isString = isString;
 exports.isObject = isObject;
-exports.reduce = reduce;
 exports.add = add;
 exports.alterIndex = alterIndex;
 exports.ap = ap;
@@ -728,7 +751,6 @@ exports.indexOf = indexOf;
 exports.iterate = iterate;
 exports.lastIndexOf = lastIndexOf;
 exports.map = map;
-exports.mapKeys = mapKeys;
 exports.merge = merge;
 exports.multiply = multiply;
 exports.pairwise = pairwise;
@@ -754,6 +776,10 @@ exports.triplet = triplet;
 exports.chain = chain;
 exports.flatMap = flatMap;
 exports.filter = filter;
+exports.reduce = reduce;
+exports.mapTuples = mapTuples;
+exports.mapTuple = mapTuple;
+exports.mapKeys = mapKeys;
 exports.flip = flip;
 exports.alterLastIndex = alterLastIndex;
 exports.alterFirstIndex = alterFirstIndex;
@@ -766,18 +792,12 @@ exports.length = length;
 exports.which = which;
 exports.some = some;
 exports.every = every;
-exports.keys = keys$2;
+exports.keys = keys$1;
 exports.assign = assign$1;
 exports.freeze = freeze;
 exports.entries = entries;
-exports.fromPairs = fromPairs;
-exports.toPairs = toPairs;
-exports.mapTuple = mapTuple;
-exports.mapTuples = mapTuples;
 exports.isNil = isNil;
 exports.isArray = isArray;
-exports.isDistinctObject = isDistinctObject;
-exports.round = round;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

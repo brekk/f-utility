@@ -7,8 +7,7 @@ import {custom} from 'entrust'
 import * as KATSU_DEBUG from 'katsu-curry/debug'
 
 import {𝘍ap} from './ap'
-import {𝘍isTypeof, isPOJO as isGDObject} from './types'
-import {𝘍which} from './which'
+import {𝘍isTypeof, isDistinctObject as 𝘍isDistinctObject} from './types'
 import {𝘍choice} from './choice'
 import {𝘍iterate} from './iterate'
 import {𝘍map} from './map'
@@ -20,7 +19,8 @@ import {
   𝘍merge,
   𝘍pairwise,
   𝘍pairwiseObject,
-  𝘍mapKeys
+  fromPairs as 𝘍fromPairs,
+  toPairs as 𝘍toPairs
 } from './object'
 
 import {invert as _invert} from './invert'
@@ -47,7 +47,8 @@ import {
   𝘍subtract,
   𝘍divide,
   𝘍multiply,
-  𝘍pow
+  𝘍pow,
+  round as 𝘍round
 } from './math'
 import {
   𝘍pathOr,
@@ -62,12 +63,20 @@ import * as f from './random-floor'
 import * as t from './random-take'
 import * as w from './random-word'
 import * as s from './random-shuffle'
+export const round = 𝘍round
+round.toString = () => `~(?)`
 export const random = Object.assign(_random, f, t, w, s)
+random.toString = () => `👾 (?)`
+export const {curry, pipe, compose} = KATSU_DEBUG
+pipe.toString = () => `🍡 (...?)`
+compose.toString = () => `🙃 🍡 (...?)`
+curry.toString = () => `🍛 (?)`
 
-export const {curry, pipe} = KATSU_DEBUG
+export const isDistinctObject = 𝘍isDistinctObject
+isDistinctObject.toString = () => `isTrueObject`
+export const isPOJO = isDistinctObject
 
 export const {
-  compose,
   $,
   PLACEHOLDER,
   curryify,
@@ -83,21 +92,16 @@ export {
   keys,
   assign,
   freeze,
-  entries,
-  fromPairs,
-  toPairs,
-  mapTuple,
-  mapTuples
+  entries
 } from './object'
+export const toPairs = 𝘍toPairs
+toPairs.toString = () => `ᗒ(?)`
+export const fromPairs = 𝘍fromPairs
+fromPairs.toString = () => `ᗕ(?)`
 export {
   isNil,
-  isArray,
-  isDistinctObject
+  isArray
 } from './types'
-export const isPOJO = isGDObject
-export {
-  round
-} from './math'
 
 const entrust = custom(curry)
 
@@ -133,11 +137,8 @@ export const isNumber = isTypeof(`number`)
 export const isFunction = isTypeof(`function`)
 export const isString = isTypeof(`string`)
 export const isObject = isTypeof(`object`)
-
-const delegateFastBinary = curry(𝘍delegateFastBinary)
-const delegateFastTertiary = curry(𝘍delegateFastTertiary)
-
-export const reduce = delegateFastTertiary(`reduce`, fastReduce)
+// const delegateFastBinary = curry(𝘍delegateFastBinary)
+// const delegateFastTertiary = curry(𝘍delegateFastTertiary)
 
 export const add = curry(𝘍add)
 export const alterIndex = curry(𝘍alterIndex)
@@ -152,7 +153,7 @@ export const indexOf = curry(𝘍indexOf)
 export const iterate = curry(𝘍iterate)
 export const lastIndexOf = curry(𝘍lastIndexOf)
 export const map = curry(𝘍map)
-export const mapKeys = curry(𝘍mapKeys)
+map.toString = () => `map`
 export const merge = curry(𝘍merge)
 export const multiply = curry(𝘍multiply)
 export const pairwise = curry(𝘍pairwise)
@@ -176,11 +177,30 @@ export const symmetricDifference = curry(𝘍symmetricDifference)
 export const ternary = curry(𝘍ternary)
 export const triplet = curry(𝘍triplet)
 
-export const chain = delegateFastBinary(`chain`, _flatMap)
+export const chain = curry(function 𝘍chain(fn, functor) {
+  return 𝘍delegateFastBinary(`chain`, _flatMap, fn, functor)
+})
 export const flatMap = chain
-export const filter = delegateFastBinary(`filter`, fastFilter)
+export const filter = curry(function 𝘍chain(fn, functor) {
+  return 𝘍delegateFastBinary(`filter`, fastFilter, fn, functor)
+})
 
-export const flip = (fn) => curry((a, b) => fn(b, a))
+export const reduce = curry(function 𝘍reduce(fn, initial, functor) {
+  return 𝘍delegateFastTertiary(`reduce`, fastReduce, fn, initial, functor)
+})
+
+export const mapTuples = pairwiseObject(map)
+export const mapTuple = mapTuples
+const 𝘍mapKeys = (fn, o) => mapTuples(
+  ([k, v]) => ([fn(k), v]),
+  o
+)
+export const mapKeys = curry(𝘍mapKeys)
+
+export const flip = (fn) => curry(function 𝘍flip(a, b) {
+  return fn(b, a)
+})
+flip.toString = () => `🙃 🍛 (?)`
 
 export const alterLastIndex = alterIndex(-1)
 export const alterFirstIndex = alterIndex(0)
@@ -189,18 +209,22 @@ export const not = (fn) => pipe(
   fn,
   invert
 )
+not.toString = () => `❗️(?)`
 export const not1 = curry((fn, a) => pipe(
   fn(a),
   invert
 ))
+not1.toString = () => `❗️1(?,?)`
 export const not2 = curry((fn, a, b) => pipe(
   fn(a, b),
   invert
 ))
+not2.toString = () => `❗️2(?,?,?)`
 export const not3 = curry((fn, a, b, c) => pipe(
   fn(a, b, c),
   invert
 ))
+not3.toString = () => `❗️3(?,?,?)`
 
 const propLength = prop(`length`)
 const objectLength = pipe(Object.keys, propLength)
@@ -209,7 +233,22 @@ export const length = (x) => (
     objectLength(x) :
     propLength(x)
 )
+length.toString = () => `length`
 
-export const which = curry(𝘍which)
+export const which = curry((compare, fn, o) => {
+  // allows us to pass functions to compare first
+  const arecomp = flip(compare)
+  return triplet(
+    Array.isArray,
+    arecomp(fn),
+    pipe(
+      Object.keys,
+      arecomp((key) => fn(o[key], key))
+    ),
+    o
+  )
+})
+fastSome.toString = () => `some`
 export const some = which(fastSome)
+fastEvery.toString = () => `every`
 export const every = which(fastEvery)
