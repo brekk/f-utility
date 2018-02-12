@@ -180,8 +180,8 @@ export const harness = (F) => {
     )
   })
   test(`toString`, () => {
-    t.is(F.map.toString(), `map(?,?)`)
     t.is(F.curry.toString(), `🍛 (?)`)
+    t.is(F.isNil.toString(), `curry(𝘍isTypeof)(null)(?)`)
     t.is(F.round.toString(), `~(?)`)
     t.is(F.random.toString(), `👾 (?)`)
     t.is(F.toPairs.toString(), `ᗕ(?)`)

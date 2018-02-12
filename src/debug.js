@@ -7,7 +7,11 @@ import {custom} from 'entrust'
 import * as KATSU_DEBUG from 'katsu-curry/debug'
 
 import {𝘍ap} from './ap'
-import {𝘍isTypeof, isDistinctObject as 𝘍isDistinctObject} from './types'
+import {
+  𝘍isTypeof,
+  isDistinctObject as 𝘍isDistinctObject,
+  isNil as 𝘍isNil
+} from './types'
 import {𝘍choice} from './choice'
 import {𝘍iterate} from './iterate'
 import {𝘍map} from './map'
@@ -99,11 +103,12 @@ toPairs.toString = () => `ᗕ(?)`
 export const fromPairs = 𝘍fromPairs
 fromPairs.toString = () => `ᗒ(?)`
 export {
-  isNil,
   isArray
 } from './types'
 
 const entrust = custom(curry)
+export const isNil = curry(𝘍isNil)
+isNil.toString = () => `curry(𝘍isTypeof)(null)(?)`
 
 const {e0, e1, e2} = entrust
 
@@ -153,7 +158,6 @@ export const indexOf = curry(𝘍indexOf)
 export const iterate = curry(𝘍iterate)
 export const lastIndexOf = curry(𝘍lastIndexOf)
 export const map = curry(𝘍map)
-map.toString = () => `map(?,?)`
 export const merge = curry(𝘍merge)
 export const multiply = curry(𝘍multiply)
 export const pairwise = curry(𝘍pairwise)
