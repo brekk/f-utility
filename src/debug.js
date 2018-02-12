@@ -71,10 +71,17 @@ export const round = 𝘍round
 round.toString = () => `~(?)`
 export const random = Object.assign(_random, f, t, w, s)
 random.toString = () => `👾 (?)`
-export const {curry, pipe, compose} = KATSU_DEBUG
-pipe.toString = () => `🍡 (?)`
-compose.toString = () => `🙃 🍡 (?)`
+const {
+  curry: 𝘍curry,
+  pipe: 𝘍pipe,
+  compose: 𝘍compose
+} = KATSU_DEBUG
+export const curry = 𝘍curry
 curry.toString = () => `🍛 (?)`
+export const pipe = 𝘍pipe
+pipe.toString = () => `🍡 (?)`
+export const compose = 𝘍compose
+compose.toString = () => `🙃 🍡 (?)`
 
 export const isDistinctObject = 𝘍isDistinctObject
 isDistinctObject.toString = () => `isTrueObject(?)`
