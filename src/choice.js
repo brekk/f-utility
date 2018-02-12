@@ -3,9 +3,9 @@ import {curry} from 'katsu-curry'
 /**
  * takes a function that takes two parameters and returns a ternary result
  * @method choice
- * @param {function} cnFn
- * @param {*} a - anything
+ * @param {function} cnFn - ternary
  * @param {*} b - anything
+ * @param {*} a - anything
  * @returns {*} result
  * @public
  * @example
@@ -14,4 +14,5 @@ import {curry} from 'katsu-curry'
  * max(500, 20) // 500
  * max(20, 500) // 500
  */
-export const choice = curry((cnFn, b, a) => cnFn(a, b) ? a : b)
+export const 𝘍choice = (cnFn, b, a) => cnFn(a, b) ? a : b
+export const choice = curry(𝘍choice)

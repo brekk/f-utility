@@ -66,7 +66,8 @@ export const assign = _assign
  * import {merge} from 'f-utility'
  * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  */
-export const merge = curry((a, b) => assign({}, a, b))
+export const 𝘍merge = (a, b) => assign({}, a, b)
+export const merge = curry(𝘍merge)
 
 /**
  * Object.entries shim
@@ -115,7 +116,8 @@ export const fromPairs = reduce(
 /**
  * modify a toPairs / fromPairs pipeline with a higher-order function
  * @method pairwise
- * @param {Function} fn - a function which maps over [key, value] tuples
+ * @param {Function} hoc - a function which wraps a given function, like map or filter
+ * @param {Function} fn - a function which iterates over [key, value] tuples
  * @param {Object} o - object
  * @returns {Object} a mapped object
  * @public
@@ -132,14 +134,16 @@ export const fromPairs = reduce(
  * // or we can use pairwiseObject
  * pairwiseObject(filter, ([k, v]) => v % 2 !== 0, input) // {a: 1, c: 3}
  */
-export const pairwise = curry((hoc, fn, o) => pipe(
+export const 𝘍pairwise = (hoc, fn, o) => pipe(
   toPairs,
   hoc(fn)
-)(o))
-export const pairwiseObject = curry((hoc, fn, o) => pipe(
+)(o)
+export const pairwise = curry(𝘍pairwise)
+export const 𝘍pairwiseObject = (hoc, fn, o) => pipe(
   pairwise(hoc, fn),
   fromPairs
-)(o))
+)(o)
+export const pairwiseObject = curry(𝘍pairwiseObject)
 
 /**
  * a simple object tuple-mapper
@@ -178,7 +182,8 @@ export const mapTuple = mapTuples
  * const fn = (v) => `__${v}`
  * mapKeys(fn, input) // {__a: 1, __b: 2, __c: 3}
  */
-export const mapKeys = curry((fn, o) => mapTuples(
+export const 𝘍mapKeys = (fn, o) => mapTuples(
   ([k, v]) => ([fn(k), v]),
   o
-))
+)
+export const mapKeys = curry(𝘍mapKeys)

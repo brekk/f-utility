@@ -3,6 +3,11 @@ import {isFunction} from './types'
 import {reduce} from './reduce'
 import {map} from './map'
 
+export const 𝘍ap = (applicative, functor) => {
+  if (functor && functor.ap && isFunction(functor.ap)) return functor.ap(applicative)
+  if (isFunction(functor)) return (x) => (applicative(x)(functor(x)))
+  return reduce((agg, f) => agg.concat(map(f, functor)), [], applicative)
+}
 /**
  * Apply a list of functions to a list of values
  * @method ap
@@ -19,8 +24,4 @@ import {map} from './map'
  *  `abc`.split(``)
  * ) // [`A`, `B`, `C`, `a batteries`, `b batteries`, `c batteries`]
  */
-export const ap = curry((applicative, functor) => {
-  if (functor && functor.ap && isFunction(functor.ap)) return functor.ap(applicative)
-  if (isFunction(functor)) return (x) => (applicative(x)(functor(x)))
-  return reduce((agg, f) => agg.concat(map(f, functor)), [], applicative)
-})
+export const ap = curry(𝘍ap)

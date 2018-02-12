@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {choice} from './choice'
 
 test(`choice should be a curried binary fn whose initial input takes the comparison items`, () => {

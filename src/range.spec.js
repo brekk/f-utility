@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {range} from './range'
 
 test(`range should do positive numbers`, () => {

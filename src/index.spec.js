@@ -1,6 +1,7 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import * as FUTILITY from './index'
+console.log(`typeof F`, FUTILITY, typeof FUTILITY)
 
 export const harness = (F) => {
   const zort = (x) => x.sort() // eslint-disable-line
@@ -62,6 +63,7 @@ export const harness = (F) => {
       `isArray`,
       `isBoolean`,
       `isDistinctObject`,
+      `isPOJO`,
       `isFunction`,
       `isNil`,
       `isNumber`,

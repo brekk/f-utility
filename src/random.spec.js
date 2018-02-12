@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {map} from './map'
 import {iterate} from './iterate'
 import {random} from './random'

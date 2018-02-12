@@ -1,6 +1,6 @@
 /* global test */
 import {I} from 'katsu-curry'
-import {t} from 'germs'
+import {t} from 'jest-t-assert'
 import {chain} from './chain'
 
 test(`chain`, () => {

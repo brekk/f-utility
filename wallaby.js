@@ -55,8 +55,6 @@ module.exports = function configureWallaby() {
         ]
       })
     },
-
-    debug: true,
     filesWithNoCoverageCalculated: [
       // `src/core/fs.js`
     ]

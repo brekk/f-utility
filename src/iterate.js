@@ -1,5 +1,17 @@
 import {curry} from 'katsu-curry'
 
+export const 𝘍iterate = (total, fn) => {
+  let count = total
+  const agg = []
+  if (typeof fn !== `function` || typeof count !== `number`) {
+    return agg
+  }
+  while (count > 0) {
+    count--
+    agg.push(fn())
+  }
+  return agg
+}
 /**
  * call a function x times and aggregate the result
  * @method iterate
@@ -11,15 +23,4 @@ import {curry} from 'katsu-curry'
  * import {iterate} from 'f-utility'
  * iterate(5, () => `x`) // [`x`, `x`, `x`, `x`, `x`]
  */
-export const iterate = curry((total, fn) => {
-  let count = total
-  const agg = []
-  if (typeof fn !== `function` || typeof count !== `number`) {
-    return agg
-  }
-  while (count > 0) {
-    count--
-    agg.push(fn())
-  }
-  return agg
-})
+export const iterate = curry(𝘍iterate)
