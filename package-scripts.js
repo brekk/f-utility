@@ -31,7 +31,11 @@ GERMS.scripts.bundle = Object.assign(
   }
 )
 GERMS.scripts.bundle.script = allNPS(`bundle.commonjs`, `bundle.es6`, `bundle.debug`)
-
+GERMS.scripts.lint.project = `clinton`
 GERMS.scripts.lint.jsdoc = `echo "documentation lint"`
+GERMS.scripts.lint = {
+  ...GERMS.scripts.lint,
+  script: allNPS(`lint.src`, `lint.jsdoc`, `lint.project`)
+}
 
 module.exports = GERMS
