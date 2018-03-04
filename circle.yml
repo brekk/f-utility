@@ -1,6 +1,6 @@
 machine:
   node:
-    version: v6.1.0
+    version: v6.2.2
   environment:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
 
@@ -14,6 +14,5 @@ test:
   override:
     - yarn test
   post:
-    # Copy over the coverage directory so we can view the HTML report in CI
-    # - mkdir -p $CIRCLE_ARTIFACTS/coverage
+    - coveralls < coverage/lcov.info
     - mv coverage $CIRCLE_ARTIFACTS/.
