@@ -3,9 +3,12 @@ import fastReduce from 'fast.js/reduce'
 import fastFilter from 'fast.js/filter'
 import fastSome from 'fast.js/array/some'
 import fastEvery from 'fast.js/array/every'
-import {custom} from 'entrust'
-import * as KATSU_DEBUG from 'katsu-curry/debug'
-
+import {e0, e1, e2} from 'entrust/debug'
+import {
+  curry as 𝘍curry,
+  pipe as 𝘍pipe,
+  compose as 𝘍compose
+} from 'katsu-curry/debug'
 import {𝘍ap} from './ap'
 import {
   𝘍isTypeof,
@@ -62,20 +65,18 @@ import {
   𝘍propIs,
   𝘍propEq
 } from './path'
+
 import {random as _random} from './random'
 import * as f from './random-floor'
 import * as t from './random-take'
 import * as w from './random-word'
 import * as s from './random-shuffle'
+
 export const round = 𝘍round
 round.toString = () => `~(?)`
 export const random = Object.assign(_random, f, t, w, s)
 random.toString = () => `👾 (?)`
-const {
-  curry: 𝘍curry,
-  pipe: 𝘍pipe,
-  compose: 𝘍compose
-} = KATSU_DEBUG
+
 export const curry = 𝘍curry
 curry.toString = () => `🍛 (?)`
 export const pipe = 𝘍pipe
@@ -87,18 +88,6 @@ export const isDistinctObject = 𝘍isDistinctObject
 isDistinctObject.toString = () => `isTrueObject(?)`
 export const isPOJO = isDistinctObject
 
-export const {
-  $,
-  PLACEHOLDER,
-  curryify,
-  curryObjectK,
-  curryObjectN,
-  curryObjectKN,
-  remap,
-  remapArray,
-  K,
-  I
-} = KATSU_DEBUG
 export {
   keys,
   assign,
@@ -113,11 +102,8 @@ export {
   isArray
 } from './types'
 
-const entrust = custom(curry)
 export const isNil = curry(𝘍isNil)
 isNil.toString = () => `curry(𝘍isTypeof)(null)(?)`
-
-const {e0, e1, e2} = entrust
 
 export const trim = e0(`trim`)
 
@@ -263,3 +249,15 @@ fastSome.toString = () => `some`
 export const some = which(fastSome)
 fastEvery.toString = () => `every`
 export const every = which(fastEvery)
+export {
+  $,
+  PLACEHOLDER,
+  curryify,
+  curryObjectK,
+  curryObjectN,
+  curryObjectKN,
+  remap,
+  remapArray,
+  K,
+  I
+} from 'katsu-curry/debug'

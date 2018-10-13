@@ -6,6 +6,8 @@
   "repository": "brekk/f-utility",
   "author": "brekk",
   "main": "f-utility.js",
+  "module": "f-utility.es.js",
+  "browser": "f-utility.umd.js",
   "scripts": {
     "docs": "nps docs",
     "dependencies": "nps dependencies",
@@ -25,11 +27,11 @@
     "utility"
   ],
   "dependencies": {
-    "entrust": "^0.0.18",
+    "entrust": "^0.0.21",
     "fantasy-land": "3.4.0",
     "fast.js": "^0.1.1",
     "flatmap-fast": "^3.0.0",
-    "katsu-curry": "^0.7.4"
+    "katsu-curry": "^0.7.8"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -74,21 +76,19 @@
     "nps": "^5.7.1",
     "nps-utils": "^1.5.0",
     "ramda": "^0.25.0",
-    "rollup": "^0.52.2",
+    "rollup": "^0.66.6",
     "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-babel-minify": "^3.1.2",
     "rollup-plugin-babili": "^3.1.1",
-    "rollup-plugin-buble": "^0.18.0",
-    "rollup-plugin-cleanup": "^2.0.0",
-    "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-buble": "^0.19.4",
+    "rollup-plugin-cleanup": "^3.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-progress": "^0.4.0",
     "testperf": "^2.0.3"
   },
   "reveal": true,
-  "module": "f-utility.mjs",
-  "browser": "f-utility.browser.js",
   "clinton": {
     "inherit": false,
     "rules": {
