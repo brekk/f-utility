@@ -56,20 +56,6 @@ export const freeze = _freeze
 export const assign = _assign
 
 /**
- * object.assign but enforced as a binary function
- * @method merge
- * @param {Object} a - object a
- * @param {Object} b - object b
- * @returns {Object} c - the results of merging a and b
- * @public
- * @example
- * import {merge} from 'f-utility'
- * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
- */
-export const 𝘍merge = (a, b) => assign({}, a, b)
-export const merge = curry(𝘍merge)
-
-/**
  * Object.entries shim
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
  * @method entries
@@ -187,3 +173,30 @@ export const 𝘍mapKeys = (fn, o) => mapTuples(
   o
 )
 export const mapKeys = curry(𝘍mapKeys)
+
+/**
+ * object.assign but enforced as a binary function
+ * @method merge
+ * @param {Object} a - object a
+ * @param {Object} b - object b
+ * @returns {Object} c - the results of merging a and b
+ * @public
+ * @example
+ * import {merge} from 'f-utility'
+ * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
+ *
+ * starting in v3.5.6, merge needs to be made safe against the prototype pollution attack
+ * export const 𝘍merge = (a, b) => assign({}, a, b)
+ *
+ */
+export const 𝘍merge = (a, b) => entries(a)
+  .concat(entries(b))
+  .reduce(
+    (hash, [k, v]) => (
+      k !== `__proto__` ?
+        assign(hash, {[k]: v}) :
+        hash
+    ),
+    {}
+  )
+export const merge = curry(𝘍merge)
