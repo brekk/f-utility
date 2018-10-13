@@ -22,9 +22,13 @@
   "keywords": [
     "functional programming",
     "functional",
-    "programming",
+    "pattern",
     "fp",
-    "utility"
+    "utility",
+    "composable",
+    "hoc",
+    "tool",
+    "toolbelt"
   ],
   "dependencies": {
     "entrust": "^0.0.21",
