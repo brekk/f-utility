@@ -4,7 +4,7 @@
   (factory((global.FUTILITY = {})));
 }(this, (function (exports) { 'use strict';
 
-  var version = "3.5.6";
+  var version = "3.5.7";
 
   var random = function (x) {
   	if ( x === void 0 ) x = 1;

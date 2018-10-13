@@ -3,7 +3,7 @@ export { pipe, compose, $, PLACEHOLDER, curryify, curry, curryObjectK, curryObje
 import { e1, e2, e0 } from 'entrust';
 import _flatMap from 'flatmap-fast';
 
-var version = "3.5.6";
+var version = "3.5.7";
 
 var random = function (x) {
 	if ( x === void 0 ) x = 1;
