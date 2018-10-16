@@ -12,5 +12,5 @@ import {curry} from 'katsu-curry'
  * ternary(true, `a`, `b`) // `a`
  * ternary(false, `a`, `b`) // `b`
  */
-export const 𝘍ternary = (cn, b, a) => cn ? a : b
-export const ternary = curry(𝘍ternary)
+export const __ternary = (cn, b, a) => cn ? a : b
+export const ternary = curry(__ternary)

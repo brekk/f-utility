@@ -12,9 +12,9 @@ import {filter} from './filter'
  * import {reject} from 'f-utility'
  * reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
  */
-export const 𝘍reject = (fn, o) => filter(
+export const __reject = (fn, o) => filter(
   (x) => !fn(x), o
 )
 export const reject = curry(
-  𝘍reject
+  __reject
 )

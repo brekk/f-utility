@@ -1,6 +1,6 @@
 import {curry} from 'katsu-curry'
 
-export const 𝘍iterate = (total, fn) => {
+export const __iterate = (total, fn) => {
   let count = total
   const agg = []
   if (typeof fn !== `function` || typeof count !== `number`) {
@@ -23,4 +23,4 @@ export const 𝘍iterate = (total, fn) => {
  * import {iterate} from 'f-utility'
  * iterate(5, () => `x`) // [`x`, `x`, `x`, `x`, `x`]
  */
-export const iterate = curry(𝘍iterate)
+export const iterate = curry(__iterate)

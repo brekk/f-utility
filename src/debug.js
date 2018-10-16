@@ -5,65 +5,65 @@ import fastSome from 'fast.js/array/some'
 import fastEvery from 'fast.js/array/every'
 import {e0, e1, e2} from 'entrust/debug'
 import {
-  curry as 𝘍curry,
-  pipe as 𝘍pipe,
-  compose as 𝘍compose
+  curry as __curry,
+  pipe as __pipe,
+  compose as __compose
 } from 'katsu-curry/debug'
-import {𝘍ap} from './ap'
+import {__ap} from './ap'
 import {
-  𝘍isTypeof,
-  isDistinctObject as 𝘍isDistinctObject,
-  isNil as 𝘍isNil
+  __isTypeof,
+  isDistinctObject as __isDistinctObject,
+  isNil as __isNil
 } from './types'
-import {𝘍choice} from './choice'
-import {𝘍iterate} from './iterate'
-import {𝘍map} from './map'
-import {𝘍range} from './range'
-import {𝘍reject} from './reject'
-import {𝘍ternary} from './ternary'
-import {𝘍triplet} from './triplet'
+import {__choice} from './choice'
+import {__iterate} from './iterate'
+import {__map} from './map'
+import {__range} from './range'
+import {__reject} from './reject'
+import {__ternary} from './ternary'
+import {__triplet} from './triplet'
 import {
-  𝘍merge,
-  𝘍pairwise,
-  𝘍pairwiseObject,
-  fromPairs as 𝘍fromPairs,
-  toPairs as 𝘍toPairs
+  __merge,
+  __pairwise,
+  __pairwiseObject,
+  fromPairs as __fromPairs,
+  toPairs as __toPairs
 } from './object'
 
 import {invert as _invert} from './invert'
 import {
-  𝘍endsWith,
-  𝘍indexOf,
-  𝘍lastIndexOf,
-  𝘍startsWith
+  __endsWith,
+  __indexOf,
+  __lastIndexOf,
+  __startsWith
 } from './string'
 import {
-  𝘍sort,
-  𝘍symmetricDifference,
-  𝘍difference,
-  𝘍alterIndex,
-  𝘍relativeIndex
+  __sort,
+  __symmetricDifference,
+  __difference,
+  __alterIndex,
+  __relativeIndex
 } from './array'
 import {
-  𝘍delegateFastBinary,
-  𝘍delegateFastTertiary
+  __delegateFastBinary,
+  __delegateFastTertiary
 } from './delegate-fast'
 import {
-  𝘍equals,
-  𝘍add,
-  𝘍subtract,
-  𝘍divide,
-  𝘍multiply,
-  𝘍pow,
-  round as 𝘍round
+  __equals,
+  __add,
+  __subtract,
+  __divide,
+  __multiply,
+  __pow,
+  round as __round
 } from './math'
 import {
-  𝘍pathOr,
-  𝘍propOr,
-  𝘍pathEq,
-  𝘍pathIs,
-  𝘍propIs,
-  𝘍propEq
+  __pathOr,
+  __propOr,
+  __pathEq,
+  __pathIs,
+  __propIs,
+  __propEq
 } from './path'
 
 import {random as _random} from './random'
@@ -72,19 +72,19 @@ import * as t from './random-take'
 import * as w from './random-word'
 import * as s from './random-shuffle'
 
-export const round = 𝘍round
+export const round = __round
 round.toString = () => `~(?)`
 export const random = Object.assign(_random, f, t, w, s)
 random.toString = () => `👾 (?)`
 
-export const curry = 𝘍curry
+export const curry = __curry
 curry.toString = () => `🍛 (?)`
-export const pipe = 𝘍pipe
+export const pipe = __pipe
 pipe.toString = () => `🍡 (?)`
-export const compose = 𝘍compose
+export const compose = __compose
 compose.toString = () => `🙃 🍡 (?)`
 
-export const isDistinctObject = 𝘍isDistinctObject
+export const isDistinctObject = __isDistinctObject
 isDistinctObject.toString = () => `isTrueObject(?)`
 export const isPOJO = isDistinctObject
 
@@ -94,16 +94,16 @@ export {
   freeze,
   entries
 } from './object'
-export const toPairs = 𝘍toPairs
+export const toPairs = __toPairs
 toPairs.toString = () => `ᗕ(?)`
-export const fromPairs = 𝘍fromPairs
+export const fromPairs = __fromPairs
 fromPairs.toString = () => `ᗒ(?)`
 export {
   isArray
 } from './types'
 
-export const isNil = curry(𝘍isNil)
-isNil.toString = () => `curry(𝘍isTypeof)(null)(?)`
+export const isNil = curry(__isNil)
+isNil.toString = () => `curry(__isTypeof)(null)(?)`
 
 export const trim = e0(`trim`)
 
@@ -129,72 +129,72 @@ export const substr = e2(`substr`)
 
 // BINARY
 
-export const isTypeof = curry(𝘍isTypeof)
+export const isTypeof = curry(__isTypeof)
 export const isBoolean = isTypeof(`boolean`)
 export const isNumber = isTypeof(`number`)
 export const isFunction = isTypeof(`function`)
 export const isString = isTypeof(`string`)
 export const isObject = isTypeof(`object`)
-// const delegateFastBinary = curry(𝘍delegateFastBinary)
-// const delegateFastTertiary = curry(𝘍delegateFastTertiary)
+// const delegateFastBinary = curry(__delegateFastBinary)
+// const delegateFastTertiary = curry(__delegateFastTertiary)
 
-export const add = curry(𝘍add)
-export const alterIndex = curry(𝘍alterIndex)
-export const ap = curry(𝘍ap)
-export const choice = curry(𝘍choice)
-export const difference = curry(𝘍difference)
-export const divide = curry(𝘍divide)
-export const endsWith = curry(𝘍endsWith)
-export const equal = curry(𝘍equals)
+export const add = curry(__add)
+export const alterIndex = curry(__alterIndex)
+export const ap = curry(__ap)
+export const choice = curry(__choice)
+export const difference = curry(__difference)
+export const divide = curry(__divide)
+export const endsWith = curry(__endsWith)
+export const equal = curry(__equals)
 export const equals = equal
-export const indexOf = curry(𝘍indexOf)
-export const iterate = curry(𝘍iterate)
-export const lastIndexOf = curry(𝘍lastIndexOf)
-export const map = curry(𝘍map)
-export const merge = curry(𝘍merge)
-export const multiply = curry(𝘍multiply)
-export const pairwise = curry(𝘍pairwise)
-export const pairwiseObject = curry(𝘍pairwiseObject)
-export const pathEq = curry(𝘍pathEq)
-export const pathIs = curry(𝘍pathIs)
-export const pathOr = curry(𝘍pathOr)
+export const indexOf = curry(__indexOf)
+export const iterate = curry(__iterate)
+export const lastIndexOf = curry(__lastIndexOf)
+export const map = curry(__map)
+export const merge = curry(__merge)
+export const multiply = curry(__multiply)
+export const pairwise = curry(__pairwise)
+export const pairwiseObject = curry(__pairwiseObject)
+export const pathEq = curry(__pathEq)
+export const pathIs = curry(__pathIs)
+export const pathOr = curry(__pathOr)
 export const path = pathOr(null)
-export const pow = curry(𝘍pow)
-export const propEq = curry(𝘍propEq)
-export const propIs = curry(𝘍propIs)
-export const propOr = curry(𝘍propOr)
+export const pow = curry(__pow)
+export const propEq = curry(__propEq)
+export const propIs = curry(__propIs)
+export const propOr = curry(__propOr)
 export const prop = propOr(null)
-export const range = curry(𝘍range)
-export const reject = curry(𝘍reject)
-export const relativeIndex = curry(𝘍relativeIndex)
-export const sort = curry(𝘍sort)
-export const startsWith = curry(𝘍startsWith)
-export const subtract = curry(𝘍subtract)
-export const symmetricDifference = curry(𝘍symmetricDifference)
-export const ternary = curry(𝘍ternary)
-export const triplet = curry(𝘍triplet)
+export const range = curry(__range)
+export const reject = curry(__reject)
+export const relativeIndex = curry(__relativeIndex)
+export const sort = curry(__sort)
+export const startsWith = curry(__startsWith)
+export const subtract = curry(__subtract)
+export const symmetricDifference = curry(__symmetricDifference)
+export const ternary = curry(__ternary)
+export const triplet = curry(__triplet)
 
-export const chain = curry(function 𝘍chain(fn, functor) {
-  return 𝘍delegateFastBinary(`chain`, _flatMap, fn, functor)
+export const chain = curry(function __chain(fn, functor) {
+  return __delegateFastBinary(`chain`, _flatMap, fn, functor)
 })
 export const flatMap = chain
-export const filter = curry(function 𝘍filter(fn, functor) {
-  return 𝘍delegateFastBinary(`filter`, fastFilter, fn, functor)
+export const filter = curry(function __filter(fn, functor) {
+  return __delegateFastBinary(`filter`, fastFilter, fn, functor)
 })
 
-export const reduce = curry(function 𝘍reduce(fn, initial, functor) {
-  return 𝘍delegateFastTertiary(`reduce`, fastReduce, fn, initial, functor)
+export const reduce = curry(function __reduce(fn, initial, functor) {
+  return __delegateFastTertiary(`reduce`, fastReduce, fn, initial, functor)
 })
 
 export const mapTuples = pairwiseObject(map)
 export const mapTuple = mapTuples
-const 𝘍mapKeys = (fn, o) => mapTuples(
+const __mapKeys = (fn, o) => mapTuples(
   ([k, v]) => ([fn(k), v]),
   o
 )
-export const mapKeys = curry(𝘍mapKeys)
+export const mapKeys = curry(__mapKeys)
 
-export const flip = (fn) => curry(function 𝘍flip(a, b) {
+export const flip = (fn) => curry(function __flip(a, b) {
   return fn(b, a)
 })
 flip.toString = () => `🙃 🍛 (?)`
@@ -232,7 +232,7 @@ export const length = (x) => (
 )
 length.toString = () => `length(?)`
 
-export const which = curry(function 𝘍which(compare, fn, o) {
+export const which = curry(function __which(compare, fn, o) {
   // allows us to pass functions to compare first
   const arecomp = flip(compare)
   return triplet(

@@ -14,12 +14,12 @@ import {equals} from './math'
  * pathOr(`default`, [`a`, `b`, `c`], {a: {b: {c: `actual`}}}) // `actual`
  * pathOr(`default`, [`a`, `b`, `c`], {x: {y: {z: `actual`}}}) // `default`
  */
-export const 𝘍pathOr = (def, lenses, input) => reduce(
+export const __pathOr = (def, lenses, input) => reduce(
   (focus, lens) => focus[lens] || def,
   input,
   lenses
 )
-export const pathOr = curry(𝘍pathOr)
+export const pathOr = curry(__pathOr)
 
 /**
  * Grab a nested value from an object
@@ -46,8 +46,8 @@ export const path = pathOr(null)
  * pathOr(`default`, `c`, {c: `actual`}) // `actual`
  * pathOr(`default`, `c`, {z: `actual`}) // `default`
  */
-export const 𝘍propOr = (def, property, input) => pathOr(def, [property], input)
-export const propOr = curry(𝘍propOr)
+export const __propOr = (def, property, input) => pathOr(def, [property], input)
+export const propOr = curry(__propOr)
 
 /**
  * Grab a property from an object or return null
@@ -70,12 +70,12 @@ export const prop = propOr(null)
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const 𝘍pathIs = (is, lenses, input) => pipe(
+export const __pathIs = (is, lenses, input) => pipe(
   path(lenses),
   is,
   Boolean
 )(input)
-export const pathIs = curry(𝘍pathIs)
+export const pathIs = curry(__pathIs)
 
 /**
  * Grab a property from an object and compare it with a given value via ===
@@ -85,13 +85,13 @@ export const pathIs = curry(𝘍pathIs)
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const 𝘍pathEq = (equiv, lenses, input) => pathIs(
+export const __pathEq = (equiv, lenses, input) => pathIs(
   equals(equiv),
   lenses,
   input
 )
 export const pathEq = curry(
-  𝘍pathEq
+  __pathEq
 )
 
 /**
@@ -102,12 +102,12 @@ export const pathEq = curry(
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const 𝘍propIs = (equiv, property, input) => pipe(
+export const __propIs = (equiv, property, input) => pipe(
   prop([property]),
   equiv,
   Boolean
 )(input)
-export const propIs = curry(𝘍propIs)
+export const propIs = curry(__propIs)
 
 /**
  * Grab a property from an object and compare it with a given value via ===
@@ -117,11 +117,11 @@ export const propIs = curry(𝘍propIs)
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const 𝘍propEq = (equiv, property, input) => pathIs(
+export const __propEq = (equiv, property, input) => pathIs(
   equals(equiv),
   [property],
   input
 )
 export const propEq = curry(
-  𝘍propEq
+  __propEq
 )

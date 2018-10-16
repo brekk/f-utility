@@ -3,7 +3,7 @@ import {curry} from 'katsu-curry'
 const has = (x, y) => !!y[x]
 const {isArray} = Array
 
-export const 𝘍willDelegate = (method, functor) => (
+export const __willDelegate = (method, functor) => (
   has(method, functor) && !isArray(functor)
 )
 /**
@@ -14,11 +14,11 @@ export const 𝘍willDelegate = (method, functor) => (
  * @returns {boolean} should we delegate?
  * @private
  */
-// const willDelegate = curry(𝘍willDelegate)
+// const willDelegate = curry(__willDelegate)
 
-export function 𝘍delegateFastBinary(method, fast, fn, functor) {
+export function __delegateFastBinary(method, fast, fn, functor) {
   return (
-    𝘍willDelegate(method, functor) ?
+    __willDelegate(method, functor) ?
       functor[method](fn) :
       fast(functor, fn)
   )
@@ -32,12 +32,12 @@ export function 𝘍delegateFastBinary(method, fast, fn, functor) {
  * @private
  */
 export const delegateFastBinary = curry(
-  𝘍delegateFastBinary
+  __delegateFastBinary
 )
 
-export function 𝘍delegateFastTertiary(method, fast, fn, initial, functor) {
+export function __delegateFastTertiary(method, fast, fn, initial, functor) {
   return (
-    𝘍willDelegate(method, functor) ?
+    __willDelegate(method, functor) ?
       functor[method](fn, initial) :
       fast(functor, fn, initial)
   )
@@ -52,5 +52,5 @@ export function 𝘍delegateFastTertiary(method, fast, fn, initial, functor) {
  * @private
  */
 export const delegateFastTertiary = curry(
-  𝘍delegateFastTertiary
+  __delegateFastTertiary
 )

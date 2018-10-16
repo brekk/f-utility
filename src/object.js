@@ -120,16 +120,16 @@ export const fromPairs = reduce(
  * // or we can use pairwiseObject
  * pairwiseObject(filter, ([k, v]) => v % 2 !== 0, input) // {a: 1, c: 3}
  */
-export const 𝘍pairwise = (hoc, fn, o) => pipe(
+export const __pairwise = (hoc, fn, o) => pipe(
   toPairs,
   hoc(fn)
 )(o)
-export const pairwise = curry(𝘍pairwise)
-export const 𝘍pairwiseObject = (hoc, fn, o) => pipe(
+export const pairwise = curry(__pairwise)
+export const __pairwiseObject = (hoc, fn, o) => pipe(
   pairwise(hoc, fn),
   fromPairs
 )(o)
-export const pairwiseObject = curry(𝘍pairwiseObject)
+export const pairwiseObject = curry(__pairwiseObject)
 
 /**
  * a simple object tuple-mapper
@@ -168,11 +168,11 @@ export const mapTuple = mapTuples
  * const fn = (v) => `__${v}`
  * mapKeys(fn, input) // {__a: 1, __b: 2, __c: 3}
  */
-export const 𝘍mapKeys = (fn, o) => mapTuples(
+export const __mapKeys = (fn, o) => mapTuples(
   ([k, v]) => ([fn(k), v]),
   o
 )
-export const mapKeys = curry(𝘍mapKeys)
+export const mapKeys = curry(__mapKeys)
 
 /**
  * object.assign but enforced as a binary function
@@ -186,10 +186,10 @@ export const mapKeys = curry(𝘍mapKeys)
  * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  *
  * starting in v3.5.6, merge needs to be made safe against the prototype pollution attack
- * export const 𝘍merge = (a, b) => assign({}, a, b)
+ * export const __merge = (a, b) => assign({}, a, b)
  *
  */
-export const 𝘍merge = (a, b) => entries(a)
+export const __merge = (a, b) => entries(a)
   .concat(entries(b))
   .reduce(
     (hash, [k, v]) => (
@@ -199,4 +199,4 @@ export const 𝘍merge = (a, b) => entries(a)
     ),
     {}
   )
-export const merge = curry(𝘍merge)
+export const merge = curry(__merge)
