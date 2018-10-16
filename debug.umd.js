@@ -1373,9 +1373,9 @@
   var debug_13 = debug$1.K;
   var debug_14 = debug$1.I;
 
-  var 𝘍isTypeof = function (type, x) { return (type === typeof x); };
+  var __isTypeof = function (type, x) { return (type === typeof x); };
   var isTypeof = curry(
-    𝘍isTypeof
+    __isTypeof
   );
   var isBoolean = isTypeof("boolean");
   var isNumber = isTypeof("number");
@@ -1388,28 +1388,28 @@
 
   var has = function (x, y) { return !!y[x]; };
   var isArray$1 = Array.isArray;
-  var 𝘍willDelegate = function (method, functor) { return (
+  var __willDelegate = function (method, functor) { return (
     has(method, functor) && !isArray$1(functor)
   ); };
-  function 𝘍delegateFastBinary(method, fast, fn, functor) {
+  function __delegateFastBinary(method, fast, fn, functor) {
     return (
-      𝘍willDelegate(method, functor) ?
+      __willDelegate(method, functor) ?
         functor[method](fn) :
         fast(functor, fn)
     )
   }
   var delegateFastBinary = curry(
-    𝘍delegateFastBinary
+    __delegateFastBinary
   );
-  function 𝘍delegateFastTertiary(method, fast, fn, initial, functor) {
+  function __delegateFastTertiary(method, fast, fn, initial, functor) {
     return (
-      𝘍willDelegate(method, functor) ?
+      __willDelegate(method, functor) ?
         functor[method](fn, initial) :
         fast(functor, fn, initial)
     )
   }
   var delegateFastTertiary = curry(
-    𝘍delegateFastTertiary
+    __delegateFastTertiary
   );
 
   var reduce$3 = delegateFastTertiary("reduce", reduce$2);
@@ -1447,23 +1447,23 @@
     }
   };
 
-  var 𝘍map = function (fn, functor) {
+  var __map = function (fn, functor) {
     if (functor && !Array.isArray(functor) && functor.map) { return functor.map(fn) }
     return map$2(functor, fn)
   };
   var map$3 = curry(
-    𝘍map
+    __map
   );
 
-  var 𝘍ap = function (applicative, functor) {
+  var __ap = function (applicative, functor) {
     if (functor && functor.ap && isFunction(functor.ap)) { return functor.ap(applicative) }
     if (isFunction(functor)) { return function (x) { return (applicative(x)(functor(x))); } }
     return reduce$3(function (agg, f) { return agg.concat(map$3(f, functor)); }, [], applicative)
   };
 
-  var 𝘍choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
+  var __choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
 
-  var 𝘍iterate = function (total, fn) {
+  var __iterate = function (total, fn) {
     var count = total;
     var agg = [];
     if (typeof fn !== "function" || typeof count !== "number") {
@@ -1475,9 +1475,9 @@
     }
     return agg
   };
-  var iterate = curry(𝘍iterate);
+  var iterate = curry(__iterate);
 
-  var 𝘍range = function (start, end) {
+  var __range = function (start, end) {
     var agg = [];
     var swap = start < end;
     var ref = (swap ? [start, end] : [end + 1, start + 1]);
@@ -1491,13 +1491,13 @@
 
   var filter$4 = delegateFastBinary("filter", filter$2);
 
-  var 𝘍reject = function (fn, o) { return filter$4(
+  var __reject = function (fn, o) { return filter$4(
     function (x) { return !fn(x); }, o
   ); };
 
-  var 𝘍ternary = function (cn, b, a) { return cn ? a : b; };
+  var __ternary = function (cn, b, a) { return cn ? a : b; };
 
-  var 𝘍triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
+  var __triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
 
   var _keys$1 = Object.keys;
   var _freeze = Object.freeze;
@@ -1519,18 +1519,18 @@
   },
     {}
   );
-  var 𝘍pairwise = function (hoc, fn, o) { return pipe(
+  var __pairwise = function (hoc, fn, o) { return pipe(
     toPairs,
     hoc(fn)
   )(o); };
-  var pairwise = curry(𝘍pairwise);
-  var 𝘍pairwiseObject = function (hoc, fn, o) { return pipe(
+  var pairwise = curry(__pairwise);
+  var __pairwiseObject = function (hoc, fn, o) { return pipe(
     pairwise(hoc, fn),
     fromPairs
   )(o); };
-  var pairwiseObject = curry(𝘍pairwiseObject);
+  var pairwiseObject = curry(__pairwiseObject);
   var mapTuples = pairwiseObject(map$3);
-  var 𝘍merge = function (a, b) { return entries(a)
+  var __merge = function (a, b) { return entries(a)
     .concat(entries(b))
     .reduce(
       function (hash, ref) {
@@ -1545,7 +1545,7 @@
     },
       {}
     ); };
-  var merge$1 = curry(𝘍merge);
+  var merge$1 = curry(__merge);
 
   var invert = function (x) { return !x; };
 
@@ -1564,28 +1564,28 @@
   var search = e1("search");
   var split = e1("split");
   var endsWithLength = e2("endsWith");
-  var 𝘍endsWith = function (end, x) { return endsWithLength(end, x.length, x); };
+  var __endsWith = function (end, x) { return endsWithLength(end, x.length, x); };
   var indexOfFromIndex = e2("indexOf");
-  var 𝘍indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
+  var __indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
   var lastIndexOfFromIndex = e2("lastIndexOf");
-  var 𝘍lastIndexOf = function (toSearch, x) { return lastIndexOfFromIndex(toSearch, Infinity, x); };
+  var __lastIndexOf = function (toSearch, x) { return lastIndexOfFromIndex(toSearch, Infinity, x); };
   var padEnd = e2("padEnd");
   var padStart = e2("padStart");
   var replace = e2("replace");
   var startsWithFromPosition = e2("startsWith");
-  var 𝘍startsWith = function (toSearch, x) { return startsWithFromPosition(toSearch, 0, x); };
+  var __startsWith = function (toSearch, x) { return startsWithFromPosition(toSearch, 0, x); };
   var substr = e2("substr");
 
   var join = e1("join");
   var concat = e1("concat");
-  var 𝘍sort = function (fn, functor) {
+  var __sort = function (fn, functor) {
     var copy = Array.from(functor);
     copy.sort(fn);
     return copy
   };
-  var 𝘍difference = function (bList, aList) { return filter$4(function (x) { return !bList.includes(x); }, aList); };
-  var difference = curry(𝘍difference);
-  var 𝘍symmetricDifference = function (a, b) {
+  var __difference = function (bList, aList) { return filter$4(function (x) { return !bList.includes(x); }, aList); };
+  var difference = curry(__difference);
+  var __symmetricDifference = function (a, b) {
     var ab = difference(a, b);
     var ba = difference(b, a);
     return (
@@ -1594,58 +1594,58 @@
         ba
     )
   };
-  var 𝘍relativeIndex = function (length, index) { return (
+  var __relativeIndex = function (length, index) { return (
     index > -1 ?
       index :
       length - Math.abs(index)
   ); };
-  var relativeIndex = curry(𝘍relativeIndex);
-  var 𝘍alterIndex = function (index, fn, input) {
+  var relativeIndex = curry(__relativeIndex);
+  var __alterIndex = function (index, fn, input) {
     var i = relativeIndex(input.length, index);
     var copy = [].concat(input);
     copy[i] = fn(copy[i]);
     return copy
   };
-  var alterIndex = curry(𝘍alterIndex);
+  var alterIndex = curry(__alterIndex);
   var alterFirstIndex = alterIndex(0);
   var alterLastIndex = alterIndex(-1);
 
-  var 𝘍equals = function (a, b) { return a === b; };
-  var equals = curry(𝘍equals);
+  var __equals = function (a, b) { return a === b; };
+  var equals = curry(__equals);
   var round = Math.round;
-  var 𝘍add = function (a, b) { return b + a; };
-  var 𝘍subtract = function (a, b) { return b - a; };
-  var 𝘍multiply = function (a, b) { return b * a; };
-  var 𝘍divide = function (a, b) { return b / a; };
-  var 𝘍pow = function (a, b) { return Math.pow(b, a); };
+  var __add = function (a, b) { return b + a; };
+  var __subtract = function (a, b) { return b - a; };
+  var __multiply = function (a, b) { return b * a; };
+  var __divide = function (a, b) { return b / a; };
+  var __pow = function (a, b) { return Math.pow(b, a); };
 
-  var 𝘍pathOr = function (def, lenses, input) { return reduce$3(
+  var __pathOr = function (def, lenses, input) { return reduce$3(
     function (focus, lens) { return focus[lens] || def; },
     input,
     lenses
   ); };
-  var pathOr = curry(𝘍pathOr);
+  var pathOr = curry(__pathOr);
   var path = pathOr(null);
-  var 𝘍propOr = function (def, property, input) { return pathOr(def, [property], input); };
-  var propOr = curry(𝘍propOr);
+  var __propOr = function (def, property, input) { return pathOr(def, [property], input); };
+  var propOr = curry(__propOr);
   var prop$1 = propOr(null);
-  var 𝘍pathIs = function (is, lenses, input) { return pipe(
+  var __pathIs = function (is, lenses, input) { return pipe(
     path(lenses),
     is,
     Boolean
   )(input); };
-  var pathIs = curry(𝘍pathIs);
-  var 𝘍pathEq = function (equiv, lenses, input) { return pathIs(
+  var pathIs = curry(__pathIs);
+  var __pathEq = function (equiv, lenses, input) { return pathIs(
     equals(equiv),
     lenses,
     input
   ); };
-  var 𝘍propIs = function (equiv, property, input) { return pipe(
+  var __propIs = function (equiv, property, input) { return pipe(
     prop$1([property]),
     equiv,
     Boolean
   )(input); };
-  var 𝘍propEq = function (equiv, property, input) { return pathIs(
+  var __propEq = function (equiv, property, input) { return pathIs(
     equals(equiv),
     [property],
     input
@@ -1751,7 +1751,7 @@
   var fromPairs$1 = fromPairs;
   fromPairs$1.toString = function () { return "ᗒ(?)"; };
   var isNil$1 = curry$1(isNil);
-  isNil$1.toString = function () { return "curry(𝘍isTypeof)(null)(?)"; };
+  isNil$1.toString = function () { return "curry(__isTypeof)(null)(?)"; };
   var trim$1 = debug_16("trim");
   var charAt$1 = debug_17("charAt");
   var codePointAt$1 = debug_17("codePointAt");
@@ -1767,60 +1767,60 @@
   var padStart$1 = debug_18("padStart");
   var replace$1 = debug_18("replace");
   var substr$1 = debug_18("substr");
-  var isTypeof$1 = curry$1(𝘍isTypeof);
+  var isTypeof$1 = curry$1(__isTypeof);
   var isBoolean$1 = isTypeof$1("boolean");
   var isNumber$1 = isTypeof$1("number");
   var isFunction$1 = isTypeof$1("function");
   var isString$1 = isTypeof$1("string");
   var isObject$1 = isTypeof$1("object");
-  var add$1 = curry$1(𝘍add);
-  var alterIndex$1 = curry$1(𝘍alterIndex);
-  var ap$1 = curry$1(𝘍ap);
-  var choice$1 = curry$1(𝘍choice);
-  var difference$1 = curry$1(𝘍difference);
-  var divide$1 = curry$1(𝘍divide);
-  var endsWith$1 = curry$1(𝘍endsWith);
-  var equal$1 = curry$1(𝘍equals);
+  var add$1 = curry$1(__add);
+  var alterIndex$1 = curry$1(__alterIndex);
+  var ap$1 = curry$1(__ap);
+  var choice$1 = curry$1(__choice);
+  var difference$1 = curry$1(__difference);
+  var divide$1 = curry$1(__divide);
+  var endsWith$1 = curry$1(__endsWith);
+  var equal$1 = curry$1(__equals);
   var equals$1 = equal$1;
-  var indexOf$1 = curry$1(𝘍indexOf);
-  var iterate$1 = curry$1(𝘍iterate);
-  var lastIndexOf$1 = curry$1(𝘍lastIndexOf);
-  var map$4 = curry$1(𝘍map);
-  var merge$2 = curry$1(𝘍merge);
-  var multiply$1 = curry$1(𝘍multiply);
-  var pairwise$1 = curry$1(𝘍pairwise);
-  var pairwiseObject$1 = curry$1(𝘍pairwiseObject);
-  var pathEq$1 = curry$1(𝘍pathEq);
-  var pathIs$1 = curry$1(𝘍pathIs);
-  var pathOr$1 = curry$1(𝘍pathOr);
+  var indexOf$1 = curry$1(__indexOf);
+  var iterate$1 = curry$1(__iterate);
+  var lastIndexOf$1 = curry$1(__lastIndexOf);
+  var map$4 = curry$1(__map);
+  var merge$2 = curry$1(__merge);
+  var multiply$1 = curry$1(__multiply);
+  var pairwise$1 = curry$1(__pairwise);
+  var pairwiseObject$1 = curry$1(__pairwiseObject);
+  var pathEq$1 = curry$1(__pathEq);
+  var pathIs$1 = curry$1(__pathIs);
+  var pathOr$1 = curry$1(__pathOr);
   var path$1 = pathOr$1(null);
-  var pow$1 = curry$1(𝘍pow);
-  var propEq$1 = curry$1(𝘍propEq);
-  var propIs$1 = curry$1(𝘍propIs);
-  var propOr$1 = curry$1(𝘍propOr);
+  var pow$1 = curry$1(__pow);
+  var propEq$1 = curry$1(__propEq);
+  var propIs$1 = curry$1(__propIs);
+  var propOr$1 = curry$1(__propOr);
   var prop$2 = propOr$1(null);
-  var range$1 = curry$1(𝘍range);
-  var reject$1 = curry$1(𝘍reject);
-  var relativeIndex$1 = curry$1(𝘍relativeIndex);
-  var sort$1 = curry$1(𝘍sort);
-  var startsWith$1 = curry$1(𝘍startsWith);
-  var subtract$1 = curry$1(𝘍subtract);
-  var symmetricDifference$1 = curry$1(𝘍symmetricDifference);
-  var ternary$1 = curry$1(𝘍ternary);
-  var triplet$1 = curry$1(𝘍triplet);
-  var chain = curry$1(function 𝘍chain(fn, functor) {
-    return 𝘍delegateFastBinary("chain", flatmapFast, fn, functor)
+  var range$1 = curry$1(__range);
+  var reject$1 = curry$1(__reject);
+  var relativeIndex$1 = curry$1(__relativeIndex);
+  var sort$1 = curry$1(__sort);
+  var startsWith$1 = curry$1(__startsWith);
+  var subtract$1 = curry$1(__subtract);
+  var symmetricDifference$1 = curry$1(__symmetricDifference);
+  var ternary$1 = curry$1(__ternary);
+  var triplet$1 = curry$1(__triplet);
+  var chain = curry$1(function __chain(fn, functor) {
+    return __delegateFastBinary("chain", flatmapFast, fn, functor)
   });
   var flatMap$1 = chain;
-  var filter$5 = curry$1(function 𝘍filter(fn, functor) {
-    return 𝘍delegateFastBinary("filter", filter$2, fn, functor)
+  var filter$5 = curry$1(function __filter(fn, functor) {
+    return __delegateFastBinary("filter", filter$2, fn, functor)
   });
-  var reduce$4 = curry$1(function 𝘍reduce(fn, initial, functor) {
-    return 𝘍delegateFastTertiary("reduce", reduce$2, fn, initial, functor)
+  var reduce$4 = curry$1(function __reduce(fn, initial, functor) {
+    return __delegateFastTertiary("reduce", reduce$2, fn, initial, functor)
   });
   var mapTuples$1 = pairwiseObject$1(map$4);
   var mapTuple$1 = mapTuples$1;
-  var 𝘍mapKeys$1 = function (fn, o) { return mapTuples$1(
+  var __mapKeys$1 = function (fn, o) { return mapTuples$1(
     function (ref) {
       var k = ref[0];
       var v = ref[1];
@@ -1828,8 +1828,8 @@
     },
     o
   ); };
-  var mapKeys$1 = curry$1(𝘍mapKeys$1);
-  var flip = function (fn) { return curry$1(function 𝘍flip(a, b) {
+  var mapKeys$1 = curry$1(__mapKeys$1);
+  var flip = function (fn) { return curry$1(function __flip(a, b) {
     return fn(b, a)
   }); };
   flip.toString = function () { return "🙃 🍛 (?)"; };
@@ -1864,7 +1864,7 @@
       propLength$1(x)
   ); };
   length$1.toString = function () { return "length(?)"; };
-  var which = curry$1(function 𝘍which(compare, fn, o) {
+  var which = curry$1(function __which(compare, fn, o) {
     var arecomp = flip(compare);
     return triplet$1(
       Array.isArray,
