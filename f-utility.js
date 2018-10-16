@@ -23,7 +23,7 @@ var f = /*#__PURE__*/Object.freeze({
   floorMin: floorMin
 });
 
-var 𝘍iterate = function (total, fn) {
+var __iterate = function (total, fn) {
   var count = total;
   var agg = [];
   if (typeof fn !== "function" || typeof count !== "number") {
@@ -35,7 +35,7 @@ var 𝘍iterate = function (total, fn) {
   }
   return agg
 };
-var iterate = katsuCurry.curry(𝘍iterate);
+var iterate = katsuCurry.curry(__iterate);
 
 var keys = Object.keys;
 var take = katsuCurry.curry(function (encase, o) {
@@ -117,43 +117,43 @@ var filter$2 = function fastFilter (subject, fn, thisContext) {
 
 var has = function (x, y) { return !!y[x]; };
 var isArray = Array.isArray;
-var 𝘍willDelegate = function (method, functor) { return (
+var __willDelegate = function (method, functor) { return (
   has(method, functor) && !isArray(functor)
 ); };
-function 𝘍delegateFastBinary(method, fast, fn, functor) {
+function __delegateFastBinary(method, fast, fn, functor) {
   return (
-    𝘍willDelegate(method, functor) ?
+    __willDelegate(method, functor) ?
       functor[method](fn) :
       fast(functor, fn)
   )
 }
 var delegateFastBinary = katsuCurry.curry(
-  𝘍delegateFastBinary
+  __delegateFastBinary
 );
-function 𝘍delegateFastTertiary(method, fast, fn, initial, functor) {
+function __delegateFastTertiary(method, fast, fn, initial, functor) {
   return (
-    𝘍willDelegate(method, functor) ?
+    __willDelegate(method, functor) ?
       functor[method](fn, initial) :
       fast(functor, fn, initial)
   )
 }
 var delegateFastTertiary = katsuCurry.curry(
-  𝘍delegateFastTertiary
+  __delegateFastTertiary
 );
 
 var filter$3 = delegateFastBinary("filter", filter$2);
 
 var join = entrust.e1("join");
 var concat = entrust.e1("concat");
-var 𝘍sort = function (fn, functor) {
+var __sort = function (fn, functor) {
   var copy = Array.from(functor);
   copy.sort(fn);
   return copy
 };
-var sort = katsuCurry.curry(𝘍sort);
-var 𝘍difference = function (bList, aList) { return filter$3(function (x) { return !bList.includes(x); }, aList); };
-var difference = katsuCurry.curry(𝘍difference);
-var 𝘍symmetricDifference = function (a, b) {
+var sort = katsuCurry.curry(__sort);
+var __difference = function (bList, aList) { return filter$3(function (x) { return !bList.includes(x); }, aList); };
+var difference = katsuCurry.curry(__difference);
+var __symmetricDifference = function (a, b) {
   var ab = difference(a, b);
   var ba = difference(b, a);
   return (
@@ -162,20 +162,20 @@ var 𝘍symmetricDifference = function (a, b) {
       ba
   )
 };
-var symmetricDifference = katsuCurry.curry(𝘍symmetricDifference);
-var 𝘍relativeIndex = function (length, index) { return (
+var symmetricDifference = katsuCurry.curry(__symmetricDifference);
+var __relativeIndex = function (length, index) { return (
   index > -1 ?
     index :
     length - Math.abs(index)
 ); };
-var relativeIndex = katsuCurry.curry(𝘍relativeIndex);
-var 𝘍alterIndex = function (index, fn, input) {
+var relativeIndex = katsuCurry.curry(__relativeIndex);
+var __alterIndex = function (index, fn, input) {
   var i = relativeIndex(input.length, index);
   var copy = [].concat(input);
   copy[i] = fn(copy[i]);
   return copy
 };
-var alterIndex = katsuCurry.curry(𝘍alterIndex);
+var alterIndex = katsuCurry.curry(__alterIndex);
 var alterFirstIndex = alterIndex(0);
 var alterLastIndex = alterIndex(-1);
 
@@ -213,8 +213,8 @@ var s = /*#__PURE__*/Object.freeze({
   shuffle: shuffle
 });
 
-var 𝘍choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
-var choice = katsuCurry.curry(𝘍choice);
+var __choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
+var choice = katsuCurry.curry(__choice);
 
 var flip = function (fn) { return katsuCurry.curry(function (a, b) { return fn(b, a); }); };
 
@@ -253,17 +253,17 @@ var map$2 = function fastMap (subject, fn, thisContext) {
   }
 };
 
-var 𝘍map = function (fn, functor) {
+var __map = function (fn, functor) {
   if (functor && !Array.isArray(functor) && functor.map) { return functor.map(fn) }
   return map$2(functor, fn)
 };
 var map$3 = katsuCurry.curry(
-  𝘍map
+  __map
 );
 
-var 𝘍isTypeof = function (type, x) { return (type === typeof x); };
+var __isTypeof = function (type, x) { return (type === typeof x); };
 var isTypeof = katsuCurry.curry(
-  𝘍isTypeof
+  __isTypeof
 );
 var isBoolean = isTypeof("boolean");
 var isNumber = isTypeof("number");
@@ -330,40 +330,40 @@ var reduce$2 = function fastReduce (subject, fn, initialValue, thisContext) {
 
 var reduce$3 = delegateFastTertiary("reduce", reduce$2);
 
-var 𝘍ap = function (applicative, functor) {
+var __ap = function (applicative, functor) {
   if (functor && functor.ap && isFunction(functor.ap)) { return functor.ap(applicative) }
   if (isFunction(functor)) { return function (x) { return (applicative(x)(functor(x))); } }
   return reduce$3(function (agg, f) { return agg.concat(map$3(f, functor)); }, [], applicative)
 };
-var ap = katsuCurry.curry(𝘍ap);
+var ap = katsuCurry.curry(__ap);
 
 var fold = entrust.e2("fold");
 
 var chain = delegateFastBinary("chain", _flatMap);
 var flatMap = chain;
 
-var 𝘍equals = function (a, b) { return a === b; };
-var equals = katsuCurry.curry(𝘍equals);
+var __equals = function (a, b) { return a === b; };
+var equals = katsuCurry.curry(__equals);
 var equal = equals;
-var 𝘍greaterThan = function (b, a) { return a > b; };
-var greaterThan = katsuCurry.curry(𝘍greaterThan);
-var 𝘍greaterThanOrEqualTo = function (b, a) { return a >= b; };
-var greaterThanOrEqualTo = katsuCurry.curry(𝘍greaterThanOrEqualTo);
-var 𝘍lessThan = function (b, a) { return a < b; };
-var lessThan = katsuCurry.curry(𝘍lessThan);
-var 𝘍lessThanOrEqualTo = function (b, a) { return a <= b; };
-var lessThanOrEqualTo = katsuCurry.curry(𝘍lessThanOrEqualTo);
+var __greaterThan = function (b, a) { return a > b; };
+var greaterThan = katsuCurry.curry(__greaterThan);
+var __greaterThanOrEqualTo = function (b, a) { return a >= b; };
+var greaterThanOrEqualTo = katsuCurry.curry(__greaterThanOrEqualTo);
+var __lessThan = function (b, a) { return a < b; };
+var lessThan = katsuCurry.curry(__lessThan);
+var __lessThanOrEqualTo = function (b, a) { return a <= b; };
+var lessThanOrEqualTo = katsuCurry.curry(__lessThanOrEqualTo);
 var round = Math.round;
-var 𝘍add = function (a, b) { return b + a; };
-var add = katsuCurry.curry(𝘍add);
-var 𝘍subtract = function (a, b) { return b - a; };
-var subtract = katsuCurry.curry(𝘍subtract);
-var 𝘍multiply = function (a, b) { return b * a; };
-var multiply = katsuCurry.curry(𝘍multiply);
-var 𝘍divide = function (a, b) { return b / a; };
-var divide = katsuCurry.curry(𝘍divide);
-var 𝘍pow = function (a, b) { return Math.pow(b, a); };
-var pow = katsuCurry.curry(𝘍pow);
+var __add = function (a, b) { return b + a; };
+var add = katsuCurry.curry(__add);
+var __subtract = function (a, b) { return b - a; };
+var subtract = katsuCurry.curry(__subtract);
+var __multiply = function (a, b) { return b * a; };
+var multiply = katsuCurry.curry(__multiply);
+var __divide = function (a, b) { return b / a; };
+var divide = katsuCurry.curry(__divide);
+var __pow = function (a, b) { return Math.pow(b, a); };
+var pow = katsuCurry.curry(__pow);
 
 var invert = function (x) { return !x; };
 var not = function (fn) { return katsuCurry.pipe(
@@ -383,11 +383,11 @@ var not3 = katsuCurry.curry(function (fn, a, b, c) { return katsuCurry.pipe(
   invert
 ); });
 
-var 𝘍reject = function (fn, o) { return filter$3(
+var __reject = function (fn, o) { return filter$3(
   function (x) { return !fn(x); }, o
 ); };
 var reject = katsuCurry.curry(
-  𝘍reject
+  __reject
 );
 
 var trim = entrust.e0("trim");
@@ -398,29 +398,29 @@ var repeat = entrust.e1("repeat");
 var search = entrust.e1("search");
 var split = entrust.e1("split");
 var endsWithLength = entrust.e2("endsWith");
-var 𝘍endsWith = function (end, x) { return endsWithLength(end, x.length, x); };
-var endsWith = katsuCurry.curry(𝘍endsWith);
+var __endsWith = function (end, x) { return endsWithLength(end, x.length, x); };
+var endsWith = katsuCurry.curry(__endsWith);
 var indexOfFromIndex = entrust.e2("indexOf");
-var 𝘍indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
-var indexOf = katsuCurry.curry(𝘍indexOf);
+var __indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
+var indexOf = katsuCurry.curry(__indexOf);
 var lastIndexOfFromIndex = entrust.e2("lastIndexOf");
-var 𝘍lastIndexOf = function (toSearch, x) { return lastIndexOfFromIndex(toSearch, Infinity, x); };
-var lastIndexOf = katsuCurry.curry(𝘍lastIndexOf);
+var __lastIndexOf = function (toSearch, x) { return lastIndexOfFromIndex(toSearch, Infinity, x); };
+var lastIndexOf = katsuCurry.curry(__lastIndexOf);
 var padEnd = entrust.e2("padEnd");
 var padStart = entrust.e2("padStart");
 var replace = entrust.e2("replace");
 var startsWithFromPosition = entrust.e2("startsWith");
-var 𝘍startsWith = function (toSearch, x) { return startsWithFromPosition(toSearch, 0, x); };
-var startsWith = katsuCurry.curry(𝘍startsWith);
+var __startsWith = function (toSearch, x) { return startsWithFromPosition(toSearch, 0, x); };
+var startsWith = katsuCurry.curry(__startsWith);
 var substr = entrust.e2("substr");
 
-var 𝘍ternary = function (cn, b, a) { return cn ? a : b; };
-var ternary = katsuCurry.curry(𝘍ternary);
+var __ternary = function (cn, b, a) { return cn ? a : b; };
+var ternary = katsuCurry.curry(__ternary);
 
-var 𝘍triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
-var triplet = katsuCurry.curry(𝘍triplet);
+var __triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
+var triplet = katsuCurry.curry(__triplet);
 
-var 𝘍range = function (start, end) {
+var __range = function (start, end) {
   var agg = [];
   var swap = start < end;
   var ref = (swap ? [start, end] : [end + 1, start + 1]);
@@ -431,7 +431,7 @@ var 𝘍range = function (start, end) {
   }
   return (swap ? agg : agg.reverse())
 };
-var range = katsuCurry.curry(𝘍range);
+var range = katsuCurry.curry(__range);
 
 var _keys = Object.keys;
 var _freeze = Object.freeze;
@@ -453,19 +453,19 @@ var fromPairs = reduce$3(
 },
   {}
 );
-var 𝘍pairwise = function (hoc, fn, o) { return katsuCurry.pipe(
+var __pairwise = function (hoc, fn, o) { return katsuCurry.pipe(
   toPairs,
   hoc(fn)
 )(o); };
-var pairwise = katsuCurry.curry(𝘍pairwise);
-var 𝘍pairwiseObject = function (hoc, fn, o) { return katsuCurry.pipe(
+var pairwise = katsuCurry.curry(__pairwise);
+var __pairwiseObject = function (hoc, fn, o) { return katsuCurry.pipe(
   pairwise(hoc, fn),
   fromPairs
 )(o); };
-var pairwiseObject = katsuCurry.curry(𝘍pairwiseObject);
+var pairwiseObject = katsuCurry.curry(__pairwiseObject);
 var mapTuples = pairwiseObject(map$3);
 var mapTuple = mapTuples;
-var 𝘍mapKeys = function (fn, o) { return mapTuples(
+var __mapKeys = function (fn, o) { return mapTuples(
   function (ref) {
     var k = ref[0];
     var v = ref[1];
@@ -473,8 +473,8 @@ var 𝘍mapKeys = function (fn, o) { return mapTuples(
   },
   o
 ); };
-var mapKeys = katsuCurry.curry(𝘍mapKeys);
-var 𝘍merge = function (a, b) { return entries(a)
+var mapKeys = katsuCurry.curry(__mapKeys);
+var __merge = function (a, b) { return entries(a)
   .concat(entries(b))
   .reduce(
     function (hash, ref) {
@@ -489,45 +489,45 @@ var 𝘍merge = function (a, b) { return entries(a)
   },
     {}
   ); };
-var merge = katsuCurry.curry(𝘍merge);
+var merge = katsuCurry.curry(__merge);
 
-var 𝘍pathOr = function (def, lenses, input) { return reduce$3(
+var __pathOr = function (def, lenses, input) { return reduce$3(
   function (focus, lens) { return focus[lens] || def; },
   input,
   lenses
 ); };
-var pathOr = katsuCurry.curry(𝘍pathOr);
+var pathOr = katsuCurry.curry(__pathOr);
 var path = pathOr(null);
-var 𝘍propOr = function (def, property, input) { return pathOr(def, [property], input); };
-var propOr = katsuCurry.curry(𝘍propOr);
+var __propOr = function (def, property, input) { return pathOr(def, [property], input); };
+var propOr = katsuCurry.curry(__propOr);
 var prop = propOr(null);
-var 𝘍pathIs = function (is, lenses, input) { return katsuCurry.pipe(
+var __pathIs = function (is, lenses, input) { return katsuCurry.pipe(
   path(lenses),
   is,
   Boolean
 )(input); };
-var pathIs = katsuCurry.curry(𝘍pathIs);
-var 𝘍pathEq = function (equiv, lenses, input) { return pathIs(
+var pathIs = katsuCurry.curry(__pathIs);
+var __pathEq = function (equiv, lenses, input) { return pathIs(
   equals(equiv),
   lenses,
   input
 ); };
 var pathEq = katsuCurry.curry(
-  𝘍pathEq
+  __pathEq
 );
-var 𝘍propIs = function (equiv, property, input) { return katsuCurry.pipe(
+var __propIs = function (equiv, property, input) { return katsuCurry.pipe(
   prop([property]),
   equiv,
   Boolean
 )(input); };
-var propIs = katsuCurry.curry(𝘍propIs);
-var 𝘍propEq = function (equiv, property, input) { return pathIs(
+var propIs = katsuCurry.curry(__propIs);
+var __propEq = function (equiv, property, input) { return pathIs(
   equals(equiv),
   [property],
   input
 ); };
 var propEq = katsuCurry.curry(
-  𝘍propEq
+  __propEq
 );
 
 var propLength = prop("length");
@@ -559,7 +559,7 @@ var every = function fastEvery (subject, fn, thisContext) {
 };
 
 var keys$2 = Object.keys;
-var 𝘍which = function (compare, fn, o) {
+var __which = function (compare, fn, o) {
   var arecomp = flip(compare);
   return triplet(
     Array.isArray,
@@ -571,7 +571,7 @@ var 𝘍which = function (compare, fn, o) {
     o
   )
 };
-var which = katsuCurry.curry(𝘍which);
+var which = katsuCurry.curry(__which);
 var some$1 = which(some);
 var every$1 = which(every);
 
