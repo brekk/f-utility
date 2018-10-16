@@ -15,8 +15,8 @@ import {curry} from 'katsu-curry'
  * equalsID(200) // false
  * equalsID(SAFE_ID) // true
  */
-export const 𝘍equals = (a, b) => a === b
-export const equals = curry(𝘍equals)
+export const __equals = (a, b) => a === b
+export const equals = curry(__equals)
 export const equal = equals
 
 /**
@@ -34,8 +34,8 @@ export const equal = equals
  * gt(100, 100) // false
  * gt(100, 101) // true
  */
-export const 𝘍greaterThan = (b, a) => a > b
-export const greaterThan = curry(𝘍greaterThan)
+export const __greaterThan = (b, a) => a > b
+export const greaterThan = curry(__greaterThan)
 export const gt = greaterThan
 
 /**
@@ -53,8 +53,8 @@ export const gt = greaterThan
  * gte(100, 100) // true
  * gte(100, 101) // true
  */
-export const 𝘍greaterThanOrEqualTo = (b, a) => a >= b
-export const greaterThanOrEqualTo = curry(𝘍greaterThanOrEqualTo)
+export const __greaterThanOrEqualTo = (b, a) => a >= b
+export const greaterThanOrEqualTo = curry(__greaterThanOrEqualTo)
 export const gte = greaterThanOrEqualTo
 
 /**
@@ -72,8 +72,8 @@ export const gte = greaterThanOrEqualTo
  * lt(100, 100) // false
  * lt(100, 101) // false
  */
-export const 𝘍lessThan = (b, a) => a < b
-export const lessThan = curry(𝘍lessThan)
+export const __lessThan = (b, a) => a < b
+export const lessThan = curry(__lessThan)
 export const lt = lessThan
 
 /**
@@ -91,8 +91,8 @@ export const lt = lessThan
  * lte(100, 100) // true
  * lte(100, 101) // false
  */
-export const 𝘍lessThanOrEqualTo = (b, a) => a <= b
-export const lessThanOrEqualTo = curry(𝘍lessThanOrEqualTo) // reverse arrow!
+export const __lessThanOrEqualTo = (b, a) => a <= b
+export const lessThanOrEqualTo = curry(__lessThanOrEqualTo) // reverse arrow!
 export const lte = lessThanOrEqualTo
 
 /**
@@ -119,8 +119,8 @@ export const {round} = Math
  * import {add} from 'f-utility'
  * add(4, 2) // 6
  */
-export const 𝘍add = (a, b) => b + a
-export const add = curry(𝘍add)
+export const __add = (a, b) => b + a
+export const add = curry(__add)
 
 /**
  * subtract things
@@ -133,8 +133,8 @@ export const add = curry(𝘍add)
  * import {subtract} from 'f-utility'
  * subtract(4, 2) // -2
  */
-export const 𝘍subtract = (a, b) => b - a
-export const subtract = curry(𝘍subtract)
+export const __subtract = (a, b) => b - a
+export const subtract = curry(__subtract)
 
 /**
  * multiply things
@@ -147,8 +147,8 @@ export const subtract = curry(𝘍subtract)
  * import {multiply} from 'f-utility'
  * multiply(4, 2) // 8
  */
-export const 𝘍multiply = (a, b) => b * a
-export const multiply = curry(𝘍multiply)
+export const __multiply = (a, b) => b * a
+export const multiply = curry(__multiply)
 
 /**
  * divide things
@@ -161,8 +161,8 @@ export const multiply = curry(𝘍multiply)
  * import {divide} from 'f-utility'
  * divide(4, 2) // 0.5
  */
-export const 𝘍divide = (a, b) => b / a
-export const divide = curry(𝘍divide)
+export const __divide = (a, b) => b / a
+export const divide = curry(__divide)
 
 /**
  * exponentiate things
@@ -175,5 +175,5 @@ export const divide = curry(𝘍divide)
  * import {pow} from 'f-utility'
  * pow(4, 2) // 16
  */
-export const 𝘍pow = (a, b) => Math.pow(b, a)
-export const pow = curry(𝘍pow)
+export const __pow = (a, b) => Math.pow(b, a)
+export const pow = curry(__pow)

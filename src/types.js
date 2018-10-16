@@ -1,6 +1,6 @@
 import {curry} from 'katsu-curry'
 
-export const 𝘍isTypeof = (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
+export const __isTypeof = (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
 /**
  * returns boolean based on type
  * @method isTypeof
@@ -14,7 +14,7 @@ export const 𝘍isTypeof = (type, x) => (type === typeof x) // eslint-disable-l
  * isTypeof(`boolean`, `nope`) // false
  */
 export const isTypeof = curry(
-  𝘍isTypeof
+  __isTypeof
 )
 
 /**

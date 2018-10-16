@@ -14,5 +14,5 @@ import {curry} from 'katsu-curry'
  * max(500, 20) // 500
  * max(20, 500) // 500
  */
-export const 𝘍choice = (cnFn, b, a) => cnFn(a, b) ? a : b
-export const choice = curry(𝘍choice)
+export const __choice = (cnFn, b, a) => cnFn(a, b) ? a : b
+export const choice = curry(__choice)

@@ -36,13 +36,13 @@ export const concat = e1(`concat`)
  * sort((x) => x % 2, [1,2,3,4,5,6,7,8]) // [ 0, 2, 4, 6, 8, 9, 7, 5, 3, 1 ]
  */
 // we can't just invert things with entrust, as sort is a mutating method
-export const 𝘍sort = (fn, functor) => {
+export const __sort = (fn, functor) => {
   const copy = Array.from(functor)
   copy.sort(fn)
   return copy
 }
 // export const sort = e1(`sort`)
-export const sort = curry(𝘍sort)
+export const sort = curry(__sort)
 
 /**
  * get the difference between two arrays
@@ -56,8 +56,8 @@ export const sort = curry(𝘍sort)
  * difference([1,2,3], [2,4,6]) // [4, 6]
  * difference([2,4,6], [1,2,3]) // [1, 3]
  */
-export const 𝘍difference = (bList, aList) => filter((x) => !bList.includes(x), aList)
-export const difference = curry(𝘍difference)
+export const __difference = (bList, aList) => filter((x) => !bList.includes(x), aList)
+export const difference = curry(__difference)
 
 /**
  * get both the differences between two arrays, and if one difference is longer, return it
@@ -70,7 +70,7 @@ export const difference = curry(𝘍difference)
  * import {symmetricDifference} from 'f-utility'
  * difference([1,2,3], [1,2]) // [3]
  */
-export const 𝘍symmetricDifference = (a, b) => {
+export const __symmetricDifference = (a, b) => {
   const ab = difference(a, b)
   const ba = difference(b, a)
   return (
@@ -79,7 +79,7 @@ export const 𝘍symmetricDifference = (a, b) => {
       ba
   )
 }
-export const symmetricDifference = curry(𝘍symmetricDifference)
+export const symmetricDifference = curry(__symmetricDifference)
 
 /**
  * alter the index of a given array input
@@ -97,21 +97,21 @@ export const symmetricDifference = curry(𝘍symmetricDifference)
  * alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
  */
 
-export const 𝘍relativeIndex = (length, index) => (
+export const __relativeIndex = (length, index) => (
   index > -1 ?
     index :
     length - Math.abs(index)
 )
 
-export const relativeIndex = curry(𝘍relativeIndex)
+export const relativeIndex = curry(__relativeIndex)
 
-export const 𝘍alterIndex = (index, fn, input) => {
+export const __alterIndex = (index, fn, input) => {
   const i = relativeIndex(input.length, index)
   const copy = [].concat(input)
   copy[i] = fn(copy[i])
   return copy
 }
-export const alterIndex = curry(𝘍alterIndex)
+export const alterIndex = curry(__alterIndex)
 
 export const alterFirstIndex = alterIndex(0)
 export const alterLastIndex = alterIndex(-1)

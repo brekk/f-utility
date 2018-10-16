@@ -2,7 +2,7 @@ import fastMap from 'fast.js/map'
 import {curry} from 'katsu-curry'
 // import FL from 'fantasy-land'
 
-export const 𝘍map = (fn, functor) => {
+export const __map = (fn, functor) => {
   if (functor && !Array.isArray(functor) && functor.map) return functor.map(fn)
   // if (functor && functor[FL.map]) return functor[FL.map](fn)
   return fastMap(functor, fn)
@@ -21,5 +21,5 @@ export const 𝘍map = (fn, functor) => {
  * add1([1,2,3]) // [2,3,4]
  */
 export const map = curry(
-  𝘍map
+  __map
 )

@@ -6,7 +6,7 @@ import {triplet} from './triplet'
 
 const {keys} = Object
 
-export const 𝘍which = (compare, fn, o) => {
+export const __which = (compare, fn, o) => {
   // allows us to pass functions to compare first
   const arecomp = flip(compare)
   return triplet(
@@ -19,7 +19,7 @@ export const 𝘍which = (compare, fn, o) => {
     o
   )
 }
-export const which = curry(𝘍which)
+export const which = curry(__which)
 
 /**
  * array.some(fn) but curried and lazy

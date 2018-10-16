@@ -17,5 +17,5 @@ import {curry} from 'katsu-curry'
  * triplet(test, double, half, 100) // 200
  * triplet(test, double, half, 5) // 2.5
  */
-export const 𝘍triplet = (cnFn, bFn, aFn, o) => cnFn(o) ? aFn(o) : bFn(o)
-export const triplet = curry(𝘍triplet)
+export const __triplet = (cnFn, bFn, aFn, o) => cnFn(o) ? aFn(o) : bFn(o)
+export const triplet = curry(__triplet)
