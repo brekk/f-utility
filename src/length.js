@@ -23,14 +23,6 @@ export const objectLength = pipe(
   propLength
 )
 
-/**
- * returns .length or total keys in an object
- * @method length
- * @param {*} x - some input
- * @returns {number} length
- * @private
- */
-/* istanbul ignore next */
-// export const length = x =>
-//   typeof x === `object` ? objectLength(x) : propLength(x)
 export const length = propLength
+export const anyLength = x =>
+  typeof x === `object` ? objectLength(x) : propLength(x)

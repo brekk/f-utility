@@ -190,13 +190,14 @@ export const invert = _invert
 export const not = _not
 
 const propLength = prop(`length`)
-const objectLength = pipe(
+export const length = propLength
+export const objectLength = pipe(
   Object.keys,
   propLength
 )
-export const length = x =>
+export const anyLength = x =>
   typeof x === `object` ? objectLength(x) : propLength(x)
-length.toString = () => `length(?)`
+anyLength.toString = () => `length(?)`
 
 export const which = curry(function __which(compare, fn, o) {
   // allows us to pass functions to compare first

@@ -34,7 +34,7 @@ export const harness = F => {
   })
 
   test(`length`, () => {
-    t.is(F.length({ a: 1, b: 2, c: 3 }), 3)
+    t.is(F.anyLength({ a: 1, b: 2, c: 3 }), 3)
     t.is(F.length(`abc`), 3)
     t.is(F.length([1, 2, 3]), 3)
   })
@@ -95,6 +95,8 @@ export const harness = F => {
       `keys`,
       `lastIndexOf`,
       `length`,
+      `anyLength`,
+      `objectLength`,
       `mapKeys`,
       `mapTuple`,
       `mapTuples`,
@@ -154,7 +156,7 @@ export const harness = F => {
     t.is(F.toPairs.toString(), `ᗕ(?)`)
     t.is(F.fromPairs.toString(), `ᗒ(?)`)
     t.is(F.flip.toString(), `🙃 🍛 (?)`)
-    t.is(F.length.toString(), `length(?)`)
+    t.is(F.anyLength.toString(), `length(?)`)
     t.is(F.pipe.toString(), `🍡 (?)`)
     t.is(F.compose.toString(), `🙃 🍡 (?)`)
     t.is(F.isDistinctObject.toString(), `isTrueObject(?)`)

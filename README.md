@@ -26,6 +26,7 @@ A collection of common, sometimes functional utilities. Uses `fast.js` + `katsu-
 -   _3.2.4_ - added `range`, speed improvements
 -   _3.3.0_ - optimizations
 -   _3.3.1_ - updated `ap` spec, added bunch of string prototype methods, and added `dont-break` for better safety in future upgrades
+-   _3.6.0_ - a number of minor breaking changes have been introduced, more details are available [here](https://gitlab.com/brekk/f-utility/wikis/Breaking-Changes-for-3.6.0)
 
 # API
 

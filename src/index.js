@@ -129,7 +129,7 @@ export {
 
 export const { version } = pkg
 
-export { length } from "./length"
+export { length, objectLength, anyLength } from "./length"
 export { which, some, every } from "./which"
 
 export const random = Object.assign(_random, f, t, w, s)

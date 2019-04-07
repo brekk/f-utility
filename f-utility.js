@@ -476,6 +476,7 @@ var objectLength = katsuCurry.pipe(
   propLength
 );
 var length = propLength;
+var anyLength = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
 
 var some = function fastSome (subject, fn, thisContext) {
   var length = subject.length,
@@ -635,6 +636,8 @@ exports.isArray = isArray$1;
 exports.isDistinctObject = isDistinctObject;
 exports.isPOJO = isPOJO;
 exports.length = length;
+exports.objectLength = objectLength;
+exports.anyLength = anyLength;
 exports.which = which;
 exports.some = some$1;
 exports.every = every$1;
