@@ -1,24 +1,26 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import {map} from './map'
-import {iterate} from './iterate'
-import {random} from './random'
-import {shuffle} from './random-shuffle'
-import {floor, floorMin} from './random-floor'
-import {pick, grab, allot} from './random-take'
-import {word, wordSource} from './random-word'
-import {keys, values} from './object'
+import { t } from "jest-t-assert"
+import { map } from "./map"
+import { iterate } from "./iterate"
+import { random } from "./random"
+import { shuffle } from "./random-shuffle"
+import { floor, floorMin } from "./random-floor"
+import { pick, grab, allot } from "./random-take"
+import { word, wordSource } from "./random-word"
+import { keys, values } from "./object"
 
 const characters = [
   `abcdefghijklmnopqrstuvwxyz`,
   `ABCDEFGHIJKLMNOPQRSTUVWXYZ`,
   `1234567890`,
   `~!@#$%^&*(),./;'[]\\<>?:{}|-=_+'\``
-].join(``).split(``)
+]
+  .join(``)
+  .split(``)
 
-const charactersAsObjectList = characters.map(
-  (x, index) => ({[`_` + x]: index})
-).reduce(Object.assign, {})
+const charactersAsObjectList = characters
+  .map((x, index) => ({ [`_` + x]: index }))
+  .reduce(Object.assign, {})
 
 test(`random should return a random number`, () => {
   t.is(typeof random, `function`)
@@ -40,13 +42,13 @@ test(`floor should return a random number floored`, () => {
   t.is(typeof floor, `function`)
   const [a, b, c] = map(floor, [1e5, 1e5, 1e5])
   // I think this should be highly unlikely that three invocations return the same value?
-  t.false((a === b) && (b === c))
+  t.false(a === b && b === c)
 })
 
 test(`floorMin should return a random number floored with a minimum`, () => {
   t.is(typeof floorMin, `function`)
   const [a, b, c] = map(floorMin(100), [1e5, 1e5, 1e5])
-  t.false((a === b) && (b === c))
+  t.false(a === b && b === c)
 })
 
 test(`pick should take unwrapped values from arrays`, () => {
@@ -55,7 +57,7 @@ test(`pick should take unwrapped values from arrays`, () => {
   const picked = pick(input)
   t.true(input.indexOf(picked) > -1)
   const [a, b, c] = iterate(3, () => pick(input))
-  t.false((a === b) && (b === c))
+  t.false(a === b && b === c)
 })
 
 test(`pick should take unwrapped values from objects`, () => {
@@ -64,7 +66,7 @@ test(`pick should take unwrapped values from objects`, () => {
   t.true(values(input).indexOf(picked) > -1)
   const output = iterate(3, () => pick(input))
   const [a, b, c] = output
-  t.false((a === b) && (a === c))
+  t.false(a === b && a === c)
 })
 
 test(`grab should take wrapped values from arrays`, () => {
@@ -73,7 +75,7 @@ test(`grab should take wrapped values from arrays`, () => {
   const picked = grab(input)
   t.true(input.indexOf(picked[0]) > -1)
   const [[a], [b], [c]] = iterate(3, () => grab(input))
-  t.false((a === b) && (b === c))
+  t.false(a === b && b === c)
 })
 
 test(`word should return a random concatenation of letters`, () => {
@@ -107,9 +109,10 @@ test(`grab should take wrapped values from objects`, () => {
 test(`allot should randomly take a given number of values from a list`, () => {
   t.is(typeof allot, `function`)
   t.is(typeof allot(2), `function`)
+  t.deepEqual(allot(2, `aaaaaaa`), [`a`, `a`])
   t.is(allot(5, characters).length, 5)
   const objectOutcome = allot(5, charactersAsObjectList)
-  const [a, b] = Object.keys(objectOutcome)
+  const [a, b] = objectOutcome
   t.not(a, b)
   t.is(objectOutcome.length, 5)
 })

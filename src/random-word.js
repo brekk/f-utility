@@ -1,7 +1,10 @@
-import {pipe, curry} from 'katsu-curry'
-import {allot} from './random-take'
-import {join} from './array'
-
+import { pipe, curry } from "katsu-curry"
+import { allot } from "./random-take"
+import { join } from "./array"
+// const trace = curry((a, b) => {
+//   console.log(a, b)
+//   return b
+// })
 const alphabet = `abcdefghijklmnopqrstuvwxyz`.split(``)
 
 /**
@@ -17,9 +20,10 @@ const alphabet = `abcdefghijklmnopqrstuvwxyz`.split(``)
  * const dna = wordSource([`g`, `a`, `t`, `c`])
  * dna(7) // `gattaca`
  */
-export const wordSource = curry(
-  (source, howLong) => pipe(
+export const wordSource = curry((source, howLong) =>
+  pipe(
     allot(howLong),
+    // trace(`...`),
     join(``)
   )(source)
 )

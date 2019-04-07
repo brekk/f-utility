@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 /**
  * a ternary statement, but curried and lazy and where each case is a function
@@ -17,5 +17,5 @@ import {curry} from 'katsu-curry'
  * triplet(test, double, half, 100) // 200
  * triplet(test, double, half, 5) // 2.5
  */
-export const __triplet = (cnFn, bFn, aFn, o) => cnFn(o) ? aFn(o) : bFn(o)
+export const __triplet = (cnFn, bFn, aFn, o) => (cnFn(o) ? aFn(o) : bFn(o))
 export const triplet = curry(__triplet)

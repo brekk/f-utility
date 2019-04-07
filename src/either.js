@@ -1,4 +1,4 @@
-import {e2} from 'entrust'
+import { e2 } from "entrust"
 
 /**
  * a delegatee last function for Either.fold ing

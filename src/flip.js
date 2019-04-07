@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 /**
  * take a function, flip the two parameters being passed to it, curry it
@@ -13,4 +13,4 @@ import {curry} from 'katsu-curry'
  * divide(1, 5) // 0.2
  * ivideday(1, 5) // 5
  */
-export const flip = (fn) => curry((a, b) => fn(b, a))
+export const flip = fn => curry((a, b) => fn(b, a))

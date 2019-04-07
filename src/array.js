@@ -1,6 +1,6 @@
-import {e1} from 'entrust'
-import {curry} from 'katsu-curry'
-import {filter} from './filter'
+import { e1 } from "entrust"
+import { curry } from "katsu-curry"
+import { filter } from "./filter"
 
 /**
  * string.prototype.join but curried
@@ -22,7 +22,7 @@ export const join = e1(`join`)
  * @param {Array} - another array
  * @returns {Array} - combined array
  */
-export const concat = e1(`concat`)
+export const concat = curry((a, b) => a.concat(b))
 
 /**
  * string.prototype.sort but curried
@@ -56,7 +56,8 @@ export const sort = curry(__sort)
  * difference([1,2,3], [2,4,6]) // [4, 6]
  * difference([2,4,6], [1,2,3]) // [1, 3]
  */
-export const __difference = (bList, aList) => filter((x) => !bList.includes(x), aList)
+export const __difference = (bList, aList) =>
+  filter(x => !aList.includes(x), bList)
 export const difference = curry(__difference)
 
 /**
@@ -73,11 +74,7 @@ export const difference = curry(__difference)
 export const __symmetricDifference = (a, b) => {
   const ab = difference(a, b)
   const ba = difference(b, a)
-  return (
-    ab.length > ba.length ?
-      ab :
-      ba
-  )
+  return ab.concat(ba)
 }
 export const symmetricDifference = curry(__symmetricDifference)
 
@@ -97,11 +94,8 @@ export const symmetricDifference = curry(__symmetricDifference)
  * alterIndex(-1, () => `x`, input) // [`a`, `b`, `c`, `d`, `x`]
  */
 
-export const __relativeIndex = (length, index) => (
-  index > -1 ?
-    index :
-    length - Math.abs(index)
-)
+export const __relativeIndex = (length, index) =>
+  index > -1 ? index : length - Math.abs(index)
 
 export const relativeIndex = curry(__relativeIndex)
 

@@ -1,5 +1,5 @@
-import {curry} from 'katsu-curry'
-import {filter} from './filter'
+import { curry } from "katsu-curry"
+import { filter } from "./filter"
 
 /**
  * array.filter((x) => !fn(x)) but inverted order, curried and fast
@@ -12,9 +12,5 @@ import {filter} from './filter'
  * import {reject} from 'f-utility'
  * reject((x) => x % 2 !== 0, [1,2,3,4,5,6,7,8]) // [2,4,6,8]
  */
-export const __reject = (fn, o) => filter(
-  (x) => !fn(x), o
-)
-export const reject = curry(
-  __reject
-)
+export const __reject = (fn, o) => filter(x => !fn(x), o)
+export const reject = curry(__reject)

@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 /**
  * === comparison
@@ -106,7 +106,7 @@ export const lte = lessThanOrEqualTo
  * round(10.3) // 10
  * round(10.9) // 11
  */
-export const {round} = Math
+export const { round } = Math
 
 /**
  * add things
@@ -133,7 +133,7 @@ export const add = curry(__add)
  * import {subtract} from 'f-utility'
  * subtract(4, 2) // -2
  */
-export const __subtract = (a, b) => b - a
+export const __subtract = (a, b) => a - b
 export const subtract = curry(__subtract)
 
 /**
@@ -161,7 +161,7 @@ export const multiply = curry(__multiply)
  * import {divide} from 'f-utility'
  * divide(4, 2) // 0.5
  */
-export const __divide = (a, b) => b / a
+export const __divide = (a, b) => a / b
 export const divide = curry(__divide)
 
 /**

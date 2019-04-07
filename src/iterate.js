@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 export const __iterate = (total, fn) => {
   let count = total

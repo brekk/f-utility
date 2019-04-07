@@ -1,5 +1,5 @@
-import fastFilter from 'fast.js/filter'
-import {delegateFastBinary} from './delegate-fast'
+import fastFilter from "fast.js/filter"
+import { delegateFastBinary } from "./delegate-fast"
 
 /**
  * array.filter(fn) but inverted order, curried and fast

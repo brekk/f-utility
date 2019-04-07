@@ -1,6 +1,6 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import * as BUNDLE from './index'
+import { t } from "jest-t-assert"
+import * as BUNDLE from "./index"
 const {
   range,
   curry,
@@ -32,39 +32,31 @@ const space = join(COLON_SPACE)
 const lines = join(NEWLINE)
 
 const add = curry((b, a) => a + b)
-const box = (x) => ([x])
+const box = x => [x]
 
-const pullReturnValueFromStringByDelimiter = curry(
-  (delim, str) => pipe(
+const pullReturnValueFromStringByDelimiter = curry((delim, str) =>
+  pipe(
     split(delim),
-    (x) => x[1]
+    x => x[1]
   )(str)
 )
 
-const propify = curry((property, x) => ({[property]: x}))
+const propify = curry((property, x) => ({ [property]: x }))
 const argify = propify(`args`)
 
-const hasInlineReturn = curry(
-  (delim, input) => (
-    input.indexOf(delim) === -1
+const hasInlineReturn = curry((delim, input) => input.indexOf(delim) === -1)
+const stripInlineReturnByDelimiter = curry((delim, str) => ({
+  returns: pullReturnValueFromStringByDelimiter(delim, str),
+  args: str.slice(0, str.indexOf(delim))
+}))
+const makeReturnObjectByDelimiter = curry((delim, str) =>
+  triplet(hasInlineReturn(delim), stripInlineReturnByDelimiter(delim), argify)(
+    str
   )
 )
-const stripInlineReturnByDelimiter = curry(
-  (delim, str) => ({
-    returns: pullReturnValueFromStringByDelimiter(delim, str),
-    args: str.slice(0, str.indexOf(delim))
-  })
-)
-const makeReturnObjectByDelimiter = curry(
-  (delim, str) => triplet(
-    hasInlineReturn(delim),
-    stripInlineReturnByDelimiter(delim),
-    argify
-  )(str)
-)
 
-const focusedOperation = curry(
-  (focalPoint, fn, o) => merge(o, {[focalPoint]: fn(o[focalPoint])})
+const focusedOperation = curry((focalPoint, fn, o) =>
+  merge(o, { [focalPoint]: fn(o[focalPoint]) })
 )
 
 const ARGS = `args`
@@ -78,28 +70,25 @@ const functionDefinition = curryObjectKN(
     k: INTERFACE,
     n: 4
   },
-  ({name, args, returns, arrow = SPACE_ARROW}) => `function ${name}(${args})${arrow} ${returns}`
+  ({ name, args, returns, arrow = SPACE_ARROW }) =>
+    `function ${name}(${args})${arrow} ${returns}`
 )
 
 const defaultFunctionDefinition = curryObjectK(
   INTERFACE,
-  ({args, returns, name}) => pipe(
-    map(space),
-    comma,
-    argify,
-    functionDefinition({arrow: COLON, returns, name})
-  )(args)
+  ({ args, returns, name }) =>
+    pipe(
+      map(space),
+      comma,
+      argify,
+      functionDefinition({ arrow: COLON, returns, name })
+    )(args)
 )
 
-const cut = curry(
-  (index, arr) => ([
-    arr.slice(0, index),
-    arr.slice(index)
-  ])
-)
+const cut = curry((index, arr) => [arr.slice(0, index), arr.slice(index)])
 
-const sliceParamsAtIndex = curry(
-  (index, params) => pipe(
+const sliceParamsAtIndex = curry((index, params) =>
+  pipe(
     cut(index + 1),
     map(comma),
     join(`): (`),
@@ -109,32 +98,32 @@ const sliceParamsAtIndex = curry(
 
 const generateCurriedFunctionDefinitions = curryObjectK(
   [...INTERFACE, `index`],
-  ({index = 0, args, returns, name}) => pipe(
-    map(space),
-    sliceParamsAtIndex(index),
-    comma,
-    argify,
-    functionDefinition({returns, name})
-  )(args)
+  ({ index = 0, args, returns, name }) =>
+    pipe(
+      map(space),
+      sliceParamsAtIndex(index),
+      comma,
+      argify,
+      functionDefinition({ returns, name })
+    )(args)
 )
 
-const splitArrayTwiceOnDelimiters = curry(
-  (d1, d2, arr) => pipe(
+const splitArrayTwiceOnDelimiters = curry((d1, d2, arr) =>
+  pipe(
     split(d1),
     map(split(d2))
   )(arr)
 )
 
-const makeCurriedFunctionByIndex = curry(
-  (data, index) => pipe(
+const makeCurriedFunctionByIndex = curry((data, index) =>
+  pipe(
     merge(data),
     generateCurriedFunctionDefinitions
-  )({index})
+  )({ index })
 )
 
-const curryDefinitionsPermutations = curryObjectK(
-  INTERFACE,
-  (data) => pipe(
+const curryDefinitionsPermutations = curryObjectK(INTERFACE, data =>
+  pipe(
     length,
     add(-1),
     range(0),
@@ -147,31 +136,25 @@ const tcdh = curryObjectKN(
   {
     k: [`name`, ARGS],
     n: 3
-  }, ({
+  },
+  ({
     name,
     args: outerArgs,
-    delimiters = {barrier: HASH, value: DOLLAR, returns: TILDE},
+    delimiters = { barrier: HASH, value: DOLLAR, returns: TILDE },
     returns: outerReturns = `any`
     // generic = false
   }) => {
-    const {
-      barrier: X,
-      value: Y,
-      returns: Z
-    } = delimiters
-    const {returns: pulledReturns, args} = pipe(
+    const { barrier: X, value: Y, returns: Z } = delimiters
+    const { returns: pulledReturns, args } = pipe(
       makeReturnObjectByDelimiter(Z),
       focusOnArgs(splitArrayTwiceOnDelimiters(X, Y))
     )(outerArgs)
     const returns = pulledReturns || outerReturns
     return pipe(
       box,
-      ap([
-        defaultFunctionDefinition,
-        curryDefinitionsPermutations
-      ]),
+      ap([defaultFunctionDefinition, curryDefinitionsPermutations]),
       lines
-    )({returns, name, args})
+    )({ returns, name, args })
   }
 )
 

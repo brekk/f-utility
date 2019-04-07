@@ -1,6 +1,6 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import {choice} from './choice'
+import { t } from "jest-t-assert"
+import { choice } from "./choice"
 
 test(`choice should be a curried binary fn whose initial input takes the comparison items`, () => {
   const comparison = (x, y) => x === 5 || y === 2

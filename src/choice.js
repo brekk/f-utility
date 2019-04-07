@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 /**
  * takes a function that takes two parameters and returns a ternary result
@@ -14,5 +14,5 @@ import {curry} from 'katsu-curry'
  * max(500, 20) // 500
  * max(20, 500) // 500
  */
-export const __choice = (cnFn, b, a) => cnFn(a, b) ? a : b
+export const __choice = (cnFn, b, a) => (cnFn(a, b) ? a : b)
 export const choice = curry(__choice)

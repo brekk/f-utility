@@ -1,4 +1,4 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 /**
  * Simple wrap for floor( x * random )
@@ -11,7 +11,7 @@ import {curry} from 'katsu-curry'
  * const {floor} = random
  * floor(0) // 0
  */
-export const floor = (x) => Math.floor(Math.random() * x)
+export const floor = x => Math.floor(Math.random() * x)
 
 /**
  * Simple wrap for floor( x * random ) + min

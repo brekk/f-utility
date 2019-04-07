@@ -1,11 +1,12 @@
-import {curry} from 'katsu-curry'
-import {isFunction} from './types'
-import {reduce} from './reduce'
-import {map} from './map'
+import { curry } from "katsu-curry"
+import { isFunction } from "./types"
+import { reduce } from "./reduce"
+import { map } from "./map"
 
 export const __ap = (applicative, functor) => {
-  if (functor && functor.ap && isFunction(functor.ap)) return functor.ap(applicative)
-  if (isFunction(functor)) return (x) => (applicative(x)(functor(x)))
+  if (functor && functor.ap && isFunction(functor.ap))
+    return functor.ap(applicative)
+  if (isFunction(functor)) return x => applicative(x)(functor(x))
   return reduce((agg, f) => agg.concat(map(f, functor)), [], applicative)
 }
 /**

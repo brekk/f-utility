@@ -1,5 +1,5 @@
-import _flatMap from 'flatmap-fast'
-import {delegateFastBinary} from './delegate-fast'
+import _flatMap from "flatmap-fast"
+import { delegateFastBinary } from "./delegate-fast"
 
 /**
  * functor.chain(fn) but curried and fast

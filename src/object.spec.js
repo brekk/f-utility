@@ -1,10 +1,10 @@
 /* global test */
-import {pipe} from 'katsu-curry'
-import {t} from 'jest-t-assert'
+import { pipe } from "katsu-curry"
+import { t } from "jest-t-assert"
 
-import {map} from './map'
-import {filter} from './filter'
-import {reject} from './reject'
+import { map } from "./map"
+import { filter } from "./filter"
+import { reject } from "./reject"
 import {
   pairwise,
   pairwiseObject,
@@ -14,21 +14,24 @@ import {
   fromPairs,
   mapTuple,
   mapKeys
-} from './object'
-import {word} from './random-word'
-import {floorMin} from './random-floor'
+} from "./object"
+import { word } from "./random-word"
+import { floorMin } from "./random-floor"
 
 test(`values`, () => {
-  const output = values({a: 1, b: 2, c: 3})
+  const output = values({ a: 1, b: 2, c: 3 })
   t.deepEqual(output, [1, 2, 3])
 })
 
 test(`merge`, () => {
   const [a, b] = map(word, [1, 1])
   const [x, y] = map(floorMin, [1e3, 1e3])
-  const aObject = {[a]: x}
-  const bObject = {[b]: y}
-  t.deepEqual(merge(aObject, bObject), {...aObject, ...bObject})
+  const aObject = { [a]: x }
+  const bObject = { [b]: y }
+  t.deepEqual(merge(aObject, bObject), { ...aObject, ...bObject })
+})
+test(`merge - Object.assign vulnerability`, () => {
+  t.deepEqual(merge({ A: 120 }, { __proto__: `test` }), { A: 120 })
 })
 
 test(`toPairs / fromPairs`, () => {
@@ -37,7 +40,7 @@ test(`toPairs / fromPairs`, () => {
     map(([k, v]) => [k, v % 2 === 0 ? v * 2 : v]),
     fromPairs
   )
-  const input = {a: 1, b: 2, c: 3, d: 4}
+  const input = { a: 1, b: 2, c: 3, d: 4 }
   const expected = {
     a: 1,
     b: 4,
@@ -45,7 +48,7 @@ test(`toPairs / fromPairs`, () => {
     d: 8
   }
   t.deepEqual(doubleEvenValues(input), expected)
-  t.deepEqual(fromPairs([[1, 2], [`a`, `b`]]), {1: 2, a: `b`})
+  t.deepEqual(fromPairs([[1, 2], [`a`, `b`]]), { 1: 2, a: `b` })
 })
 
 test(`pairwise should perform higher-order operations on tuples`, () => {
@@ -54,15 +57,15 @@ test(`pairwise should perform higher-order operations on tuples`, () => {
     b: 2,
     c: 3
   }
-  const fn = (x) => x[1] % 2 !== 0
+  const fn = x => x[1] % 2 !== 0
   const output = pairwise(filter, fn, input)
   const outputO = pairwiseObject(filter, fn, input)
   const output2 = pairwise(reject, fn, input)
   const output2O = pairwiseObject(reject, fn, input)
   t.deepEqual(output, [[`a`, 1], [`c`, 3]])
   t.deepEqual(output2, [[`b`, 2]])
-  t.deepEqual(outputO, {a: 1, c: 3})
-  t.deepEqual(output2O, {b: 2})
+  t.deepEqual(outputO, { a: 1, c: 3 })
+  t.deepEqual(output2O, { b: 2 })
 })
 
 test(`mapTuple`, () => {
@@ -71,9 +74,9 @@ test(`mapTuple`, () => {
     b: 2,
     c: 3
   }
-  const fn = ([k, v]) => ([k.toUpperCase(), v * 2])
+  const fn = ([k, v]) => [k.toUpperCase(), v * 2]
   const output = mapTuple(fn, input)
-  t.deepEqual(output, {A: 2, B: 4, C: 6})
+  t.deepEqual(output, { A: 2, B: 4, C: 6 })
 })
 
 test(`mapKeys`, () => {
@@ -82,7 +85,7 @@ test(`mapKeys`, () => {
     b: 2,
     c: 3
   }
-  const fn = (v) => `__${v}`
+  const fn = v => `__${v}`
   const output = mapKeys(fn, input)
-  t.deepEqual(output, {__a: 1, __b: 2, __c: 3})
+  t.deepEqual(output, { __a: 1, __b: 2, __c: 3 })
 })

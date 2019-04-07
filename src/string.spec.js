@@ -1,5 +1,5 @@
 /* global test */
-import {t} from 'jest-t-assert'
+import { t } from "jest-t-assert"
 import {
   charAt,
   codePointAt,
@@ -16,7 +16,7 @@ import {
   startsWith,
   substr,
   trim
-} from './string'
+} from "./string"
 
 test(`trim`, () => {
   t.is(trim(` cooool `), `cooool`)
@@ -52,8 +52,8 @@ test(`lastIndexOf`, () => {
 })
 test(`match`, () => {
   t.is(typeof match, `function`)
-  t.is(match(/x/, `butts`), null)
-  const weirdThing = [ `t` ]
+  t.deepEqual(match(/x/, `butts`), [])
+  const weirdThing = [`t`]
   weirdThing.index = 2
   weirdThing.input = `butts`
   t.deepEqual(match(/t/, `butts`), weirdThing)
@@ -70,7 +70,7 @@ if (``.padEnd) {
 }
 test(`repeat`, () => {
   t.is(typeof repeat, `function`)
-  t.is(repeat(3, `x`, ``), `xxx`)
+  t.deepEqual(repeat(`x`, 3), `xxx`.split(``))
 })
 test(`replace`, () => {
   t.is(typeof replace, `function`)

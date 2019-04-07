@@ -1,11 +1,10 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
 const has = (x, y) => !!y[x]
-const {isArray} = Array
+const { isArray } = Array
 
-export const __willDelegate = (method, functor) => (
+export const __willDelegate = (method, functor) =>
   has(method, functor) && !isArray(functor)
-)
 /**
  * functor-last curried goodness
  * @method willDelegate
@@ -17,11 +16,9 @@ export const __willDelegate = (method, functor) => (
 // const willDelegate = curry(__willDelegate)
 
 export function __delegateFastBinary(method, fast, fn, functor) {
-  return (
-    __willDelegate(method, functor) ?
-      functor[method](fn) :
-      fast(functor, fn)
-  )
+  return __willDelegate(method, functor)
+    ? functor[method](fn)
+    : fast(functor, fn)
 }
 /**
  * functor-last curried goodness
@@ -31,16 +28,12 @@ export function __delegateFastBinary(method, fast, fn, functor) {
  * @returns {Array} mapped iterable
  * @private
  */
-export const delegateFastBinary = curry(
-  __delegateFastBinary
-)
+export const delegateFastBinary = curry(__delegateFastBinary)
 
 export function __delegateFastTertiary(method, fast, fn, initial, functor) {
-  return (
-    __willDelegate(method, functor) ?
-      functor[method](fn, initial) :
-      fast(functor, fn, initial)
-  )
+  return __willDelegate(method, functor)
+    ? functor[method](fn, initial)
+    : fast(functor, fn, initial)
 }
 /**
  * functor-last curried goodness
@@ -51,6 +44,4 @@ export function __delegateFastTertiary(method, fast, fn, initial, functor) {
  * @returns {Array} mapped iterable
  * @private
  */
-export const delegateFastTertiary = curry(
-  __delegateFastTertiary
-)
+export const delegateFastTertiary = curry(__delegateFastTertiary)

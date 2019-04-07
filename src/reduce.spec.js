@@ -1,6 +1,6 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import {reduce} from './reduce'
+import { t } from "jest-t-assert"
+import { reduce } from "./reduce"
 
 test(`reduce`, () => {
   const out = reduce((a, b) => a.concat(b), [], [[`a`], [`b`, `c`], [`d`, `e`]])
