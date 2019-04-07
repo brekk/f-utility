@@ -1,5 +1,5 @@
-import fastMap from 'fast.js/map'
-import {curry} from 'katsu-curry'
+import fastMap from "fast.js/map"
+import { curry } from "katsu-curry"
 // import FL from 'fantasy-land'
 
 export const __map = (fn, functor) => {
@@ -20,6 +20,4 @@ export const __map = (fn, functor) => {
  * const add1 = map((x) => x + 1)
  * add1([1,2,3]) // [2,3,4]
  */
-export const map = curry(
-  __map
-)
+export const map = curry(__map)

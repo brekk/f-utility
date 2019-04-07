@@ -1,8 +1,8 @@
-import {curry, pipe} from 'katsu-curry'
-import {reduce} from './reduce'
-import {map} from './map'
+import { curry, pipe } from "katsu-curry"
+import { reduce } from "./reduce"
+import { map } from "./map"
 // import {alterFirstIndex, alterLastIndex} from './array'
-const {keys: _keys, freeze: _freeze, assign: _assign} = Object
+const { keys: _keys, freeze: _freeze, assign: _assign } = Object
 
 /**
  * Object.keys
@@ -26,7 +26,7 @@ export const keys = _keys
  * import {values} from 'f-utility'
  * values({a:1, b: 2, c: 3}) // [1, 2, 3]
  */
-export const values = (x) => keys(x).map((y) => x[y])
+export const values = x => keys(x).map(y => x[y])
 
 /**
  * Object.freeze
@@ -66,10 +66,11 @@ export const assign = _assign
  * import {entries} from 'f-utility'
  * entries({a: 1, b: 2}) // [[`a`, 1], [`b`, 2]]
  */
-export const entries = (o) => pipe(
-  keys,
-  map((k) => ([k, o[k]]))
-)(o)
+export const entries = o =>
+  pipe(
+    keys,
+    map(k => [k, o[k]])
+  )(o)
 
 /**
  * An alias of `entries`
@@ -94,10 +95,7 @@ export const toPairs = entries
  * import {fromPairs} from 'f-utility'
  * fromPairs([[`a`, 1], [`b`, 2]]) // {a: 1, b: 2}
  */
-export const fromPairs = reduce(
-  (agg, [k, v]) => merge(agg, {[k]: v}),
-  {}
-)
+export const fromPairs = reduce((agg, [k, v]) => merge(agg, { [k]: v }), {})
 
 /**
  * modify a toPairs / fromPairs pipeline with a higher-order function
@@ -120,15 +118,17 @@ export const fromPairs = reduce(
  * // or we can use pairwiseObject
  * pairwiseObject(filter, ([k, v]) => v % 2 !== 0, input) // {a: 1, c: 3}
  */
-export const __pairwise = (hoc, fn, o) => pipe(
-  toPairs,
-  hoc(fn)
-)(o)
+export const __pairwise = (hoc, fn, o) =>
+  pipe(
+    toPairs,
+    hoc(fn)
+  )(o)
 export const pairwise = curry(__pairwise)
-export const __pairwiseObject = (hoc, fn, o) => pipe(
-  pairwise(hoc, fn),
-  fromPairs
-)(o)
+export const __pairwiseObject = (hoc, fn, o) =>
+  pipe(
+    pairwise(hoc, fn),
+    fromPairs
+  )(o)
 export const pairwiseObject = curry(__pairwiseObject)
 
 /**
@@ -168,10 +168,7 @@ export const mapTuple = mapTuples
  * const fn = (v) => `__${v}`
  * mapKeys(fn, input) // {__a: 1, __b: 2, __c: 3}
  */
-export const __mapKeys = (fn, o) => mapTuples(
-  ([k, v]) => ([fn(k), v]),
-  o
-)
+export const __mapKeys = (fn, o) => mapTuples(([k, v]) => [fn(k), v], o)
 export const mapKeys = curry(__mapKeys)
 
 /**
@@ -185,18 +182,6 @@ export const mapKeys = curry(__mapKeys)
  * import {merge} from 'f-utility'
  * merge({c: 3}, {a: 1, b: 2}) // {a: 1, b: 2, c: 3}
  *
- * starting in v3.5.6, merge needs to be made safe against the prototype pollution attack
- * export const __merge = (a, b) => assign({}, a, b)
- *
  */
-export const __merge = (a, b) => entries(a)
-  .concat(entries(b))
-  .reduce(
-    (hash, [k, v]) => (
-      k !== `__proto__` ?
-        assign(hash, {[k]: v}) :
-        hash
-    ),
-    {}
-  )
+export const __merge = (a, b) => assign({}, a, b)
 export const merge = curry(__merge)

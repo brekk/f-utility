@@ -9,7 +9,7 @@
  * const {shuffle} = random
  * const shuffle(`abcde`.split(``)) // randomly shuffled array
  */
-export const shuffle = (list) => {
+export const shuffle = list => {
   const newList = [...list]
   // modified fisher-yates shuffle
   let start = newList.length

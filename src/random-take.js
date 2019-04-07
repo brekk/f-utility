@@ -1,8 +1,8 @@
-import {curry} from 'katsu-curry'
-import {floor} from './random-floor'
-import {iterate} from './iterate'
+import { curry } from "katsu-curry"
+import { floor } from "./random-floor"
+import { iterate } from "./iterate"
 
-const {keys} = Object
+const { keys } = Object
 
 /**
  * Take values randomly from objects or arrays
@@ -30,24 +30,15 @@ export const take = curry((encase, o) => {
   if (o && o[0] && o.length) {
     const found = floor(o.length)
     const selection = o[found]
-    return (
-      !encase ?
-        selection :
-        [selection]
-    )
+    return !encase ? selection : [selection]
   }
   // for objects
   const ks = keys(o)
   const index = floor(ks.length)
   const key = ks[index]
   const value = o[key]
-  return (
-    !encase ?
-      value :
-      {
-        [key]: value
-      }
-  )
+  if (encase) return { [key]: value }
+  return value
 })
 
 /**
@@ -96,6 +87,6 @@ export const grab = take(true)
  * allot(3, a2eObject) // {d: 4, e: 5, a: 1}
  * allot(3, a2eObject) // {a: 1, c: 3, a: 1}
  */
-export const allot = curry(
-  (howMany, ofThing) => iterate(howMany, () => grab(ofThing))
+export const allot = curry((howMany, ofThing) =>
+  iterate(howMany, () => pick(ofThing))
 )

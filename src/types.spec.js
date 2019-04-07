@@ -1,10 +1,18 @@
 /* global test */
-import {$} from 'katsu-curry'
-import {t} from 'jest-t-assert'
-import {map} from './map'
-import {freeze} from './object'
-import {floorMin} from './random-floor'
-import {isString, isNil, isBoolean, isNumber, isObject, isFunction, isDistinctObject} from './types'
+import { $ } from "katsu-curry"
+import { t } from "jest-t-assert"
+import { map } from "./map"
+import { freeze } from "./object"
+import { floorMin } from "./random-floor"
+import {
+  isString,
+  isNil,
+  isBoolean,
+  isNumber,
+  isObject,
+  isFunction,
+  isDistinctObject
+} from "./types"
 
 const allTypes = freeze({
   booleanTrue: true,

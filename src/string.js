@@ -1,5 +1,5 @@
-import {curry} from 'katsu-curry'
-import {e0, e1, e2} from 'entrust'
+import { curry } from "katsu-curry"
+import { e0, e1, e2 } from "entrust"
 
 /**
  * string.split(x) but delegatee last
@@ -39,28 +39,48 @@ export const trim = e0(`trim`)
 // UNARY
 export const charAt = e1(`charAt`)
 export const codePointAt = e1(`codePointAt`)
-export const match = e1(`match`)
-export const repeat = e1(`repeat`)
+export const match = curry((a, b) => {
+  const z = b.match(a)
+  return z === null ? [] : z
+})
+// export const repeat = e1(`repeat`)
+export const repeat = curry((x, n) => {
+  let output = new Array(n)
+  for (let i = 0; i < n; i++) {
+    output[i] = x
+  }
+  return output
+})
 export const search = e1(`search`)
 export const split = e1(`split`)
 
 // BINARY
 export const endsWithLength = e2(`endsWith`)
-// the optional length param makes the above kinda unhelpful
-export const __endsWith = (end, x) => endsWithLength(end, x.length, x)
+export const __endsWith = (x, i) => {
+  const last = i[i.length - 1]
+  return Array.isArray(x) ? last === x[0] : last === x
+}
 export const endsWith = curry(__endsWith)
+
 export const indexOfFromIndex = e2(`indexOf`)
 // the optional fromIndex param above is easy to forget
 export const __indexOf = (toSearch, x) => indexOfFromIndex(toSearch, 0, x)
 export const indexOf = curry(__indexOf)
 export const lastIndexOfFromIndex = e2(`lastIndexOf`)
 // samesies
-export const __lastIndexOf = (toSearch, x) => lastIndexOfFromIndex(toSearch, Infinity, x)
+export const __lastIndexOf = (toSearch, x) =>
+  lastIndexOfFromIndex(toSearch, Infinity, x)
 export const lastIndexOf = curry(__lastIndexOf)
 export const padEnd = e2(`padEnd`)
 export const padStart = e2(`padStart`)
 export const replace = e2(`replace`)
 export const startsWithFromPosition = e2(`startsWith`)
-export const __startsWith = (toSearch, x) => startsWithFromPosition(toSearch, 0, x)
+// export const __startsWith = (toSearch, x) =>
+//   startsWithFromPosition(toSearch, 0, x)
+// export const startsWith = curry(__startsWith)
+export const __startsWith = (x, i) => {
+  const first = i[0]
+  return Array.isArray(x) ? first === x[0] : first === x
+}
 export const startsWith = curry(__startsWith)
 export const substr = e2(`substr`)

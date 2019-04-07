@@ -1,6 +1,6 @@
-import {curry} from 'katsu-curry'
+import { curry } from "katsu-curry"
 
-export const __isTypeof = (type, x) => (type === typeof x) // eslint-disable-line valid-typeof
+export const __isTypeof = (type, x) => type === typeof x // eslint-disable-line valid-typeof
 /**
  * returns boolean based on type
  * @method isTypeof
@@ -13,9 +13,7 @@ export const __isTypeof = (type, x) => (type === typeof x) // eslint-disable-lin
  * isTypeof(`boolean`, true) // true
  * isTypeof(`boolean`, `nope`) // false
  */
-export const isTypeof = curry(
-  __isTypeof
-)
+export const isTypeof = curry(__isTypeof)
 
 /**
  * test whether something is a boolean
@@ -95,7 +93,7 @@ export const isString = isTypeof(`string`)
  * isNil(null) // true
  * isNil(undefined) // true
  */
-export const isNil = (x) => x == null
+export const isNil = x => x == null
 
 /**
  * test whether something is an object
@@ -148,5 +146,5 @@ export const isArray = Array.isArray
  * isDistinctObject(null) // false
  * isDistinctObject(undefined) // false
  */
-export const isDistinctObject = (x) => !isNil(x) && isObject(x) && !isArray(x)
+export const isDistinctObject = x => !isNil(x) && isObject(x) && !isArray(x)
 export const isPOJO = isDistinctObject

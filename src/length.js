@@ -1,6 +1,6 @@
-import {pipe} from 'katsu-curry'
-import {prop} from './path'
-import {keys} from './object'
+import { pipe } from "katsu-curry"
+import { prop } from "./path"
+import { keys } from "./object"
 
 /**
  * returns .length if it exists on an input
@@ -18,7 +18,10 @@ export const propLength = prop(`length`)
  * @returns {number} length
  * @private
  */
-export const objectLength = pipe(keys, propLength)
+export const objectLength = pipe(
+  keys,
+  propLength
+)
 
 /**
  * returns .length or total keys in an object
@@ -28,4 +31,6 @@ export const objectLength = pipe(keys, propLength)
  * @private
  */
 /* istanbul ignore next */
-export const length = (x) => (typeof x === `object` ? objectLength(x) : propLength(x))
+// export const length = x =>
+//   typeof x === `object` ? objectLength(x) : propLength(x)
+export const length = propLength

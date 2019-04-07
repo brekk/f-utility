@@ -1,36 +1,15 @@
 /* global test */
-import {curry} from 'katsu-curry'
-import {t} from 'jest-t-assert'
-import {invert, not, not1, not2, not3} from './invert'
-import {equal} from './math'
-
-test(`invert`, () => {
-  t.falsy(invert(true))
-  t.truthy(invert(false))
-})
+import { t } from "jest-t-assert"
+import { invert, not } from "./invert"
 
 test(`not`, () => {
-  const notAHundo = not(equal(100))
-  t.truthy(notAHundo(200))
-  t.falsy(notAHundo(100))
+  t.falsy(not(true))
+  t.truthy(not(false))
 })
 
-test(`not1`, () => {
-  const notAHundo = not1(equal, 100)
-  t.truthy(notAHundo(200))
-  t.falsy(notAHundo(100))
-})
-
-test(`not2`, () => {
-  const ascending = curry((a, b, c) => ((a < b) && (b < c)))
-  const isDescending = not2(ascending, 1, 10)
-  t.truthy(isDescending(1))
-  t.falsy(isDescending(100))
-})
-
-test(`not3`, () => {
-  const ascending = curry((a, b, c, d) => ((a < b) && (b < c) && (c < d)))
-  const isDescending = not3(ascending, 1, 10, 100)
-  t.truthy(isDescending(1))
-  t.falsy(isDescending(1000))
+test(`invert`, () => {
+  t.deepEqual(invert({ a: 1, b: 2, c: 1, d: 2, e: 1 }), {
+    1: [`a`, `c`, `e`],
+    2: [`b`, `d`]
+  })
 })

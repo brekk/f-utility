@@ -1,53 +1,45 @@
-import _flatMap from 'flatmap-fast'
-import fastReduce from 'fast.js/reduce'
-import fastFilter from 'fast.js/filter'
-import fastSome from 'fast.js/array/some'
-import fastEvery from 'fast.js/array/every'
-import {e0, e1, e2} from 'entrust/debug'
+import _flatMap from "flatmap-fast"
+import fastReduce from "fast.js/reduce"
+import fastFilter from "fast.js/filter"
+import fastSome from "fast.js/array/some"
+import fastEvery from "fast.js/array/every"
+import { e0, e1, e2 } from "entrust/debug"
 import {
   curry as __curry,
   pipe as __pipe,
   compose as __compose
-} from 'katsu-curry/debug'
-import {__ap} from './ap'
+} from "katsu-curry/debug"
+import { __ap } from "./ap"
 import {
   __isTypeof,
   isDistinctObject as __isDistinctObject,
   isNil as __isNil
-} from './types'
-import {__choice} from './choice'
-import {__iterate} from './iterate'
-import {__map} from './map'
-import {__range} from './range'
-import {__reject} from './reject'
-import {__ternary} from './ternary'
-import {__triplet} from './triplet'
+} from "./types"
+import { __choice } from "./choice"
+import { __iterate } from "./iterate"
+import { __map } from "./map"
+import { __range } from "./range"
+import { __reject } from "./reject"
+import { __ternary } from "./ternary"
+import { __triplet } from "./triplet"
 import {
   __merge,
   __pairwise,
   __pairwiseObject,
   fromPairs as __fromPairs,
   toPairs as __toPairs
-} from './object'
+} from "./object"
 
-import {invert as _invert} from './invert'
-import {
-  __endsWith,
-  __indexOf,
-  __lastIndexOf,
-  __startsWith
-} from './string'
+import { not as _not, invert as _invert } from "./invert"
+import { __endsWith, __indexOf, __lastIndexOf, __startsWith } from "./string"
 import {
   __sort,
   __symmetricDifference,
   __difference,
   __alterIndex,
   __relativeIndex
-} from './array'
-import {
-  __delegateFastBinary,
-  __delegateFastTertiary
-} from './delegate-fast'
+} from "./array"
+import { __delegateFastBinary, __delegateFastTertiary } from "./delegate-fast"
 import {
   __equals,
   __add,
@@ -56,21 +48,22 @@ import {
   __multiply,
   __pow,
   round as __round
-} from './math'
+} from "./math"
 import {
   __pathOr,
   __propOr,
   __pathEq,
-  __pathIs,
+  __pathSatisfies,
+  __propSatisfies,
   __propIs,
   __propEq
-} from './path'
+} from "./path"
 
-import {random as _random} from './random'
-import * as f from './random-floor'
-import * as t from './random-take'
-import * as w from './random-word'
-import * as s from './random-shuffle'
+import { random as _random } from "./random"
+import * as f from "./random-floor"
+import * as t from "./random-take"
+import * as w from "./random-word"
+import * as s from "./random-shuffle"
 
 export const round = __round
 round.toString = () => `~(?)`
@@ -88,19 +81,12 @@ export const isDistinctObject = __isDistinctObject
 isDistinctObject.toString = () => `isTrueObject(?)`
 export const isPOJO = isDistinctObject
 
-export {
-  keys,
-  assign,
-  freeze,
-  entries
-} from './object'
+export { keys, assign, freeze, entries } from "./object"
 export const toPairs = __toPairs
 toPairs.toString = () => `ᗕ(?)`
 export const fromPairs = __fromPairs
 fromPairs.toString = () => `ᗒ(?)`
-export {
-  isArray
-} from './types'
+export { isArray } from "./types"
 
 export const isNil = curry(__isNil)
 isNil.toString = () => `curry(__isTypeof)(null)(?)`
@@ -156,13 +142,14 @@ export const multiply = curry(__multiply)
 export const pairwise = curry(__pairwise)
 export const pairwiseObject = curry(__pairwiseObject)
 export const pathEq = curry(__pathEq)
-export const pathIs = curry(__pathIs)
 export const pathOr = curry(__pathOr)
+export const pathSatisfies = curry(__pathSatisfies)
 export const path = pathOr(null)
 export const pow = curry(__pow)
 export const propEq = curry(__propEq)
 export const propIs = curry(__propIs)
 export const propOr = curry(__propOr)
+export const propSatisfies = curry(__propSatisfies)
 export const prop = propOr(null)
 export const range = curry(__range)
 export const reject = curry(__reject)
@@ -188,48 +175,27 @@ export const reduce = curry(function __reduce(fn, initial, functor) {
 
 export const mapTuples = pairwiseObject(map)
 export const mapTuple = mapTuples
-const __mapKeys = (fn, o) => mapTuples(
-  ([k, v]) => ([fn(k), v]),
-  o
-)
+const __mapKeys = (fn, o) => mapTuples(([k, v]) => [fn(k), v], o)
 export const mapKeys = curry(__mapKeys)
 
-export const flip = (fn) => curry(function __flip(a, b) {
-  return fn(b, a)
-})
+export const flip = fn =>
+  curry(function __flip(a, b) {
+    return fn(b, a)
+  })
 flip.toString = () => `🙃 🍛 (?)`
 
 export const alterLastIndex = alterIndex(-1)
 export const alterFirstIndex = alterIndex(0)
 export const invert = _invert
-export const not = (fn) => pipe(
-  fn,
-  invert
-)
-not.toString = () => `❗️(?)`
-export const not1 = curry((fn, a) => pipe(
-  fn(a),
-  invert
-))
-not1.toString = () => `❗️1(?,?)`
-export const not2 = curry((fn, a, b) => pipe(
-  fn(a, b),
-  invert
-))
-not2.toString = () => `❗️2(?,?,?)`
-export const not3 = curry((fn, a, b, c) => pipe(
-  fn(a, b, c),
-  invert
-))
-not3.toString = () => `❗️3(?,?,?,?)`
+export const not = _not
 
 const propLength = prop(`length`)
-const objectLength = pipe(Object.keys, propLength)
-export const length = (x) => (
-  typeof x === `object` ?
-    objectLength(x) :
-    propLength(x)
+const objectLength = pipe(
+  Object.keys,
+  propLength
 )
+export const length = x =>
+  typeof x === `object` ? objectLength(x) : propLength(x)
 length.toString = () => `length(?)`
 
 export const which = curry(function __which(compare, fn, o) {
@@ -240,7 +206,7 @@ export const which = curry(function __which(compare, fn, o) {
     arecomp(fn),
     pipe(
       Object.keys,
-      arecomp((key) => fn(o[key], key))
+      arecomp(key => fn(o[key], key))
     ),
     o
   )
@@ -260,4 +226,4 @@ export {
   remapArray,
   K,
   I
-} from 'katsu-curry/debug'
+} from "katsu-curry/debug"

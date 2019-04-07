@@ -1125,10 +1125,8 @@ var debug_12 = debug$1.PLACEHOLDER;
 var debug_13 = debug$1.K;
 var debug_14 = debug$1.I;
 
-var __isTypeof = function (type, x) { return (type === typeof x); };
-var isTypeof = curry(
-  __isTypeof
-);
+var __isTypeof = function (type, x) { return type === typeof x; };
+var isTypeof = curry(__isTypeof);
 var isBoolean = isTypeof("boolean");
 var isNumber = isTypeof("number");
 var isFunction = isTypeof("function");
@@ -1140,29 +1138,19 @@ var isDistinctObject = function (x) { return !isNil(x) && isObject(x) && !isArra
 
 var has = function (x, y) { return !!y[x]; };
 var isArray$1 = Array.isArray;
-var __willDelegate = function (method, functor) { return (
-  has(method, functor) && !isArray$1(functor)
-); };
+var __willDelegate = function (method, functor) { return has(method, functor) && !isArray$1(functor); };
 function __delegateFastBinary(method, fast, fn, functor) {
-  return (
-    __willDelegate(method, functor) ?
-      functor[method](fn) :
-      fast(functor, fn)
-  )
+  return __willDelegate(method, functor)
+    ? functor[method](fn)
+    : fast(functor, fn)
 }
-var delegateFastBinary = curry(
-  __delegateFastBinary
-);
+var delegateFastBinary = curry(__delegateFastBinary);
 function __delegateFastTertiary(method, fast, fn, initial, functor) {
-  return (
-    __willDelegate(method, functor) ?
-      functor[method](fn, initial) :
-      fast(functor, fn, initial)
-  )
+  return __willDelegate(method, functor)
+    ? functor[method](fn, initial)
+    : fast(functor, fn, initial)
 }
-var delegateFastTertiary = curry(
-  __delegateFastTertiary
-);
+var delegateFastTertiary = curry(__delegateFastTertiary);
 
 var reduce$3 = delegateFastTertiary("reduce", reduce$2);
 
@@ -1203,18 +1191,17 @@ var __map = function (fn, functor) {
   if (functor && !Array.isArray(functor) && functor.map) { return functor.map(fn) }
   return map$2(functor, fn)
 };
-var map$3 = curry(
-  __map
-);
+var map$3 = curry(__map);
 
 var __ap = function (applicative, functor) {
-  if (functor && functor.ap && isFunction(functor.ap)) { return functor.ap(applicative) }
-  if (isFunction(functor)) { return function (x) { return (applicative(x)(functor(x))); } }
+  if (functor && functor.ap && isFunction(functor.ap))
+    { return functor.ap(applicative) }
+  if (isFunction(functor)) { return function (x) { return applicative(x)(functor(x)); } }
   return reduce$3(function (agg, f) { return agg.concat(map$3(f, functor)); }, [], applicative)
 };
 var ap = curry(__ap);
 
-var __choice = function (cnFn, b, a) { return cnFn(a, b) ? a : b; };
+var __choice = function (cnFn, b, a) { return (cnFn(a, b) ? a : b); };
 var choice = curry(__choice);
 
 var __iterate = function (total, fn) {
@@ -1234,29 +1221,25 @@ var iterate = curry(__iterate);
 var __range = function (start, end) {
   var agg = [];
   var swap = start < end;
-  var ref = (swap ? [start, end] : [end + 1, start + 1]);
+  var ref = swap ? [start, end] : [end + 1, start + 1];
   var a = ref[0];
   var b = ref[1];
   for (var x = a; x < b; x++) {
     agg.push(x);
   }
-  return (swap ? agg : agg.reverse())
+  return swap ? agg : agg.reverse()
 };
 var range = curry(__range);
 
 var filter$3 = delegateFastBinary("filter", filter$2);
 
-var __reject = function (fn, o) { return filter$3(
-  function (x) { return !fn(x); }, o
-); };
-var reject = curry(
-  __reject
-);
+var __reject = function (fn, o) { return filter$3(function (x) { return !fn(x); }, o); };
+var reject = curry(__reject);
 
-var __ternary = function (cn, b, a) { return cn ? a : b; };
+var __ternary = function (cn, b, a) { return (cn ? a : b); };
 var ternary = curry(__ternary);
 
-var __triplet = function (cnFn, bFn, aFn, o) { return cnFn(o) ? aFn(o) : bFn(o); };
+var __triplet = function (cnFn, bFn, aFn, o) { return (cnFn(o) ? aFn(o) : bFn(o)); };
 var triplet = curry(__triplet);
 
 var _keys = Object.keys;
@@ -1266,79 +1249,64 @@ var keys = _keys;
 var freeze = _freeze;
 var assign = _assign;
 var entries = function (o) { return pipe(
-  keys,
-  map$3(function (k) { return ([k, o[k]]); })
-)(o); };
+    keys,
+    map$3(function (k) { return [k, o[k]]; })
+  )(o); };
 var toPairs = entries;
-var fromPairs = reduce$3(
-  function (agg, ref) {
-    var obj;
-    var k = ref[0];
-    var v = ref[1];
-    return merge(agg, ( obj = {}, obj[k] = v, obj ));
-},
-  {}
-);
+var fromPairs = reduce$3(function (agg, ref) {
+  var obj;
+  var k = ref[0];
+  var v = ref[1];
+  return merge(agg, ( obj = {}, obj[k] = v, obj ));
+}, {});
 var __pairwise = function (hoc, fn, o) { return pipe(
-  toPairs,
-  hoc(fn)
-)(o); };
+    toPairs,
+    hoc(fn)
+  )(o); };
 var pairwise = curry(__pairwise);
 var __pairwiseObject = function (hoc, fn, o) { return pipe(
-  pairwise(hoc, fn),
-  fromPairs
-)(o); };
+    pairwise(hoc, fn),
+    fromPairs
+  )(o); };
 var pairwiseObject = curry(__pairwiseObject);
 var mapTuples = pairwiseObject(map$3);
-var __mapKeys = function (fn, o) { return mapTuples(
-  function (ref) {
-    var k = ref[0];
-    var v = ref[1];
-    return ([fn(k), v]);
-  },
-  o
-); };
+var __mapKeys = function (fn, o) { return mapTuples(function (ref) {
+  var k = ref[0];
+  var v = ref[1];
+  return [fn(k), v];
+  }, o); };
 var mapKeys = curry(__mapKeys);
-var __merge = function (a, b) { return entries(a)
-  .concat(entries(b))
-  .reduce(
-    function (hash, ref) {
-      var obj;
-      var k = ref[0];
-      var v = ref[1];
-      return (
-      k !== "__proto__" ?
-        assign(hash, ( obj = {}, obj[k] = v, obj )) :
-        hash
-    );
-  },
-    {}
-  ); };
+var __merge = function (a, b) { return assign({}, a, b); };
 var merge = curry(__merge);
 
-var invert = function (x) { return !x; };
-var not1 = curry(function (fn, a) { return pipe(
-  fn(a),
-  invert
-); });
-var not2 = curry(function (fn, a, b) { return pipe(
-  fn(a, b),
-  invert
-); });
-var not3 = curry(function (fn, a, b, c) { return pipe(
-  fn(a, b, c),
-  invert
-); });
+var not = function (x) { return !x; };
+var invert = function (x) { return Object.keys(x).reduce(function (o, key) {
+    var value = x[key];
+    o[value] = o[value] ? o[value].concat(key) : [key];
+    return o
+  }, {}); };
 
 var trim = e0("trim");
 var charAt = e1("charAt");
 var codePointAt = e1("codePointAt");
-var match = e1("match");
-var repeat = e1("repeat");
+var match = curry(function (a, b) {
+  var z = b.match(a);
+  return z === null ? [] : z
+});
+var repeat = curry(function (x, n) {
+  var output = new Array(n);
+  for (var i = 0; i < n; i++) {
+    output[i] = x;
+  }
+  return output
+});
 var search = e1("search");
 var split = e1("split");
 var endsWithLength = e2("endsWith");
-var __endsWith = function (end, x) { return endsWithLength(end, x.length, x); };
+var __endsWith = function (x, i) {
+  var last = i[i.length - 1];
+  return Array.isArray(x) ? last === x[0] : last === x
+};
 var endsWith = curry(__endsWith);
 var indexOfFromIndex = e2("indexOf");
 var __indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
@@ -1350,35 +1318,30 @@ var padEnd = e2("padEnd");
 var padStart = e2("padStart");
 var replace = e2("replace");
 var startsWithFromPosition = e2("startsWith");
-var __startsWith = function (toSearch, x) { return startsWithFromPosition(toSearch, 0, x); };
+var __startsWith = function (x, i) {
+  var first = i[0];
+  return Array.isArray(x) ? first === x[0] : first === x
+};
 var startsWith = curry(__startsWith);
 var substr = e2("substr");
 
 var join = e1("join");
-var concat = e1("concat");
+var concat = curry(function (a, b) { return a.concat(b); });
 var __sort = function (fn, functor) {
   var copy = Array.from(functor);
   copy.sort(fn);
   return copy
 };
 var sort = curry(__sort);
-var __difference = function (bList, aList) { return filter$3(function (x) { return !bList.includes(x); }, aList); };
+var __difference = function (bList, aList) { return filter$3(function (x) { return !aList.includes(x); }, bList); };
 var difference = curry(__difference);
 var __symmetricDifference = function (a, b) {
   var ab = difference(a, b);
   var ba = difference(b, a);
-  return (
-    ab.length > ba.length ?
-      ab :
-      ba
-  )
+  return ab.concat(ba)
 };
 var symmetricDifference = curry(__symmetricDifference);
-var __relativeIndex = function (length, index) { return (
-  index > -1 ?
-    index :
-    length - Math.abs(index)
-); };
+var __relativeIndex = function (length, index) { return index > -1 ? index : length - Math.abs(index); };
 var relativeIndex = curry(__relativeIndex);
 var __alterIndex = function (index, fn, input) {
   var i = relativeIndex(input.length, index);
@@ -1403,53 +1366,43 @@ var lessThanOrEqualTo = curry(__lessThanOrEqualTo);
 var round = Math.round;
 var __add = function (a, b) { return b + a; };
 var add = curry(__add);
-var __subtract = function (a, b) { return b - a; };
+var __subtract = function (a, b) { return a - b; };
 var subtract = curry(__subtract);
 var __multiply = function (a, b) { return b * a; };
 var multiply = curry(__multiply);
-var __divide = function (a, b) { return b / a; };
+var __divide = function (a, b) { return a / b; };
 var divide = curry(__divide);
 var __pow = function (a, b) { return Math.pow(b, a); };
 var pow = curry(__pow);
 
-var __pathOr = function (def, lenses, input) { return reduce$3(
-  function (focus, lens) { return focus[lens] || def; },
-  input,
-  lenses
-); };
+var __pathOr = function (def, lenses, input) { return reduce$3(function (focus, lens) { return focus[lens] || def; }, input, lenses); };
 var pathOr = curry(__pathOr);
+var __pathSatisfies = function (equiv, pathTo, input) { return pipe(
+    path(pathTo),
+    equiv,
+    Boolean
+  )(input); };
+var pathSatisfies = curry(__pathSatisfies);
+var __propSatisfies = function (equiv, propTo, input) { return pipe(
+    prop(propTo),
+    equiv,
+    Boolean
+  )(input); };
+var propSatisfies = curry(__propSatisfies);
 var path = pathOr(null);
 var __propOr = function (def, property, input) { return pathOr(def, [property], input); };
 var propOr = curry(__propOr);
 var prop = propOr(null);
-var __pathIs = function (is, lenses, input) { return pipe(
-  path(lenses),
-  is,
-  Boolean
-)(input); };
-var pathIs = curry(__pathIs);
-var __pathEq = function (equiv, lenses, input) { return pathIs(
-  equals(equiv),
-  lenses,
-  input
-); };
-var pathEq = curry(
-  __pathEq
-);
-var __propIs = function (equiv, property, input) { return pipe(
-  prop([property]),
-  equiv,
-  Boolean
-)(input); };
+var __pathEq = function (lenses, equiv, input) { return pathSatisfies(equals(equiv), lenses, input); };
+var pathEq = curry(__pathEq);
+var __propIs = function (type, property, input) { return pipe(
+    prop(property),
+    function (val) { return (val != null && val.constructor === type) || val instanceof type; },
+    Boolean
+  )(input); };
 var propIs = curry(__propIs);
-var __propEq = function (equiv, property, input) { return pathIs(
-  equals(equiv),
-  [property],
-  input
-); };
-var propEq = curry(
-  __propEq
-);
+var __propEq = function (property, equiv, input) { return pathSatisfies(equals(equiv), [property], input); };
+var propEq = curry(__propEq);
 
 var random = function (x) {
 	if ( x === void 0 ) x = 1;
@@ -1470,26 +1423,18 @@ var take = curry(function (encase, o) {
   if (o && o[0] && o.length) {
     var found = floor(o.length);
     var selection = o[found];
-    return (
-      !encase ?
-        selection :
-        [selection]
-    )
+    return !encase ? selection : [selection]
   }
   var ks = keys$1(o);
   var index = floor(ks.length);
   var key = ks[index];
   var value = o[key];
-  return (
-    !encase ?
-      value :
-      ( obj = {}, obj[key] = value, obj )
-  )
+  if (encase) { return ( obj = {}, obj[key] = value, obj ) }
+  return value
 });
 var pick = take(false);
 var grab = take(true);
-var allot = curry(
-  function (howMany, ofThing) { return iterate(howMany, function () { return grab(ofThing); }); }
+var allot = curry(function (howMany, ofThing) { return iterate(howMany, function () { return pick(ofThing); }); }
 );
 
 var t = /*#__PURE__*/Object.freeze({
@@ -1500,8 +1445,7 @@ var t = /*#__PURE__*/Object.freeze({
 });
 
 var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
-var wordSource = curry(
-  function (source, howLong) { return pipe(
+var wordSource = curry(function (source, howLong) { return pipe(
     allot(howLong),
     join("")
   )(source); }
@@ -1591,13 +1535,14 @@ var multiply$1 = curry$1(__multiply);
 var pairwise$1 = curry$1(__pairwise);
 var pairwiseObject$1 = curry$1(__pairwiseObject);
 var pathEq$1 = curry$1(__pathEq);
-var pathIs$1 = curry$1(__pathIs);
 var pathOr$1 = curry$1(__pathOr);
+var pathSatisfies$1 = curry$1(__pathSatisfies);
 var path$1 = pathOr$1(null);
 var pow$1 = curry$1(__pow);
 var propEq$1 = curry$1(__propEq);
 var propIs$1 = curry$1(__propIs);
 var propOr$1 = curry$1(__propOr);
+var propSatisfies$1 = curry$1(__propSatisfies);
 var prop$1 = propOr$1(null);
 var range$1 = curry$1(__range);
 var reject$1 = curry$1(__reject);
@@ -1620,49 +1565,26 @@ var reduce$4 = curry$1(function __reduce(fn, initial, functor) {
 });
 var mapTuples$1 = pairwiseObject$1(map$4);
 var mapTuple$1 = mapTuples$1;
-var __mapKeys$1 = function (fn, o) { return mapTuples$1(
-  function (ref) {
-    var k = ref[0];
-    var v = ref[1];
-    return ([fn(k), v]);
-  },
-  o
-); };
+var __mapKeys$1 = function (fn, o) { return mapTuples$1(function (ref) {
+  var k = ref[0];
+  var v = ref[1];
+  return [fn(k), v];
+  }, o); };
 var mapKeys$1 = curry$1(__mapKeys$1);
 var flip = function (fn) { return curry$1(function __flip(a, b) {
-  return fn(b, a)
-}); };
+    return fn(b, a)
+  }); };
 flip.toString = function () { return "🙃 🍛 (?)"; };
 var alterLastIndex$1 = alterIndex$1(-1);
 var alterFirstIndex$1 = alterIndex$1(0);
 var invert$1 = invert;
-var not$1 = function (fn) { return pipe$1(
-  fn,
-  invert$1
-); };
-not$1.toString = function () { return "❗️(?)"; };
-var not1$1 = curry$1(function (fn, a) { return pipe$1(
-  fn(a),
-  invert$1
-); });
-not1$1.toString = function () { return "❗️1(?,?)"; };
-var not2$1 = curry$1(function (fn, a, b) { return pipe$1(
-  fn(a, b),
-  invert$1
-); });
-not2$1.toString = function () { return "❗️2(?,?,?)"; };
-var not3$1 = curry$1(function (fn, a, b, c) { return pipe$1(
-  fn(a, b, c),
-  invert$1
-); });
-not3$1.toString = function () { return "❗️3(?,?,?,?)"; };
+var not$1 = not;
 var propLength = prop$1("length");
-var objectLength = pipe$1(Object.keys, propLength);
-var length = function (x) { return (
-  typeof x === "object" ?
-    objectLength(x) :
-    propLength(x)
-); };
+var objectLength = pipe$1(
+  Object.keys,
+  propLength
+);
+var length = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
 length.toString = function () { return "length(?)"; };
 var which = curry$1(function __which(compare, fn, o) {
   var arecomp = flip(compare);
@@ -1681,4 +1603,4 @@ var some$1 = which(some);
 every.toString = function () { return "every"; };
 var every$1 = which(every);
 
-export { round$1 as round, random$1 as random, curry$1 as curry, pipe$1 as pipe, compose$$1 as compose, isDistinctObject$1 as isDistinctObject, isPOJO$1 as isPOJO, toPairs$1 as toPairs, fromPairs$1 as fromPairs, isNil$1 as isNil, trim$1 as trim, charAt$1 as charAt, codePointAt$1 as codePointAt, concat$1 as concat, fold, fork, join$1 as join, match$1 as match, repeat$1 as repeat, search$1 as search, split$1 as split, padEnd$1 as padEnd, padStart$1 as padStart, replace$1 as replace, substr$1 as substr, isTypeof$1 as isTypeof, isBoolean$1 as isBoolean, isNumber$1 as isNumber, isFunction$1 as isFunction, isString$1 as isString, isObject$1 as isObject, add$1 as add, alterIndex$1 as alterIndex, ap$1 as ap, choice$1 as choice, difference$1 as difference, divide$1 as divide, endsWith$1 as endsWith, equal$1 as equal, equals$1 as equals, indexOf$1 as indexOf, iterate$1 as iterate, lastIndexOf$1 as lastIndexOf, map$4 as map, merge$1 as merge, multiply$1 as multiply, pairwise$1 as pairwise, pairwiseObject$1 as pairwiseObject, pathEq$1 as pathEq, pathIs$1 as pathIs, pathOr$1 as pathOr, path$1 as path, pow$1 as pow, propEq$1 as propEq, propIs$1 as propIs, propOr$1 as propOr, prop$1 as prop, range$1 as range, reject$1 as reject, relativeIndex$1 as relativeIndex, sort$1 as sort, startsWith$1 as startsWith, subtract$1 as subtract, symmetricDifference$1 as symmetricDifference, ternary$1 as ternary, triplet$1 as triplet, chain, flatMap, filter$4 as filter, reduce$4 as reduce, mapTuples$1 as mapTuples, mapTuple$1 as mapTuple, mapKeys$1 as mapKeys, flip, alterLastIndex$1 as alterLastIndex, alterFirstIndex$1 as alterFirstIndex, invert$1 as invert, not$1 as not, not1$1 as not1, not2$1 as not2, not3$1 as not3, length, which, some$1 as some, every$1 as every, keys, assign, freeze, entries, isArray, debug_11 as $, debug_12 as PLACEHOLDER, debug_8 as curryify, debug_4 as curryObjectK, debug_5 as curryObjectN, debug_6 as curryObjectKN, debug_9 as remap, debug_10 as remapArray, debug_13 as K, debug_14 as I };
+export { round$1 as round, random$1 as random, curry$1 as curry, pipe$1 as pipe, compose$$1 as compose, isDistinctObject$1 as isDistinctObject, isPOJO$1 as isPOJO, toPairs$1 as toPairs, fromPairs$1 as fromPairs, isNil$1 as isNil, trim$1 as trim, charAt$1 as charAt, codePointAt$1 as codePointAt, concat$1 as concat, fold, fork, join$1 as join, match$1 as match, repeat$1 as repeat, search$1 as search, split$1 as split, padEnd$1 as padEnd, padStart$1 as padStart, replace$1 as replace, substr$1 as substr, isTypeof$1 as isTypeof, isBoolean$1 as isBoolean, isNumber$1 as isNumber, isFunction$1 as isFunction, isString$1 as isString, isObject$1 as isObject, add$1 as add, alterIndex$1 as alterIndex, ap$1 as ap, choice$1 as choice, difference$1 as difference, divide$1 as divide, endsWith$1 as endsWith, equal$1 as equal, equals$1 as equals, indexOf$1 as indexOf, iterate$1 as iterate, lastIndexOf$1 as lastIndexOf, map$4 as map, merge$1 as merge, multiply$1 as multiply, pairwise$1 as pairwise, pairwiseObject$1 as pairwiseObject, pathEq$1 as pathEq, pathOr$1 as pathOr, pathSatisfies$1 as pathSatisfies, path$1 as path, pow$1 as pow, propEq$1 as propEq, propIs$1 as propIs, propOr$1 as propOr, propSatisfies$1 as propSatisfies, prop$1 as prop, range$1 as range, reject$1 as reject, relativeIndex$1 as relativeIndex, sort$1 as sort, startsWith$1 as startsWith, subtract$1 as subtract, symmetricDifference$1 as symmetricDifference, ternary$1 as ternary, triplet$1 as triplet, chain, flatMap, filter$4 as filter, reduce$4 as reduce, mapTuples$1 as mapTuples, mapTuple$1 as mapTuple, mapKeys$1 as mapKeys, flip, alterLastIndex$1 as alterLastIndex, alterFirstIndex$1 as alterFirstIndex, invert$1 as invert, not$1 as not, length, which, some$1 as some, every$1 as every, keys, assign, freeze, entries, isArray, debug_11 as $, debug_12 as PLACEHOLDER, debug_8 as curryify, debug_4 as curryObjectK, debug_5 as curryObjectN, debug_6 as curryObjectKN, debug_9 as remap, debug_10 as remapArray, debug_13 as K, debug_14 as I };

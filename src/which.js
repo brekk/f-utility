@@ -1,10 +1,10 @@
-import fastSome from 'fast.js/array/some'
-import fastEvery from 'fast.js/array/every'
-import {pipe, curry} from 'katsu-curry'
-import {flip} from './flip'
-import {triplet} from './triplet'
+import fastSome from "fast.js/array/some"
+import fastEvery from "fast.js/array/every"
+import { pipe, curry } from "katsu-curry"
+import { flip } from "./flip"
+import { triplet } from "./triplet"
 
-const {keys} = Object
+const { keys } = Object
 
 export const __which = (compare, fn, o) => {
   // allows us to pass functions to compare first
@@ -14,7 +14,7 @@ export const __which = (compare, fn, o) => {
     arecomp(fn),
     pipe(
       keys,
-      arecomp((key) => fn(o[key], key))
+      arecomp(key => fn(o[key], key))
     ),
     o
   )

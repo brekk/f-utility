@@ -1,13 +1,13 @@
 /* global test, jasmine */
-import execa from 'execa'
-import {t} from 'jest-t-assert'
+import execa from "execa"
+import { t } from "jest-t-assert"
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 20e3 // eslint-disable-line fp/no-mutation
 global.Promise = require.requireActual(`bluebird`) // eslint-disable-line fp/no-mutation
 
 // 0  1  2    3     4     5
 // // => name took: speed milliseconds.
-const getSpeed = (x) => {
+const getSpeed = x => {
   const parts = x.split(` `)
   const speed = parseFloat(parts[4])
   return [parts[2], speed]
@@ -15,17 +15,18 @@ const getSpeed = (x) => {
 // const oldSpeed = getSpeed(oldTime)
 // const newSpeed = getSpeed(newTime)
 const cwd = process.cwd()
-const {log: _log} = console
+const { log: _log } = console
 const log = _log.bind(console)
 
-test.skip(`f-utility/map wants to be faster than ramda/map`, (done) => {
+test.skip(`f-utility/map wants to be faster than ramda/map`, done => {
   t.plan(13)
   return new global.Promise((resolve, reject) => {
     setImmediate(() => {
-      execa.shell(
-        `${cwd}/node_modules/.bin/babel-node ${cwd}/src/map-performance.fixture.js`
-      ).then(
-        (output) => {
+      execa
+        .shell(
+          `${cwd}/node_modules/.bin/babel-node ${cwd}/src/map-performance.fixture.js`
+        )
+        .then(output => {
           log(output.stdout)
           const lines = output.stdout.split(`\n`)
           const speedArr = lines.map(getSpeed)
@@ -33,7 +34,7 @@ test.skip(`f-utility/map wants to be faster than ramda/map`, (done) => {
           speedArr.forEach(([k, v]) => {
             speeds[k] = v
           })
-          const {fastjs, entrust, futility, ramda, ramdaFastJS} = speeds
+          const { fastjs, entrust, futility, ramda, ramdaFastJS } = speeds
           // fast is fast
           t.truthy(fastjs < entrust)
           t.truthy(fastjs < futility)
@@ -56,12 +57,10 @@ test.skip(`f-utility/map wants to be faster than ramda/map`, (done) => {
           t.truthy(Math.abs(ramda - futility) < 1500)
           done()
           resolve(output.stdout)
-        }
-      ).catch(
-        (e) => {
+        })
+        .catch(e => {
           reject(e)
-        }
-      )
+        })
     })
   })
 })

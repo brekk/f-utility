@@ -1,6 +1,6 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import {range} from './range'
+import { t } from "jest-t-assert"
+import { range } from "./range"
 
 test(`range should do positive numbers`, () => {
   t.deepEqual(range(0, 5), [0, 1, 2, 3, 4])

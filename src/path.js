@@ -1,6 +1,6 @@
-import {pipe, curry} from 'katsu-curry'
-import {reduce} from './reduce'
-import {equals} from './math'
+import { pipe, curry } from "katsu-curry"
+import { reduce } from "./reduce"
+import { equals } from "./math"
 
 /**
  * Grab a nested value from an object or return a default
@@ -14,12 +14,41 @@ import {equals} from './math'
  * pathOr(`default`, [`a`, `b`, `c`], {a: {b: {c: `actual`}}}) // `actual`
  * pathOr(`default`, [`a`, `b`, `c`], {x: {y: {z: `actual`}}}) // `default`
  */
-export const __pathOr = (def, lenses, input) => reduce(
-  (focus, lens) => focus[lens] || def,
-  input,
-  lenses
-)
+export const __pathOr = (def, lenses, input) =>
+  reduce((focus, lens) => focus[lens] || def, input, lenses)
 export const pathOr = curry(__pathOr)
+
+/**
+ * Grab a property from an object and compare it with a given function
+ * @method pathSatisfies
+ * @param {function} equiv - a test function
+ * @param {string} pathTo - a nested property
+ * @param {any} input - an object to grab things from
+ * @returns {boolean} a truthy value
+ */
+export const __pathSatisfies = (equiv, pathTo, input) =>
+  pipe(
+    path(pathTo),
+    equiv,
+    Boolean
+  )(input)
+export const pathSatisfies = curry(__pathSatisfies)
+
+/**
+ * Grab a property from an object and compare it with a given function
+ * @method propSatisfies
+ * @param {function} equiv - a test function
+ * @param {string} propTo - a nested property
+ * @param {any} input - an object to grab things from
+ * @returns {boolean} a truthy value
+ */
+export const __propSatisfies = (equiv, propTo, input) =>
+  pipe(
+    prop(propTo),
+    equiv,
+    Boolean
+  )(input)
+export const propSatisfies = curry(__propSatisfies)
 
 /**
  * Grab a nested value from an object
@@ -63,65 +92,33 @@ export const propOr = curry(__propOr)
 export const prop = propOr(null)
 
 /**
- * Grab a property from an object and compare it with a given function
- * @method pathIs
- * @param {function} is - an assertion function
- * @param {strings[]} lenses - a property
- * @param {any} input - an object to grab things from
- * @returns {boolean} a truthy value
- */
-export const __pathIs = (is, lenses, input) => pipe(
-  path(lenses),
-  is,
-  Boolean
-)(input)
-export const pathIs = curry(__pathIs)
-
-/**
  * Grab a property from an object and compare it with a given value via ===
  * @method pathEq
- * @param {any} equiv - equivalent value
  * @param {strings[]} lenses - a property
- * @param {any} input - an object to grab things from
- * @returns {boolean} a truthy value
- */
-export const __pathEq = (equiv, lenses, input) => pathIs(
-  equals(equiv),
-  lenses,
-  input
-)
-export const pathEq = curry(
-  __pathEq
-)
-
-/**
- * Grab a property from an object and compare it with a given function
- * @method propEq
  * @param {any} equiv - equivalent value
- * @param {string} property - a property
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const __propIs = (equiv, property, input) => pipe(
-  prop([property]),
-  equiv,
-  Boolean
-)(input)
+export const __pathEq = (lenses, equiv, input) =>
+  pathSatisfies(equals(equiv), lenses, input)
+export const pathEq = curry(__pathEq)
+
+export const __propIs = (type, property, input) =>
+  pipe(
+    prop(property),
+    val => (val != null && val.constructor === type) || val instanceof type,
+    Boolean
+  )(input)
 export const propIs = curry(__propIs)
 
 /**
  * Grab a property from an object and compare it with a given value via ===
  * @method propEq
- * @param {any} equiv - equivalent value
  * @param {string} property - a property
+ * @param {any} equiv - equivalent value
  * @param {any} input - an object to grab things from
  * @returns {boolean} a truthy value
  */
-export const __propEq = (equiv, property, input) => pathIs(
-  equals(equiv),
-  [property],
-  input
-)
-export const propEq = curry(
-  __propEq
-)
+export const __propEq = (property, equiv, input) =>
+  pathSatisfies(equals(equiv), [property], input)
+export const propEq = curry(__propEq)

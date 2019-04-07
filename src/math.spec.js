@@ -1,8 +1,27 @@
 /* global test */
-import {pipe} from 'katsu-curry'
-import {t} from 'jest-t-assert'
+import { pipe } from "katsu-curry"
+import { t } from "jest-t-assert"
 
-import {equals, add, subtract, divide, multiply, pow, round, gt, gte, lt, lte} from './math'
+import {
+  equals,
+  add,
+  subtract,
+  divide,
+  multiply,
+  pow,
+  round,
+  gt,
+  gte,
+  lt,
+  lte
+} from "./math"
+
+test(`subtract`, () => {
+  t.is(subtract(2, 5), -3)
+})
+test(`divide`, () => {
+  t.is(divide(2, 5), 0.4)
+})
 
 test(`math is like, mathy`, () => {
   const doNothing = pipe(
@@ -14,8 +33,8 @@ test(`math is like, mathy`, () => {
     pow(1),
     round
   )
-  t.is(doNothing(100), 100)
-  t.is(doNothing(-7), -7)
+  t.is(doNothing(100), 99)
+  t.is(doNothing(-7), 114)
 })
 
 test(`equals is a function`, () => {

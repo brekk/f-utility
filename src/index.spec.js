@@ -1,31 +1,37 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import * as FUTILITY from './index'
-console.log(`typeof F`, FUTILITY, typeof FUTILITY)
+import { t } from "jest-t-assert"
+import * as FUTILITY from "./index"
 
-export const harness = (F) => {
-  const zort = (x) => x.sort() // eslint-disable-line
+export const harness = F => {
+  const zort = x => x.sort() // eslint-disable-line
 
-  const {symmetricDifference, reject, isFunction, pipe, keys, map} = F
+  const { symmetricDifference, reject, isFunction, pipe, keys, map } = F
 
-  const keySort = pipe(keys, zort)
-  const nonFunctions = (x) => pipe(
+  const keySort = pipe(
     keys,
-    map((k) => {
-      const v = x[k]
-      if (!isFunction(v)) {
-        return k
-      }
-    }),
-    reject((y) => !y),
     zort
-  )(x)
+  )
+  const nonFunctions = x =>
+    pipe(
+      keys,
+      map(k => {
+        const v = x[k]
+        if (!isFunction(v)) {
+          return k
+        }
+      }),
+      reject(y => !y),
+      zort
+    )(x)
 
   test(`index`, () => {
     t.is(typeof F, `object`)
     const futilityKeys = keySort(F)
     const expected = zort([
       `$`,
+      `I`,
+      `K`,
+      `PLACEHOLDER`,
       `add`,
       `alterFirstIndex`,
       `alterIndex`,
@@ -38,11 +44,11 @@ export const harness = (F) => {
       `codePointAt`,
       `compose`,
       `concat`,
+      `curryObjectKN`,
+      `curryObjectK`,
+      `curryObjectN`,
       `curry`,
       `curryify`,
-      `curryObjectK`,
-      `curryObjectKN`,
-      `curryObjectN`,
       `difference`,
       `divide`,
       `endsWith`,
@@ -57,58 +63,53 @@ export const harness = (F) => {
       `fork`,
       `freeze`,
       `fromPairs`,
-      `I`,
       `indexOf`,
       `invert`,
       `isArray`,
       `isBoolean`,
       `isDistinctObject`,
-      `isPOJO`,
       `isFunction`,
       `isNil`,
       `isNumber`,
       `isObject`,
+      `isPOJO`,
       `isString`,
       `isTypeof`,
       `iterate`,
       `join`,
-      `K`,
       `keys`,
       `lastIndexOf`,
       `length`,
-      `map`,
       `mapKeys`,
       `mapTuple`,
       `mapTuples`,
+      `map`,
       `match`,
       `merge`,
       `multiply`,
       `not`,
-      `not1`,
-      `not2`,
-      `not3`,
       `padEnd`,
       `padStart`,
-      `pairwise`,
       `pairwiseObject`,
-      `path`,
+      `pairwise`,
       `pathEq`,
-      `pathIs`,
       `pathOr`,
+      `pathSatisfies`,
+      `path`,
       `pipe`,
-      `PLACEHOLDER`,
       `pow`,
-      `prop`,
       `propEq`,
       `propIs`,
       `propOr`,
+      `propSatisfies`,
+      `prop`,
       `random`,
       `range`,
       `reduce`,
       `reject`,
       `relativeIndex`,
-      `remap`,
       `remapArray`,
+      `remap`,
       `repeat`,
       `replace`,
       `round`,
@@ -129,10 +130,7 @@ export const harness = (F) => {
     ])
     const sillyPowerAssert = symmetricDifference(expected, futilityKeys)
     t.deepEqual(sillyPowerAssert, [])
-    t.deepEqual(
-      futilityKeys,
-      expected
-    )
+    t.deepEqual(futilityKeys, expected)
     const nonMethods = nonFunctions(F)
     t.deepEqual(nonMethods, [`version`])
   })

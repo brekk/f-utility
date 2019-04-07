@@ -1,6 +1,6 @@
 /* global test */
-import {t} from 'jest-t-assert'
-import {ternary} from './ternary'
+import { t } from "jest-t-assert"
+import { ternary } from "./ternary"
 
 test(`ternary`, () => {
   const [a, b] = `ab`.split(``)

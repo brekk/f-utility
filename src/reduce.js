@@ -1,5 +1,5 @@
-import fastReduce from 'fast.js/reduce'
-import {delegateFastTertiary} from './delegate-fast'
+import fastReduce from "fast.js/reduce"
+import { delegateFastTertiary } from "./delegate-fast"
 
 /**
  * functor.reduce but curried and fast
