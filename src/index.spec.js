@@ -80,6 +80,8 @@ export const harness = F => {
       `keys`,
       `lastIndexOf`,
       `length`,
+      `anyLength`,
+      `objectLength`,
       `mapKeys`,
       `mapTuple`,
       `mapTuples`,

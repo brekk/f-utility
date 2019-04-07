@@ -690,6 +690,7 @@
     propLength$1
   );
   var length$1 = propLength$1;
+  var anyLength = function (x) { return typeof x === "object" ? objectLength$1(x) : propLength$1(x); };
 
   var some = function fastSome (subject, fn, thisContext) {
     var length = subject.length,
@@ -849,6 +850,8 @@
   exports.isDistinctObject = isDistinctObject;
   exports.isPOJO = isPOJO;
   exports.length = length$1;
+  exports.objectLength = objectLength$1;
+  exports.anyLength = anyLength;
   exports.which = which;
   exports.some = some$2;
   exports.every = every$1;

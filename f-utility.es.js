@@ -471,6 +471,7 @@ var objectLength = pipe(
   propLength
 );
 var length = propLength;
+var anyLength = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
 
 var some = function fastSome (subject, fn, thisContext) {
   var length = subject.length,
@@ -534,4 +535,4 @@ function compose() {
 var version$1 = version;
 var random$1 = Object.assign(random, f, t, w, s);
 
-export { compose, version$1 as version, random$1 as random, concat, join, sort, symmetricDifference, difference, alterIndex, alterFirstIndex, alterLastIndex, relativeIndex, choice, filter$3 as filter, flip, fork, iterate, map$3 as map, ap, fold, chain, flatMap, equals, equal, round, add, subtract, divide, multiply, pow, invert, not, reduce$3 as reduce, reject, charAt, codePointAt, endsWith, indexOf, lastIndexOf, match, padEnd, padStart, repeat, replace, search, split, startsWith, substr, trim, ternary, triplet, range, keys$1 as keys, assign, freeze, merge, entries, fromPairs, toPairs, mapTuple, mapTuples, mapKeys, pairwise, pairwiseObject, path, pathOr, pathEq, pathSatisfies, prop, propOr, propIs, propEq, propSatisfies, isTypeof, isBoolean, isNumber, isFunction, isString, isObject, isNil, isArray$1 as isArray, isDistinctObject, isPOJO, length, which, some$1 as some, every$1 as every };
+export { compose, version$1 as version, random$1 as random, concat, join, sort, symmetricDifference, difference, alterIndex, alterFirstIndex, alterLastIndex, relativeIndex, choice, filter$3 as filter, flip, fork, iterate, map$3 as map, ap, fold, chain, flatMap, equals, equal, round, add, subtract, divide, multiply, pow, invert, not, reduce$3 as reduce, reject, charAt, codePointAt, endsWith, indexOf, lastIndexOf, match, padEnd, padStart, repeat, replace, search, split, startsWith, substr, trim, ternary, triplet, range, keys$1 as keys, assign, freeze, merge, entries, fromPairs, toPairs, mapTuple, mapTuples, mapKeys, pairwise, pairwiseObject, path, pathOr, pathEq, pathSatisfies, prop, propOr, propIs, propEq, propSatisfies, isTypeof, isBoolean, isNumber, isFunction, isString, isObject, isNil, isArray$1 as isArray, isDistinctObject, isPOJO, length, objectLength, anyLength, which, some$1 as some, every$1 as every };

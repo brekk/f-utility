@@ -1587,12 +1587,13 @@ var alterFirstIndex$1 = alterIndex$1(0);
 var invert$1 = invert;
 var not$1 = not;
 var propLength = prop$1("length");
+var length = propLength;
 var objectLength = pipe$$1(
   Object.keys,
   propLength
 );
-var length = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
-length.toString = function () { return "length(?)"; };
+var anyLength = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
+anyLength.toString = function () { return "length(?)"; };
 var which = curry$$1(function __which(compare, fn, o) {
   var arecomp = flip(compare);
   return triplet$1(
@@ -1690,6 +1691,8 @@ exports.alterFirstIndex = alterFirstIndex$1;
 exports.invert = invert$1;
 exports.not = not$1;
 exports.length = length;
+exports.objectLength = objectLength;
+exports.anyLength = anyLength;
 exports.which = which;
 exports.some = some$1;
 exports.every = every$1;
