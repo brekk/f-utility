@@ -47,9 +47,13 @@ import {
   propIs,
   propEq,
   isNil,
-  length
+  length,
+  random
 } from "./index"
 const oneToTen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const add2 = x => x + 2
+const times10 = x => x * 10
+const aNumber = () => random.floorMin(1, 100)
 
 test(`equals`, () => {
   const five = equals(5)
@@ -57,7 +61,6 @@ test(`equals`, () => {
   expect(five(10)).toEqual(five2(10))
   expect(five(5)).toEqual(five2(5))
 })
-const aNumber = () => Math.round(Math.random() * 100)
 test(`subtract`, () => {
   const a = aNumber()
   const b = aNumber()
@@ -149,8 +152,6 @@ test(`repeat`, () => {
   expect(repeat({}, 5)).toEqual(R.repeat({}, 5))
 })
 
-const add2 = x => x + 2
-const times10 = x => x * 10
 test(`pipe`, () => {
   expect(
     pipe(
