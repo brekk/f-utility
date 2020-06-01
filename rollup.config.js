@@ -1,33 +1,29 @@
-import resolve from 'rollup-plugin-node-resolve'
-import cjs from 'rollup-plugin-commonjs'
-import alias from 'rollup-plugin-alias'
-import buble from 'rollup-plugin-buble'
-import cleanup from 'rollup-plugin-cleanup'
-import json from 'rollup-plugin-json'
-import progress from 'rollup-plugin-progress'
-import pkg from './package.json'
-import path from 'path'
+import resolve from "rollup-plugin-node-resolve"
+import cjs from "rollup-plugin-commonjs"
+import alias from "rollup-plugin-alias"
+import buble from "rollup-plugin-buble"
+import cleanup from "rollup-plugin-cleanup"
+import json from "rollup-plugin-json"
+/* import progress from "rollup-plugin-progress" */
+import pkg from "./package.json"
+import path from "path"
 
-const local = (x) => path.resolve(__dirname, x)
-const external = (
-  pkg && pkg.dependencies
-  ? Object.keys(pkg.dependencies)
-  : []
-)
+const local = x => path.resolve(__dirname, x)
+const external = pkg && pkg.dependencies ? Object.keys(pkg.dependencies) : []
 
 const plugins = [
-  progress(),
+  /* progress(), */
   json(),
-  cjs({extensions: [`.js`], include: `node_modules/**`}),
+  cjs({ extensions: [`.js`], include: `node_modules/**` }),
   buble(),
-  resolve({jsnext: true, main: true}),
-  cleanup({comments: `none`}),
+  resolve({ jsnext: true, main: true }),
+  cleanup({ comments: `none` })
   // babili()
 ]
 
 export default [
   {
-    input: `src/index.js`,
+    input: `src/f-utility.js`,
     output: {
       name: `FUTILITY`,
       file: pkg.browser,
@@ -36,14 +32,15 @@ export default [
     plugins
   },
   {
-    input: `src/index.js`,
+    input: `src/f-utility.js`,
     external,
     output: [
       { file: pkg.main, format: `cjs` },
       { file: pkg.module, format: `es` }
     ],
     plugins
-  },
+  }
+  /*
   {
     input: `src/debug.js`,
     output: {
@@ -62,4 +59,5 @@ export default [
     ],
     plugins
   }
+  */
 ]

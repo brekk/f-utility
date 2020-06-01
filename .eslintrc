@@ -1,14 +1,15 @@
 {
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "parserOptions": {
     "ecmaVersion": 7,
     "sourceType": "module"
   },
   "rules": {
-  "prettier/prettier": ["error", {"semi": false, "trailingComma": "none"}],
+    "prettier/prettier": ["error", {"semi": false, "trailingComma": "none"}],
     "no-extra-semi": 2,
     "valid-jsdoc": "error",
     "no-var": 2,
@@ -16,10 +17,9 @@
     "arrow-parens": [2, "as-needed"],
     "consistent-this": 0,
     "func-names": [2],
+    "func-style": ["error", "declaration", {"allowArrowFunctions": false}],
     "generator-star-spacing": [2, "after"],
-    "indent": [2, 2],
     "jsx-quotes": [1, "prefer-double"],
-    "quotes": [2, "backtick"],
     "max-len": [1, 100, 2],
     "new-cap": [2, {"capIsNew": false}],
     "no-trailing-spaces": [2, { "skipBlankLines": true }],
