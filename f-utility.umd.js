@@ -31,7 +31,49 @@
     }
   }
 
+  function ofType(exp) {
+    return function compareTypeofs(xx) {
+      return typeof xx === exp
+    }
+  }
+
+  var ref = [
+    "string",
+    "number",
+    "undefined",
+    "function",
+    "boolean",
+    "symbol",
+    "object"
+  ].map(ofType);
+  var _isString = ref[0];
+  var _isNumber = ref[1];
+  var _isUndefined = ref[2];
+  var _isFunction = ref[3];
+  var _isBoolean = ref[4];
+  var _isSymbol = ref[5];
+  var _isRawObject = ref[6];
+  var isString = _isString;
+  var isNumber = _isNumber;
+  var isUndefined = _isUndefined;
+  var isFunction = _isFunction;
+  var isBoolean = _isBoolean;
+  var isSymbol = _isSymbol;
+  var isRawObject = _isRawObject;
   var isArray = Array.isArray;
+
+  var ARCHETYPES = Object.freeze({
+    string: "String∋string",
+    number: "Number∋number",
+    boolean: "Boolean∋boolean",
+    function: "Function∋function",
+    object: "Object∋object",
+    undefined: "Global∋nil"
+  });
+
+  var U = C.UNION_TYPE_DELIMITER;
+
+  var isArray$1 = Array.isArray;
   var keys = Object.keys;
   var freeze = Object.freeze;
   function mash(a, b) {
@@ -40,105 +82,61 @@
   function jam(a, b) {
     return mash(b, a)
   }
-  function last(x) {
-    return x[x.length - 1]
-  }
-  function smooth(x) {
-    return x.filter(function (y) { return y; })
-  }
-  function identity(y) {
-    return y
-  }
-  function box(bx) {
-    return [bx]
-  }
-  function pipe() {
-    var fns = Array.from(arguments);
-    var nonFuncs = fns.filter(function (z) { return typeof z !== "function"; });
-    if (nonFuncs.length !== 0)
-      { throw new TypeError(
-        ("Expected to receive functions as arguments, but received: " + (nonFuncs
-          .map(function (a, i) { return ("[" + i + "] = " + a); })
-          .join(" ; ")))
-      ) }
-    return function composed(x) {
-      return fns.reduce(function outputToInput(prev, fn) {
-        return fn(prev)
-      }, x)
-    }
-  }
-  function toPairs(oo) {
-    return keys(oo).map(function enpair(ky) {
-      return [ky, oo[ky]]
-    })
-  }
-  function fromPairs(ps) {
-    return ps.reduce(function pairing(oo, ref) {
-      var obj;
-      var ke = ref[0];
-      var va = ref[1];
-      return mash(oo, ( obj = {}, obj[ke] = va, obj ))
-    }, {})
-  }
-  function toUpper(z) {
-    return z.toUpperCase()
-  }
-  function toLower(z) {
-    return z.toLowerCase()
-  }
-  function not(yy) {
-    return !yy
-  }
-  function constant(k) {
-    return function forever() {
-      return k
-    }
-  }
-  function length(xx) {
-    return xx && typeof xx === "object" ? Object.keys(xx).length : xx.length
-  }
-  function complement(fn) {
-    return function subtleComplement() {
-      var args = Array.from(arguments);
-      return !fn.apply(null, args)
-    }
-  }
-  function T() {
-    return true
-  }
-  function F() {
-    return true
+
+  function symbolToString(s) {
+    return "" + s.toString()
   }
 
-  var BASICS = /*#__PURE__*/Object.freeze({
-    isArray: isArray,
-    keys: keys,
-    freeze: freeze,
-    mash: mash,
-    jam: jam,
-    last: last,
-    smooth: smooth,
-    identity: identity,
-    box: box,
-    pipe: pipe,
-    toPairs: toPairs,
-    fromPairs: fromPairs,
-    toUpper: toUpper,
-    toLower: toLower,
-    not: not,
-    constant: constant,
-    length: length,
-    complement: complement,
-    T: T,
-    F: F
-  });
-
-  var UNMATCHED = C.UNMATCHED;
   function defaultMemoizer(raw) {
     var x = raw[0];
     var y = raw[1];
-    return x.concat(y).join("-")
+    return x
+      .concat(y)
+      .map(function (z) { return (typeof z === "symbol" ? symbolToString(z) : z); })
+      .join("-")
   }
+
+  var memo = memoizeWith(function identity(x) {
+    return x
+  });
+  var union = memo(function unionType(x) {
+    return x.split("|")
+  });
+
+  var __of__$1 = C.__of__;
+  var memo$1 = memoizeWith(function (x) { return x; });
+  var constructor = memo$1(function (x) {
+    var oof = x.indexOf(__of__$1);
+    return oof > -1 ? x.slice(0, oof) : x
+  });
+
+  var __of__$2 = C.__of__;
+  var memo$2 = memoizeWith(function (x) { return x; });
+  var typeChild = memo$2(function (x) {
+    var oof = x.indexOf(__of__$2);
+    return oof > -1 ? x.slice(oof + 1) : x
+  });
+
+  var memo$3 = memoizeWith(function (x) { return x; });
+  var compareTypes = memo$3(function _compareTypes(exp, given) {
+    var ref = [exp, given].map(union);
+    var expectedUnion = ref[0];
+    var givenUnion = ref[1];
+    var comparisons = expectedUnion.map(function (typeA) { return givenUnion.map(
+        function (typeB) { return typeA === "any" ||
+          typeB === "any" ||
+          typeA === typeB ||
+          constructor(typeA) === constructor(typeB) ||
+          typeChild(typeA) === typeChild(typeB); }
+      ); }
+    );
+    var unionComparisons = comparisons.reduce(
+      function (all, nextCase) { return all.concat(nextCase.filter(function (z) { return !z; }).length === 0); },
+      []
+    );
+    return unionComparisons.filter(function (z) { return !z; }).length === 0
+  });
+
   function makeTypechecker(typecheck, useMemoizer) {
     if ( useMemoizer === void 0 ) useMemoizer = defaultMemoizer;
     return memoizeWith(useMemoizer)(function rawMakeTypeChecker(expected, given) {
@@ -153,7 +151,7 @@
         .slice(0, given.length)
         .map(function typeCheckParam(ex, ii) {
           var actual = typecheck(given[ii]);
-          var success = compareType(actual, ex);
+          var success = compareTypes(actual, ex);
           var outcome = {
             idx: ii,
             raw: Object.freeze({ value: given[ii] }),
@@ -185,106 +183,41 @@
       return results
     })
   }
-  var memo = memoizeWith(function (x) { return x; });
-  var __of__ = "∋";
-  function typeSystem(z) {
-    var constructor = (z && z.constructor && z.constructor.name) || "Global";
-    var type = typeof z;
-    return ("" + constructor + __of__ + type)
-  }
-  var PREFERRED_TYPE = Object.freeze({
-    string: "String∋string",
-    number: "Number∋number",
-    boolean: "Boolean∋boolean",
-    function: "Function∋function",
-    object: "Object∋object"
-  });
-  function preferredType(tt) {
-    if (tt.indexOf("|") > -1) { return tt.split("|").map(function (ttt) { return preferredType(ttt); }) }
-    return PREFERRED_TYPE[tt] || tt
-  }
-  var typeParent = memo(function (x) {
-    var oof = x.indexOf(__of__);
-    return oof > -1 ? x.slice(0, oof) : x
-  });
-  var typeChild = memo(function (x) {
-    var oof = x.indexOf(__of__);
-    return oof > -1 ? x.slice(oof + 1) : x
-  });
-  var separateUnionTypes = memo(function (x) { return x.split("|"); });
-  var compareType = memo(function _compareType(exp, given) {
-    var ref = [exp, given].map(separateUnionTypes);
-    var expectedUnion = ref[0];
-    var givenUnion = ref[1];
-    var comparisons = expectedUnion.map(function (typeA) { return givenUnion.map(function (typeB) {
-        if (typeA === "any" || typeB === "any") {
-          return true
-        }
-        if (typeA === typeB) {
-          return true
-        }
-        if (typeParent(typeA) === typeParent(typeB)) {
-          return true
-        }
-        if (typeChild(typeA) === typeChild(typeB)) {
-          return true
-        }
-        return false
-      }); }
-    );
-    var allCases = comparisons.reduce(
-      function (all, nextCase) { return all.concat(nextCase); },
-      []
-    );
-    var noneFailed = allCases.filter(function (z) { return !z; }).length === 0;
-    console.log("given", expectedUnion, "vs.", givenUnion, ">>", noneFailed);
-    return noneFailed
-  });
-  function checkTypesValid(checker) {
-    return function checkTypesValidGivenPattern(signature, given) {
-      return !makeTypechecker(checker)(signature, given).failures
-    }
-  }
-  function checkReturnTypeValid(checker) {
-    return function checkReturnTypeValidGiven(given) {
-      return function checkReturnTypeValidGivenAB(a, b) {
-        var aType = checker(given);
-        var bType = makeTypechecker(checker)(a, b).returnType;
-        return compareType(aType, bType)
-      }
-    }
-  }
-  function isType(exp) {
-    return function compareTypeofs(xx) {
-      return typeof xx === exp
-    }
-  }
-  var ref = [
-    "string",
-    "number",
-    "undefined",
-    "function",
-    "boolean",
-    "symbol",
-    "object"
-  ].map(isType);
-  var _isString = ref[0];
-  var _isNumber = ref[1];
-  var _isUndefined = ref[2];
-  var _isFunction = ref[3];
-  var _isBoolean = ref[4];
-  var _isSymbol = ref[5];
-  var _isRawObject = ref[6];
-  var isString = _isString;
-  var isNumber = _isNumber;
-  var isUndefined = _isUndefined;
-  var isFunction = _isFunction;
-  var isBoolean = _isBoolean;
-  var isSymbol = _isSymbol;
-  var isRawObject = _isRawObject;
-  var isArray$1 = Array.isArray;
+
+  var UNMATCHED = C.UNMATCHED;
   function isUnmatched(z) {
     return z === UNMATCHED
+  }
+
+  var __of__$3 = C.__of__;
+  function system(z) {
+    var constructor = (z && z.constructor && z.constructor.name) || "Global";
+    var type = typeof z;
+    if (!z) {
+      if (type === "undefined" || type === "object") {
+        type = "nil";
+      } else {
+        constructor = "Boolean";
+      }
+    }
+    return ("" + constructor + __of__$3 + type)
+  }
+
+  function checkParamsWith(checker) {
+    return function checkParams(signature, given) {
+      var checked = makeTypechecker(checker)(signature, given);
+      return !checked.failures
+    }
+  }
+
+  function checkReturnWith(checker) {
+    return function checkReturn(outcome) {
+      return function checkReturnTypeValidoutcomeAB(a, b) {
+        var actual = checker(outcome);
+        var expected = makeTypechecker(checker)(a, b).returnType;
+        return compareTypes(expected, actual)
+      }
+    }
   }
 
   function makeAliases(F) {
@@ -299,6 +232,142 @@
       mergeRight: F.jam
     })
   }
+
+  function box(bx) {
+    return [bx]
+  }
+  var FUNCTION = box;
+
+  function complement(fn) {
+    return function subtleComplement() {
+      var args = Array.from(arguments);
+      return !fn.apply(null, args)
+    }
+  }
+  var FUNCTION$1 = complement;
+
+  function constant(k) {
+    return function forever() {
+      return k
+    }
+  }
+  var FUNCTION$2 = constant;
+
+  function F() {
+    return true
+  }
+  var FUNCTION$3 = F;
+
+  function first(x) {
+    return x[0]
+  }
+  var FUNCTION$4 = first;
+
+  function fromPairs(ps) {
+    return ps.reduce(function pairing(oo, ref) {
+      var obj;
+      var ke = ref[0];
+      var va = ref[1];
+      return Object.assign({}, oo, ( obj = {}, obj[ke] = va, obj ))
+    }, {})
+  }
+  var FUNCTION$5 = fromPairs;
+
+  function identity(y) {
+    return y
+  }
+  var FUNCTION$6 = identity;
+
+  function last(x) {
+    return x[x.length - 1]
+  }
+  var FUNCTION$7 = last;
+
+  function length(xx) {
+    return xx && typeof xx === "object" ? Object.keys(xx).length : xx.length
+  }
+  var FUNCTION$8 = length;
+
+  function not(yy) {
+    return !yy
+  }
+  var FUNCTION$9 = not;
+
+  function pipe() {
+    var fns = Array.from(arguments);
+    var nonFuncs = fns.filter(function (z) { return typeof z !== "function"; });
+    if (nonFuncs.length !== 0)
+      { throw new TypeError(
+        ("Expected to receive functions as arguments, but received: " + (nonFuncs
+          .map(function (a, i) { return ("[" + i + "] = " + a); })
+          .join(" ; ")))
+      ) }
+    return function piped(x) {
+      var len = fns.length;
+      var idx = 0;
+      var current = x;
+      while (idx < len) {
+      var fn = fns[idx];
+      current = fn(current);
+  idx += 1;
+      }
+      return current
+    }
+  }
+  var FUNCTION$a = pipe;
+
+  function smooth(x) {
+    return x.filter(function identity(y) {
+      return y
+    })
+  }
+  var FUNCTION$b = smooth;
+
+  function T() {
+    return true
+  }
+  var FUNCTION$c = T;
+
+  function toLower(z) {
+    return z.toLowerCase()
+  }
+  var FUNCTION$d = toLower;
+
+  function toPairs(oo) {
+    return Object.keys(oo).map(function enpair(ky) {
+      return [ky, oo[ky]]
+    })
+  }
+  var FUNCTION$e = toPairs;
+
+  function toUpper(z) {
+    return z.toUpperCase()
+  }
+  var FUNCTION$f = toUpper;
+
+  var CORE = freeze({
+    freeze: freeze,
+    mash: mash,
+    jam: jam,
+    isArray: isArray$1,
+    keys: keys,
+    box: FUNCTION,
+    complement: FUNCTION$1,
+    identity: FUNCTION$6,
+    constant: FUNCTION$2,
+    F: FUNCTION$3,
+    first: FUNCTION$4,
+    fromPairs: FUNCTION$5,
+    last: FUNCTION$7,
+    length: FUNCTION$8,
+    not: FUNCTION$9,
+    pipe: FUNCTION$a,
+    smooth: FUNCTION$b,
+    T: FUNCTION$c,
+    toLower: FUNCTION$d,
+    toPairs: FUNCTION$e,
+    toUpper: FUNCTION$f
+  });
 
   function makeSideEffectsFromEnv(curry) {
     var sideEffect = curry(function _sideEffect(fn, a) {
@@ -352,7 +421,7 @@
   }
   function category(test) {
     return function testedCategory(ref) {
-      var ts = ref.ts; if ( ts === void 0 ) ts = typeSystem;
+      var ts = ref.ts; if ( ts === void 0 ) ts = system;
       var givenLength = ref.n;
       var hm = ref.hm;
       var check = ref.check;
@@ -384,7 +453,7 @@
             var result = fn.apply(this, args);
             if (check) {
               var tChecker = makeTypechecker(ts)(hm, args);
-              var isValid = checkTypesValid(ts)(hm, args);
+              var isValid = checkParamsWith(ts)(hm, args);
               if (!isValid) {
                 var rawParams = tChecker.rawParams;
                 var params = tChecker.params;
@@ -396,11 +465,13 @@
                   )
                 )
               }
-              var returnTypeValid = checkReturnTypeValid(ts)(result)(hm, args);
+              var returnTypeValid = checkReturnWith(ts)(result)(hm, args);
               if (!returnTypeValid) {
                 var returnType = tChecker.returnType;
                 throw new TypeError(
-                  ("Expected " + (fn.name) + " to return " + returnType + " but got " + result + ".")
+                  ("Expected " + (fn.name) + " to return " + (preferredType(
+                    returnType
+                  )) + " but got " + (system(result)) + ".")
                 )
               }
             }
@@ -468,12 +539,12 @@
   function add(b, a) {
     return a + b
   }
-  var FUNCTION = add;
+  var FUNCTION$g = add;
 
   function and(a, b) {
     return a && b
   }
-  var FUNCTION$1 = and;
+  var FUNCTION$h = and;
 
   function any(fn, xx) {
     var idx = 0;
@@ -485,7 +556,7 @@
     }
     return found
   }
-  var FUNCTION$2 = any;
+  var FUNCTION$i = any;
 
   function ap(a, b) {
     if (isFunction(a) && isFunction(b)) {
@@ -493,22 +564,22 @@
         return a(x, b(x))
       }
     }
-    if (!isArray$1(a) || !isArray$1(b))
+    if (!isArray(a) || !isArray(b))
       { throw new TypeError(
-        "Expected to receive an array of functions and an array of values"
+        "Expected to receive an array of functions and an array of values."
       ) }
-    if (a.filter(isFunction).length !== a.length)
+    if (!a.length || a.filter(isFunction).length !== a.length)
       { throw new TypeError("Expected to receive an array of functions to apply.") }
     return a.reduce(function apReduce(out, fn) {
       return out.concat(b.map(fn))
     }, [])
   }
-  var FUNCTION$3 = ap;
+  var FUNCTION$j = ap;
 
   function concat(a, b) {
     return a.concat(b)
   }
-  var FUNCTION$4 = concat;
+  var FUNCTION$k = concat;
 
   function cond(conditions, input) {
     var idx = 0;
@@ -527,35 +598,37 @@
     }
     return match
   }
-  var FUNCTION$5 = cond;
+  var FUNCTION$l = cond;
 
   function divide(b, a) {
     return a / b
   }
-  var FUNCTION$6 = divide;
+  var FUNCTION$m = divide;
 
   function equals(a, b) {
     return a === b
   }
-  var FUNCTION$7 = equals;
+  var FUNCTION$n = equals;
 
   function makeIterable(xx) {
-    if (!xx)
-      { throw new TypeError(
+    var isArray = Array.isArray(xx);
+    var isObject = xx && typeof xx === "object";
+    if (!isArray && !isObject) {
+      throw new TypeError(
         "Expected iterable initial value to be either an array or an object."
-      ) }
+      )
+    }
     var len = length(xx);
-    var isArray$$1 = Array.isArray(xx);
-    var init = isArray$$1 ? Array(len) : {};
-    var xKeys = !isArray$$1 && Object.keys(xx);
+    var init = isArray ? Array(len) : {};
+    var xKeys = !isArray && Object.keys(xx);
     return {
       length: len,
       iterate: function iterate(idx) {
-        var key = isArray$$1 ? idx : xKeys[idx];
+        var key = isArray ? idx : xKeys[idx];
         return { key: key, value: xx[key] }
       },
       init: init,
-      isArray: isArray$$1
+      isArray: isArray
     }
   }
 
@@ -580,7 +653,7 @@
     }
     return result
   }
-  var FUNCTION$8 = filter;
+  var FUNCTION$o = filter;
 
   function forEach(fn, xx) {
     var idx = 0;
@@ -593,32 +666,32 @@
       idx += 1;
     }
   }
-  var FUNCTION$9 = forEach;
+  var FUNCTION$p = forEach;
 
   function greaterThan(b, a) {
     return a > b
   }
-  var FUNCTION$a = greaterThan;
+  var FUNCTION$q = greaterThan;
 
   function greaterThanOrEqualTo(b, a) {
     return a >= b
   }
-  var FUNCTION$b = greaterThanOrEqualTo;
+  var FUNCTION$r = greaterThanOrEqualTo;
 
   function join(del, xx) {
     return xx.join(del)
   }
-  var FUNCTION$c = join;
+  var FUNCTION$s = join;
 
   function lessThan(b, a) {
     return a < b
   }
-  var FUNCTION$d = lessThan;
+  var FUNCTION$t = lessThan;
 
   function lessThanOrEqualTo(b, a) {
     return a <= b
   }
-  var FUNCTION$e = lessThanOrEqualTo;
+  var FUNCTION$u = lessThanOrEqualTo;
 
   function map(fn, xx) {
     var idx = 0;
@@ -635,22 +708,22 @@
     }
     return result
   }
-  var FUNCTION$f = map;
+  var FUNCTION$v = map;
 
   function multiply(b, a) {
     return a * b
   }
-  var FUNCTION$g = multiply;
+  var FUNCTION$w = multiply;
 
   function nth(ix, xx) {
     return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
   }
-  var FUNCTION$h = nth;
+  var FUNCTION$x = nth;
 
   function or(a, b) {
     return a || b
   }
-  var FUNCTION$i = or;
+  var FUNCTION$y = or;
 
   function range(aa, zz) {
     var out = [];
@@ -660,48 +733,48 @@
     }
     return out
   }
-  var FUNCTION$j = range;
+  var FUNCTION$z = range;
 
   function split(del, xx) {
     return xx.split(del)
   }
-  var FUNCTION$k = split;
+  var FUNCTION$A = split;
 
   function subtract(b, a) {
     return a - b
   }
-  var FUNCTION$l = subtract;
+  var FUNCTION$B = subtract;
 
   function toJSON(indent, x) {
     return JSON.stringify(x, null, indent)
   }
-  var FUNCTION$m = toJSON;
+  var FUNCTION$C = toJSON;
 
   function extendBinary(F) {
-    var binaryExtension = FUNCTION$f(function (fn) { return F.curryN(2, fn); }, {
-      and: FUNCTION$1,
-      equals: FUNCTION$7,
-      or: FUNCTION$i,
-      subtract: FUNCTION$l,
-      add: FUNCTION,
-      divide: FUNCTION$6,
-      any: FUNCTION$2,
-      filter: FUNCTION$8,
-      forEach: FUNCTION$9,
-      multiply: FUNCTION$g,
-      ap: FUNCTION$3,
-      concat: FUNCTION$4,
-      map: FUNCTION$f,
-      cond: FUNCTION$5,
-      gt: FUNCTION$a,
-      gte: FUNCTION$b,
-      lt: FUNCTION$d,
-      lte: FUNCTION$e,
-      nth: FUNCTION$h,
-      range: FUNCTION$j,
-      join: FUNCTION$c,
-      split: FUNCTION$k,
-      toJSON: FUNCTION$m
+    var binaryExtension = FUNCTION$v(function (fn) { return F.curryN(2, fn); }, {
+      and: FUNCTION$h,
+      equals: FUNCTION$n,
+      or: FUNCTION$y,
+      subtract: FUNCTION$B,
+      add: FUNCTION$g,
+      divide: FUNCTION$m,
+      any: FUNCTION$i,
+      filter: FUNCTION$o,
+      forEach: FUNCTION$p,
+      multiply: FUNCTION$w,
+      ap: FUNCTION$j,
+      concat: FUNCTION$k,
+      map: FUNCTION$v,
+      cond: FUNCTION$l,
+      gt: FUNCTION$q,
+      gte: FUNCTION$r,
+      lt: FUNCTION$t,
+      lte: FUNCTION$u,
+      nth: FUNCTION$x,
+      range: FUNCTION$z,
+      join: FUNCTION$s,
+      split: FUNCTION$A,
+      toJSON: FUNCTION$C
     });
     return F.mash(F, binaryExtension)
   }
@@ -709,12 +782,12 @@
   function both(aPred, bPred, x) {
     return aPred(x) && bPred(x)
   }
-  var FUNCTION$n = both;
+  var FUNCTION$D = both;
 
   function either(aPred, bPred, x) {
     return aPred(x) || bPred(x)
   }
-  var FUNCTION$o = either;
+  var FUNCTION$E = either;
 
   function reduce(fn, initial, xx) {
     var loop = makeIterable(xx);
@@ -729,34 +802,34 @@
     }
     return result
   }
-  var FUNCTION$p = reduce;
+  var FUNCTION$F = reduce;
 
   function slice(aa, bb, xx) {
     return xx.slice(aa, bb)
   }
-  var FUNCTION$q = slice;
+  var FUNCTION$G = slice;
 
   function extendTernary(F) {
     var ternaryExtension = F.map(F.curryN(3), {
-      both: FUNCTION$n,
-      either: FUNCTION$o,
-      reduce: FUNCTION$p,
-      slice: FUNCTION$q
+      both: FUNCTION$D,
+      either: FUNCTION$E,
+      reduce: FUNCTION$F,
+      slice: FUNCTION$G
     });
     return F.mash(F, ternaryExtension)
   }
 
   function custom(config) {
-    return pipe(
+    return CORE.pipe(
       fabricate,
       function basicDefinitions(ref) {
         var def = ref.def;
         var curry = ref.curry;
         var curryN = ref.curryN;
         var sideEffectMethods = makeSideEffectsFromEnv(curry);
-        return mash(
-          mash(
-            BASICS,
+        return CORE.mash(
+          CORE.mash(
+            CORE,
             sideEffectMethods
           ),
           {
@@ -774,33 +847,33 @@
             isBoolean: isBoolean,
             isSymbol: isSymbol,
             isRawObject: isRawObject,
-            isArray: isArray$1
+            isArray: isArray
           }
         )
       },
       extendUnary,
       extendBinary,
       extendTernary,
-      function derived(F$$1) {
-        var G = F$$1.mash(F$$1, {
-          j2: F$$1.toJSON(2),
-          reject: F$$1.curry(function reject(fn, xx) {
-            return F$$1.filter(F$$1.complement(fn), xx)
+      function derived(F) {
+        var G = F.mash(F, {
+          j2: F.toJSON(2),
+          reject: F.curry(function reject(fn, xx) {
+            return F.filter(F.complement(fn), xx)
           }),
-          isObject: F$$1.both(F$$1.isRawObject, Boolean),
-          uniq: F$$1.reduce(function unique(agg, xx) {
+          isObject: F.both(F.isRawObject, Boolean),
+          uniq: F.reduce(function unique(agg, xx) {
             return !agg.includes(xx) ? agg.concat(xx) : agg
           }, []),
-          anyPass: F$$1.curry(function anyPass(preds, xx) {
-            return F$$1.pipe(
-              F$$1.map(F$$1.flip(F$$1.any)(xx)),
-              F$$1.smooth,
-              F$$1.length,
-              F$$1.gt(0)
+          anyPass: F.curry(function anyPass(preds, xx) {
+            return F.pipe(
+              F.map(F.flip(F.any)(xx)),
+              F.smooth,
+              F.length,
+              F.gt(0)
             )(preds)
           }),
-          pathOr: F$$1.curry(function pathOr(dd, ks, src) {
-            return F$$1.reduce(
+          pathOr: F.curry(function pathOr(dd, ks, src) {
+            return F.reduce(
               function walkPathOr(agg, st) {
                 return (agg && agg[st]) || dd
               },
@@ -812,14 +885,14 @@
         function deriveFromAccessor(acc) {
           return {
             unsafe: acc(null),
-            eq: F$$1.curry(function equivalence(ks, ex, src) {
-              return F$$1.pipe(
+            eq: F.curry(function equivalence(ks, ex, src) {
+              return F.pipe(
                 acc(C.UNMATCHED, ks),
-                F$$1.equals(ex)
+                F.equals(ex)
               )(src)
             }),
-            satisfies: F$$1.curry(function satisfaction(fn, ks, src) {
-              return F$$1.pipe(
+            satisfies: F.curry(function satisfaction(fn, ks, src) {
+              return F.pipe(
                 acc(C.UNMATCHED, ks),
                 fn,
                 Boolean
@@ -831,14 +904,14 @@
         var path = ref.unsafe;
         var pathEq = ref.eq;
         var pathSatisfies = ref.satisfies;
-        var propOr = F$$1.curry(function _propOr(dd, key, source) {
-          return F$$1.pathOr(dd, [key], source)
+        var propOr = F.curry(function _propOr(dd, key, source) {
+          return G.pathOr(dd, [key], source)
         });
         var ref$1 = deriveFromAccessor(propOr);
         var prop = ref$1.unsafe;
         var propEq = ref$1.eq;
         var propSatisfies = ref$1.satisfies;
-        return F$$1.mash(G, {
+        return F.mash(G, {
           path: path,
           pathEq: pathEq,
           pathSatisfies: pathSatisfies,
@@ -848,11 +921,12 @@
           propSatisfies: propSatisfies
         })
       },
-      makeAliases
+      makeAliases,
+      CORE.freeze
     )(config)
   }
   var DEFAULT_CONFIG = {
-    ts: typeSystem,
+    ts: system,
     check: process.env.NODE_ENV !== "production"
   };
   var FUTILITY = custom(DEFAULT_CONFIG);

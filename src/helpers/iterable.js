@@ -1,12 +1,14 @@
-import { length } from "../basic"
+import { length } from "../core/length"
 
 export function makeIterable(xx) {
-  if (!xx)
+  const isArray = Array.isArray(xx)
+  const isObject = xx && typeof xx === "object"
+  if (!isArray && !isObject) {
     throw new TypeError(
       "Expected iterable initial value to be either an array or an object."
     )
+  }
   const len = length(xx)
-  const isArray = Array.isArray(xx)
   const init = isArray ? Array(len) : {}
   const xKeys = !isArray && Object.keys(xx)
   return {

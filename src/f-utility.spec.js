@@ -1,7 +1,7 @@
 import OLD from "f-utility"
 import R from "ramda"
-import { makeTypechecker } from "./type-system"
-import { toString } from "./define"
+import makeTypechecker from "./types/makeChecker"
+import { toString } from "./define-function"
 import F from "./f-utility"
 
 /* eslint-disable func-style */
@@ -219,6 +219,12 @@ test("pipe", () => {
     c
   )
   expect(comp(100)).toEqual(-67)
+  expect(() => F.pipe(false)).toThrow()
+})
+test("first / last", () => {
+  const cool = "abcdefghijk".split("")
+  expect(F.first(cool)).toEqual("a")
+  expect(F.last(cool)).toEqual("k")
 })
 test("keys", () => {
   expect(F.keys({ a: 1, b: 2, c: 3 })).toEqual("abc".split(""))
@@ -255,8 +261,17 @@ test("map - object", () => {
 test("filter / reject", () => {
   const isEven = x => x % 2 === 0
   const input = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const inputO = { a: 0, b: 303, gross: "cool" }
   expect(F.filter(isEven, input)).toEqual([0, 2, 4, 6, 8])
+  expect(F.filter(isEven, inputO)).toEqual({ a: 0 })
   expect(F.reject(isEven, input)).toEqual([1, 3, 5, 7, 9])
+  expect(F.reject(isEven, inputO)).toEqual({ b: 303, gross: "cool" })
+})
+test("forEach", done => {
+  let jam = []
+  F.forEach(() => jam.push("cool"), [0, 1, 2])
+  expect(jam).toEqual("cool.cool.cool".split("."))
+  done()
 })
 test("reduce", () => {
   expect(
@@ -325,7 +340,7 @@ test("def - union type", () => {
     return "so def"
   })
   expect(() => defIsCool(1, { cool: true }, false, /regex/, "yes")).toThrow(
-    "Given defIsSoSoDef( Number∋number, Object∋object, Boolean∋boolean, RegExp∋object ) but expected defIsSoSoDef( Number, any, Number∋number,String∋string, RegExp )"
+    "Given defIsSoSoDef( Number∋number, Object∋object, Boolean∋boolean, RegExp∋object ) but expected defIsSoSoDef( Number, any, number|string, RegExp )"
   )
 })
 test("slice", () => {
@@ -401,6 +416,13 @@ test("ap", () => {
   const aa = [F.toUpper, F.toLower, z => F.toUpper(z[0]) + z.substr(1)]
   const bb = ["cool", "shit"]
   expect(F.ap(aa, bb)).toEqual(["COOL", "SHIT", "cool", "shit", "Cool", "Shit"])
+  expect(() => F.ap(aa, undefined)).toThrow(
+    "Expected to receive an array of functions and an array of values."
+  )
+  expect(() => F.ap([], bb)).toThrow(
+    "Expected to receive an array of functions to apply."
+  )
+  expect(F.ap(F.concat, F.toLower)("cOOl")).toEqual("cOOlcool")
 })
 
 test("addIndex", () => {
@@ -424,6 +446,63 @@ test("cond", () => {
 test("T / F", () => {
   expect(F.T()).toBeTruthy()
   expect(F.F()).toBeTruthy()
+})
+
+test("lt", () => {
+  expect(F.lt(200, 100)).toBeTruthy()
+  expect(F.lt(100, 200)).toBeFalsy()
+  expect(F.lt(200, 200)).toBeFalsy()
+})
+test("gt", () => {
+  expect(F.gt(100, 200)).toBeTruthy()
+  expect(F.gt(200, 100)).toBeFalsy()
+  expect(F.gt(200, 200)).toBeFalsy()
+})
+test("lte", () => {
+  expect(F.lte(100, 100)).toBeTruthy()
+  expect(F.lte(100, 200)).toBeFalsy()
+  expect(F.lte(200, 100)).toBeTruthy()
+})
+test("gte", () => {
+  expect(F.gte(100, 100)).toBeTruthy()
+  expect(F.gte(200, 100)).toBeFalsy()
+  expect(F.gte(100, 200)).toBeTruthy()
+})
+
+test("join", () => {
+  expect(F.join(".", "abcdefgh".split(""))).toEqual("a.b.c.d.e.f.g.h")
+})
+
+test("split", () => {
+  expect(F.split(".", "a.b.c.d.e.f.g.h")).toEqual("abcdefgh".split(""))
+})
+test("toJSON", () => {
+  const input = { whatever: { cool: "yes" } }
+  expect(F.toJSON(4)(input)).toEqual(JSON.stringify(input, null, 4))
+})
+
+test("pathOr / path / pathEq / pathSatisfies", () => {
+  expect(F.pathOr("?", "abc".split(""), { a: { b: { c: 100 } } })).toEqual(100)
+  expect(F.pathOr("?", "abc".split(""), { aa: { b: { c: 100 } } })).toEqual("?")
+  expect(F.path("abc".split(""), { a: { b: { c: 100 } } })).toEqual(100)
+  expect(F.pathEq("abc".split(""), 100, { a: { b: { c: 100 } } })).toBeTruthy()
+  expect(F.pathEq("abc".split(""), 100, { aa: { b: { c: 500 } } })).toBeFalsy()
+  expect(
+    F.pathSatisfies(x => x % 2 === 0, "abc".split(""), { a: { b: { c: 500 } } })
+  ).toBeTruthy()
+  expect(
+    F.pathSatisfies(x => x % 2 === 0, "abc".split(""), { a: { b: { c: 123 } } })
+  ).toBeFalsy()
+})
+
+test("propOr / prop / propEq / propSatisfies", () => {
+  expect(F.propOr("?", "abc", { abc: 100 })).toEqual(100)
+  expect(F.propOr("?", "abc", { ac: 100 })).toEqual("?")
+  expect(F.prop("abc", { abc: 100 })).toEqual(100)
+  expect(F.propEq("abc", 100, { abc: 100 })).toBeTruthy()
+  expect(F.propEq("abc", 100, { boring: true })).toBeFalsy()
+  expect(F.propSatisfies(x => x % 2 === 0, "abc", { abc: 500 })).toBeTruthy()
+  expect(F.propSatisfies(x => x % 2 === 0, "abc", { abc: 123 })).toBeFalsy()
 })
 
 /* eslint-enable func-style */

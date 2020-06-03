@@ -1,4 +1,4 @@
-import { length } from "../basic"
+import { length } from "../core/length"
 function any(fn, xx) {
   let idx = 0
   let found = false

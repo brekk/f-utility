@@ -1,10 +1,10 @@
 import {
   makeTypechecker,
-  checkTypesValid,
-  checkReturnTypeValid,
+  checkParamsWith,
+  checkReturnWith,
   typeSystem,
-  preferredType
-} from "./type-system"
+  archetype
+} from "./types"
 
 export function makeParamMerger(taste) {
   return function compareParams(aa, bb) {
@@ -79,7 +79,7 @@ export function category(test) {
           const result = fn.apply(this, args)
           if (check) {
             const tChecker = makeTypechecker(ts)(hm, args)
-            const isValid = checkTypesValid(ts)(hm, args)
+            const isValid = checkParamsWith(ts)(hm, args)
 
             if (!isValid) {
               const { rawParams, params } = tChecker
@@ -87,17 +87,17 @@ export function category(test) {
                 hmError(
                   fn.name,
                   rawParams.map(z => z.actual),
-                  params.map(preferredType)
+                  params.map(archetype)
                 )
               )
             }
-            const returnTypeValid = checkReturnTypeValid(ts)(result)(hm, args)
+            const returnTypeValid = checkReturnWith(ts)(result)(hm, args)
 
             if (!returnTypeValid) {
               /* tChecker = makeTypechecker(ts)(hm, args) */
               const { returnType } = tChecker
               throw new TypeError(
-                `Expected ${fn.name} to return ${preferredType(
+                `Expected ${fn.name} to return ${archetype(
                   returnType
                 )} but got ${typeSystem(result)}.`
               )

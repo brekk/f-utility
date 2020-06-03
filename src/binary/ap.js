@@ -1,4 +1,4 @@
-import { isFunction, isArray } from "../type-system"
+import { isFunction, isArray } from "../types"
 
 function ap(a, b) {
   // S combinator
@@ -9,9 +9,9 @@ function ap(a, b) {
   }
   if (!isArray(a) || !isArray(b))
     throw new TypeError(
-      "Expected to receive an array of functions and an array of values"
+      "Expected to receive an array of functions and an array of values."
     )
-  if (a.filter(isFunction).length !== a.length)
+  if (!a.length || a.filter(isFunction).length !== a.length)
     throw new TypeError("Expected to receive an array of functions to apply.")
   return a.reduce(function apReduce(out, fn) {
     return out.concat(b.map(fn))

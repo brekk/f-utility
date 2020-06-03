@@ -1,6 +1,6 @@
 import C from "./constants"
-import { jam } from "./basic"
-import { category } from "./define"
+import { jam } from "./core/native"
+import { category } from "./define-function"
 const { $ } = C
 
 export function DEFAULT_PLACEHOLDER_TEST(x) {

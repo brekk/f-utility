@@ -11,9 +11,9 @@ import {
   isSymbol,
   isRawObject,
   isArray
-} from "./type-system"
+} from "./types"
 import addAliases from "./aliases"
-import * as BASICS from "./basic"
+import CORE from "./core"
 import addSideEffectMethods from "./side-effect"
 import { fabricate } from "./root"
 import extendUnary from "./unary"
@@ -21,13 +21,13 @@ import extendBinary from "./binary"
 import extendTernary from "./ternary"
 
 function custom(config) {
-  return BASICS.pipe(
+  return CORE.pipe(
     fabricate,
     function basicDefinitions({ def, curry, curryN }) {
       const sideEffectMethods = addSideEffectMethods(curry)
-      return BASICS.mash(
-        BASICS.mash(
-          BASICS,
+      return CORE.mash(
+        CORE.mash(
+          CORE,
 
           sideEffectMethods
         ),
@@ -111,7 +111,7 @@ function custom(config) {
         satisfies: pathSatisfies
       } = deriveFromAccessor(G.pathOr)
       const propOr = F.curry(function _propOr(dd, key, source) {
-        return F.pathOr(dd, [key], source)
+        return G.pathOr(dd, [key], source)
       })
       const {
         unsafe: prop,
@@ -128,7 +128,8 @@ function custom(config) {
         propSatisfies
       })
     },
-    addAliases
+    addAliases,
+    CORE.freeze
   )(config)
 }
 const DEFAULT_CONFIG = {
@@ -136,5 +137,4 @@ const DEFAULT_CONFIG = {
   check: process.env.NODE_ENV !== "production"
 }
 const FUTILITY = custom(DEFAULT_CONFIG)
-FUTILITY.custom = custom
-export default FUTILITY
+export default FUTILITY.mash(FUTILITY, { custom })
