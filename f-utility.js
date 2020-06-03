@@ -1,5 +1,7 @@
 'use strict';
 
+var __of__ = "∋";
+var UNION_TYPE_DELIMITER = '|';
 var C = Object.freeze({
   $: "@@FUTILITY::constant.magic",
   UNMATCHED: "@@FUTILITY::constant.unmatched",
@@ -10,7 +12,9 @@ var C = Object.freeze({
   r: "\r",
   q: "'",
   qq: '"',
-  s: "\\"
+  s: "\\",
+  __of__: __of__,
+  UNION_TYPE_DELIMITER: UNION_TYPE_DELIMITER
 });
 
 function memoizeWith(memoizer) {
@@ -64,10 +68,25 @@ var ARCHETYPES = Object.freeze({
   boolean: "Boolean∋boolean",
   function: "Function∋function",
   object: "Object∋object",
-  undefined: "Global∋nil"
+  undefined: "Global∋nil",
+  symbol: "Symbol∋symbol",
+  nil: "Global∋nil"
 });
 
 var U = C.UNION_TYPE_DELIMITER;
+var __of__$1 = C.__of__;
+function unionArchetype(recurse) {
+  return function arch(tt) {
+    if (tt && tt.indexOf && tt.indexOf(U) > -1 && recurse) {
+      return tt.split(U).map(function (z) { return unionArchetype(false)(z); })
+    }
+    var match = ARCHETYPES[tt];
+    if (match) { return match }
+    if (tt[0].toUpperCase() === tt[0]) { return ("" + tt + __of__$1 + "object") }
+    return tt
+  }
+}
+var archetype = unionArchetype(true);
 
 var isArray$1 = Array.isArray;
 var keys = Object.keys;
@@ -99,17 +118,17 @@ var union = memo(function unionType(x) {
   return x.split("|")
 });
 
-var __of__$1 = C.__of__;
+var __of__$2 = C.__of__;
 var memo$1 = memoizeWith(function (x) { return x; });
 var constructor = memo$1(function (x) {
-  var oof = x.indexOf(__of__$1);
+  var oof = x.indexOf(__of__$2);
   return oof > -1 ? x.slice(0, oof) : x
 });
 
-var __of__$2 = C.__of__;
+var __of__$3 = C.__of__;
 var memo$2 = memoizeWith(function (x) { return x; });
 var typeChild = memo$2(function (x) {
-  var oof = x.indexOf(__of__$2);
+  var oof = x.indexOf(__of__$3);
   return oof > -1 ? x.slice(oof + 1) : x
 });
 
@@ -185,7 +204,7 @@ function isUnmatched(z) {
   return z === UNMATCHED
 }
 
-var __of__$3 = C.__of__;
+var __of__$4 = C.__of__;
 function system(z) {
   var constructor = (z && z.constructor && z.constructor.name) || "Global";
   var type = typeof z;
@@ -196,7 +215,7 @@ function system(z) {
       constructor = "Boolean";
     }
   }
-  return ("" + constructor + __of__$3 + type)
+  return ("" + constructor + __of__$4 + type)
 }
 
 function checkParamsWith(checker) {
@@ -457,7 +476,7 @@ function category(test) {
                 hmError(
                   fn.name,
                   rawParams.map(function (z) { return z.actual; }),
-                  params.map(preferredType)
+                  params.map(archetype)
                 )
               )
             }
@@ -465,7 +484,7 @@ function category(test) {
             if (!returnTypeValid) {
               var returnType = tChecker.returnType;
               throw new TypeError(
-                ("Expected " + (fn.name) + " to return " + (preferredType(
+                ("Expected " + (fn.name) + " to return " + (archetype(
                   returnType
                 )) + " but got " + (system(result)) + ".")
               )
@@ -926,6 +945,6 @@ var DEFAULT_CONFIG = {
   check: process.env.NODE_ENV !== "production"
 };
 var FUTILITY = custom(DEFAULT_CONFIG);
-FUTILITY.custom = custom;
+var fUtility = FUTILITY.mash(FUTILITY, { custom: custom });
 
-module.exports = FUTILITY;
+module.exports = fUtility;
