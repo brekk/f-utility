@@ -743,6 +743,54 @@ function makeDifference(ref) {
 }
 var ARITY$i = 2;
 
+function makeIterable(xx) {
+  var isArray = Array.isArray(xx);
+  var isObject = xx && typeof xx === "object";
+  if (!isArray && !isObject) {
+    throw new TypeError(
+      "Expected iterable initial value to be either an array or an object."
+    )
+  }
+  var len = length(xx);
+  var init = isArray ? Array(len) : {};
+  var xKeys = !isArray && Object.keys(xx);
+  return {
+    length: len,
+    iterate: function iterate(idx) {
+      var key = isArray ? idx : xKeys[idx];
+      return { key: key, value: xx[key] }
+    },
+    init: init,
+    isArray: isArray
+  }
+}
+
+function makeSymmetricDifference(ref) {
+  var curryN = ref.curryN;
+  var difference = ref.difference;
+  return curryN(ARITY$j, function symmetricDifference(aa, bb) {
+    var aLoop = makeIterable(aa);
+    var bLoop = makeIterable(bb);
+    var notBoth = [];
+    var idxA = 0;
+    var idxB = 0;
+    while (idxA < aLoop.length) {
+      var ref = aLoop.iterate(idxA);
+      var value = ref.value;
+      if (!bb.includes(value)) { notBoth.push(value); }
+      idxA += 1;
+    }
+    while (idxB < bLoop.length) {
+      var ref$1 = bLoop.iterate(idxB);
+      var value$1 = ref$1.value;
+      if (!aa.includes(value$1)) { notBoth.push(value$1); }
+      idxB += 1;
+    }
+    return notBoth
+  })
+}
+var ARITY$j = 2;
+
 function makeFlip(ref) {
   var curryN = ref.curryN;
   return function flip(fn) {
@@ -824,7 +872,7 @@ function makePathOrDerivatives(ref) {
 function makePathOr(ref) {
   var curryN = ref.curryN;
   var reduce = ref.reduce;
-  return curryN(ARITY$m, function pathOr(dd, ks, src) {
+  return curryN(ARITY$n, function pathOr(dd, ks, src) {
     return reduce(
       function walkPathOr(agg, st) {
         return (agg && agg[st]) || dd
@@ -834,17 +882,17 @@ function makePathOr(ref) {
     )
   })
 }
-var ARITY$m = 3;
+var ARITY$n = 3;
 
 function makeReject(ref) {
   var curryN = ref.curryN;
   var filter = ref.filter;
   var complement = ref.complement;
-  return curryN(ARITY$n, function reject(fn, xx) {
+  return curryN(ARITY$o, function reject(fn, xx) {
     return filter(complement(fn), xx)
   })
 }
-var ARITY$n = 2;
+var ARITY$o = 2;
 
 function makeUniq(ref) {
   var reduce = ref.reduce;
@@ -869,6 +917,7 @@ var derivedFunctionsSortedByIncreasingDependencies = {
   uniq: makeUniq,
   isObject: makeIsObject,
   difference: makeDifference,
+  symmetricDifference: makeSymmetricDifference,
   anyPass: makeAnyPass,
   pathOr: makePathOr,
   pathOrDerivatives: makePathOrDerivatives
@@ -907,28 +956,6 @@ function any(fn, xx) {
   return found
 }
 var FUNCTION$i = any;
-
-function makeIterable(xx) {
-  var isArray = Array.isArray(xx);
-  var isObject = xx && typeof xx === "object";
-  if (!isArray && !isObject) {
-    throw new TypeError(
-      "Expected iterable initial value to be either an array or an object."
-    )
-  }
-  var len = length(xx);
-  var init = isArray ? Array(len) : {};
-  var xKeys = !isArray && Object.keys(xx);
-  return {
-    length: len,
-    iterate: function iterate(idx) {
-      var key = isArray ? idx : xKeys[idx];
-      return { key: key, value: xx[key] }
-    },
-    init: init,
-    isArray: isArray
-  }
-}
 
 function all(fn, xx) {
   var idx = 0;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`methods 1`] = `
+exports[` 1`] = `
 Array [
   "$",
   "C",
@@ -98,6 +98,7 @@ Array [
   "sort",
   "split",
   "subtract",
+  "symmetricDifference",
   "temper",
   "toJSON",
   "toLower",
@@ -110,7 +111,7 @@ Array [
 ]
 `;
 
-exports[`methods 2`] = `
+exports[`comparisons f-utility vs. ramda 1`] = `
 Array [
   "$",
   "C",
@@ -153,7 +154,7 @@ Array [
 ]
 `;
 
-exports[`methods 3`] = `
+exports[`comparisons ramda vs. f-utility 1`] = `
 Array [
   "adjust",
   "allPass",
@@ -300,7 +301,6 @@ Array [
   "splitWhen",
   "startsWith",
   "sum",
-  "symmetricDifference",
   "symmetricDifferenceWith",
   "tail",
   "take",
@@ -346,7 +346,7 @@ Array [
 ]
 `;
 
-exports[`methods 4`] = `
+exports[`comparisons v3 vs. v4 1`] = `
 Array [
   "curryify",
   "curryObjectK",
@@ -356,7 +356,6 @@ Array [
   "remapArray",
   "compose",
   "random",
-  "symmetricDifference",
   "alterIndex",
   "alterFirstIndex",
   "alterLastIndex",
@@ -403,7 +402,7 @@ Array [
 ]
 `;
 
-exports[`methods 5`] = `
+exports[`comparisons v4 vs. v3 1`] = `
 Array [
   "C",
   "F",

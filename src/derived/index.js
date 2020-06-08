@@ -1,6 +1,7 @@
 import __addIndex from "./addIndex"
 import __anyPass from "./anyPass"
 import __difference from "./difference"
+import __symmetricDifference from "./symmetricDifference"
 import __flip from "./flip"
 import __isObject from "./isObject"
 import __j2 from "./j2"
@@ -19,6 +20,7 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   uniq: __uniq, // curryN reduce
   isObject: __isObject, // curryN both isRawObject
   difference: __difference, // curryN complement filter includes
+  symmetricDifference: __symmetricDifference, // curryN difference
   anyPass: __anyPass, // curryN any flip gt length map smooth pipe
   pathOr: __pathOr, // curryN reduce
   pathOrDerivatives: __pathOrDerivatives // curryN equals is pathOr pipe

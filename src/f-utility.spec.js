@@ -5,25 +5,54 @@ import F from "./f-utility"
 const OLD = require("../old-f-utility")
 
 /* eslint-disable func-style */
-test("methods", () => {
+describe("comparisons", () => {
   const futilityMethods = F.keys(F)
   expect(
     futilityMethods.sort((a, b) => (a !== b ? (a > b ? 1 : -1) : 0))
   ).toMatchSnapshot()
-  const FUTILITY_VS_RAMDA = R.difference(futilityMethods, R.keys(R))
-  const RAMDA_VS_FUTILITY = R.difference(R.keys(R), futilityMethods)
-  expect(FUTILITY_VS_RAMDA).toMatchSnapshot()
-  expect(RAMDA_VS_FUTILITY).toMatchSnapshot()
-  const F4_VS_F3 = R.difference(futilityMethods, R.keys(OLD))
-  const F3_VS_F4 = R.difference(R.keys(OLD), futilityMethods)
-  console.log("OLD VS. NEW", F4_VS_F3, "AND", F3_VS_F4)
-  expect(F3_VS_F4).toMatchSnapshot()
-  expect(F4_VS_F3).toMatchSnapshot()
+  const FUTILITY_VS_RAMDA = F.difference(futilityMethods, R.keys(R))
+  const RAMDA_VS_FUTILITY = F.difference(R.keys(R), futilityMethods)
+  const F4_VS_F3 = F.difference(futilityMethods, R.keys(OLD))
+  const F3_VS_F4 = F.difference(R.keys(OLD), futilityMethods)
+  test("f-utility vs. ramda", () => {
+    expect(FUTILITY_VS_RAMDA).toMatchSnapshot()
+  })
+  test("ramda vs. f-utility", () => {
+    expect(RAMDA_VS_FUTILITY).toMatchSnapshot()
+  })
+  test("v3 vs. v4", () => {
+    expect(F3_VS_F4).toMatchSnapshot()
+  })
+  test("v4 vs. v3", () => {
+    expect(F4_VS_F3).toMatchSnapshot()
+  })
+  test("symmetricDifference", () => {
+    expect(F.symmetricDifference(F, R)).toEqual(R.symmetricDifference(F, R))
+    expect(F.symmetricDifference([1, 2, 3], [4, 5, 6])).toEqual([
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ])
+    expect(F.symmetricDifference([1, 2, 3, 4], [4, 5, 6])).toEqual([
+      1,
+      2,
+      3,
+      5,
+      6
+    ])
+    expect(F.symmetricDifference([], [1, 2, 3])).toEqual([1, 2, 3])
+    expect(F.symmetricDifference([1, 2, 3], [])).toEqual([1, 2, 3])
+    expect(F.symmetricDifference([1, 2, 3], [1, 2, 3])).toEqual([])
+    expect(F.symmetricDifference([1, 2, 3, 4, 5], [1, 2, 3])).toEqual([4, 5])
+  })
 })
 test("difference", () => {
   const one = "abcdefghi".split("")
   const two = "abcdefgijk".split("")
-  expect(F.difference(one, two)).toEqual(R.difference(one, two))
+  expect(F.difference(one, two)).toEqual(F.difference(one, two))
 })
 test("sort", () => {
   const items = [
