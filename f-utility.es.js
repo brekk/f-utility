@@ -174,7 +174,7 @@ var PKG = {
 };
 
 var __of__ = "∋";
-var UNION_TYPE_DELIMITER = '|';
+var UNION_TYPE_DELIMITER = "|";
 var C = Object.freeze({
   $: "@@FUTILITY::constant.magic",
   UNMATCHED: "@@FUTILITY::constant.unmatched",
