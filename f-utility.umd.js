@@ -771,19 +771,18 @@
 
   function makeSymmetricDifference(ref) {
     var curryN = ref.curryN;
-    var difference = ref.difference;
     return curryN(ARITY$j, function symmetricDifference(aa, bb) {
       var aLoop = makeIterable(aa);
       var bLoop = makeIterable(bb);
       var notBoth = [];
       var idxA = 0;
-      var idxB = 0;
       while (idxA < aLoop.length) {
         var ref = aLoop.iterate(idxA);
         var value = ref.value;
         if (!bb.includes(value)) { notBoth.push(value); }
         idxA += 1;
       }
+      var idxB = 0;
       while (idxB < bLoop.length) {
         var ref$1 = bLoop.iterate(idxB);
         var value$1 = ref$1.value;
