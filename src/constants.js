@@ -1,5 +1,5 @@
 export const __of__ = "∋"
-export const UNION_TYPE_DELIMITER = '|'
+export const UNION_TYPE_DELIMITER = "|"
 const C = Object.freeze({
   $: "@@FUTILITY::constant.magic",
   UNMATCHED: "@@FUTILITY::constant.unmatched",

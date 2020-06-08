@@ -39,6 +39,7 @@ export function toString(fn, args = []) {
 export function hmError(name, actual, params) {
   return `Given ${name}( ${actual &&
     actual.join(", ")} ) but expected ${name}( ${params
+    .map(z => (Array.isArray(z) ? z.join("|") : z))
     .slice(0, actual.length)
     .join(", ")} )`
 }

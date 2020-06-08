@@ -1,23 +1,84 @@
-import OLD from "f-utility"
 import R from "ramda"
 import makeTypechecker from "./types/makeChecker"
 import { toString } from "./define-function"
 import F from "./f-utility"
+const OLD = require("../old-f-utility")
 
 /* eslint-disable func-style */
 test("methods", () => {
-  const jumpsuitMethods = F.keys(F)
+  const futilityMethods = F.keys(F)
   expect(
-    jumpsuitMethods.sort((a, b) => (a !== b ? (a > b ? 1 : -1) : 0))
+    futilityMethods.sort((a, b) => (a !== b ? (a > b ? 1 : -1) : 0))
   ).toMatchSnapshot()
-  const THE_DIFF = R.difference(jumpsuitMethods, R.keys(R))
-  const THE_OTHER_DIFF = R.difference(R.keys(R), jumpsuitMethods)
-  /* console.log("what's the diff?", THE_DIFF) */
-  /* console.log("what's the other diff?", JSON.stringify(THE_OTHER_DIFF, null, 2)) */
-  expect(THE_DIFF).toMatchSnapshot()
-  expect(THE_OTHER_DIFF).toMatchSnapshot()
-  expect(R.symmetricDifference(jumpsuitMethods, R.keys(OLD))).toMatchSnapshot()
+  const FUTILITY_VS_RAMDA = R.difference(futilityMethods, R.keys(R))
+  const RAMDA_VS_FUTILITY = R.difference(R.keys(R), futilityMethods)
+  expect(FUTILITY_VS_RAMDA).toMatchSnapshot()
+  expect(RAMDA_VS_FUTILITY).toMatchSnapshot()
+  const F4_VS_F3 = R.difference(futilityMethods, R.keys(OLD))
+  const F3_VS_F4 = R.difference(R.keys(OLD), futilityMethods)
+  console.log("OLD VS. NEW", F4_VS_F3, "AND", F3_VS_F4)
+  expect(F3_VS_F4).toMatchSnapshot()
+  expect(F4_VS_F3).toMatchSnapshot()
 })
+test("difference", () => {
+  const one = "abcdefghi".split("")
+  const two = "abcdefgijk".split("")
+  expect(F.difference(one, two)).toEqual(R.difference(one, two))
+})
+test("sort", () => {
+  const items = [
+    { name: "Alpha", value: 34 },
+    { name: "Beta", value: 32 },
+    { name: "Gamma", value: 45 },
+    { name: "Delta", value: 200 },
+    { name: "Delta", value: -100 },
+    { name: "Delta", value: -12 }
+  ]
+
+  // sort by value
+  const valSorted = F.sort((a, b) => a.value - b.value, items)
+  expect(valSorted).toEqual([
+    { name: "Delta", value: -100 },
+    { name: "Delta", value: -12 },
+    { name: "Beta", value: 32 },
+    { name: "Alpha", value: 34 },
+    { name: "Gamma", value: 45 },
+    { name: "Delta", value: 200 }
+  ])
+})
+test("sort - alphabetic", () => {
+  const items = [
+    { name: "Gamma", value: 45 },
+    { name: "Beta", value: 32 },
+    { name: "Alpha", value: 34 },
+    { name: "Delta", value: 200 },
+    { name: "Delta", value: -100 },
+    { name: "Delta", value: -12 }
+  ]
+  // sort by name
+  const nameSorted = F.sort((a, b) => {
+    const nameA = a.name.toUpperCase()
+    const nameB = b.name.toUpperCase()
+    if (nameA < nameB) {
+      return -1
+    }
+    if (nameA > nameB) {
+      return 1
+    }
+
+    // names must be equal
+    return 0
+  }, items)
+  expect(nameSorted).toEqual([
+    { name: "Alpha", value: 34 },
+    { name: "Beta", value: 32 },
+    { name: "Delta", value: 200 },
+    { name: "Delta", value: -100 },
+    { name: "Delta", value: -12 },
+    { name: "Gamma", value: 45 }
+  ])
+})
+
 test("toPairs / fromPairs", () => {
   const input = { a: 1, b: 2, c: 3, d: 4 }
   const output = [["a", 1], ["b", 2], ["c", 3], ["d", 4]]
@@ -97,6 +158,9 @@ test("pathOr and more", () => {
       fixture
     )
   ).toBeTruthy()
+  expect(
+    F.pathSatisfies(x => x === 1000, ["a", "alpha", "anemone", "xxxx"], fixture)
+  ).toBeFalsy()
 })
 test("anyPass", () => {
   const matches = F.anyPass([x => x > 90, x => x < 70])
@@ -333,15 +397,19 @@ test("def - return type", () => {
   expect(tripleSCorrect(1, 2, 3)).toEqual("1")
 })
 test("def - union type", () => {
+  /* eslint-disable no-unused-vars */
   const defIsCool = F.def({
     check: true,
-    hm: ["Number", "any", "number|string", "RegExp", "any"]
-  })(function defIsSoSoDef(aa, bb, cc, dd, ee) {
+    hm: ["Number", "any", "number|string", "RegExp", "string"]
+  })(function defIsSoSoDef(aa, bb, cc, dd) {
     return "so def"
   })
+  /* eslint-enable no-unused-vars */
+  /* eslint-disable max-len */
   expect(() => defIsCool(1, { cool: true }, false, /regex/, "yes")).toThrow(
-    "Given defIsSoSoDef( Number∋number, Object∋object, Boolean∋boolean, RegExp∋object ) but expected defIsSoSoDef( Number, any, number|string, RegExp )"
+    "Given defIsSoSoDef( Number∋number, Object∋object, Boolean∋boolean, RegExp∋object ) but expected defIsSoSoDef( Number∋object, any, Number∋number|String∋string, RegExp∋object )"
   )
+  /* eslint-enable max-len */
 })
 test("slice", () => {
   expect(F.slice(1, Infinity, "abcde".split(""))).toEqual("bcde".split(""))

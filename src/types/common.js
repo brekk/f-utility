@@ -1,24 +1,16 @@
+import ofConstructor from "./ofConstructor"
 import ofType from "./ofType"
 const [
   _isString,
   _isNumber,
-  _isUndefined,
   _isFunction,
   _isBoolean,
   _isSymbol,
   _isRawObject
-] = [
-  "string",
-  "number",
-  "undefined",
-  "function",
-  "boolean",
-  "symbol",
-  "object"
-].map(ofType)
+] = [String, Number, Function, Boolean, Symbol, Object].map(ofConstructor)
+export const isUndefined = ofType("undefined")
 export const isString = _isString
 export const isNumber = _isNumber
-export const isUndefined = _isUndefined
 export const isFunction = _isFunction
 export const isBoolean = _isBoolean
 export const isSymbol = _isSymbol

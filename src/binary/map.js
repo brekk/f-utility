@@ -31,5 +31,5 @@ function map(fn, xx) {
 }
 */
 export const ARITY = 2
-export const SIGNATURE = ["function", "array|object", "array|object"]
+export const SIGNATURE = ["function", "Array|object", "Array|object"]
 export const FUNCTION = map

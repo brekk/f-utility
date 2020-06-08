@@ -8,3 +8,6 @@ export function mash(a, b) {
 export function jam(a, b) {
   return mash(b, a)
 }
+export function temper(a, b) {
+  return freeze(mash(a, b))
+}

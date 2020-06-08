@@ -1,11 +1,14 @@
 import {
+  isUnmatched,
   typeSystem,
   checkReturnWith,
   checkParamsWith,
   compareTypes,
   archetype
 } from "./types"
+import C from "./constants"
 import PREFERRED_TYPE from "./types/archetypes"
+const { UNMATCHED } = C
 
 test("PREFERRED_TYPE", () => {
   expect(PREFERRED_TYPE).toEqual({
@@ -147,4 +150,8 @@ test("typeSystem", () => {
     "Global∋nil",
     "ClassesAreGross∋object"
   ])
+})
+
+test("isUnmatched", () => {
+  expect(isUnmatched(UNMATCHED)).toBeTruthy()
 })

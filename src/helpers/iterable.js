@@ -3,6 +3,7 @@ import { length } from "../core/length"
 export function makeIterable(xx) {
   const isArray = Array.isArray(xx)
   const isObject = xx && typeof xx === "object"
+
   if (!isArray && !isObject) {
     throw new TypeError(
       "Expected iterable initial value to be either an array or an object."
