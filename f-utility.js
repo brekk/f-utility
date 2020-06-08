@@ -1,7 +1,7 @@
 'use strict';
 
 var name = "f-utility";
-var version = "3.6.0";
+var version = "4.0.0";
 var description = "functional utilities";
 var license = "ISC";
 var repository = "brekk/f-utility";
@@ -31,13 +31,6 @@ var keywords = [
 	"tool",
 	"toolbelt"
 ];
-var dependencies = {
-	entrust: "^0.0.21",
-	"fantasy-land": "3.4.0",
-	"fast.js": "^0.1.1",
-	"flatmap-fast": "^3.0.0",
-	"katsu-curry": "^0.7.8"
-};
 var devDependencies = {
 	"babel-cli": "^6.26.0",
 	"babel-core": "^6.26.0",
@@ -168,7 +161,6 @@ var PKG = {
 	browser: browser,
 	scripts: scripts,
 	keywords: keywords,
-	dependencies: dependencies,
 	devDependencies: devDependencies,
 	reveal: reveal,
 	clinton: clinton,
