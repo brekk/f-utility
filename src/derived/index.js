@@ -1,5 +1,6 @@
 import __addIndex from "./addIndex"
 import __anyPass from "./anyPass"
+import __bind from "./bind"
 import __difference from "./difference"
 import __symmetricDifference from "./symmetricDifference"
 import __flip from "./flip"
@@ -14,6 +15,7 @@ import __when from "./when"
 const derivedFunctionsSortedByIncreasingDependencies = {
   j2: __j2, // toJSON
   addIndex: __addIndex, // curryN
+  bind: __bind, // curryN
   flip: __flip, // curryN
   when: __when, // ifElse identity
   reject: __reject, // curryN complement filter

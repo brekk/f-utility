@@ -7,9 +7,9 @@ export function extendQuaternaryWithSignatures(F) {
   return F.mash(F, signed)
 }
 export function extendQuaternary(F) {
-  const quaternaryExtension = F.map(F.curryN(4), {
+  const quaternaryExtension = {
     ifElse
-  })
+  }
   return F.temper(F, quaternaryExtension)
 }
 

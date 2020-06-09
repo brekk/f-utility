@@ -62,7 +62,7 @@ const BINARY_WITH_SIGNATURES = [
 ]
 
 function extendBinary(F) {
-  const binaryExtension = map(fn => F.curryN(2, fn), {
+  const BINARY = {
     // infix
     gt,
     gte,
@@ -96,8 +96,8 @@ function extendBinary(F) {
     sort,
     split,
     toJSON
-  })
-  return F.mash(F, binaryExtension)
+  }
+  return F.temper(F, BINARY)
 }
 
 export function extendBinaryWithSignatures(F) {

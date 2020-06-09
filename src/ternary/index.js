@@ -14,7 +14,7 @@ export function extendTernaryWithSignatures(F) {
   return F.mash(F, signed)
 }
 export function extendTernary(F) {
-  const ternaryExtension = F.map(F.curryN(3), {
+  const ternaryExtension = {
     // logic
     both,
     either,
@@ -22,8 +22,8 @@ export function extendTernary(F) {
     reduce,
     // alteration
     slice
-  })
-  return F.mash(F, ternaryExtension)
+  }
+  return F.temper(F, ternaryExtension)
 }
 
 export default extendTernary

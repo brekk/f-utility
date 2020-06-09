@@ -14,6 +14,7 @@ import {
   isUnmatched,
   typeSystem
 } from "./types"
+import autoCurryWith from "./auto-curry"
 import addAliases from "./aliases"
 import CORE from "./core"
 import addSideEffectMethods from "./side-effect"
@@ -28,42 +29,36 @@ function custom(config) {
     fabricate,
     function basicDefinitions({ def, curry, curryN }) {
       const sideEffectMethods = addSideEffectMethods(curry)
-      function wrapCoreFunctionsWithCurry(CC) {
-        return CC.keys(CC)
-          .map(function wrapCurry(fnName) {
-            const fn = CC[fnName]
-            const isBinaryFunctionPlus = isFunction(fn) && fn.length > 1
-            return [fnName, isBinaryFunctionPlus ? curryN(fn.length, fn) : fn]
-          })
-          .reduce((agg, [k, v]) => CC.mash(agg, { [k]: v }), {})
-      }
-      return CORE.temper(
-        CORE.temper(wrapCoreFunctionsWithCurry(CORE), sideEffectMethods),
-        {
-          memoizeWith,
-          def,
-          curry,
-          curryN,
-          C,
-          $: C.$,
-          is,
-          isArray,
-          isBoolean,
-          isFunction,
-          isNumber,
-          isRawObject,
-          isString,
-          isSymbol,
-          isUndefined,
-          isUnmatched
-        }
-      )
-    },
-    extendBinary,
-    extendTernary,
-    extendQuaternary,
-    extendDerived,
-    addAliases
+      const autoCurry = autoCurryWith(curryN)
+      const BASE = CORE.smash(autoCurry(CORE), sideEffectMethods, {
+        memoizeWith,
+        def,
+        curry,
+        curryN,
+        C,
+        $: C.$,
+        is,
+        isArray,
+        isBoolean,
+        isFunction,
+        isNumber,
+        isRawObject,
+        isString,
+        isSymbol,
+        isUndefined,
+        isUnmatched
+      })
+      return BASE.pipe(
+        extendBinary,
+        autoCurry,
+        extendTernary,
+        autoCurry,
+        extendQuaternary,
+        autoCurry,
+        extendDerived,
+        addAliases
+      )(BASE)
+    }
   )(config)
 }
 const DEFAULT_CONFIG = {

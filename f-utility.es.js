@@ -259,9 +259,25 @@ function mash(a, b) {
 function jam(a, b) {
   return mash(b, a)
 }
+function smash(args) {
+  var rawArgs = Array.from(arguments);
+  if (!Array.isArray(args) && rawArgs.length) {
+    args = rawArgs;
+  }
+  return args.reduce(function (agg, xx) { return mash(agg, xx); })
+}
 function temper(a, b) {
   return freeze(mash(a, b))
 }
+function apply(fn, args) {
+  return fn.apply(null, args)
+}
+function call(args) {
+  return args[0].apply(null, args.slice(1))
+}
+var max = Math.max;
+var min = Math.min;
+var round = Math.round;
 
 var NATIVE = /*#__PURE__*/Object.freeze({
   isArray: isArray$1,
@@ -269,7 +285,13 @@ var NATIVE = /*#__PURE__*/Object.freeze({
   freeze: freeze,
   mash: mash,
   jam: jam,
-  temper: temper
+  smash: smash,
+  temper: temper,
+  apply: apply,
+  call: call,
+  max: max,
+  min: min,
+  round: round
 });
 
 function symbolToString(s) {
@@ -406,6 +428,23 @@ function checkReturnWith(checker) {
       var expected = makeTypechecker(checker)(a, b).returnType;
       return compareTypes(expected, actual)
     }
+  }
+}
+
+function autoCurryUsing(curryN) {
+  return function autoCurry(CC) {
+    return Object.keys(CC)
+      .map(function wrapCurry(fnName) {
+        var fn = CC[fnName];
+        var isBinaryFunctionPlus = typeof fn === "function" && fn.length;
+        return [fnName, isBinaryFunctionPlus ? curryN(fn.length, fn) : fn]
+      })
+      .reduce(function (agg, ref) {
+        var obj;
+        var k = ref[0];
+        var v = ref[1];
+        return Object.assign({}, agg, ( obj = {}, obj[k] = v, obj ));
+    }, {})
   }
 }
 
@@ -730,16 +769,26 @@ function makeAnyPass(ref) {
 }
 var ARITY$h = 2;
 
+function makeBind(ref) {
+  var curryN = ref.curryN;
+  return curryN(2, function bind(fn, _this) {
+    function bound() {
+      return fn.apply(_this, arguments)
+    }
+    return fn.length > 1 ? curryN(fn.length, bound) : bound
+  })
+}
+
 function makeDifference(ref) {
   var curryN = ref.curryN;
   var filter = ref.filter;
   var includes = ref.includes;
   var complement = ref.complement;
-  return curryN(ARITY$i, function difference(aa, bb) {
+  return curryN(ARITY$j, function difference(aa, bb) {
     return filter(complement(includes(bb)), aa)
   })
 }
-var ARITY$i = 2;
+var ARITY$j = 2;
 
 function makeIterable(xx) {
   var isArray = Array.isArray(xx);
@@ -765,7 +814,7 @@ function makeIterable(xx) {
 
 function makeSymmetricDifference(ref) {
   var curryN = ref.curryN;
-  return curryN(ARITY$j, function symmetricDifference(aa, bb) {
+  return curryN(ARITY$k, function symmetricDifference(aa, bb) {
     var aLoop = makeIterable(aa);
     var bLoop = makeIterable(bb);
     var notBoth = [];
@@ -786,7 +835,7 @@ function makeSymmetricDifference(ref) {
     return notBoth
   })
 }
-var ARITY$j = 2;
+var ARITY$k = 2;
 
 function makeFlip(ref) {
   var curryN = ref.curryN;
@@ -869,7 +918,7 @@ function makePathOrDerivatives(ref) {
 function makePathOr(ref) {
   var curryN = ref.curryN;
   var reduce = ref.reduce;
-  return curryN(ARITY$n, function pathOr(dd, ks, src) {
+  return curryN(ARITY$o, function pathOr(dd, ks, src) {
     return reduce(
       function walkPathOr(agg, st) {
         return (agg && agg[st]) || dd
@@ -879,17 +928,17 @@ function makePathOr(ref) {
     )
   })
 }
-var ARITY$n = 3;
+var ARITY$o = 3;
 
 function makeReject(ref) {
   var curryN = ref.curryN;
   var filter = ref.filter;
   var complement = ref.complement;
-  return curryN(ARITY$o, function reject(fn, xx) {
+  return curryN(ARITY$p, function reject(fn, xx) {
     return filter(complement(fn), xx)
   })
 }
-var ARITY$o = 2;
+var ARITY$p = 2;
 
 function makeUniq(ref) {
   var reduce = ref.reduce;
@@ -908,6 +957,7 @@ function makeWhen(ref) {
 var derivedFunctionsSortedByIncreasingDependencies = {
   j2: makeJ2,
   addIndex: makeAddIndex,
+  bind: makeBind,
   flip: makeFlip,
   when: makeWhen,
   reject: makeReject,
@@ -1150,7 +1200,7 @@ function toJSON(indent, x) {
 var FUNCTION$F = toJSON;
 
 function extendBinary(F) {
-  var binaryExtension = FUNCTION$x(function (fn) { return F.curryN(2, fn); }, {
+  var BINARY = {
     gt: FUNCTION$s,
     gte: FUNCTION$t,
     lt: FUNCTION$v,
@@ -1177,8 +1227,8 @@ function extendBinary(F) {
     sort: FUNCTION$D,
     split: FUNCTION$C,
     toJSON: FUNCTION$F
-  });
-  return F.mash(F, binaryExtension)
+  };
+  return F.temper(F, BINARY)
 }
 
 function both(aPred, bPred, x) {
@@ -1212,13 +1262,13 @@ function slice(aa, bb, xx) {
 var FUNCTION$J = slice;
 
 function extendTernary(F) {
-  var ternaryExtension = F.map(F.curryN(3), {
+  var ternaryExtension = {
     both: FUNCTION$G,
     either: FUNCTION$H,
     reduce: FUNCTION$I,
     slice: FUNCTION$J
-  });
-  return F.mash(F, ternaryExtension)
+  };
+  return F.temper(F, ternaryExtension)
 }
 
 function ifElse(condition, yes, no, xx) {
@@ -1227,9 +1277,9 @@ function ifElse(condition, yes, no, xx) {
 var FUNCTION$K = ifElse;
 
 function extendQuaternary(F) {
-  var quaternaryExtension = F.map(F.curryN(4), {
+  var quaternaryExtension = {
     ifElse: FUNCTION$K
-  });
+  };
   return F.temper(F, quaternaryExtension)
 }
 
@@ -1241,47 +1291,36 @@ function custom(config) {
       var curry = ref.curry;
       var curryN = ref.curryN;
       var sideEffectMethods = makeSideEffectsFromEnv(curry);
-      function wrapCoreFunctionsWithCurry(CC) {
-        return CC.keys(CC)
-          .map(function wrapCurry(fnName) {
-            var fn = CC[fnName];
-            var isBinaryFunctionPlus = isFunction(fn) && fn.length > 1;
-            return [fnName, isBinaryFunctionPlus ? curryN(fn.length, fn) : fn]
-          })
-          .reduce(function (agg, ref) {
-            var obj;
-            var k = ref[0];
-            var v = ref[1];
-            return CC.mash(agg, ( obj = {}, obj[k] = v, obj ));
-        }, {})
-      }
-      return CORE.temper(
-        CORE.temper(wrapCoreFunctionsWithCurry(CORE), sideEffectMethods),
-        {
-          memoizeWith: memoizeWith,
-          def: def,
-          curry: curry,
-          curryN: curryN,
-          C: C,
-          $: C.$,
-          is: ofConstructor,
-          isArray: isArray,
-          isBoolean: isBoolean,
-          isFunction: isFunction,
-          isNumber: isNumber,
-          isRawObject: isRawObject,
-          isString: isString,
-          isSymbol: isSymbol,
-          isUndefined: isUndefined,
-          isUnmatched: isUnmatched
-        }
-      )
-    },
-    extendBinary,
-    extendTernary,
-    extendQuaternary,
-    extendDerived,
-    makeAliases
+      var autoCurry = autoCurryUsing(curryN);
+      var BASE = CORE.smash(autoCurry(CORE), sideEffectMethods, {
+        memoizeWith: memoizeWith,
+        def: def,
+        curry: curry,
+        curryN: curryN,
+        C: C,
+        $: C.$,
+        is: ofConstructor,
+        isArray: isArray,
+        isBoolean: isBoolean,
+        isFunction: isFunction,
+        isNumber: isNumber,
+        isRawObject: isRawObject,
+        isString: isString,
+        isSymbol: isSymbol,
+        isUndefined: isUndefined,
+        isUnmatched: isUnmatched
+      });
+      return BASE.pipe(
+        extendBinary,
+        autoCurry,
+        extendTernary,
+        autoCurry,
+        extendQuaternary,
+        autoCurry,
+        extendDerived,
+        makeAliases
+      )(BASE)
+    }
   )(config)
 }
 var DEFAULT_CONFIG = {
