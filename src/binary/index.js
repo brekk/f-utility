@@ -1,4 +1,5 @@
 import { FUNCTION as add, SIGNATURE as 𝒮add } from "./add"
+import { FUNCTION as apply, SIGNATURE as 𝒮apply } from "./apply"
 import { FUNCTION as and, SIGNATURE as 𝒮and } from "./and"
 import { FUNCTION as any, SIGNATURE as 𝒮any } from "./any"
 import { FUNCTION as all, SIGNATURE as 𝒮all } from "./all"
@@ -50,6 +51,7 @@ const BINARY_WITH_SIGNATURES = [
   [𝒮concat, concat],
   [𝒮map, map],
   [𝒮cond, cond],
+  [𝒮apply, apply],
   // accessor
   [𝒮nth, nth],
   // generator
@@ -83,6 +85,7 @@ function extendBinary(F) {
     forEach,
     includes,
     // folds
+    apply,
     ap,
     concat,
     map,

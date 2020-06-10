@@ -252,49 +252,10 @@ function unionArchetype(recurse) {
 }
 var archetype = unionArchetype(true);
 
-var isArray$1 = Array.isArray;
-var keys = Object.keys;
-var freeze = Object.freeze;
 function mash(a, b) {
   return Object.assign({}, a, b)
 }
-function jam(a, b) {
-  return mash(b, a)
-}
-function smash(args) {
-  var rawArgs = Array.from(arguments);
-  if (!Array.isArray(args) && rawArgs.length) {
-    args = rawArgs;
-  }
-  return args.reduce(function (agg, xx) { return mash(agg, xx); })
-}
-function temper(a, b) {
-  return freeze(mash(a, b))
-}
-function apply(fn, args) {
-  return fn.apply(null, args)
-}
-function call(args) {
-  return args[0].apply(null, args.slice(1))
-}
-var max = Math.max;
-var min = Math.min;
-var round = Math.round;
-
-var NATIVE = /*#__PURE__*/Object.freeze({
-  isArray: isArray$1,
-  keys: keys,
-  freeze: freeze,
-  mash: mash,
-  jam: jam,
-  smash: smash,
-  temper: temper,
-  apply: apply,
-  call: call,
-  max: max,
-  min: min,
-  round: round
-});
+var FUNCTION = mash;
 
 function symbolToString(s) {
   return "" + s.toString()
@@ -452,25 +413,43 @@ function autoCurryUsing(curryN) {
 
 function makeAliases(F) {
   return F.temper(F, {
-    __: F.$,
-    PLACEHOLDER: F.$,
     I: F.identity,
     K: F.constant,
+    PLACEHOLDER: F.$,
+    __: F.$,
     always: F.constant,
-    some: F.any,
-    sideEffect2: F.binarySideEffect,
-    merge: F.mash,
-    mergeRight: F.jam,
     entries: F.toPairs,
+    every: F.all,
     fromEntries: F.fromPairs,
-    every: F.all
+    merge: F.mash,
+    mergeAll: F.smash,
+    mergeRight: F.jam,
+    sideEffect2: F.binarySideEffect,
+    some: F.any
   })
 }
+
+var isArray$1 = Array.isArray;
+var keys = Object.keys;
+var freeze = Object.freeze;
+var round = Math.round;
+
+var NATIVE = /*#__PURE__*/Object.freeze({
+  isArray: isArray$1,
+  keys: keys,
+  freeze: freeze,
+  round: round
+});
 
 function box(bx) {
   return [bx]
 }
-var FUNCTION = box;
+var FUNCTION$1 = box;
+
+function call(args) {
+  return args[0].apply(null, args.slice(1))
+}
+var FUNCTION$2 = call;
 
 function complement(fn) {
   return function subtleComplement() {
@@ -478,24 +457,24 @@ function complement(fn) {
     return !fn.apply(null, args)
   }
 }
-var FUNCTION$1 = complement;
+var FUNCTION$3 = complement;
 
 function constant(k) {
   return function forever() {
     return k
   }
 }
-var FUNCTION$2 = constant;
+var FUNCTION$4 = constant;
 
 function F() {
   return true
 }
-var FUNCTION$3 = F;
+var FUNCTION$5 = F;
 
 function first(x) {
   return x[0]
 }
-var FUNCTION$4 = first;
+var FUNCTION$6 = first;
 
 function fromPairs(ps) {
   return ps.reduce(function pairing(oo, ref) {
@@ -505,27 +484,32 @@ function fromPairs(ps) {
     return Object.assign({}, oo, ( obj = {}, obj[ke] = va, obj ))
   }, {})
 }
-var FUNCTION$5 = fromPairs;
+var FUNCTION$7 = fromPairs;
 
 function identity(y) {
   return y
 }
-var FUNCTION$6 = identity;
+var FUNCTION$8 = identity;
+
+function jam(a, b) {
+  return Object.assign({}, b, a)
+}
+var FUNCTION$9 = jam;
 
 function last(x) {
   return x[x.length - 1]
 }
-var FUNCTION$7 = last;
+var FUNCTION$a = last;
 
 function length(xx) {
   return xx && typeof xx === "object" ? Object.keys(xx).length : xx.length
 }
-var FUNCTION$8 = length;
+var FUNCTION$b = length;
 
 function not(yy) {
   return !yy
 }
-var FUNCTION$9 = not;
+var FUNCTION$c = not;
 
 function pipe() {
   var fns = Array.from(arguments);
@@ -548,54 +532,73 @@ idx += 1;
     return current
   }
 }
-var FUNCTION$a = pipe;
+var FUNCTION$d = pipe;
+
+function smash(args) {
+  var rawArgs = Array.from(arguments);
+  if (!Array.isArray(args) && rawArgs.length) {
+    args = rawArgs;
+  }
+  return args.reduce(function (agg, xx) { return Object.assign({}, agg, xx); })
+}
+var FUNCTION$e = smash;
 
 function smooth(x) {
   return x.filter(function identity(y) {
     return y
   })
 }
-var FUNCTION$b = smooth;
+var FUNCTION$f = smooth;
 
 function T() {
   return true
 }
-var FUNCTION$c = T;
+var FUNCTION$g = T;
+
+function temper(a, b) {
+  return Object.freeze(Object.assign({}, a, b))
+}
+var FUNCTION$h = temper;
 
 function toLower(z) {
   return z.toLowerCase()
 }
-var FUNCTION$d = toLower;
+var FUNCTION$i = toLower;
 
 function toPairs(oo) {
   return Object.keys(oo).map(function enpair(ky) {
     return [ky, oo[ky]]
   })
 }
-var FUNCTION$e = toPairs;
+var FUNCTION$j = toPairs;
 
 function toUpper(z) {
   return z.toUpperCase()
 }
-var FUNCTION$f = toUpper;
+var FUNCTION$k = toUpper;
 
-var CORE = temper(NATIVE, {
-  box: FUNCTION,
-  complement: FUNCTION$1,
-  identity: FUNCTION$6,
-  constant: FUNCTION$2,
-  F: FUNCTION$3,
-  first: FUNCTION$4,
-  fromPairs: FUNCTION$5,
-  last: FUNCTION$7,
-  length: FUNCTION$8,
-  not: FUNCTION$9,
-  pipe: FUNCTION$a,
-  smooth: FUNCTION$b,
-  T: FUNCTION$c,
-  toLower: FUNCTION$d,
-  toPairs: FUNCTION$e,
-  toUpper: FUNCTION$f
+var CORE = FUNCTION$h(NATIVE, {
+  F: FUNCTION$5,
+  T: FUNCTION$g,
+  box: FUNCTION$1,
+  call: FUNCTION$2,
+  complement: FUNCTION$3,
+  constant: FUNCTION$4,
+  first: FUNCTION$6,
+  fromPairs: FUNCTION$7,
+  identity: FUNCTION$8,
+  jam: FUNCTION$9,
+  last: FUNCTION$a,
+  length: FUNCTION$b,
+  smash: FUNCTION$e,
+  mash: FUNCTION,
+  not: FUNCTION$c,
+  pipe: FUNCTION$d,
+  smooth: FUNCTION$f,
+  temper: FUNCTION$h,
+  toLower: FUNCTION$i,
+  toPairs: FUNCTION$j,
+  toUpper: FUNCTION$k
 });
 
 function makeSideEffectsFromEnv(curry) {
@@ -751,25 +754,45 @@ function makeAddIndex(ref) {
   }
 }
 
-function makeAnyPass(ref) {
+function makeChain(ref) {
+  var curryN = ref.curryN;
+  var map = ref.map;
+  var pipe = ref.pipe;
+  var reduce = ref.reduce;
+  var concat = ref.concat;
+  return curryN(ARITY$m, function chain(fn, xx) {
+    if (xx && typeof xx.chain === "function") { return xx.chain(fn) }
+    if (typeof xx === "function") { return function (yy) { return fn(xx(yy), yy); } }
+    return pipe(
+      map(fn),
+      reduce(concat, [])
+    )(xx)
+  })
+}
+var ARITY$m = 2;
+
+function makePredicatesPass(ref) {
   var curryN = ref.curryN;
   var pipe = ref.pipe;
   var map = ref.map;
   var flip = ref.flip;
   var any = ref.any;
+  var all = ref.all;
   var smooth = ref.smooth;
   var length = ref.length;
   var gt = ref.gt;
-  return curryN(ARITY$h, function anyPass(preds, xx) {
-    return pipe(
-      map(flip(any)(xx)),
-      smooth,
-      length,
-      gt(0)
-    )(preds)
-  })
+  function predFor(pred) {
+    return curryN(2, function predPass(preds, xx) {
+      return pipe(
+        map(flip(pred)(xx)),
+        smooth,
+        length,
+        gt(0)
+      )(preds)
+    })
+  }
+  return { anyPass: predFor(any), allPass: predFor(all) }
 }
-var ARITY$h = 2;
 
 function makeBind(ref) {
   var curryN = ref.curryN;
@@ -786,58 +809,11 @@ function makeDifference(ref) {
   var filter = ref.filter;
   var includes = ref.includes;
   var complement = ref.complement;
-  return curryN(ARITY$j, function difference(aa, bb) {
+  return curryN(ARITY$o, function difference(aa, bb) {
     return filter(complement(includes(bb)), aa)
   })
 }
-var ARITY$j = 2;
-
-function makeIterable(xx) {
-  var isArray = Array.isArray(xx);
-  var isObject = xx && typeof xx === "object";
-  if (!isArray && !isObject) {
-    throw new TypeError(
-      "Expected iterable initial value to be either an array or an object."
-    )
-  }
-  var len = length(xx);
-  var init = isArray ? Array(len) : {};
-  var xKeys = !isArray && Object.keys(xx);
-  return {
-    length: len,
-    iterate: function iterate(idx) {
-      var key = isArray ? idx : xKeys[idx];
-      return { key: key, value: xx[key] }
-    },
-    init: init,
-    isArray: isArray
-  }
-}
-
-function makeSymmetricDifference(ref) {
-  var curryN = ref.curryN;
-  return curryN(ARITY$k, function symmetricDifference(aa, bb) {
-    var aLoop = makeIterable(aa);
-    var bLoop = makeIterable(bb);
-    var notBoth = [];
-    var idxA = 0;
-    while (idxA < aLoop.length) {
-      var ref = aLoop.iterate(idxA);
-      var value = ref.value;
-      if (!bb.includes(value)) { notBoth.push(value); }
-      idxA += 1;
-    }
-    var idxB = 0;
-    while (idxB < bLoop.length) {
-      var ref$1 = bLoop.iterate(idxB);
-      var value$1 = ref$1.value;
-      if (!aa.includes(value$1)) { notBoth.push(value$1); }
-      idxB += 1;
-    }
-    return notBoth
-  })
-}
-var ARITY$k = 2;
+var ARITY$o = 2;
 
 function makeFlip(ref) {
   var curryN = ref.curryN;
@@ -860,6 +836,21 @@ function makeJ2(ref) {
   var toJSON = ref.toJSON;
   return toJSON(2)
 }
+
+function makePathOr(ref) {
+  var curryN = ref.curryN;
+  var reduce = ref.reduce;
+  return curryN(ARITY$s, function pathOr(dd, ks, src) {
+    return reduce(
+      function walkPathOr(agg, st) {
+        return (agg && agg[st]) || dd
+      },
+      src,
+      ks
+    )
+  })
+}
+var ARITY$s = 3;
 
 function makePathOrDerivatives(ref) {
   var equals = ref.equals;
@@ -917,30 +908,76 @@ function makePathOrDerivatives(ref) {
   }
 }
 
-function makePathOr(ref) {
-  var curryN = ref.curryN;
-  var reduce = ref.reduce;
-  return curryN(ARITY$o, function pathOr(dd, ks, src) {
-    return reduce(
-      function walkPathOr(agg, st) {
-        return (agg && agg[st]) || dd
-      },
-      src,
-      ks
-    )
-  })
-}
-var ARITY$o = 3;
-
 function makeReject(ref) {
   var curryN = ref.curryN;
   var filter = ref.filter;
   var complement = ref.complement;
-  return curryN(ARITY$p, function reject(fn, xx) {
+  return curryN(ARITY$t, function reject(fn, xx) {
     return filter(complement(fn), xx)
   })
 }
-var ARITY$p = 2;
+var ARITY$t = 2;
+
+function makeIterable(xx) {
+  var isArray = Array.isArray(xx);
+  var isObject = xx && typeof xx === "object";
+  if (!isArray && !isObject) {
+    throw new TypeError(
+      "Expected iterable initial value to be either an array or an object."
+    )
+  }
+  var len = length(xx);
+  var init = isArray ? Array(len) : {};
+  var xKeys = !isArray && Object.keys(xx);
+  return {
+    length: len,
+    iterate: function iterate(idx) {
+      var key = isArray ? idx : xKeys[idx];
+      return { key: key, value: xx[key] }
+    },
+    init: init,
+    isArray: isArray
+  }
+}
+
+function makeSymmetricDifference(ref) {
+  var curryN = ref.curryN;
+  return curryN(ARITY$u, function symmetricDifference(aa, bb) {
+    var aLoop = makeIterable(aa);
+    var bLoop = makeIterable(bb);
+    var notBoth = [];
+    var idxA = 0;
+    while (idxA < aLoop.length) {
+      var ref = aLoop.iterate(idxA);
+      var value = ref.value;
+      if (!bb.includes(value)) { notBoth.push(value); }
+      idxA += 1;
+    }
+    var idxB = 0;
+    while (idxB < bLoop.length) {
+      var ref$1 = bLoop.iterate(idxB);
+      var value$1 = ref$1.value;
+      if (!aa.includes(value$1)) { notBoth.push(value$1); }
+      idxB += 1;
+    }
+    return notBoth
+  })
+}
+var ARITY$u = 2;
+
+function makeUnion(ref) {
+  var uniq = ref.uniq;
+  var curryN = ref.curryN;
+  var pipe = ref.pipe;
+  var concat = ref.concat;
+  return curryN(ARITY$v, function union(aa, bb) {
+    return pipe(
+      concat(bb),
+      uniq
+    )(aa)
+  })
+}
+var ARITY$v = 2;
 
 function makeUniq(ref) {
   var reduce = ref.reduce;
@@ -962,14 +999,16 @@ var derivedFunctionsSortedByIncreasingDependencies = {
   bind: makeBind,
   flip: makeFlip,
   when: makeWhen,
+  chain: makeChain,
   reject: makeReject,
   uniq: makeUniq,
   isObject: makeIsObject,
+  union: makeUnion,
   difference: makeDifference,
   symmetricDifference: makeSymmetricDifference,
-  anyPass: makeAnyPass,
+  __predicatesPass: makePredicatesPass,
   pathOr: makePathOr,
-  pathOrDerivatives: makePathOrDerivatives
+  __derived: makePathOrDerivatives
 };
 function extendDerived(C) {
   return C.pipe(
@@ -979,7 +1018,7 @@ function extendDerived(C) {
       var name = ref[0];
       var maker = ref[1];
       var fn = maker(__F);
-      return __F.mash(__F, name !== "pathOrDerivatives" ? ( obj = {}, obj[name] = fn, obj ) : fn)
+      return __F.mash(__F, !name.includes("__") ? ( obj = {}, obj[name] = fn, obj ) : fn)
     }, C)
   )(derivedFunctionsSortedByIncreasingDependencies)
 }
@@ -987,12 +1026,17 @@ function extendDerived(C) {
 function add(b, a) {
   return a + b
 }
-var FUNCTION$g = add;
+var FUNCTION$l = add;
+
+function apply(fn, args) {
+  return fn.apply(null, args)
+}
+var FUNCTION$m = apply;
 
 function and(a, b) {
   return a && b
 }
-var FUNCTION$h = and;
+var FUNCTION$n = and;
 
 function any(fn, xx) {
   var idx = 0;
@@ -1004,7 +1048,7 @@ function any(fn, xx) {
   }
   return found
 }
-var FUNCTION$i = any;
+var FUNCTION$o = any;
 
 function all(fn, xx) {
   var idx = 0;
@@ -1019,7 +1063,7 @@ function all(fn, xx) {
   }
   return promised
 }
-var FUNCTION$j = all;
+var FUNCTION$p = all;
 
 function ap(a, b) {
   if (isFunction(a) && isFunction(b)) {
@@ -1037,12 +1081,12 @@ function ap(a, b) {
     return out.concat(b.map(fn))
   }, [])
 }
-var FUNCTION$k = ap;
+var FUNCTION$q = ap;
 
 function concat(a, b) {
   return a.concat(b)
 }
-var FUNCTION$l = concat;
+var FUNCTION$r = concat;
 
 function cond(conditions, input) {
   var idx = 0;
@@ -1061,17 +1105,17 @@ function cond(conditions, input) {
   }
   return match
 }
-var FUNCTION$m = cond;
+var FUNCTION$s = cond;
 
 function divide(b, a) {
   return a / b
 }
-var FUNCTION$n = divide;
+var FUNCTION$t = divide;
 
 function equals(a, b) {
   return a === b
 }
-var FUNCTION$o = equals;
+var FUNCTION$u = equals;
 
 function filter(fn, xx) {
   var idx = 0;
@@ -1094,7 +1138,7 @@ function filter(fn, xx) {
   }
   return result
 }
-var FUNCTION$p = filter;
+var FUNCTION$v = filter;
 
 function forEach(fn, xx) {
   var idx = 0;
@@ -1107,37 +1151,37 @@ function forEach(fn, xx) {
     idx += 1;
   }
 }
-var FUNCTION$q = forEach;
+var FUNCTION$w = forEach;
 
 function includes(a, b) {
   return a.includes(b)
 }
-var FUNCTION$r = includes;
+var FUNCTION$x = includes;
 
 function greaterThan(b, a) {
   return a > b
 }
-var FUNCTION$s = greaterThan;
+var FUNCTION$y = greaterThan;
 
 function greaterThanOrEqualTo(b, a) {
   return a >= b
 }
-var FUNCTION$t = greaterThanOrEqualTo;
+var FUNCTION$z = greaterThanOrEqualTo;
 
 function join(del, xx) {
   return xx.join(del)
 }
-var FUNCTION$u = join;
+var FUNCTION$A = join;
 
 function lessThan(b, a) {
   return a < b
 }
-var FUNCTION$v = lessThan;
+var FUNCTION$B = lessThan;
 
 function lessThanOrEqualTo(b, a) {
   return a <= b
 }
-var FUNCTION$w = lessThanOrEqualTo;
+var FUNCTION$C = lessThanOrEqualTo;
 
 function map(fn, xx) {
   var idx = 0;
@@ -1154,22 +1198,22 @@ function map(fn, xx) {
   }
   return result
 }
-var FUNCTION$x = map;
+var FUNCTION$D = map;
 
 function multiply(b, a) {
   return a * b
 }
-var FUNCTION$y = multiply;
+var FUNCTION$E = multiply;
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
-var FUNCTION$z = nth;
+var FUNCTION$F = nth;
 
 function or(a, b) {
   return a || b
 }
-var FUNCTION$A = or;
+var FUNCTION$G = or;
 
 function range(aa, zz) {
   var out = [];
@@ -1179,56 +1223,57 @@ function range(aa, zz) {
   }
   return out
 }
-var FUNCTION$B = range;
+var FUNCTION$H = range;
 
 function split(del, xx) {
   return xx.split(del)
 }
-var FUNCTION$C = split;
+var FUNCTION$I = split;
 
 function sort(fn, rr) {
   return [].concat(rr).sort(fn)
 }
-var FUNCTION$D = sort;
+var FUNCTION$J = sort;
 
 function subtract(b, a) {
   return a - b
 }
-var FUNCTION$E = subtract;
+var FUNCTION$K = subtract;
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
-var FUNCTION$F = toJSON;
+var FUNCTION$L = toJSON;
 
 function extendBinary(F) {
   var BINARY = {
-    gt: FUNCTION$s,
-    gte: FUNCTION$t,
-    lt: FUNCTION$v,
-    lte: FUNCTION$w,
-    and: FUNCTION$h,
-    equals: FUNCTION$o,
-    or: FUNCTION$A,
-    subtract: FUNCTION$E,
-    add: FUNCTION$g,
-    divide: FUNCTION$n,
-    multiply: FUNCTION$y,
-    all: FUNCTION$j,
-    any: FUNCTION$i,
-    filter: FUNCTION$p,
-    forEach: FUNCTION$q,
-    includes: FUNCTION$r,
-    ap: FUNCTION$k,
-    concat: FUNCTION$l,
-    map: FUNCTION$x,
-    join: FUNCTION$u,
-    cond: FUNCTION$m,
-    nth: FUNCTION$z,
-    range: FUNCTION$B,
-    sort: FUNCTION$D,
-    split: FUNCTION$C,
-    toJSON: FUNCTION$F
+    gt: FUNCTION$y,
+    gte: FUNCTION$z,
+    lt: FUNCTION$B,
+    lte: FUNCTION$C,
+    and: FUNCTION$n,
+    equals: FUNCTION$u,
+    or: FUNCTION$G,
+    subtract: FUNCTION$K,
+    add: FUNCTION$l,
+    divide: FUNCTION$t,
+    multiply: FUNCTION$E,
+    all: FUNCTION$p,
+    any: FUNCTION$o,
+    filter: FUNCTION$v,
+    forEach: FUNCTION$w,
+    includes: FUNCTION$x,
+    apply: FUNCTION$m,
+    ap: FUNCTION$q,
+    concat: FUNCTION$r,
+    map: FUNCTION$D,
+    join: FUNCTION$A,
+    cond: FUNCTION$s,
+    nth: FUNCTION$F,
+    range: FUNCTION$H,
+    sort: FUNCTION$J,
+    split: FUNCTION$I,
+    toJSON: FUNCTION$L
   };
   return F.temper(F, BINARY)
 }
@@ -1236,12 +1281,12 @@ function extendBinary(F) {
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
-var FUNCTION$G = both;
+var FUNCTION$M = both;
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-var FUNCTION$H = either;
+var FUNCTION$N = either;
 
 function reduce(fn, initial, xx) {
   var loop = makeIterable(xx);
@@ -1256,19 +1301,19 @@ function reduce(fn, initial, xx) {
   }
   return result
 }
-var FUNCTION$I = reduce;
+var FUNCTION$O = reduce;
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
-var FUNCTION$J = slice;
+var FUNCTION$P = slice;
 
 function extendTernary(F) {
   var ternaryExtension = {
-    both: FUNCTION$G,
-    either: FUNCTION$H,
-    reduce: FUNCTION$I,
-    slice: FUNCTION$J
+    both: FUNCTION$M,
+    either: FUNCTION$N,
+    reduce: FUNCTION$O,
+    slice: FUNCTION$P
   };
   return F.temper(F, ternaryExtension)
 }
@@ -1276,11 +1321,11 @@ function extendTernary(F) {
 function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
-var FUNCTION$K = ifElse;
+var FUNCTION$Q = ifElse;
 
 function extendQuaternary(F) {
   var quaternaryExtension = {
-    ifElse: FUNCTION$K
+    ifElse: FUNCTION$Q
   };
   return F.temper(F, quaternaryExtension)
 }

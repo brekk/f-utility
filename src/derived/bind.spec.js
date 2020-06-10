@@ -17,7 +17,7 @@ test("bind", () => {
   expect(F.bind(goodbye, B)("disgusting", "cardboard")).toEqual(
     "Bye you disgusting cardboard! I'll kill you for all the fish!"
   )
-  expect(F.bind(goodbye, B)("cool")("human")).toEqual(
-    "Bye you cool human! I'll kill you for all the fish!"
+  expect(F.bind(goodbye, { thanks: "Thanks" })("cool")("human")).toEqual(
+    "Bye you cool human! Thanks for all the fish!"
   )
 })

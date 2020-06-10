@@ -1,8 +1,8 @@
+import OLD from "f-utility"
 import R from "ramda"
 import makeTypechecker from "./types/makeChecker"
-import { toString } from "./define-function"
 import F from "./f-utility"
-const OLD = require("../old-f-utility")
+/* const OLD = require("../old-f-utility") */
 
 /* eslint-disable func-style */
 describe("comparisons", () => {
@@ -48,113 +48,6 @@ describe("comparisons", () => {
     expect(F.symmetricDifference([1, 2, 3], [1, 2, 3])).toEqual([])
     expect(F.symmetricDifference([1, 2, 3, 4, 5], [1, 2, 3])).toEqual([4, 5])
   })
-})
-test("difference", () => {
-  const one = "abcdefghi".split("")
-  const two = "abcdefgijk".split("")
-  expect(F.difference(one, two)).toEqual(F.difference(one, two))
-})
-test("sort", () => {
-  const items = [
-    { name: "Alpha", value: 34 },
-    { name: "Beta", value: 32 },
-    { name: "Gamma", value: 45 },
-    { name: "Delta", value: 200 },
-    { name: "Delta", value: -100 },
-    { name: "Delta", value: -12 }
-  ]
-
-  // sort by value
-  const valSorted = F.sort((a, b) => a.value - b.value, items)
-  expect(valSorted).toEqual([
-    { name: "Delta", value: -100 },
-    { name: "Delta", value: -12 },
-    { name: "Beta", value: 32 },
-    { name: "Alpha", value: 34 },
-    { name: "Gamma", value: 45 },
-    { name: "Delta", value: 200 }
-  ])
-})
-test("sort - alphabetic", () => {
-  const items = [
-    { name: "Gamma", value: 45 },
-    { name: "Beta", value: 32 },
-    { name: "Alpha", value: 34 },
-    { name: "Delta", value: 200 },
-    { name: "Delta", value: -100 },
-    { name: "Delta", value: -12 }
-  ]
-  // sort by name
-  const nameSorted = F.sort((a, b) => {
-    const nameA = a.name.toUpperCase()
-    const nameB = b.name.toUpperCase()
-    if (nameA < nameB) {
-      return -1
-    }
-    if (nameA > nameB) {
-      return 1
-    }
-
-    // names must be equal
-    return 0
-  }, items)
-  expect(nameSorted).toEqual([
-    { name: "Alpha", value: 34 },
-    { name: "Beta", value: 32 },
-    { name: "Delta", value: 200 },
-    { name: "Delta", value: -100 },
-    { name: "Delta", value: -12 },
-    { name: "Gamma", value: 45 }
-  ])
-})
-
-test("toPairs / fromPairs", () => {
-  const input = { a: 1, b: 2, c: 3, d: 4 }
-  const output = [["a", 1], ["b", 2], ["c", 3], ["d", 4]]
-  expect(F.toPairs(input)).toEqual(output)
-  expect(F.fromPairs(output)).toEqual(input)
-})
-test("toString", () => {
-  function cobra(x, a, b) {
-    return "venom-" + x + "-" + a + "::" + b
-  }
-  const out = toString(cobra, ["cool"])
-  expect(out()).toEqual("curry(cobra)(cool)")
-  expect(toString(cobra)()).toEqual("curry(cobra)")
-  expect(toString(cobra, ["yeah", "so"])()).toEqual("curry(cobra)(yeah,so)")
-  // eslint-disable-next-line
-  expect(toString((a, b, c) => {}, ["fun", "yes"])()).toEqual(
-    "curry(fn)(fun,yes)"
-  )
-})
-test("sideEffect", done => {
-  const x = Math.round(Math.random() * 1e3)
-  const finalCall = F.sideEffect(given => {
-    expect(given).toEqual(x)
-    done()
-  })
-  finalCall(x)
-})
-test("sideEffect2", done => {
-  const x = Math.round(Math.random() * 1e3)
-  const finalCall = F.sideEffect2((tag, given) => {
-    expect(given).toEqual(x)
-    expect(tag).toEqual("whatever")
-    done()
-  })
-  finalCall("whatever", x)
-})
-test("inspect", done => {
-  const object = { id: "it's a living" }
-  const look = z => z.id
-
-  const tt = "freitag"
-  const cb = (tag, inspected) => {
-    expect(tag).toEqual(tt)
-    expect(inspected).toEqual(object.id)
-    done()
-  }
-  F.inspect(cb, look, tt, object)
 })
 test("freeze", () => {
   const frozen = F.freeze({ a: 1, b: 2, c: 3 })

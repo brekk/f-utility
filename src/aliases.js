@@ -1,17 +1,18 @@
 export function makeAliases(F) {
   return F.temper(F, {
-    __: F.$,
-    PLACEHOLDER: F.$,
     I: F.identity,
     K: F.constant,
+    PLACEHOLDER: F.$,
+    __: F.$,
     always: F.constant,
-    some: F.any,
-    sideEffect2: F.binarySideEffect,
-    merge: F.mash,
-    mergeRight: F.jam,
     entries: F.toPairs,
+    every: F.all,
     fromEntries: F.fromPairs,
-    every: F.all
+    merge: F.mash,
+    mergeAll: F.smash,
+    mergeRight: F.jam,
+    sideEffect2: F.binarySideEffect,
+    some: F.any
   })
 }
 

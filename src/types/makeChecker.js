@@ -1,4 +1,4 @@
-import { mash } from "../core/native"
+import { mash } from "../core/mash"
 import memoizeWith from "../memoize-with"
 import defaultMemoizer from "./memoizer"
 import compareType from "./compare"

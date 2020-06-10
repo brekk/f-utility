@@ -1,5 +1,5 @@
 import C from "./constants"
-import { jam } from "./core/native"
+import { jam } from "./core/jam"
 import { category } from "./define-function"
 const { $ } = C
 
