@@ -31,6 +31,11 @@
     "toolbelt"
   ],
   "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.1",
+    "@rollup/plugin-buble": "^0.21.3",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^8.0.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
@@ -45,7 +50,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
-    "bluebird": "^3.5.1",
+    "benny": "^3.6.14",
     "chalk": "^2.3.0",
     "del-cli": "^1.1.0",
     "depcheck": "^0.6.8",
@@ -65,87 +70,19 @@
     "eslint-plugin-standard": "^3.0.1",
     "execa": "^0.8.0",
     "f-utility": "3.6.0",
-    "fantasy-eithers": "^0.0.2",
     "germs": "^0.1.9",
     "husky": "^0.14.3",
     "jayin": "^0.0.3",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
-    "jest-t-assert": "^0.2.0",
     "madge": "^3.0.1",
     "nps": "^5.7.1",
     "nps-utils": "^1.5.0",
     "prettier": "^1.15.2",
     "ramda": "^0.26.1",
-    "rollup": "^0.66.6",
-    "rollup-plugin-alias": "^1.4.0",
-    "rollup-plugin-babel-minify": "^3.1.2",
-    "rollup-plugin-babili": "^3.1.1",
-    "rollup-plugin-buble": "^0.19.4",
-    "rollup-plugin-cleanup": "^3.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-progress": "^0.4.0",
+    "rollup": ">2.0.0",
+    "rollup-plugin-terser": "^6.1.0",
     "testperf": "^2.0.3"
   },
-  "reveal": true,
-  "clinton": {
-    "inherit": false,
-    "rules": {
-      "cli": "error",
-      "editorconfig": "off",
-      "filename-case": [
-        "error",
-        {
-          "case": "kebabCase"
-        }
-      ],
-      "gulp": [
-        "error",
-        "optional"
-      ],
-      "keywords": "error",
-      "license": "ISC",
-      "max-depth": "warn",
-      "no-callback": "error",
-      "no-dup-keywords": "error",
-      "no-empty-keywords": "error",
-      "no-git-merge-conflict": "error",
-      "pkg-dependency-order": "error",
-      "pkg-description": "off",
-      "pkg-engine": "off",
-      "pkg-main": "error",
-      "pkg-name": "error",
-      "pkg-normalize": "warn",
-      "pkg-property-order": "error",
-      "pkg-schema": "error",
-      "pkg-shorthand-repository": "error",
-      "pkg-user-order": "error",
-      "readme": "error",
-      "test-script": "error",
-      "use-travis": "off",
-      "valid-version": "error",
-      "ava": "off",
-      "gitignore": "error",
-      "xo": "off"
-    }
-  },
-  "jest": {
-    "modulePaths": [
-      "src"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "mapCoverage": true,
-    "moduleFileExtensions": [
-      "js",
-      "json"
-    ],
-    "testMatch": [
-      "**/*.spec.(jsx|js)"
-    ]
-  }
+  "reveal": true
 }

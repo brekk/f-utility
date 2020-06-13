@@ -1,8 +1,13 @@
 import OLD from "f-utility"
 import R from "ramda"
+import PKG from "../package.json"
 import makeTypechecker from "./types/makeChecker"
-import F from "./f-utility"
+import F from "./build/f-utility"
 /* const OLD = require("../old-f-utility") */
+
+test("version", () => {
+  expect(F.version).toEqual(PKG.version)
+})
 
 /* eslint-disable func-style */
 describe("comparisons", () => {
@@ -135,10 +140,34 @@ test("or", () => {
   expect(F.or(false, false)).toBeFalsy()
 })
 test("either", () => {
-  expect(F.either(() => true, () => false, "")).toBeTruthy()
-  expect(F.either(() => false, () => true, "")).toBeTruthy()
-  expect(F.either(() => true, () => true, "")).toBeTruthy()
-  expect(F.either(() => false, () => false, "")).toBeFalsy()
+  expect(
+    F.either(
+      () => true,
+      () => false,
+      ""
+    )
+  ).toBeTruthy()
+  expect(
+    F.either(
+      () => false,
+      () => true,
+      ""
+    )
+  ).toBeTruthy()
+  expect(
+    F.either(
+      () => true,
+      () => true,
+      ""
+    )
+  ).toBeTruthy()
+  expect(
+    F.either(
+      () => false,
+      () => false,
+      ""
+    )
+  ).toBeFalsy()
 })
 test("and", () => {
   expect(F.and(true, true)).toBeTruthy()
@@ -146,9 +175,24 @@ test("and", () => {
   expect(F.and(true, false)).toBeFalsy()
 })
 test("both", () => {
-  expect(F.both(() => true, () => true)("")).toBeTruthy()
-  expect(F.both(() => false, () => true)("")).toBeFalsy()
-  expect(F.both(() => true, () => false)("")).toBeFalsy()
+  expect(
+    F.both(
+      () => true,
+      () => true
+    )("")
+  ).toBeTruthy()
+  expect(
+    F.both(
+      () => false,
+      () => true
+    )("")
+  ).toBeFalsy()
+  expect(
+    F.both(
+      () => true,
+      () => false
+    )("")
+  ).toBeFalsy()
 })
 test("not", () => {
   expect(F.not(true)).toBeFalsy()
@@ -199,11 +243,7 @@ test("pipe", () => {
   const a = x => x / 10
   const b = y => y + 24
   const c = z => z - 101
-  const comp = F.pipe(
-    a,
-    b,
-    c
-  )
+  const comp = F.pipe(a, b, c)
   expect(comp(100)).toEqual(-67)
   expect(() => F.pipe(false)).toThrow()
 })
@@ -338,9 +378,12 @@ test("slice", () => {
 })
 
 test("makeTypechecker", () => {
-  expect(() => makeTypechecker(z => typeof z, x => x)(1, 1)).toThrow(
-    "makeTypechecker needs two valid lists of types to run"
-  )
+  expect(() =>
+    makeTypechecker(
+      z => typeof z,
+      x => x
+    )(1, 1)
+  ).toThrow("makeTypechecker needs two valid lists of types to run")
   const copy = {}
   const saver = ([a, b]) => {
     copy[a.concat(b).join("-")] = [a, b]
@@ -375,7 +418,10 @@ test("makeTypechecker", () => {
     ]
   })
   expect(copy).toEqual({
-    "boolean-boolean-true-false": [["boolean", "boolean"], [true, false]]
+    "boolean-boolean-true-false": [
+      ["boolean", "boolean"],
+      [true, false]
+    ]
   })
 })
 

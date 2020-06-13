@@ -1,4 +1,4 @@
-import F from "../f-utility"
+import F from "../build/f-utility"
 /* eslint-disable func-style */
 const RAW_DATA = {
   a: {

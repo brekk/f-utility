@@ -4,7 +4,7 @@ import {
   checkReturnWith,
   typeSystem,
   archetype
-} from "./types"
+} from "./types/index"
 
 export function makeParamMerger(taste) {
   return function compareParams(aa, bb) {
@@ -44,13 +44,8 @@ export function hmError(name, actual, params) {
     .join(", ")} )`
 }
 
-export function category(test) {
-  return function testedCategory({
-    ts = typeSystem,
-    n: givenLength,
-    hm,
-    check
-  }) {
+export function defineFunctionWithParameterTest(test) {
+  return function funcfunc({ ts = typeSystem, n: givenLength, hm, check }) {
     if (check) {
       if (typeof ts !== "function")
         throw new TypeError("Expected typeSystem to be a function.")
@@ -95,7 +90,6 @@ export function category(test) {
             const returnTypeValid = checkReturnWith(ts)(result)(hm, args)
 
             if (!returnTypeValid) {
-              /* tChecker = makeTypechecker(ts)(hm, args) */
               const { returnType } = tChecker
               throw new TypeError(
                 `Expected ${fn.name} to return ${archetype(

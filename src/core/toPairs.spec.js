@@ -1,4 +1,4 @@
-import F from '../f-utility'
+import F from '../build/f-utility'
 test("toPairs / fromPairs", () => {
   const input = { a: 1, b: 2, c: 3, d: 4 }
   const output = [["a", 1], ["b", 2], ["c", 3], ["d", 4]]

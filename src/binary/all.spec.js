@@ -1,4 +1,4 @@
-import F from "../f-utility"
+import F from "../build/f-utility"
 
 test("all", () => {
   const allEven = F.all(x => x % 2 === 0)

@@ -1,43 +1,70 @@
-import resolve from "rollup-plugin-node-resolve"
-import cjs from "rollup-plugin-commonjs"
-import alias from "rollup-plugin-alias"
-import buble from "rollup-plugin-buble"
-import cleanup from "rollup-plugin-cleanup"
-import json from "rollup-plugin-json"
-/* import progress from "rollup-plugin-progress" */
-import pkg from "./package.json"
-import path from "path"
+import resolve from "@rollup/plugin-node-resolve"
+// import alias from "@rollup/plugin-alias"
+import cjs from "@rollup/plugin-commonjs"
+import json from "@rollup/plugin-json"
+import { terser } from "rollup-plugin-terser"
+// import path from "path"
 
-const local = x => path.resolve(__dirname, x)
-const external = pkg && pkg.dependencies ? Object.keys(pkg.dependencies) : []
+// const local = x => path.resolve(__dirname, x)
 
 const plugins = [
-  /* progress(), */
-  json(),
-  cjs({ extensions: [`.js`], include: `node_modules/**` }),
-  buble(),
-  resolve({ jsnext: true, main: true }),
-  cleanup({ comments: `none` })
-  // babili()
+  // alias({
+  //   entries: {
+  //     types: "types/index.js",
+  //     binary: "binary/index.js",
+  //     ternary: "ternary/index.js",
+  //     quaternary: "quaternary/index.js",
+  //     derived: "derived/index.js"
+  //   }
+  // }),
+  json({ namedExports: true, preferConst: true }),
+  resolve(),
+  cjs({ extensions: [`.js`] })
+
+  // buble()
 ]
 
+const terserConfig = {
+  mangle: {
+    keep_fnames: true
+  },
+  compress: {
+    keep_fargs: true,
+    hoist_funs: true
+  },
+  keep_fnames: true
+}
+
+const tersePlugs = plugins.concat(terser(terserConfig))
+const BUILD = {
+  CORE: "src/build/f-utility.js"
+}
 export default [
   {
-    input: `src/f-utility.js`,
+    input: BUILD.CORE,
     output: {
       name: `FUTILITY`,
-      file: pkg.browser,
+      file: `f-utility.umd.js`,
       format: `umd`
     },
-    plugins
+    plugins: tersePlugs
   },
   {
-    input: `src/f-utility.js`,
-    external,
+    input: BUILD.CORE,
     output: [
-      { file: pkg.main, format: `cjs` },
-      { file: pkg.module, format: `es` }
+      {
+        file: `f-utility.js`,
+        format: `cjs`
+      }
     ],
+    plugins: tersePlugs
+  },
+  {
+    input: BUILD.CORE,
+    output: {
+      file: `f-utility.es.js`,
+      format: `es`
+    },
     plugins
   }
   /*

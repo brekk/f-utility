@@ -5,7 +5,7 @@ import {
   checkParamsWith,
   compareTypes,
   archetype
-} from "./types"
+} from "./types/index"
 import C from "./constants"
 import PREFERRED_TYPE from "./types/archetypes"
 const { UNMATCHED } = C

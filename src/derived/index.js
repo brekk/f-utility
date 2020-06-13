@@ -1,5 +1,6 @@
 import __addIndex from "./addIndex"
 import __chain from "./chain"
+import __flatten from "./flatten"
 import __predicatesPass from "./predPass"
 import __bind from "./bind"
 import __difference from "./difference"
@@ -20,6 +21,7 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   bind: __bind, // curryN
   flip: __flip, // curryN
   when: __when, // ifElse identity
+  flatten: __flatten, // isArray forEach any
   chain: __chain, // curryN map reduce concat
   reject: __reject, // curryN complement filter
   uniq: __uniq, // curryN reduce

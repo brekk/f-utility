@@ -1,4 +1,4 @@
-import F from '../f-utility'
+import F from '../build/f-utility'
 
 test("sort", () => {
   const items = [

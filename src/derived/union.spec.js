@@ -1,5 +1,5 @@
 import R from "ramda"
-import F from "../f-utility"
+import F from "../build/f-utility"
 
 test("union", () => {
   const one = "abcde".split("")

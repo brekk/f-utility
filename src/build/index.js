@@ -1,6 +1,6 @@
-import C from "./constants"
-import { jam } from "./core/jam"
-import { category } from "./define-function"
+import C from "../constants"
+import { mash } from "../core/mash"
+import { defineFunctionWithParameterTest } from "../define-function"
 const { $ } = C
 
 export function DEFAULT_PLACEHOLDER_TEST(x) {
@@ -9,10 +9,10 @@ export function DEFAULT_PLACEHOLDER_TEST(x) {
 
 export function fabricate(config) {
   const { test = DEFAULT_PLACEHOLDER_TEST } = config
-  const def = category(test)
-  const curry = def(jam({ n: false, check: false }, config))
+  const def = defineFunctionWithParameterTest(test)
+  const curry = def(mash(config, { n: false, check: false }))
   const curryN = curry(function _curryN(nn, fn) {
-    return def(jam({ n: nn, check: false }, config))(fn)
+    return def(mash(config, { n: nn, check: false }))(fn)
   })
   return { def, curry, curryN }
 }

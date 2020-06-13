@@ -1,7 +1,5 @@
 export function smooth(x) {
-  return x.filter(function identity(y) {
-    return y
-  })
+  return x.filter(Boolean)
 }
 export default smooth
 export const FUNCTION = smooth

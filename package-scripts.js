@@ -9,7 +9,9 @@ const GERMS = germs.build(pkg.name, {
   readme: `echo "documentation readme -s API src/*.js"`,
   prepublishOnly: `nps care`,
   clean: utils.concurrent(built),
-  test: 'jest --coverage --verbose',
+  test: "jest --coverage --verbose",
+  rollup: "rollup -c rollup.config.js",
+  bundle: 'nps rollup',
   scrub: utils.concurrent(
     built.concat([
       `del ./f-utility.*`,

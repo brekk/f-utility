@@ -1,5 +1,5 @@
 import memoizeWith from "../memoize-with"
-const memo = memoizeWith(function identity(x) {
+const memo = memoizeWith(function basicMemo(x) {
   return x
 })
 export const union = memo(function unionType(x) {

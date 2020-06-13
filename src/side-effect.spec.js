@@ -1,4 +1,4 @@
-import F from "./f-utility"
+import F from "./build/f-utility"
 /* eslint-disable func-style */
 test("sideEffect", done => {
   const x = Math.round(Math.random() * 1e3)

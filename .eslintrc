@@ -35,8 +35,7 @@
     "import/order": 2,
     "import/extensions": [2, {
       "js": "never",
-      "validation": "always",
-      "task": "always"
+      "json": "always",
     }]
   },
   "extends": ["standard", "plugin:prettier/recommended"],
