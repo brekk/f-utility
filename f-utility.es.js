@@ -1220,7 +1220,11 @@ function custom(config) {
 }
 const DEFAULT_CONFIG = {
   ts: system,
-  check: process.env.NODE_ENV !== "production"
+  check:
+    typeof process !== "undefined" &&
+    typeof process.env !== "undefined" &&
+    typeof process.env.NODE_ENV !== "undefined" &&
+    process.env.NODE_ENV !== "production"
 };
 const FUTILITY = custom(DEFAULT_CONFIG);
 var fUtility = FUTILITY.temper(FUTILITY, { custom, version: "4.0.0" });
