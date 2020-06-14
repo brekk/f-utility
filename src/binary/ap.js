@@ -20,4 +20,4 @@ function ap(a, b) {
 
 export const FUNCTION = ap
 export const ARITY = 2
-export const SIGNATURE = ["function|array", "function|array", "array"]
+export const SIGNATURE = ["function|Array", "function|Array", "function|Array"]

@@ -50,7 +50,7 @@ const BUILD = {
   AUTO: "src/build/f-utility.js",
   UNCHECKED: "src/build/production.js"
 }
-
+/* eslint-disable func-style */
 const buildFor = input => {
   const suffix = input.includes("debug")
     ? ".debug"

@@ -13,4 +13,4 @@ function forEach(fn, xx) {
 
 export const FUNCTION = forEach
 export const ARITY = 2
-export const SIGNATURE = ["function", "array|object", "array|object"]
+export const SIGNATURE = ["function", "object", "nil"]

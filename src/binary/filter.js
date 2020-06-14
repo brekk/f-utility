@@ -21,4 +21,4 @@ function filter(fn, xx) {
 
 export const FUNCTION = filter
 export const ARITY = 2
-export const SIGNATURE = ["function", "array|object", "array|object"]
+export const SIGNATURE = ["function", "object", "object"]

@@ -12,4 +12,4 @@ function any(fn, xx) {
 
 export const FUNCTION = any
 export const ARITY = 2
-export const SIGNATURE = ["function", "array|object", "boolean"]
+export const SIGNATURE = ["function", "object", "boolean"]

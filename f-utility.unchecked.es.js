@@ -73,6 +73,8 @@ const typeChild = memo$2(x => {
 const memo$3 = memoizeWith(x => x);
 const compareTypes = memo$3(function _compareTypes(exp, given) {
   const [expectedUnion, givenUnion] = [exp, given].map(union);
+  const expectedHasUnions = expectedUnion.length > 1;
+  const givenHasUnions = givenUnion.length > 1;
   const comparisons = expectedUnion.map(typeA =>
     givenUnion.map(
       typeB =>
@@ -87,11 +89,20 @@ const compareTypes = memo$3(function _compareTypes(exp, given) {
         typeChild(typeA) === typeChild(typeB)
     )
   );
-  const unionComparisons = comparisons.reduce(
+  const noUnionComparisons = comparisons.reduce(
     (all, nextCase) => all.concat(nextCase.filter(z => !z).length === 0),
     []
   );
-  return unionComparisons.filter(z => !z).length === 0
+
+  const out = noUnionComparisons.filter(Boolean);
+
+  if (!expectedHasUnions && !givenHasUnions) {
+    return out.length > 0
+  }
+  const anyValid = comparisons
+    .reduce((a, b) => a.concat(b), [])
+    .reduce((xx, cc) => xx || cc, false);
+  return anyValid
 });
 
 function makeTypechecker(typecheck, useMemoizer = defaultMemoizer) {
@@ -155,7 +166,8 @@ function checkReturnWith(checker) {
     return function checkReturnTypeValidoutcomeAB(a, b) {
       const actual = checker(outcome);
       const expected = makeTypechecker(checker)(a, b).returnType;
-      return compareTypes(expected, actual)
+      const compared = compareTypes(expected, actual);
+      return compared
     }
   }
 }
@@ -983,15 +995,15 @@ function includes(a, b) {
 }
 const FUNCTION$x = includes;
 
-function greaterThan(b, a) {
+function gt(b, a) {
   return a > b
 }
-const FUNCTION$y = greaterThan;
+const FUNCTION$y = gt;
 
-function greaterThanOrEqualTo(b, a) {
+function gte(b, a) {
   return a >= b
 }
-const FUNCTION$z = greaterThanOrEqualTo;
+const FUNCTION$z = gte;
 
 function join(del, xx) {
   return xx.join(del)
@@ -999,16 +1011,15 @@ function join(del, xx) {
 
 const FUNCTION$A = join;
 
-function lessThan(b, a) {
+function lt(b, a) {
   return a < b
 }
+const FUNCTION$B = lt;
 
-const FUNCTION$B = lessThan;
-
-function lessThanOrEqualTo(b, a) {
+function lte(b, a) {
   return a <= b
 }
-const FUNCTION$C = lessThanOrEqualTo;
+const FUNCTION$C = lte;
 
 function map(fn, xx) {
   let idx = 0;

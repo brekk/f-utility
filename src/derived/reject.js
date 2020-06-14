@@ -7,4 +7,4 @@ function makeReject({ curryN, filter, complement }) {
 export default makeReject
 export const GET_FUNCTION = makeReject
 export const ARITY = 2
-export const SIGNATURE = ["function", "Array|object", "Array|object"]
+export const SIGNATURE = ["function", "object", "object"]

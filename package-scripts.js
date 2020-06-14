@@ -11,7 +11,8 @@ const GERMS = germs.build(pkg.name, {
   clean: utils.concurrent(built),
   test: "jest --coverage --verbose",
   rollup: "rollup -c rollup.config.js",
-  bundle: 'nps rollup',
+  bundle: "nps rollup",
+  build: 'echo "BUILDING F-UTILITY WITH ROLLUP"',
   scrub: utils.concurrent(
     built.concat([
       `del ./f-utility.*`,

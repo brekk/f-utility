@@ -64,9 +64,12 @@ const BINARY_WITH_SIGNATURES = [
 ]
 
 export function extendBinaryWithSignatures(F) {
-  const sign = F.map(([hm, fn]) => F.def({ n: 2, hm, check: true })(fn))
-  const signed = sign(BINARY_WITH_SIGNATURES)
-  return F.mash(F, signed)
+  return F.temper(
+    F,
+    BINARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 2, check: true, hm })(fn) })
+    }, {})
+  )
 }
 
 export default extendBinaryWithSignatures

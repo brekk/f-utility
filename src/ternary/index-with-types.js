@@ -8,10 +8,14 @@ const TERNARY_WITH_SIGNATURES = [
   [𝒮reduce, reduce],
   [𝒮slice, slice]
 ]
+
 export function extendTernaryWithSignatures(F) {
-  const sign = F.map(([hm, fn]) => F.def({ n: 3, check: true, hm })(fn))
-  const signed = sign(TERNARY_WITH_SIGNATURES)
-  return F.mash(F, signed)
+  return F.temper(
+    F,
+    TERNARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 3, check: true, hm })(fn) })
+    }, {})
+  )
 }
 
 export default extendTernaryWithSignatures

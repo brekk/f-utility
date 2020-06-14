@@ -73,6 +73,8 @@ const typeChild = memo$2(x => {
 const memo$3 = memoizeWith(x => x);
 const compareTypes = memo$3(function _compareTypes(exp, given) {
   const [expectedUnion, givenUnion] = [exp, given].map(union);
+  const expectedHasUnions = expectedUnion.length > 1;
+  const givenHasUnions = givenUnion.length > 1;
   const comparisons = expectedUnion.map(typeA =>
     givenUnion.map(
       typeB =>
@@ -87,11 +89,20 @@ const compareTypes = memo$3(function _compareTypes(exp, given) {
         typeChild(typeA) === typeChild(typeB)
     )
   );
-  const unionComparisons = comparisons.reduce(
+  const noUnionComparisons = comparisons.reduce(
     (all, nextCase) => all.concat(nextCase.filter(z => !z).length === 0),
     []
   );
-  return unionComparisons.filter(z => !z).length === 0
+
+  const out = noUnionComparisons.filter(Boolean);
+
+  if (!expectedHasUnions && !givenHasUnions) {
+    return out.length > 0
+  }
+  const anyValid = comparisons
+    .reduce((a, b) => a.concat(b), [])
+    .reduce((xx, cc) => xx || cc, false);
+  return anyValid
 });
 
 function makeTypechecker(typecheck, useMemoizer = defaultMemoizer) {
@@ -155,7 +166,8 @@ function checkReturnWith(checker) {
     return function checkReturnTypeValidoutcomeAB(a, b) {
       const actual = checker(outcome);
       const expected = makeTypechecker(checker)(a, b).returnType;
-      return compareTypes(expected, actual)
+      const compared = compareTypes(expected, actual);
+      return compared
     }
   }
 }
@@ -879,7 +891,7 @@ function any(fn, xx) {
 }
 
 const FUNCTION$o = any;
-const SIGNATURE$3 = ["function", "array|object", "boolean"];
+const SIGNATURE$3 = ["function", "object", "boolean"];
 
 function all(fn, xx) {
   let idx = 0;
@@ -915,13 +927,13 @@ function ap(a, b) {
 }
 
 const FUNCTION$q = ap;
-const SIGNATURE$5 = ["function|array", "function|array", "array"];
+const SIGNATURE$5 = ["function|Array", "function|Array", "function|Array"];
 
 function concat(a, b) {
   return a.concat(b)
 }
 const FUNCTION$r = concat;
-const SIGNATURE$6 = ["array", "array", "array"];
+const SIGNATURE$6 = ["any", "any", "any"];
 
 function cond(conditions, input) {
   let idx = 0;
@@ -940,7 +952,7 @@ function cond(conditions, input) {
 }
 
 const FUNCTION$s = cond;
-const SIGNATURE$7 = ["array", "any", "any"];
+const SIGNATURE$7 = ["Array", "any", "any"];
 
 function divide(b, a) {
   return a / b
@@ -974,7 +986,7 @@ function filter(fn, xx) {
 }
 
 const FUNCTION$v = filter;
-const SIGNATURE$a = ["function", "array|object", "array|object"];
+const SIGNATURE$a = ["function", "object", "object"];
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -988,24 +1000,24 @@ function forEach(fn, xx) {
 }
 
 const FUNCTION$w = forEach;
-const SIGNATURE$b = ["function", "array|object", "array|object"];
+const SIGNATURE$b = ["function", "object", "nil"];
 
 function includes(a, b) {
   return a.includes(b)
 }
 const FUNCTION$x = includes;
-const SIGNATURE$c = ["Array|string", "Array|string"];
+const SIGNATURE$c = ["Array|string", "Array|string", "boolean"];
 
-function greaterThan(b, a) {
+function gt(b, a) {
   return a > b
 }
-const FUNCTION$y = greaterThan;
+const FUNCTION$y = gt;
 const SIGNATURE$d = ["number", "number", "boolean"];
 
-function greaterThanOrEqualTo(b, a) {
+function gte(b, a) {
   return a >= b
 }
-const FUNCTION$z = greaterThanOrEqualTo;
+const FUNCTION$z = gte;
 const SIGNATURE$e = ["number", "number", "boolean"];
 
 function join(del, xx) {
@@ -1013,19 +1025,18 @@ function join(del, xx) {
 }
 
 const FUNCTION$A = join;
-const SIGNATURE$f = ["string", "array", "string"];
+const SIGNATURE$f = ["string", "Array", "string"];
 
-function lessThan(b, a) {
+function lt(b, a) {
   return a < b
 }
-
-const FUNCTION$B = lessThan;
+const FUNCTION$B = lt;
 const SIGNATURE$g = ["number", "number", "boolean"];
 
-function lessThanOrEqualTo(b, a) {
+function lte(b, a) {
   return a <= b
 }
-const FUNCTION$C = lessThanOrEqualTo;
+const FUNCTION$C = lte;
 const SIGNATURE$h = ["number", "number", "boolean"];
 
 function map(fn, xx) {
@@ -1040,7 +1051,7 @@ function map(fn, xx) {
   }
   return result
 }
-const SIGNATURE$i = ["function", "Array|object", "Array|object"];
+const SIGNATURE$i = ["function", "object", "object"];
 const FUNCTION$D = map;
 
 function multiply(b, a) {
@@ -1054,7 +1065,7 @@ function nth(ix, xx) {
 }
 
 const FUNCTION$F = nth;
-const SIGNATURE$k = ["number", "array", "any"];
+const SIGNATURE$k = ["number", "Array", "any"];
 
 function or(a, b) {
   return a || b
@@ -1073,14 +1084,14 @@ function range(aa, zz) {
 }
 
 const FUNCTION$H = range;
-const SIGNATURE$m = ["number", "number", "array"];
+const SIGNATURE$m = ["number", "number", "Array"];
 
 function split(del, xx) {
   return xx.split(del)
 }
 
 const FUNCTION$I = split;
-const SIGNATURE$n = ["string", "string", "array"];
+const SIGNATURE$n = ["string", "string", "Array"];
 
 function sort(fn, rr) {
   return [].concat(rr).sort(fn)
@@ -1140,9 +1151,12 @@ const BINARY_WITH_SIGNATURES = [
 ];
 
 function extendBinaryWithSignatures(F) {
-  const sign = F.map(([hm, fn]) => F.def({ n: 2, hm, check: true })(fn));
-  const signed = sign(BINARY_WITH_SIGNATURES);
-  return F.mash(F, signed)
+  return F.temper(
+    F,
+    BINARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 2, check: true, hm })(fn) })
+    }, {})
+  )
 }
 
 function both(aPred, bPred, x) {
@@ -1171,14 +1185,14 @@ function reduce(fn, initial, xx) {
 }
 
 const FUNCTION$O = reduce;
-const SIGNATURE$t = ["function", "any", "array|object", "any"];
+const SIGNATURE$t = ["function", "any", "object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
 const FUNCTION$P = slice;
-const SIGNATURE$u = ["function", "function", "any", "boolean"];
+const SIGNATURE$u = ["number", "number", "object", "object"];
 
 const TERNARY_WITH_SIGNATURES = [
   [SIGNATURE$r, FUNCTION$M],
@@ -1186,10 +1200,14 @@ const TERNARY_WITH_SIGNATURES = [
   [SIGNATURE$t, FUNCTION$O],
   [SIGNATURE$u, FUNCTION$P]
 ];
+
 function extendTernaryWithSignatures(F) {
-  const sign = F.map(([hm, fn]) => F.def({ n: 3, check: true, hm })(fn));
-  const signed = sign(TERNARY_WITH_SIGNATURES);
-  return F.mash(F, signed)
+  return F.temper(
+    F,
+    TERNARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 3, check: true, hm })(fn) })
+    }, {})
+  )
 }
 
 function ifElse(condition, yes, no, xx) {
@@ -1200,10 +1218,14 @@ const FUNCTION$Q = ifElse;
 const SIGNATURE$v = ["function", "function", "function", "any", "any"];
 
 const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$v, FUNCTION$Q]];
+
 function extendQuaternaryWithSignatures(F) {
-  const sign = F.map(([hm, fn]) => F.def({ n: 4, check: true, hm })(fn));
-  const signed = sign(QUATERNARY_WITH_SIGNATURES);
-  return F.mash(F, signed)
+  return F.temper(
+    F,
+    QUATERNARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 4, check: true, hm })(fn) })
+    }, {})
+  )
 }
 
 function coreWithTypes(config) {

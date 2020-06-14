@@ -52,12 +52,46 @@ test("checkReturnWith", () => {
   expect(checkReturnWith(typeSystem)(123)(hm, args)).toBeFalsy()
   expect(checkReturnWith(typeSystem)(true)(hm, args)).toBeFalsy()
 })
+test("checkReturnWith - union type", () => {
+  // const fun = (a, b, c) => '' + a + b + c
+  const hm = ["number", "number", "number", "string|number"]
+  const args = [1, 2, 3]
+  expect(checkReturnWith(typeSystem)(123)(hm, args)).toBeTruthy()
+  expect(checkReturnWith(typeSystem)("string")(hm, args)).toBeTruthy()
+})
 test("checkParamsWith", () => {
   const hm = ["number", "object", "boolean", "string", "symbol", "any"]
   expect(
     checkParamsWith(typeSystem)(hm, [1, {}, true, "yes", Symbol("cool")])
   ).toBeTruthy()
 })
+test("checkParamsWith - union type", () => {
+  const hm = [
+    "number|string",
+    "object|string",
+    "boolean",
+    "string",
+    "symbol",
+    "any"
+  ]
+  expect(
+    checkParamsWith(typeSystem)(hm, [1, {}, true, "yes", Symbol("cool")])
+  ).toBeTruthy()
+  expect(
+    checkParamsWith(typeSystem)(hm, ["string", {}, true, "yes", Symbol("cool")])
+  ).toBeTruthy()
+
+  expect(
+    checkParamsWith(typeSystem)(hm, [
+      "string",
+      "string",
+      true,
+      "yes",
+      Symbol("cool")
+    ])
+  ).toBeTruthy()
+})
+
 test("compareTypes", () => {
   expect(compareTypes("any", "whatever")).toBeTruthy()
   expect(compareTypes("whatever", "any")).toBeTruthy()

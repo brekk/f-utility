@@ -1,6 +1,7 @@
-function greaterThanOrEqualTo(b, a) {
+export function gte(b, a) {
   return a >= b
 }
-export const FUNCTION = greaterThanOrEqualTo
+export default gte
+export const FUNCTION = gte
 export const ARITY = 2
 export const SIGNATURE = ["number", "number", "boolean"]

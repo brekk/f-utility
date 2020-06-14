@@ -3,4 +3,4 @@ function concat(a, b) {
 }
 export const FUNCTION = concat
 export const ARITY = 2
-export const SIGNATURE = ["array", "array", "array"]
+export const SIGNATURE = ["any", "any", "any"]

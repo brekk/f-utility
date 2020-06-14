@@ -4,4 +4,4 @@ function join(del, xx) {
 
 export const FUNCTION = join
 export const ARITY = 2
-export const SIGNATURE = ["string", "array", "string"]
+export const SIGNATURE = ["string", "Array", "string"]

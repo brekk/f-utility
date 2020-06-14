@@ -15,4 +15,4 @@ function reduce(fn, initial, xx) {
 
 export const FUNCTION = reduce
 export const ARITY = 3
-export const SIGNATURE = ["function", "any", "array|object", "any"]
+export const SIGNATURE = ["function", "any", "object", "any"]

@@ -6,6 +6,8 @@ import typeChild from "./typeof"
 const memo = memoizeWith(x => x)
 export const compareTypes = memo(function _compareTypes(exp, given) {
   const [expectedUnion, givenUnion] = [exp, given].map(separateUnionTypes)
+  const expectedHasUnions = expectedUnion.length > 1
+  const givenHasUnions = givenUnion.length > 1
   const comparisons = expectedUnion.map(typeA =>
     givenUnion.map(
       typeB =>
@@ -20,10 +22,19 @@ export const compareTypes = memo(function _compareTypes(exp, given) {
         typeChild(typeA) === typeChild(typeB)
     )
   )
-  const unionComparisons = comparisons.reduce(
+  const noUnionComparisons = comparisons.reduce(
     (all, nextCase) => all.concat(nextCase.filter(z => !z).length === 0),
     []
   )
-  return unionComparisons.filter(z => !z).length === 0
+
+  const out = noUnionComparisons.filter(Boolean)
+
+  if (!expectedHasUnions && !givenHasUnions) {
+    return out.length > 0
+  }
+  const anyValid = comparisons
+    .reduce((a, b) => a.concat(b), [])
+    .reduce((xx, cc) => xx || cc, false)
+  return anyValid
 })
 export default compareTypes

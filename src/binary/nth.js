@@ -4,4 +4,4 @@ function nth(ix, xx) {
 
 export const FUNCTION = nth
 export const ARITY = 2
-export const SIGNATURE = ["number", "array", "any"]
+export const SIGNATURE = ["number", "Array", "any"]

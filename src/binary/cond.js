@@ -17,4 +17,4 @@ function cond(conditions, input) {
 
 export const FUNCTION = cond
 export const ARITY = 2
-export const SIGNATURE = ["array", "any", "any"]
+export const SIGNATURE = ["Array", "any", "any"]

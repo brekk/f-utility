@@ -4,4 +4,4 @@ function slice(aa, bb, xx) {
 
 export const FUNCTION = slice
 export const ARITY = 3
-export const SIGNATURE = ["function", "function", "any", "boolean"]
+export const SIGNATURE = ["number", "number", "object", "object"]
