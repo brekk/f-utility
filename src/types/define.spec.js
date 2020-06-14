@@ -1,4 +1,4 @@
-import { toString } from "./define-function"
+import { toString } from "./define"
 
 test("toString", () => {
   function cobra(x, a, b) {

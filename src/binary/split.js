@@ -4,4 +4,4 @@ function split(del, xx) {
 
 export const FUNCTION = split
 export const ARITY = 2
-export const SIGNATURE = ['string', 'string', 'array']
+export const SIGNATURE = ["string", "string", "array"]

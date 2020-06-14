@@ -1,4 +1,4 @@
-import makeIterable from "../helpers/iterable"
+import makeIterable from "$helpers/iterable"
 
 function map(fn, xx) {
   let idx = 0

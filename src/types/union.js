@@ -1,4 +1,4 @@
-import memoizeWith from "../memoize-with"
+import memoizeWith from "$core/memoize-with"
 const memo = memoizeWith(function basicMemo(x) {
   return x
 })

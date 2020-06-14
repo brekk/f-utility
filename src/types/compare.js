@@ -1,4 +1,4 @@
-import memoizeWith from "../memoize-with"
+import memoizeWith from "$core/memoize-with"
 import separateUnionTypes from "./union"
 import typeParent from "./constructor"
 import typeChild from "./typeof"

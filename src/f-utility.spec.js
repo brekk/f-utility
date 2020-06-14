@@ -1,8 +1,8 @@
 import OLD from "f-utility"
 import R from "ramda"
 import PKG from "../package.json"
-import makeTypechecker from "./types/makeChecker"
-import F from "./build/f-utility"
+import makeTypechecker from "$types/makeChecker"
+import F from "$build/production"
 /* const OLD = require("../old-f-utility") */
 
 test("version", () => {

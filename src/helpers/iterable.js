@@ -1,4 +1,4 @@
-import { length } from "../core/length"
+import { length } from "$core/length"
 
 export function makeIterable(xx) {
   const isArray = Array.isArray(xx)

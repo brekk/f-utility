@@ -11,11 +11,11 @@ export function pipe() {
   return function piped(x) {
     const len = fns.length
     let idx = 0
-    let current = x 
+    let current = x
     while (idx < len) {
-    const fn = fns[idx]
-    current = fn(current)
-idx += 1
+      const fn = fns[idx]
+      current = fn(current)
+      idx += 1
     }
     return current
     /*
@@ -28,5 +28,5 @@ idx += 1
 
 export default pipe
 export const FUNCTION = pipe
-export const ARITY = 'VARIADIC'
-export const SIGNATURE = ['any', 'any']
+export const ARITY = "VARIADIC"
+export const SIGNATURE = ["any", "any"]

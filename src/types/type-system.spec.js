@@ -5,9 +5,9 @@ import {
   checkParamsWith,
   compareTypes,
   archetype
-} from "./types/index"
-import C from "./constants"
-import PREFERRED_TYPE from "./types/archetypes"
+} from "$types/index"
+import C from "$core/constants"
+import PREFERRED_TYPE from "$types/archetypes"
 const { UNMATCHED } = C
 
 test("PREFERRED_TYPE", () => {

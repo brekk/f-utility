@@ -1,10 +1,8 @@
-import {
-  makeTypechecker,
-  checkParamsWith,
-  checkReturnWith,
-  typeSystem,
-  archetype
-} from "./types/index"
+import { makeTypechecker } from "./makeChecker"
+import { checkParamsWith } from "./check-params"
+import { checkReturnWith } from "./check-return"
+import { system as typeSystem } from "./system"
+import { archetype } from "./archetype"
 
 export function makeParamMerger(taste) {
   return function compareParams(aa, bb) {

@@ -1,22 +1,31 @@
 import resolve from "@rollup/plugin-node-resolve"
-// import alias from "@rollup/plugin-alias"
+import alias from "@rollup/plugin-alias"
 import cjs from "@rollup/plugin-commonjs"
 import json from "@rollup/plugin-json"
 import { terser } from "rollup-plugin-terser"
-// import path from "path"
-
-// const local = x => path.resolve(__dirname, x)
+import { map, pipe } from "ramda"
+import path from "path"
+const mapLocal = pipe(
+  map(z =>
+    Object.assign({}, z, {
+      replacement: path.resolve(__dirname, z.replacement)
+    })
+  )
+)
 
 const plugins = [
-  // alias({
-  //   entries: {
-  //     types: "types/index.js",
-  //     binary: "binary/index.js",
-  //     ternary: "ternary/index.js",
-  //     quaternary: "quaternary/index.js",
-  //     derived: "derived/index.js"
-  //   }
-  // }),
+  alias({
+    entries: mapLocal([
+      { find: "$binary", replacement: "src/binary" },
+      { find: "$build", replacement: "src/build" },
+      { find: "$core", replacement: "src/core" },
+      { find: "$derived", replacement: "src/derived" },
+      { find: "$helpers", replacement: "src/helpers" },
+      { find: "$quaternary", replacement: "src/quaternary" },
+      { find: "$ternary", replacement: "src/ternary" },
+      { find: "$types", replacement: "src/types" }
+    ])
+  }),
   json({ namedExports: true, preferConst: true }),
   resolve(),
   cjs({ extensions: [`.js`] })
@@ -37,54 +46,50 @@ const terserConfig = {
 
 const tersePlugs = plugins.concat(terser(terserConfig))
 const BUILD = {
-  CORE: "src/build/f-utility.js"
+  CHECKED: "src/build/debug.js",
+  AUTO: "src/build/f-utility.js",
+  UNCHECKED: "src/build/production.js"
 }
-export default [
-  {
-    input: BUILD.CORE,
-    output: {
-      name: `FUTILITY`,
-      file: `f-utility.umd.js`,
-      format: `umd`
+
+const buildFor = input => {
+  const suffix = input.includes("debug")
+    ? ".debug"
+    : input.includes("production")
+    ? ".unchecked"
+    : ""
+  return [
+    {
+      input,
+      output: {
+        name: `F`,
+        file: `f-utility${suffix}.umd.js`,
+        format: `umd`
+      },
+      plugins: tersePlugs
     },
-    plugins: tersePlugs
-  },
-  {
-    input: BUILD.CORE,
-    output: [
-      {
-        file: `f-utility.js`,
-        format: `cjs`
-      }
-    ],
-    plugins: tersePlugs
-  },
-  {
-    input: BUILD.CORE,
-    output: {
-      file: `f-utility.es.js`,
-      format: `es`
+    {
+      input,
+      output: [
+        {
+          file: `f-utility${suffix}.js`,
+          format: `cjs`
+        }
+      ],
+      plugins: tersePlugs
     },
-    plugins
-  }
-  /*
-  {
-    input: `src/debug.js`,
-    output: {
-      name: `FUTILITYDEBUG`,
-      file: `debug.umd.js`,
-      format: `umd`
-    },
-    plugins
-  },
-  {
-    input: `src/debug.js`,
-    external,
-    output: [
-      { file: `debug.js`, format: `cjs` },
-      { file: `debug.es.js`, format: `es` }
-    ],
-    plugins
-  }
-  */
-]
+    {
+      input,
+      output: {
+        file: `f-utility${suffix}.es.js`,
+        format: `es`
+      },
+      plugins
+    }
+  ]
+}
+
+export default [].concat(
+  buildFor(BUILD.AUTO),
+  buildFor(BUILD.UNCHECKED),
+  buildFor(BUILD.CHECKED)
+)

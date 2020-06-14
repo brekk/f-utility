@@ -1,4 +1,4 @@
-import F from "../build/f-utility"
+import F from "$build/production"
 
 test("bind", () => {
   function hello() {

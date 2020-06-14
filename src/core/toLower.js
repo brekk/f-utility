@@ -5,4 +5,4 @@ export function toLower(z) {
 export default toLower
 export const FUNCTION = toLower
 export const ARITY = 1
-export const SIGNATURE = ['string', 'string']
+export const SIGNATURE = ["string", "string"]

@@ -9,4 +9,4 @@ function range(aa, zz) {
 
 export const FUNCTION = range
 export const ARITY = 2
-export const SIGNATURE = ['number', 'number', 'array']
+export const SIGNATURE = ["number", "number", "array"]

@@ -1,4 +1,4 @@
-import makeIterable from "../helpers/iterable"
+import makeIterable from "$helpers/iterable"
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx)

@@ -1,4 +1,4 @@
-import makeIterable from "../helpers/iterable"
+import makeIterable from "$helpers/iterable"
 
 function makeFlatten({ isArray, forEach }) {
   return function flatten(xx) {

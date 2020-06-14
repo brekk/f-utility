@@ -1,4 +1,4 @@
-import { isFunction, isArray } from "../types/index"
+import { isFunction, isArray } from "$types/index"
 
 function ap(a, b) {
   // S combinator

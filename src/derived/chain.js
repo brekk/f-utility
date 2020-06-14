@@ -6,10 +6,7 @@ function makeChain({ curryN, map, pipe, reduce, concat }) {
     // If second argument is a function, chain(f, g)(x) is equivalent to f(g(x), x).
     if (typeof xx === "function") return yy => fn(xx(yy), yy)
     // (skipping this for now) Acts as a transducer if a transformer is given in list position.
-    return pipe(
-      map(fn),
-      reduce(concat, [])
-    )(xx)
+    return pipe(map(fn), reduce(concat, []))(xx)
   })
 }
 

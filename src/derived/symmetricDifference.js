@@ -1,4 +1,4 @@
-import makeIterable from "../helpers/iterable"
+import makeIterable from "$helpers/iterable"
 function makeSymmetricDifference({ curryN }) {
   return curryN(ARITY, function symmetricDifference(aa, bb) {
     const aLoop = makeIterable(aa)

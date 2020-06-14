@@ -5,4 +5,4 @@ export function not(yy) {
 export default not
 export const FUNCTION = not
 export const ARITY = 1
-export const SIGNATURE = ['any', 'boolean']
+export const SIGNATURE = ["any", "boolean"]

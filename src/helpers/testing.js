@@ -1,4 +1,4 @@
-function testCurriedFunctionEqual(arity) {
+export function testCurriedFunctionEqual(arity) {
   return function matching(expected, fn) {
     const INVOKER = {
       0: () => expect(fn()).toEqual(expected),

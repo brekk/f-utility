@@ -1,5 +1,5 @@
 import R from "ramda"
-import F from "../build/f-utility"
+import F from "$build/production"
 
 test("difference", () => {
   const one = "abcdefghi".split("")

@@ -1,4 +1,4 @@
-import C from "../constants"
+import C from "$core/constants"
 const { __of__ } = C
 export function system(z) {
   let constructor = (z && z.constructor && z.constructor.name) || "Global"

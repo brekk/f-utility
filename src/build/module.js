@@ -1,6 +1,6 @@
-import C from "../constants"
-import { mash } from "../core/mash"
-import { defineFunctionWithParameterTest } from "../define-function"
+import C from "$core/constants"
+import { mash } from "$core/mash"
+import { defineFunctionWithParameterTest } from "$types/define"
 const { $ } = C
 
 export function DEFAULT_PLACEHOLDER_TEST(x) {

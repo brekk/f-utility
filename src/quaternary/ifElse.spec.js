@@ -1,4 +1,4 @@
-import F from "../build/f-utility"
+import F from "$build/production"
 /* eslint-disable func-style */
 test("ifElse", () => {
   const yes = x => x * 2

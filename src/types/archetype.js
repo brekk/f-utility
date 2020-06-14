@@ -1,5 +1,5 @@
-import C from "../constants"
 import ARCHETYPES from "./archetypes"
+import C from "$core/constants"
 const { UNION_TYPE_DELIMITER: U, __of__ } = C
 export function unionArchetype(recurse) {
   return function arch(tt) {

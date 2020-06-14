@@ -1,5 +1,5 @@
-import memoizeWith from "../memoize-with"
-import C from "../constants"
+import memoizeWith from "$core/memoize-with"
+import C from "$core/constants"
 const { __of__ } = C
 const memo = memoizeWith(x => x)
 

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`config 1`] = `
+Object {
+  "AUTO": Object {
+    "check": true,
+    "name": "@@FUTILITY::config.auto",
+    "ts": [Function],
+  },
+  "CHECKED": Object {
+    "check": true,
+    "name": "@@FUTILITY::config.checked",
+    "ts": [Function],
+  },
+  "UNCHECKED": Object {
+    "check": false,
+    "name": "@@FUTILITY::config.unchecked",
+    "ts": [Function],
+  },
+}
+`;

@@ -1,4 +1,4 @@
-import F from "../build/f-utility"
+import F from "$build/production"
 
 test("smash", () => {
   expect(F.smash([{ a: 1 }, { b: 2 }, { c: 3 }, { d: 4 }])).toEqual({

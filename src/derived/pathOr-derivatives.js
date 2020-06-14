@@ -1,4 +1,4 @@
-import C from "../constants"
+import C from "$core/constants"
 function makePathOrDerivatives({ equals, is, curryN, pipe, pathOr }) {
   // pathOr => {path, pathEq, pathSatisfies, pathIs}
   // propOr => {prop, propEq, propSatisfies, propIs}

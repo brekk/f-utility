@@ -16,6 +16,11 @@ const C = Object.freeze({
 });
 // ∋ indicates "a member of"
 
+function mash(a, b) {
+  return Object.assign({}, a, b)
+}
+const FUNCTION = mash;
+
 function memoizeWith(memoizer) {
   return function memoize(fn) {
     const saved = {};
@@ -29,65 +34,6 @@ function memoizeWith(memoizer) {
     return memoized
   }
 }
-
-function ofConstructor(Ctor) {
-  return function ofConstructorsAndMagic(xx) {
-    return (xx && xx.constructor === Ctor) || xx instanceof Ctor
-  }
-}
-
-function ofType(exp) {
-  return function compareTypeofs(xx) {
-    return typeof xx === exp // eslint-disable-line valid-typeof
-  }
-}
-
-const [
-  _isString,
-  _isNumber,
-  _isFunction,
-  _isBoolean,
-  _isSymbol,
-  _isRawObject
-] = [String, Number, Function, Boolean, Symbol, Object].map(ofConstructor);
-const isUndefined = ofType("undefined");
-const isString = _isString;
-const isNumber = _isNumber;
-const isFunction = _isFunction;
-const isBoolean = _isBoolean;
-const isSymbol = _isSymbol;
-const isRawObject = _isRawObject;
-const isArray = Array.isArray;
-
-const ARCHETYPES = Object.freeze({
-  string: "String∋string",
-  number: "Number∋number",
-  boolean: "Boolean∋boolean",
-  function: "Function∋function",
-  object: "Object∋object",
-  undefined: "Global∋nil",
-  symbol: "Symbol∋symbol",
-  nil: "Global∋nil"
-});
-
-const { UNION_TYPE_DELIMITER: U, __of__: __of__$1 } = C;
-function unionArchetype(recurse) {
-  return function arch(tt) {
-    if (tt && tt.indexOf && tt.indexOf(U) > -1 && recurse) {
-      return tt.split(U).map(z => unionArchetype(false)(z))
-    }
-    const match = ARCHETYPES[tt];
-    if (match) return match
-    if (tt[0].toUpperCase() === tt[0]) return `${tt}${__of__$1}object`
-    return tt
-  }
-}
-const archetype = unionArchetype(true);
-
-function mash(a, b) {
-  return Object.assign({}, a, b)
-}
-const FUNCTION = mash;
 
 function symbolToString(s) {
   return "" + s.toString()
@@ -108,19 +54,19 @@ const union = memo(function unionType(x) {
   return x.split("|")
 });
 
-const { __of__: __of__$2 } = C;
+const { __of__: __of__$1 } = C;
 const memo$1 = memoizeWith(x => x);
 
 const constructor = memo$1(x => {
-  const oof = x.indexOf(__of__$2);
+  const oof = x.indexOf(__of__$1);
   return oof > -1 ? x.slice(0, oof) : x
 });
 
-const { __of__: __of__$3 } = C;
+const { __of__: __of__$2 } = C;
 const memo$2 = memoizeWith(x => x);
 
 const typeChild = memo$2(x => {
-  const oof = x.indexOf(__of__$3);
+  const oof = x.indexOf(__of__$2);
   return oof > -1 ? x.slice(oof + 1) : x
 });
 
@@ -197,27 +143,6 @@ function makeTypechecker(typecheck, useMemoizer = defaultMemoizer) {
   })
 }
 
-const { UNMATCHED } = C;
-function isUnmatched(z) {
-  return z === UNMATCHED
-}
-
-const { __of__: __of__$4 } = C;
-function system(z) {
-  let constructor = (z && z.constructor && z.constructor.name) || "Global";
-  let type = typeof z;
-  // deal with undefined / null
-  // and the fact that z.constructor.name for boolean is currently Global
-  if (!z) {
-    if (type === "undefined" || type === "object") {
-      type = "nil";
-    } else {
-      constructor = "Boolean";
-    }
-  }
-  return `${constructor}${__of__$4}${type}`
-}
-
 function checkParamsWith(checker) {
   return function checkParams(signature, given) {
     const checked = makeTypechecker(checker)(signature, given);
@@ -233,6 +158,200 @@ function checkReturnWith(checker) {
       return compareTypes(expected, actual)
     }
   }
+}
+
+const { __of__: __of__$3 } = C;
+function system(z) {
+  let constructor = (z && z.constructor && z.constructor.name) || "Global";
+  let type = typeof z;
+  // deal with undefined / null
+  // and the fact that z.constructor.name for boolean is currently Global
+  if (!z) {
+    if (type === "undefined" || type === "object") {
+      type = "nil";
+    } else {
+      constructor = "Boolean";
+    }
+  }
+  return `${constructor}${__of__$3}${type}`
+}
+
+const ARCHETYPES = Object.freeze({
+  string: "String∋string",
+  number: "Number∋number",
+  boolean: "Boolean∋boolean",
+  function: "Function∋function",
+  object: "Object∋object",
+  undefined: "Global∋nil",
+  symbol: "Symbol∋symbol",
+  nil: "Global∋nil"
+});
+
+const { UNION_TYPE_DELIMITER: U, __of__: __of__$4 } = C;
+function unionArchetype(recurse) {
+  return function arch(tt) {
+    if (tt && tt.indexOf && tt.indexOf(U) > -1 && recurse) {
+      return tt.split(U).map(z => unionArchetype(false)(z))
+    }
+    const match = ARCHETYPES[tt];
+    if (match) return match
+    if (tt[0].toUpperCase() === tt[0]) return `${tt}${__of__$4}object`
+    return tt
+  }
+}
+const archetype = unionArchetype(true);
+
+function makeParamMerger(taste) {
+  return function compareParams(aa, bb) {
+    return aa
+      .map(function testGaps(yy) {
+        return taste(yy) && bb[0] ? bb.shift() : yy
+      })
+      .concat(bb)
+  }
+}
+function testCurryGaps(taste) {
+  return function testCurryCapsByTaste(args) {
+    return args.reduce(function doesCurryTasteGood(pp, x) {
+      return taste(x) ? pp : pp + 1
+    }, 0)
+  }
+}
+function some(fn) {
+  return function someInList(x) {
+    return x.some(fn)
+  }
+}
+
+function toString(fn, args = []) {
+  return function functionToString() {
+    return `curry(${fn.name || "fn"})${
+      args.length > 0 ? `(${args.join(`,`)})` : ``
+    }`
+  }
+}
+
+function hmError(name, actual, params) {
+  return `Given ${name}( ${actual &&
+    actual.join(", ")} ) but expected ${name}( ${params
+    .map(z => (Array.isArray(z) ? z.join("|") : z))
+    .slice(0, actual.length)
+    .join(", ")} )`
+}
+
+function defineFunctionWithParameterTest(test) {
+  return function funcfunc({ ts = system, n: givenLength, hm, check }) {
+    if (check) {
+      if (typeof ts !== "function")
+        throw new TypeError("Expected typeSystem to be a function.")
+      if (!hm || !Array.isArray(hm))
+        throw new TypeError("Expected hm to be an array of strings.")
+    }
+    return function currified(fn) {
+      const heat = testCurryGaps(test);
+      const mergeParams = makeParamMerger(test);
+      const isSpicy = some(test);
+      function curried() {
+        const args = Array.from(arguments);
+
+        const nArgs =
+          hm && Array.isArray(hm)
+            ? hm.length - 1
+            : givenLength && typeof givenLength === "number"
+            ? givenLength
+            : fn.length;
+        const length = isSpicy(args) ? heat(args) : args.length;
+        function saucy() {
+          const args2 = Array.from(arguments);
+          return curried.apply(this, mergeParams(args, args2))
+        }
+        saucy.toString = toString(fn, args);
+        if (length >= nArgs) {
+          const result = fn.apply(this, args);
+          if (check) {
+            const tChecker = makeTypechecker(ts)(hm, args);
+            const isValid = checkParamsWith(ts)(hm, args);
+
+            if (!isValid) {
+              const { rawParams, params } = tChecker;
+              throw new TypeError(
+                hmError(
+                  fn.name,
+                  rawParams.map(z => z.actual),
+                  params.map(archetype)
+                )
+              )
+            }
+            const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
+
+            if (!returnTypeValid) {
+              const { returnType } = tChecker;
+              throw new TypeError(
+                `Expected ${fn.name} to return ${archetype(
+                  returnType
+                )} but got ${system(result)}.`
+              )
+            }
+          }
+          return result
+        }
+        return saucy
+      }
+      curried.toString = toString(fn);
+      return curried
+    }
+  }
+}
+
+const { $ } = C;
+
+function DEFAULT_PLACEHOLDER_TEST(x) {
+  return x === $
+}
+
+function fabricate(config) {
+  const { test = DEFAULT_PLACEHOLDER_TEST } = config;
+  const def = defineFunctionWithParameterTest(test);
+  const curry = def(mash(config, { n: false, check: false }));
+  const curryN = curry(function _curryN(nn, fn) {
+    return def(mash(config, { n: nn, check: false }))(fn)
+  });
+  return { def, curry, curryN }
+}
+fabricate(DEFAULT_PLACEHOLDER_TEST);
+
+function ofConstructor(Ctor) {
+  return function ofConstructorsAndMagic(xx) {
+    return (xx && xx.constructor === Ctor) || xx instanceof Ctor
+  }
+}
+
+function ofType(exp) {
+  return function compareTypeofs(xx) {
+    return typeof xx === exp // eslint-disable-line valid-typeof
+  }
+}
+
+const [
+  _isString,
+  _isNumber,
+  _isFunction,
+  _isBoolean,
+  _isSymbol,
+  _isRawObject
+] = [String, Number, Function, Boolean, Symbol, Object].map(ofConstructor);
+const isUndefined = ofType("undefined");
+const isString = _isString;
+const isNumber = _isNumber;
+const isFunction = _isFunction;
+const isBoolean = _isBoolean;
+const isSymbol = _isSymbol;
+const isRawObject = _isRawObject;
+const isArray = Array.isArray;
+
+const { UNMATCHED } = C;
+function isUnmatched(z) {
+  return z === UNMATCHED
 }
 
 function autoCurryUsing(curryN) {
@@ -358,11 +477,11 @@ function pipe() {
   return function piped(x) {
     const len = fns.length;
     let idx = 0;
-    let current = x; 
+    let current = x;
     while (idx < len) {
-    const fn = fns[idx];
-    current = fn(current);
-idx += 1;
+      const fn = fns[idx];
+      current = fn(current);
+      idx += 1;
     }
     return current
     /*
@@ -484,10 +603,7 @@ function makeChain({ curryN, map, pipe, reduce, concat }) {
     // If second argument is a function, chain(f, g)(x) is equivalent to f(g(x), x).
     if (typeof xx === "function") return yy => fn(xx(yy), yy)
     // (skipping this for now) Acts as a transducer if a transformer is given in list position.
-    return pipe(
-      map(fn),
-      reduce(concat, [])
-    )(xx)
+    return pipe(map(fn), reduce(concat, []))(xx)
   })
 }
 const ARITY = 2;
@@ -547,12 +663,7 @@ function makePredicatesPass({
 }) {
   function predFor(pred) {
     return curryN(2, function predPass(preds, xx) {
-      return pipe(
-        map(flip(pred)(xx)),
-        smooth,
-        length,
-        gt(0)
-      )(preds)
+      return pipe(map(flip(pred)(xx)), smooth, length, gt(0))(preds)
     })
   }
   return { anyPass: predFor(any), allPass: predFor(all) }
@@ -742,16 +853,19 @@ function add(b, a) {
 }
 
 const FUNCTION$l = add;
+const SIGNATURE = ["number", "number", "number"];
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
 const FUNCTION$m = apply;
+const SIGNATURE$1 = ["function", "Array", "any"];
 
 function and(a, b) {
   return a && b
 }
 const FUNCTION$n = and;
+const SIGNATURE$2 = ["any", "any", "boolean"];
 
 function any(fn, xx) {
   let idx = 0;
@@ -765,6 +879,7 @@ function any(fn, xx) {
 }
 
 const FUNCTION$o = any;
+const SIGNATURE$3 = ["function", "array|object", "boolean"];
 
 function all(fn, xx) {
   let idx = 0;
@@ -779,6 +894,7 @@ function all(fn, xx) {
   return promised
 }
 const FUNCTION$p = all;
+const SIGNATURE$4 = ["function", "Array|object"];
 
 function ap(a, b) {
   // S combinator
@@ -799,11 +915,13 @@ function ap(a, b) {
 }
 
 const FUNCTION$q = ap;
+const SIGNATURE$5 = ["function|array", "function|array", "array"];
 
 function concat(a, b) {
   return a.concat(b)
 }
 const FUNCTION$r = concat;
+const SIGNATURE$6 = ["array", "array", "array"];
 
 function cond(conditions, input) {
   let idx = 0;
@@ -822,16 +940,19 @@ function cond(conditions, input) {
 }
 
 const FUNCTION$s = cond;
+const SIGNATURE$7 = ["array", "any", "any"];
 
 function divide(b, a) {
   return a / b
 }
 const FUNCTION$t = divide;
+const SIGNATURE$8 = ["number", "number", "number"];
 
 function equals(a, b) {
   return a === b
 }
 const FUNCTION$u = equals;
+const SIGNATURE$9 = ["any", "any", "boolean"];
 
 function filter(fn, xx) {
   let idx = 0;
@@ -853,6 +974,7 @@ function filter(fn, xx) {
 }
 
 const FUNCTION$v = filter;
+const SIGNATURE$a = ["function", "array|object", "array|object"];
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -866,38 +988,45 @@ function forEach(fn, xx) {
 }
 
 const FUNCTION$w = forEach;
+const SIGNATURE$b = ["function", "array|object", "array|object"];
 
 function includes(a, b) {
   return a.includes(b)
 }
 const FUNCTION$x = includes;
+const SIGNATURE$c = ["Array|string", "Array|string"];
 
 function greaterThan(b, a) {
   return a > b
 }
 const FUNCTION$y = greaterThan;
+const SIGNATURE$d = ["number", "number", "boolean"];
 
 function greaterThanOrEqualTo(b, a) {
   return a >= b
 }
 const FUNCTION$z = greaterThanOrEqualTo;
+const SIGNATURE$e = ["number", "number", "boolean"];
 
 function join(del, xx) {
   return xx.join(del)
 }
 
 const FUNCTION$A = join;
+const SIGNATURE$f = ["string", "array", "string"];
 
 function lessThan(b, a) {
   return a < b
 }
 
 const FUNCTION$B = lessThan;
+const SIGNATURE$g = ["number", "number", "boolean"];
 
 function lessThanOrEqualTo(b, a) {
   return a <= b
 }
 const FUNCTION$C = lessThanOrEqualTo;
+const SIGNATURE$h = ["number", "number", "boolean"];
 
 function map(fn, xx) {
   let idx = 0;
@@ -911,24 +1040,28 @@ function map(fn, xx) {
   }
   return result
 }
+const SIGNATURE$i = ["function", "Array|object", "Array|object"];
 const FUNCTION$D = map;
 
 function multiply(b, a) {
   return a * b
 }
 const FUNCTION$E = multiply;
+const SIGNATURE$j = ["number", "number", "number"];
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
 const FUNCTION$F = nth;
+const SIGNATURE$k = ["number", "array", "any"];
 
 function or(a, b) {
   return a || b
 }
 
 const FUNCTION$G = or;
+const SIGNATURE$l = ["any", "any", "boolean"];
 
 function range(aa, zz) {
   const out = [];
@@ -940,79 +1073,89 @@ function range(aa, zz) {
 }
 
 const FUNCTION$H = range;
+const SIGNATURE$m = ["number", "number", "array"];
 
 function split(del, xx) {
   return xx.split(del)
 }
 
 const FUNCTION$I = split;
+const SIGNATURE$n = ["string", "string", "array"];
 
 function sort(fn, rr) {
   return [].concat(rr).sort(fn)
 }
 
 const FUNCTION$J = sort;
+const SIGNATURE$o = ["function", "Array", "Array"];
 
 function subtract(b, a) {
   return a - b
 }
 
 const FUNCTION$K = subtract;
+const SIGNATURE$p = ["number", "number", "number"];
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
 const FUNCTION$L = toJSON;
+const SIGNATURE$q = ["number", "any", "string"];
 
-function extendBinary(F) {
-  const BINARY = {
-    // infix
-    gt: FUNCTION$y,
-    gte: FUNCTION$z,
-    lt: FUNCTION$B,
-    lte: FUNCTION$C,
-    and: FUNCTION$n,
-    equals: FUNCTION$u,
-    or: FUNCTION$G,
-    // math
-    subtract: FUNCTION$K,
-    add: FUNCTION$l,
-    divide: FUNCTION$t,
-    multiply: FUNCTION$E,
-    // predicate
-    all: FUNCTION$p,
-    any: FUNCTION$o,
-    filter: FUNCTION$v,
-    forEach: FUNCTION$w,
-    includes: FUNCTION$x,
-    // folds
-    apply: FUNCTION$m,
-    ap: FUNCTION$q,
-    concat: FUNCTION$r,
-    map: FUNCTION$D,
-    join: FUNCTION$A,
-    cond: FUNCTION$s,
-    // accessor
-    nth: FUNCTION$F,
-    // generator
-    range: FUNCTION$H,
-    // conversion
-    sort: FUNCTION$J,
-    split: FUNCTION$I,
-    toJSON: FUNCTION$L
-  };
-  return F.temper(F, BINARY)
+const BINARY_WITH_SIGNATURES = [
+  // infix
+  [SIGNATURE$d, FUNCTION$y],
+  [SIGNATURE$e, FUNCTION$z],
+  [SIGNATURE$g, FUNCTION$B],
+  [SIGNATURE$h, FUNCTION$C],
+  [SIGNATURE$2, FUNCTION$n],
+  [SIGNATURE$9, FUNCTION$u],
+  [SIGNATURE$l, FUNCTION$G],
+  // math
+  [SIGNATURE$p, FUNCTION$K],
+  [SIGNATURE, FUNCTION$l],
+  [SIGNATURE$8, FUNCTION$t],
+  [SIGNATURE$j, FUNCTION$E],
+  // predicate
+  [SIGNATURE$4, FUNCTION$p],
+  [SIGNATURE$3, FUNCTION$o],
+  [SIGNATURE$a, FUNCTION$v],
+  [SIGNATURE$b, FUNCTION$w],
+  [SIGNATURE$c, FUNCTION$x],
+  // folds
+  [SIGNATURE$5, FUNCTION$q],
+  [SIGNATURE$6, FUNCTION$r],
+  [SIGNATURE$i, FUNCTION$D],
+  [SIGNATURE$7, FUNCTION$s],
+  [SIGNATURE$1, FUNCTION$m],
+  // accessor
+  [SIGNATURE$k, FUNCTION$F],
+  // generator
+  [SIGNATURE$m, FUNCTION$H],
+  // conversion
+  [SIGNATURE$f, FUNCTION$A],
+  [SIGNATURE$o, FUNCTION$J],
+  [SIGNATURE$n, FUNCTION$I],
+  [SIGNATURE$q, FUNCTION$L]
+];
+
+function extendBinaryWithSignatures(F) {
+  const sign = F.map(([hm, fn]) => F.def({ n: 2, hm, check: true })(fn));
+  const signed = sign(BINARY_WITH_SIGNATURES);
+  return F.mash(F, signed)
 }
 
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
 const FUNCTION$M = both;
+const SIGNATURE$r = ["function", "function", "any", "boolean"];
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
 const FUNCTION$N = either;
+const SIGNATURE$s = ["function", "function", "any"];
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -1028,24 +1171,25 @@ function reduce(fn, initial, xx) {
 }
 
 const FUNCTION$O = reduce;
+const SIGNATURE$t = ["function", "any", "array|object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
 const FUNCTION$P = slice;
+const SIGNATURE$u = ["function", "function", "any", "boolean"];
 
-function extendTernary(F) {
-  const ternaryExtension = {
-    // logic
-    both: FUNCTION$M,
-    either: FUNCTION$N,
-    // folds
-    reduce: FUNCTION$O,
-    // alteration
-    slice: FUNCTION$P
-  };
-  return F.temper(F, ternaryExtension)
+const TERNARY_WITH_SIGNATURES = [
+  [SIGNATURE$r, FUNCTION$M],
+  [SIGNATURE$s, FUNCTION$N],
+  [SIGNATURE$t, FUNCTION$O],
+  [SIGNATURE$u, FUNCTION$P]
+];
+function extendTernaryWithSignatures(F) {
+  const sign = F.map(([hm, fn]) => F.def({ n: 3, check: true, hm })(fn));
+  const signed = sign(TERNARY_WITH_SIGNATURES);
+  return F.mash(F, signed)
 }
 
 function ifElse(condition, yes, no, xx) {
@@ -1053,134 +1197,16 @@ function ifElse(condition, yes, no, xx) {
 }
 
 const FUNCTION$Q = ifElse;
+const SIGNATURE$v = ["function", "function", "function", "any", "any"];
 
-function extendQuaternary(F) {
-  const quaternaryExtension = {
-    ifElse: FUNCTION$Q
-  };
-  return F.temper(F, quaternaryExtension)
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$v, FUNCTION$Q]];
+function extendQuaternaryWithSignatures(F) {
+  const sign = F.map(([hm, fn]) => F.def({ n: 4, check: true, hm })(fn));
+  const signed = sign(QUATERNARY_WITH_SIGNATURES);
+  return F.mash(F, signed)
 }
 
-function makeParamMerger(taste) {
-  return function compareParams(aa, bb) {
-    return aa
-      .map(function testGaps(yy) {
-        return taste(yy) && bb[0] ? bb.shift() : yy
-      })
-      .concat(bb)
-  }
-}
-function testCurryGaps(taste) {
-  return function testCurryCapsByTaste(args) {
-    return args.reduce(function doesCurryTasteGood(pp, x) {
-      return taste(x) ? pp : pp + 1
-    }, 0)
-  }
-}
-function some(fn) {
-  return function someInList(x) {
-    return x.some(fn)
-  }
-}
-
-function toString(fn, args = []) {
-  return function functionToString() {
-    return `curry(${fn.name || "fn"})${
-      args.length > 0 ? `(${args.join(`,`)})` : ``
-    }`
-  }
-}
-
-function hmError(name, actual, params) {
-  return `Given ${name}( ${actual &&
-    actual.join(", ")} ) but expected ${name}( ${params
-    .map(z => (Array.isArray(z) ? z.join("|") : z))
-    .slice(0, actual.length)
-    .join(", ")} )`
-}
-
-function defineFunctionWithParameterTest(test) {
-  return function funcfunc({ ts = system, n: givenLength, hm, check }) {
-    if (check) {
-      if (typeof ts !== "function")
-        throw new TypeError("Expected typeSystem to be a function.")
-      if (!hm || !Array.isArray(hm))
-        throw new TypeError("Expected hm to be an array of strings.")
-    }
-    return function currified(fn) {
-      const heat = testCurryGaps(test);
-      const mergeParams = makeParamMerger(test);
-      const isSpicy = some(test);
-      function curried() {
-        const args = Array.from(arguments);
-
-        const nArgs =
-          hm && Array.isArray(hm)
-            ? hm.length - 1
-            : givenLength && typeof givenLength === "number"
-            ? givenLength
-            : fn.length;
-        const length = isSpicy(args) ? heat(args) : args.length;
-        function saucy() {
-          const args2 = Array.from(arguments);
-          return curried.apply(this, mergeParams(args, args2))
-        }
-        saucy.toString = toString(fn, args);
-        if (length >= nArgs) {
-          const result = fn.apply(this, args);
-          if (check) {
-            const tChecker = makeTypechecker(ts)(hm, args);
-            const isValid = checkParamsWith(ts)(hm, args);
-
-            if (!isValid) {
-              const { rawParams, params } = tChecker;
-              throw new TypeError(
-                hmError(
-                  fn.name,
-                  rawParams.map(z => z.actual),
-                  params.map(archetype)
-                )
-              )
-            }
-            const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
-
-            if (!returnTypeValid) {
-              const { returnType } = tChecker;
-              throw new TypeError(
-                `Expected ${fn.name} to return ${archetype(
-                  returnType
-                )} but got ${system(result)}.`
-              )
-            }
-          }
-          return result
-        }
-        return saucy
-      }
-      curried.toString = toString(fn);
-      return curried
-    }
-  }
-}
-
-const { $ } = C;
-
-function DEFAULT_PLACEHOLDER_TEST(x) {
-  return x === $
-}
-
-function fabricate(config) {
-  const { test = DEFAULT_PLACEHOLDER_TEST } = config;
-  const def = defineFunctionWithParameterTest(test);
-  const curry = def(mash(config, { n: false, check: false }));
-  const curryN = curry(function _curryN(nn, fn) {
-    return def(mash(config, { n: nn, check: false }))(fn)
-  });
-  return { def, curry, curryN }
-}
-fabricate(DEFAULT_PLACEHOLDER_TEST);
-
-function custom(config) {
+function coreWithTypes(config) {
   return CORE.pipe(fabricate, function basicDefinitions({
     def,
     curry,
@@ -1207,26 +1233,50 @@ function custom(config) {
       isUnmatched
     });
     return BASE.pipe(
-      extendBinary,
+      extendBinaryWithSignatures,
       autoCurry,
-      extendTernary,
+      extendTernaryWithSignatures,
       autoCurry,
-      extendQuaternary,
+      extendQuaternaryWithSignatures,
       autoCurry,
       extendDerived,
       makeAliases
     )(BASE)
   })(config)
 }
-const DEFAULT_CONFIG = {
-  ts: system,
-  check:
-    typeof process !== "undefined" &&
-    typeof process.env !== "undefined" &&
-    typeof process.env.NODE_ENV !== "undefined" &&
-    process.env.NODE_ENV !== "production"
-};
-const FUTILITY = custom(DEFAULT_CONFIG);
-var fUtility = FUTILITY.temper(FUTILITY, { custom, version: "4.0.0" });
+
+const CONFIG = Object.freeze({
+  UNCHECKED: {
+    name: "@@FUTILITY::config.unchecked",
+    ts: () => "any",
+    check: false
+  },
+  CHECKED: {
+    name: "@@FUTILITY::config.checked",
+    ts: system,
+    check: true
+  },
+  AUTO: {
+    name: "@@FUTILITY::config.auto",
+    ts: system,
+    check:
+      /* istanbul ignore next */
+      (typeof process !== "undefined" &&
+        typeof process.env !== "undefined" &&
+        typeof process.env.NODE_ENV !== "undefined" &&
+        process.env.NODE_ENV !== "production") ||
+      /* istanbul ignore next */
+      (typeof window !== "undefined" &&
+        typeof window.__FUTILITY_TYPE_CHECK === "boolean" &&
+        window.__FUTILITY_TYPE_CHECK)
+  }
+});
+
+const FUTILITY = coreWithTypes(CONFIG.AUTO);
+var fUtility = FUTILITY.temper(FUTILITY, {
+  custom: coreWithTypes,
+  version: "4.0.0",
+  configuration: CONFIG.AUTO
+});
 
 export default fUtility;

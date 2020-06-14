@@ -1,4 +1,4 @@
-import F from "./build/f-utility"
+import F from "$build/production"
 
 test("all f-utility functions of arity > 1 are curried!", () => {
   F.pipe(

@@ -1,5 +1,5 @@
-import { mash } from "../core/mash"
-import memoizeWith from "../memoize-with"
+import { mash } from "$core/mash"
+import memoizeWith from "$core/memoize-with"
 import defaultMemoizer from "./memoizer"
 import compareType from "./compare"
 

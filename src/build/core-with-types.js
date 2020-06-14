@@ -1,0 +1,63 @@
+import { fabricate } from "./module"
+import C from "$core/constants"
+import memoizeWith from "$core/memoize-with"
+import {
+  is,
+  isArray,
+  isBoolean,
+  isFunction,
+  isNumber,
+  isRawObject,
+  isString,
+  isSymbol,
+  isUndefined,
+  isUnmatched
+} from "$types/index"
+import autoCurryWith from "$core/auto-curry"
+import addAliases from "$core/aliases"
+import CORE from "$core/index"
+import addSideEffectMethods from "$core/side-effect"
+import extendDerived from "$derived/index-with-types"
+import extendBinary from "$binary/index-with-types"
+import extendTernary from "$ternary/index-with-types"
+import extendQuaternary from "$quaternary/index-with-types"
+
+function coreWithTypes(config) {
+  return CORE.pipe(fabricate, function basicDefinitions({
+    def,
+    curry,
+    curryN
+  }) {
+    const sideEffectMethods = addSideEffectMethods(curry)
+    const autoCurry = autoCurryWith(curryN)
+    const BASE = CORE.smash(autoCurry(CORE), sideEffectMethods, {
+      memoizeWith,
+      def,
+      curry,
+      curryN,
+      C,
+      $: C.$,
+      is,
+      isArray,
+      isBoolean,
+      isFunction,
+      isNumber,
+      isRawObject,
+      isString,
+      isSymbol,
+      isUndefined,
+      isUnmatched
+    })
+    return BASE.pipe(
+      extendBinary,
+      autoCurry,
+      extendTernary,
+      autoCurry,
+      extendQuaternary,
+      autoCurry,
+      extendDerived,
+      addAliases
+    )(BASE)
+  })(config)
+}
+export default coreWithTypes

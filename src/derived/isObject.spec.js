@@ -1,4 +1,4 @@
-import F from "../build/f-utility"
+import F from "$build/production"
 
 test("isObject", () => {
   const output = F.map(F.isObject, [
