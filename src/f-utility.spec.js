@@ -1,55 +1,39 @@
 import OLD from "f-utility"
 import R from "ramda"
 import PKG from "../package.json"
-import F from "$build/production"
+import exam from "$build/tester"
 /* const OLD = require("../old-f-utility") */
 
-test("version", () => {
+exam("version", F => () => {
   expect(F.version).toEqual(PKG.version)
+})
+exam("snapshot", F => () => {
+  const sortedSnapKeys = F.pipe(
+    F.filter(F.is(Function)),
+    F.keys,
+    F.sort((a, b) => a - b)
+  )(F)
+  expect(sortedSnapKeys).toMatchSnapshot()
 })
 
 /* eslint-disable func-style */
-describe("comparisons", () => {
-  const futilityMethods = F.keys(F)
-  expect(
-    futilityMethods.sort((a, b) => (a !== b ? (a > b ? 1 : -1) : 0))
-  ).toMatchSnapshot()
+exam("f-utility vs. ramda", F => () => {
+  const futilityMethods = F.pipe(F.filter(F.is(Function)), F.keys)(F)
   const FUTILITY_VS_RAMDA = F.difference(futilityMethods, R.keys(R))
+  expect(FUTILITY_VS_RAMDA).toMatchSnapshot()
+})
+exam("ramda vs. f-utility", F => () => {
+  const futilityMethods = F.pipe(F.filter(F.is(Function)), F.keys)(F)
   const RAMDA_VS_FUTILITY = F.difference(R.keys(R), futilityMethods)
-  const F4_VS_F3 = F.difference(futilityMethods, R.keys(OLD))
+  expect(RAMDA_VS_FUTILITY).toMatchSnapshot()
+})
+exam("v3 vs. v4", F => () => {
+  const futilityMethods = F.pipe(F.filter(F.is(Function)), F.keys)(F)
   const F3_VS_F4 = F.difference(R.keys(OLD), futilityMethods)
-  test("f-utility vs. ramda", () => {
-    expect(FUTILITY_VS_RAMDA).toMatchSnapshot()
-  })
-  test("ramda vs. f-utility", () => {
-    expect(RAMDA_VS_FUTILITY).toMatchSnapshot()
-  })
-  test("v3 vs. v4", () => {
-    expect(F3_VS_F4).toMatchSnapshot()
-  })
-  test("v4 vs. v3", () => {
-    expect(F4_VS_F3).toMatchSnapshot()
-  })
-  test("symmetricDifference", () => {
-    expect(F.symmetricDifference(F, R)).toEqual(R.symmetricDifference(F, R))
-    expect(F.symmetricDifference([1, 2, 3], [4, 5, 6])).toEqual([
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ])
-    expect(F.symmetricDifference([1, 2, 3, 4], [4, 5, 6])).toEqual([
-      1,
-      2,
-      3,
-      5,
-      6
-    ])
-    expect(F.symmetricDifference([], [1, 2, 3])).toEqual([1, 2, 3])
-    expect(F.symmetricDifference([1, 2, 3], [])).toEqual([1, 2, 3])
-    expect(F.symmetricDifference([1, 2, 3], [1, 2, 3])).toEqual([])
-    expect(F.symmetricDifference([1, 2, 3, 4, 5], [1, 2, 3])).toEqual([4, 5])
-  })
+  expect(F3_VS_F4).toMatchSnapshot()
+})
+exam("v4 vs. v3", F => () => {
+  const futilityMethods = F.pipe(F.filter(F.is(Function)), F.keys)(F)
+  const F4_VS_F3 = F.difference(futilityMethods, R.keys(OLD))
+  expect(F4_VS_F3).toMatchSnapshot()
 })
