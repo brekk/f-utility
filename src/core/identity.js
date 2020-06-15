@@ -4,4 +4,4 @@ export function identity(y) {
 export default identity
 export const FUNCTION = identity
 export const ARITY = 1
-export const SIGNATURE = ["Array", "any"]
+export const SIGNATURE = ["any", "any"]

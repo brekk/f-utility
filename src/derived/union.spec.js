@@ -1,7 +1,7 @@
 import R from "ramda"
-import F from "$build/production"
+import exam from "$build/tester"
 
-test("union", () => {
+exam("union", F => () => {
   const one = "abcde".split("")
   const two = "abcdefgijk".split("")
   expect(F.union(one, two)).toEqual(R.union(one, two))

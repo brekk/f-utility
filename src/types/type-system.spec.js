@@ -1,4 +1,5 @@
 import {
+  isNil,
   isUnmatched,
   typeSystem,
   checkReturnWith,
@@ -9,7 +10,16 @@ import {
 import C from "$core/constants"
 import PREFERRED_TYPE from "$types/archetypes"
 const { UNMATCHED } = C
-
+test("isNil", () => {
+  expect([null, undefined, false, true, "neil", "nail"].map(isNil)).toEqual([
+    true,
+    true,
+    false,
+    false,
+    false,
+    false
+  ])
+})
 test("PREFERRED_TYPE", () => {
   expect(PREFERRED_TYPE).toEqual({
     boolean: "Boolean∋boolean",

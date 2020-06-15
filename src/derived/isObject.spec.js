@@ -1,6 +1,5 @@
-import F from "$build/production"
-
-test("isObject", () => {
+import exam from "$build/tester"
+exam("isObject", F => () => {
   const output = F.map(F.isObject, [
     null,
     undefined,

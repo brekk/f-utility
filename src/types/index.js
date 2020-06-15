@@ -1,4 +1,5 @@
 export {
+  isNil,
   isString,
   isNumber,
   isUndefined,

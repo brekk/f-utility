@@ -13,3 +13,7 @@ export function memoizeWith(memoizer) {
 }
 
 export default memoizeWith
+
+export const FUNCTION = memoizeWith
+export const ARITY = 1
+export const SIGNATURE = ["function", "function"]

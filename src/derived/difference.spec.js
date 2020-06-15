@@ -1,7 +1,7 @@
 import R from "ramda"
-import F from "$build/production"
+import exam from "$build/tester"
 
-test("difference", () => {
+exam("difference", F => () => {
   const one = "abcdefghi".split("")
   const two = "abcdefgijk".split("")
   expect(F.difference(one, two)).toEqual(R.difference(one, two))

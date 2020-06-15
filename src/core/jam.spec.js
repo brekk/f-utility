@@ -1,6 +1,6 @@
-import F from "$build/production"
+import exam from '$build/tester'
 
-test("jam", () => {
+exam("jam", F => () => {
   expect(F.mergeRight({ a: 1, b: 2 }, { b: 1 })).toEqual({ a: 1, b: 2 })
   expect(F.mergeRight({ a: 1, b: 2 }, { c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
 })

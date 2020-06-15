@@ -7,4 +7,4 @@ export function toPairs(oo) {
 export default toPairs
 export const FUNCTION = toPairs
 export const ARITY = 1
-export const SIGNATURE = ["object", "array"]
+export const SIGNATURE = ["object", "Array"]

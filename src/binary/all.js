@@ -16,4 +16,4 @@ function all(fn, xx) {
 export default all
 export const FUNCTION = all
 export const ARITY = 2
-export const SIGNATURE = ["function", "Array|object"]
+export const SIGNATURE = ["function", "Array|object", "boolean"]

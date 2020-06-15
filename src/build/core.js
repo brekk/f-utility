@@ -30,24 +30,28 @@ function core(config) {
   }) {
     const sideEffectMethods = addSideEffectMethods(curry)
     const autoCurry = autoCurryWith(curryN)
-    const BASE = CORE.smash(autoCurry(CORE), sideEffectMethods, {
-      memoizeWith,
-      def,
-      curry,
-      curryN,
-      C,
-      $: C.$,
-      is,
-      isArray,
-      isBoolean,
-      isFunction,
-      isNumber,
-      isRawObject,
-      isString,
-      isSymbol,
-      isUndefined,
-      isUnmatched
-    })
+    const BASE = CORE.smash([
+      autoCurry(CORE),
+      sideEffectMethods,
+      {
+        memoizeWith,
+        def,
+        curry,
+        curryN,
+        C,
+        $: C.$,
+        is,
+        isArray,
+        isBoolean,
+        isFunction,
+        isNumber,
+        isRawObject,
+        isString,
+        isSymbol,
+        isUndefined,
+        isUnmatched
+      }
+    ])
     return BASE.pipe(
       extendBinary,
       autoCurry,

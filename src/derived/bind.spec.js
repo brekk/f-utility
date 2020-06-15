@@ -1,6 +1,6 @@
-import F from "$build/production"
+import exam from "$build/tester"
 
-test("bind", () => {
+exam("bind", F => () => {
   function hello() {
     return `Hi, my name is ${(this && this.name) || "default"}`
   }

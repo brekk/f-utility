@@ -1,6 +1,6 @@
-import F from "$build/production"
+import exam from "$build/tester"
 
-test("all f-utility functions of arity > 1 are curried!", () => {
+exam("all f-utility functions of arity > 1 are curried!", F => () => {
   F.pipe(
     F.filter(F.is(Function)),
     F.map(

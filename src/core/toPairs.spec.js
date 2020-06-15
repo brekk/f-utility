@@ -1,5 +1,6 @@
-import F from "$build/production"
-test("toPairs / fromPairs", () => {
+import exam from "$build/tester"
+
+exam("toPairs / fromPairs", F => () => {
   const input = { a: 1, b: 2, c: 3, d: 4 }
   const output = [
     ["a", 1],

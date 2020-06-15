@@ -4,5 +4,5 @@ export function temper(a, b) {
 
 export default temper
 export const FUNCTION = temper
-export const ARITY = 1
-export const SIGNATURE = ["Array", "any"]
+export const ARITY = 2
+export const SIGNATURE = ["object", "object", "object"]

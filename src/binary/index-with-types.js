@@ -1,4 +1,5 @@
 import { FUNCTION as add, SIGNATURE as 𝒮add } from "./add"
+import { FUNCTION as find, SIGNATURE as 𝒮find } from "./find"
 import { FUNCTION as apply, SIGNATURE as 𝒮apply } from "./apply"
 import { FUNCTION as and, SIGNATURE as 𝒮and } from "./and"
 import { FUNCTION as any, SIGNATURE as 𝒮any } from "./any"
@@ -17,6 +18,8 @@ import { FUNCTION as join, SIGNATURE as 𝒮join } from "./join"
 import { FUNCTION as lt, SIGNATURE as 𝒮lt } from "./lt"
 import { FUNCTION as lte, SIGNATURE as 𝒮lte } from "./lte"
 import { FUNCTION as map, SIGNATURE as 𝒮map } from "./map"
+import { FUNCTION as max, SIGNATURE as 𝒮max } from "./max"
+import { FUNCTION as min, SIGNATURE as 𝒮min } from "./min"
 import { FUNCTION as multiply, SIGNATURE as 𝒮multiply } from "./multiply"
 import { FUNCTION as nth, SIGNATURE as 𝒮nth } from "./nth"
 import { FUNCTION as or, SIGNATURE as 𝒮or } from "./or"
@@ -44,9 +47,12 @@ const BINARY_WITH_SIGNATURES = [
   [𝒮all, all],
   [𝒮any, any],
   [𝒮filter, filter],
+  [𝒮find, find],
   [𝒮forEach, forEach],
   [𝒮includes, includes],
   // folds
+  [𝒮min, min],
+  [𝒮max, max],
   [𝒮ap, ap],
   [𝒮concat, concat],
   [𝒮map, map],

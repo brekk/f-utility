@@ -1,6 +1,7 @@
-import F from "$build/production"
+import exam from "$build/tester"
+
 /* eslint-disable func-style */
-test("sideEffect", done => {
+exam("sideEffect", F => done => {
   const x = Math.round(Math.random() * 1e3)
   const finalCall = F.sideEffect(given => {
     expect(given).toEqual(x)
@@ -8,7 +9,7 @@ test("sideEffect", done => {
   })
   finalCall(x)
 })
-test("sideEffect2", done => {
+exam("sideEffect2", F => done => {
   const x = Math.round(Math.random() * 1e3)
   const finalCall = F.sideEffect2((tag, given) => {
     expect(given).toEqual(x)
@@ -17,7 +18,7 @@ test("sideEffect2", done => {
   })
   finalCall("whatever", x)
 })
-test("inspect", done => {
+exam("inspect", F => done => {
   const object = { id: "it's a living" }
   const look = z => z.id
 

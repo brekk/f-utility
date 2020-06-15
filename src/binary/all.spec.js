@@ -1,6 +1,6 @@
-import F from "$build/production"
+import exam from "$build/tester"
 
-test("all", () => {
+exam("all", F => () => {
   const allEven = F.all(x => x % 2 === 0)
   expect(allEven({ b: 2, d: 4, f: 6, h: 8, i: 10 })).toBeTruthy()
   expect(allEven({ a: 101 })).toBeFalsy()

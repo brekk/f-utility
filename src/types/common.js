@@ -16,3 +16,6 @@ export const isBoolean = _isBoolean
 export const isSymbol = _isSymbol
 export const isRawObject = _isRawObject
 export const isArray = Array.isArray
+export function isNil(xx) {
+  return typeof xx === "undefined" || (typeof xx === "object" && !xx)
+}

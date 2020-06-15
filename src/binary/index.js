@@ -1,4 +1,5 @@
 import { FUNCTION as add } from "./add"
+import { FUNCTION as find } from "./find"
 import { FUNCTION as apply } from "./apply"
 import { FUNCTION as and } from "./and"
 import { FUNCTION as any } from "./any"
@@ -17,6 +18,8 @@ import { FUNCTION as join } from "./join"
 import { FUNCTION as lt } from "./lt"
 import { FUNCTION as lte } from "./lte"
 import { FUNCTION as map } from "./map"
+import { FUNCTION as max } from "./max"
+import { FUNCTION as min } from "./min"
 import { FUNCTION as multiply } from "./multiply"
 import { FUNCTION as nth } from "./nth"
 import { FUNCTION as or } from "./or"
@@ -45,9 +48,12 @@ export function extendBinary(F) {
     all,
     any,
     filter,
+    find,
     forEach,
     includes,
     // folds
+    max,
+    min,
     apply,
     ap,
     concat,

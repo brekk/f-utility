@@ -4,5 +4,5 @@ export function jam(a, b) {
 
 export default jam
 export const FUNCTION = jam
-export const ARITY = 1
-export const SIGNATURE = ["Array", "any"]
+export const ARITY = 2
+export const SIGNATURE = ["object", "object", "object"]

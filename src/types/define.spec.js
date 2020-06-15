@@ -1,4 +1,6 @@
+import exam from "$build/tester"
 import { toString } from "./define"
+/* eslint-disable func-style */
 
 test("toString", () => {
   function cobra(x, a, b) {
@@ -13,3 +15,19 @@ test("toString", () => {
     "curry(fn)(fun,yes)"
   )
 })
+exam("curry", F => () => {
+  const triple = (a, b, c) => a + b / c
+  const c3 = F.curry(triple)
+  const ccc = c3(12, 34, 56)
+  expect(ccc).toEqual(12 + 34 / 56)
+  expect(c3(12)(34)(56)).toEqual(ccc)
+  expect(c3(12, 34)(56)).toEqual(ccc)
+  expect(c3(12)(34, 56)).toEqual(ccc)
+})
+exam("curry - placeholder", F => () => {
+  const triple = (a, b, c) => a + b / c
+  const c3 = F.curry(triple)
+  const place = c3(12, F.$, 56)
+  expect(place(100)).toEqual(12 + 100 / 56)
+})
+/* eslint-enable func-style */

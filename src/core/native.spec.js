@@ -1,9 +1,15 @@
-import F from "$build/production"
+import exam from "$build/tester"
 
 /* eslint-disable func-style */
-test("call", () => {
+exam("call", F => () => {
   const ternary = (x, y, z) => (x + y) / z
   expect(F.call([ternary, 1, 2, 3])).toEqual(1)
   expect(F.call([ternary, 4, 2, 3])).toEqual(2)
 })
-/* eslint-enable func-style */
+
+exam("freeze", F => () => {
+  const frozen = F.freeze({ a: 1, b: 2, c: 3 })
+  expect(() => {
+    frozen.b = -1
+  }).toThrow()
+})

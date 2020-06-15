@@ -1,6 +1,6 @@
-import F from "$build/production"
+import exam from "$build/tester"
 /* eslint-disable func-style */
-test("ifElse", () => {
+exam("ifElse", F => () => {
   const yes = x => x * 2
   const no = y => y / 2
   expect(F.ifElse(z => z % 2 === 0, yes, no)(100)).toEqual(200)

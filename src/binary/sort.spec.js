@@ -1,6 +1,6 @@
-import F from '$build/production'
+import exam from "$build/tester"
 
-test("sort", () => {
+exam("sort", F => () => {
   const items = [
     { name: "Alpha", value: 34 },
     { name: "Beta", value: 32 },
@@ -21,7 +21,7 @@ test("sort", () => {
     { name: "Delta", value: 200 }
   ])
 })
-test("sort - alphabetic", () => {
+exam("sort - alphabetic", F => () => {
   const items = [
     { name: "Gamma", value: 45 },
     { name: "Beta", value: 32 },

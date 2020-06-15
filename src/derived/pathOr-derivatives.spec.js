@@ -1,4 +1,4 @@
-import F from "$build/production"
+import exam from "$build/tester"
 /* eslint-disable func-style */
 const RAW_DATA = {
   a: {
@@ -11,19 +11,19 @@ const RAW_DATA = {
   },
   j: Math.round(Math.random() * 1e3)
 }
-test("path", () => {
+exam("path", F => () => {
   expect(F.path(["a", "c", "d"], RAW_DATA)).toEqual(RAW_DATA.a.c.d)
   expect(F.path(["a", "c", "whatever"], RAW_DATA)).toBeFalsy()
 })
-test("pathEq", () => {
+exam("pathEq", F => () => {
   expect(F.pathEq(["a", "c", "d"], 1, RAW_DATA)).toBeTruthy()
   expect(F.pathEq(["a", "c", "d"], "whatever", RAW_DATA)).toBeFalsy()
 })
-test("pathSatisfies", () => {
+exam("pathSatisfies", F => () => {
   expect(F.pathSatisfies(z => z[2] === 3, ["a", "f"], RAW_DATA)).toBeTruthy()
   expect(F.pathSatisfies(z => z.h === false, ["b", "g"], RAW_DATA)).toBeTruthy()
 })
-test("pathIs", () => {
+exam("pathIs", F => () => {
   expect(F.pathIs(Boolean, ["b", "i"], RAW_DATA)).toBeTruthy()
   expect(F.pathIs(String, ["b", "i"], RAW_DATA)).toBeFalsy()
 })
