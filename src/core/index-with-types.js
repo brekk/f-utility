@@ -1,4 +1,6 @@
 import { FUNCTION as box, SIGNATURE as boxSignature } from "./box"
+import { FUNCTION as init, SIGNATURE as initSignature } from "./init"
+import { FUNCTION as tail, SIGNATURE as tailSignature } from "./tail"
 import { FUNCTION as append, SIGNATURE as appendSignature } from "./append"
 import { FUNCTION as prepend, SIGNATURE as prependSignature } from "./prepend"
 import { FUNCTION as adjust, SIGNATURE as adjustSignature } from "./adjust"
@@ -62,6 +64,8 @@ const CORE_WITH_SIGNATURES = [
   [incSignature, inc],
   [jamSignature, jam],
   [lastSignature, last],
+  [initSignature, init],
+  [tailSignature, tail],
   [lengthSignature, length],
   [mashSignature, mash],
   [meanSignature, mean],

@@ -52,17 +52,17 @@ const BUILD = {
 }
 /* eslint-disable func-style */
 const buildFor = input => {
-  const suffix = input.includes("debug")
-    ? ".debug"
+  const name = input.includes("debug")
+    ? "debug"
     : input.includes("production")
-    ? ".unchecked"
-    : ""
+    ? "f-utility.unchecked"
+    : "f-utility"
   return [
     {
       input,
       output: {
         name: `F`,
-        file: `f-utility${suffix}.umd.js`,
+        file: `${name}.umd.js`,
         format: `umd`
       },
       plugins: tersePlugs
@@ -71,7 +71,7 @@ const buildFor = input => {
       input,
       output: [
         {
-          file: `f-utility${suffix}.js`,
+          file: `${name}.js`,
           format: `cjs`
         }
       ],
@@ -80,7 +80,7 @@ const buildFor = input => {
     {
       input,
       output: {
-        file: `f-utility${suffix}.es.js`,
+        file: `${name}.es.js`,
         format: `es`
       },
       plugins

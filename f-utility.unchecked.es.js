@@ -424,6 +424,10 @@ function T() {
   return true
 }
 
+function init(xx) {
+  return xx.slice(0, -1)
+}
+
 function adjust(idx, fn, xx) {
   const copy = [].concat(xx);
   const relIdx = idx < 0 ? copy.length + idx : idx;
@@ -482,6 +486,10 @@ function inc(xx) {
 
 function jam(a, b) {
   return Object.assign({}, b, a)
+}
+
+function tail(xx) {
+  return xx.slice(1)
 }
 
 function last(x) {
@@ -649,6 +657,8 @@ const CORE = temper(NATIVE, {
   identity,
   inc,
   jam,
+  tail,
+  init,
   last,
   length,
   mash,
@@ -711,14 +721,21 @@ function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
   )
 }
 
+function makePluck({ curryN, map, prop }) {
+  return curryN(ARITY, function pluck(kk, xs) {
+    return map(prop(kk), xs)
+  })
+}
+const ARITY = 2;
+
 function makeChain({ curryN, map, pipe, reduce, concat }) {
-  return curryN(ARITY, function chain(fn, xx) {
+  return curryN(ARITY$1, function chain(fn, xx) {
     if (xx && typeof xx.chain === "function") return xx.chain(fn)
     if (typeof xx === "function") return yy => fn(xx(yy), yy)
     return pipe(map(fn), reduce(concat, []))(xx)
   })
 }
-const ARITY = 2;
+const ARITY$1 = 2;
 
 function makeFlatten({ isArray, forEach }) {
   return function flatten(xx) {
@@ -768,11 +785,11 @@ function makeBind({ curryN }) {
 }
 
 function makeDifference({ curryN, filter, includes, complement }) {
-  return curryN(ARITY$1, function difference(aa, bb) {
+  return curryN(ARITY$2, function difference(aa, bb) {
     return filter(complement(includes(bb)), aa)
   })
 }
-const ARITY$1 = 2;
+const ARITY$2 = 2;
 
 function makeFlip({ curryN }) {
   return function flip(fn) {
@@ -793,7 +810,7 @@ function makeJ2({ toJSON }) {
 }
 
 function makePathOr({ curryN, reduce }) {
-  return curryN(ARITY$2, function pathOr(dd, ks, src) {
+  return curryN(ARITY$3, function pathOr(dd, ks, src) {
     return reduce(
       function walkPathOr(agg, st) {
         return (agg && agg[st]) || dd
@@ -803,7 +820,7 @@ function makePathOr({ curryN, reduce }) {
     )
   })
 }
-const ARITY$2 = 3;
+const ARITY$3 = 3;
 
 function makePathOrDerivatives({ equals, is, curryN, pipe, pathOr }) {
   // pathOr => {path, pathEq, pathSatisfies, pathIs}
@@ -861,14 +878,14 @@ function makePathOrDerivatives({ equals, is, curryN, pipe, pathOr }) {
 }
 
 function makeReject({ curryN, filter, complement }) {
-  return curryN(ARITY$3, function reject(fn, xx) {
+  return curryN(ARITY$4, function reject(fn, xx) {
     return filter(complement(fn), xx)
   })
 }
-const ARITY$3 = 2;
+const ARITY$4 = 2;
 
 function makeSymmetricDifference({ curryN }) {
-  return curryN(ARITY$4, function symmetricDifference(aa, bb) {
+  return curryN(ARITY$5, function symmetricDifference(aa, bb) {
     const aLoop = makeIterable(aa);
     const bLoop = makeIterable(bb);
     const notBoth = [];
@@ -887,17 +904,17 @@ function makeSymmetricDifference({ curryN }) {
     return notBoth
   })
 }
-const ARITY$4 = 2;
+const ARITY$5 = 2;
 
 function makeUnion({ uniq, curryN, pipe, concat }) {
-  return curryN(ARITY$5, function union(aa, bb) {
+  return curryN(ARITY$6, function union(aa, bb) {
     return pipe(
       concat(bb),
       uniq
     )(aa)
   })
 }
-const ARITY$5 = 2;
+const ARITY$6 = 2;
 
 function makeUniq({ reduce }) {
   return reduce(function unique(agg, xx) {
@@ -926,7 +943,8 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   symmetricDifference: makeSymmetricDifference, // curryN difference
   __predicatesPass: makePredicatesPass, // curryN all, any flip gt length map smooth pipe
   pathOr: makePathOr, // curryN reduce
-  __pathOrDerivatives: makePathOrDerivatives // curryN equals is pathOr pipe
+  __pathOrDerivatives: makePathOrDerivatives, // curryN equals is pathOr pipe
+  pluck: makePluck // curryN prop map
 };
 function extendDerived(C) {
   return C.pipe(
@@ -1172,7 +1190,9 @@ function split(del, xx) {
 const FUNCTION$q = split;
 
 function sort(fn, rr) {
-  return [].concat(rr).sort(fn)
+  const copy = [].concat(rr);
+  copy.sort(fn);
+  return copy
 }
 
 const FUNCTION$r = sort;

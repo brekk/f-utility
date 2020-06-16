@@ -2,6 +2,7 @@ import * as NATIVE from "./native"
 
 import F from "./F"
 import T from "./T"
+import init from "./init"
 import adjust from "./adjust"
 import append from "./append"
 import box from "./box"
@@ -14,6 +15,7 @@ import fromPairs from "./fromPairs"
 import identity from "./identity"
 import inc from "./inc"
 import jam from "./jam"
+import tail from "./tail"
 import last from "./last"
 import length from "./length"
 import mash from "./mash"
@@ -46,6 +48,8 @@ export const CORE = temper(NATIVE, {
   identity,
   inc,
   jam,
+  tail,
+  init,
   last,
   length,
   mash,

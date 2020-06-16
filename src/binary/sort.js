@@ -1,5 +1,7 @@
 function sort(fn, rr) {
-  return [].concat(rr).sort(fn)
+  const copy = [].concat(rr)
+  copy.sort(fn)
+  return copy
 }
 
 export const FUNCTION = sort

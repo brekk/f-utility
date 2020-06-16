@@ -3,6 +3,7 @@ import {
   SIGNATURE as addIndexSignature
 } from "./addIndex"
 import { GET_FUNCTION as chain, SIGNATURE as chainSignature } from "./chain"
+import { GET_FUNCTION as pluck, SIGNATURE as pluckSignature } from "./pluck"
 import { GET_FUNCTION as median, SIGNATURE as medianSignature } from "./median"
 import {
   GET_FUNCTION as flatten,
@@ -48,13 +49,15 @@ const derivedFunctionsSortedByIncreasingDependencies = [
   ["symmetricDifference", symmetricDifference, symmetricDifferenceSignature], // curryN difference
   ["__predicatesPass", __predicatesPass, false], // curryN all, any flip gt length map smooth pipe
   ["pathOr", pathOr, pathOrSignature], // curryN reduce
-  ["__pathOrDerivatives", __pathOrDerivatives, false] // curryN equals is pathOr pipe
+  ["__pathOrDerivatives", __pathOrDerivatives, false], // curryN equals is pathOr pipe
+  ["pluck", pluck, pluckSignature]
 ]
 function extendDerived(C) {
   return C.reduce(
     function extendFUtility(__F, [name, maker, hm]) {
       const fn = maker(__F)
       const multi = name.includes("__")
+      // the Ms count different when baby divides the pie
       if (!multi) {
         const safeFn = C.def({ check: true, hm })(fn)
         return __F.mash(__F, { [name]: safeFn })

@@ -1,1607 +1,1562 @@
-import katsuCurry, { curry, pipe } from 'katsu-curry';
-import { e0, e1, e2 } from 'entrust';
-import _flatMap from 'flatmap-fast';
+const __of__ = "∋";
+const UNION_TYPE_DELIMITER = "|";
+const C = Object.freeze({
+  $: "@@FUTILITY::constant.magic",
+  UNMATCHED: "@@FUTILITY::constant.unmatched",
+  b: "\b",
+  f: "\f",
+  n: "\n",
+  t: "\t",
+  r: "\r",
+  q: "'",
+  qq: '"',
+  s: "\\",
+  __of__,
+  UNION_TYPE_DELIMITER
+});
+// ∋ indicates "a member of"
 
-var bindInternal4 = function bindInternal4 (func, thisContext) {
-  return function (a, b, c, d) {
-    return func.call(thisContext, a, b, c, d);
-  };
-};
+function mash(a, b) {
+  return Object.assign({}, a, b)
+}
+const FUNCTION = mash;
+const SIGNATURE = ["object", "object", "object"];
 
-var reduce = function fastReduce (subject, fn, initialValue, thisContext) {
-  var length = subject.length,
-      iterator = thisContext !== undefined ? bindInternal4(fn, thisContext) : fn,
-      i, result;
-  if (initialValue === undefined) {
-    i = 1;
-    result = subject[0];
-  }
-  else {
-    i = 0;
-    result = initialValue;
-  }
-  for (; i < length; i++) {
-    result = iterator(result, subject[i], i, subject);
-  }
-  return result;
-};
-
-var reduce$1 = function fastReduceObject (subject, fn, initialValue, thisContext) {
-  var keys = Object.keys(subject),
-      length = keys.length,
-      iterator = thisContext !== undefined ? bindInternal4(fn, thisContext) : fn,
-      i, key, result;
-  if (initialValue === undefined) {
-    i = 1;
-    result = subject[keys[0]];
-  }
-  else {
-    i = 0;
-    result = initialValue;
-  }
-  for (; i < length; i++) {
-    key = keys[i];
-    result = iterator(result, subject[key], key, subject);
-  }
-  return result;
-};
-
-var reduce$2 = function fastReduce (subject, fn, initialValue, thisContext) {
-  if (subject instanceof Array) {
-    return reduce(subject, fn, initialValue, thisContext);
-  }
-  else {
-    return reduce$1(subject, fn, initialValue, thisContext);
-  }
-};
-
-var bindInternal3 = function bindInternal3 (func, thisContext) {
-  return function (a, b, c) {
-    return func.call(thisContext, a, b, c);
-  };
-};
-
-var filter = function fastFilter (subject, fn, thisContext) {
-  var length = subject.length,
-      result = [],
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    if (iterator(subject[i], i, subject)) {
-      result.push(subject[i]);
+function memoizeWith(memoizer) {
+  return function memoize(fn) {
+    const saved = {};
+    function memoized() {
+      const args = Array.from(arguments);
+      const mem = memoizer(args);
+      if (mem && saved[mem]) return saved[mem]
+      saved[mem] = fn.apply(null, args);
+      return saved[mem]
     }
+    return memoized
   }
-  return result;
-};
-
-var filter$1 = function fastFilterObject (subject, fn, thisContext) {
-  var keys = Object.keys(subject),
-      length = keys.length,
-      result = {},
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i, key;
-  for (i = 0; i < length; i++) {
-    key = keys[i];
-    if (iterator(subject[key], key, subject)) {
-      result[key] = subject[key];
-    }
-  }
-  return result;
-};
-
-var filter$2 = function fastFilter (subject, fn, thisContext) {
-  if (subject instanceof Array) {
-    return filter(subject, fn, thisContext);
-  }
-  else {
-    return filter$1(subject, fn, thisContext);
-  }
-};
-
-var some = function fastSome (subject, fn, thisContext) {
-  var length = subject.length,
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    if (iterator(subject[i], i, subject)) {
-      return true;
-    }
-  }
-  return false;
-};
-
-var every = function fastEvery (subject, fn, thisContext) {
-  var length = subject.length,
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    if (!iterator(subject[i], i, subject)) {
-      return false;
-    }
-  }
-  return true;
-};
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
 }
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
+const FUNCTION$1 = memoizeWith;
+const SIGNATURE$1 = ["function", "function"];
+
+function symbolToString(s) {
+  return "" + s.toString()
 }
 
-var debug_15 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, '__esModule', { value: true });
-function unwrapExports$$1 (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
-}
-function createCommonjsModule$$1(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-var debug = createCommonjsModule$$1(function (module, exports) {
-Object.defineProperty(exports, '__esModule', { value: true });
-var PLACEHOLDER = "🍛";
-var $ = PLACEHOLDER;
-var bindInternal3 = function bindInternal3 (func, thisContext) {
-  return function (a, b, c) {
-    return func.call(thisContext, a, b, c);
-  };
-};
-var some$1 = function fastSome (subject, fn, thisContext) {
-  var length = subject.length,
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    if (iterator(subject[i], i, subject)) {
-      return true;
-    }
-  }
-  return false;
-};
-var curry$$1 = function (fn) {
-  var test = function (x) { return x === PLACEHOLDER; };
-  return function curried() {
-    var arguments$1 = arguments;
-    var argLength = arguments.length;
-    var args = new Array(argLength);
-    for (var i = 0; i < argLength; ++i) {
-      args[i] = arguments$1[i];
-    }
-    var countNonPlaceholders = function (toCount) {
-      var count = toCount.length;
-      while (!test(toCount[count])) {
-        count--;
-      }
-      return count
-    };
-    var length = (
-      some$1(args, test) ?
-        countNonPlaceholders(args) :
-        args.length
-    );
-    function saucy() {
-      var arguments$1 = arguments;
-      var arg2Length = arguments.length;
-      var args2 = new Array(arg2Length);
-      for (var j = 0; j < arg2Length; ++j) {
-        args2[j] = arguments$1[j];
-      }
-      return curried.apply(this, args.map(
-        function (y) { return (
-          test(y) && args2[0] ?
-            args2.shift() :
-            y
-        ); }
-      ).concat(args2))
-    }
-    return (
-      length >= fn.length ?
-        fn.apply(this, args) :
-        saucy
+function defaultMemoizer(raw) {
+  let [x, y] = raw;
+  return x
+    .concat(y)
+    .map(z =>
+      typeof z === "symbol"
+        ? symbolToString(z)
+        : z && typeof z === "object"
+        ? Object.entries(z).reduce(
+            (xx, [kk, vv]) => xx + "-" + kk + ":" + vv,
+            ""
+          )
+        : z
     )
-  }
-};
-var delegatee = curry$$1(function (method, arg, x) { return (x[method](arg)); });
-var filter = delegatee("filter");
-var innerpipe = function (args) { return function (x) {
-  var first = args[0];
-  var rest = args.slice(1);
-  var current = first(x);
-  for (var a = 0; a < rest.length; a++) {
-    current = rest[a](current);
-  }
-  return current
-}; };
-function pipe$1() {
-  var arguments$1 = arguments;
-  var argLength = arguments.length;
-  var args = new Array(argLength);
-  for (var i = 0; i < argLength; ++i) {
-    args[i] = arguments$1[i];
-  }
-  return innerpipe(args)
 }
-var composedToString = function (args, name) {
-  if ( args === void 0 ) { args = []; }
-  if ( name === void 0 ) { name = "pipe"; }
-  var stringifyFunctions = function (x) { return (
-    x && x.toString && typeof x.toString === "function" ?
-      x.toString() :
-      "fn"
-  ); };
-  var names = args.map(stringifyFunctions);
-  return function () { return (
-    (name + "(" + (names.join(", ")) + ")")
-  ); }
-};
-var slice = Array.prototype.slice;
-var aintFunction = function (x) { return typeof x !== "function"; };
-var prepipe = function (a, name) {
-  if ( name === void 0 ) { name = "pipe"; }
-  var args = slice.call(a);
-  if (args.filter(aintFunction).length > 0) {
-    throw new Error(
-      (name + " expected all arguments to be functions.")
+
+const memo = memoizeWith(function basicMemo(x) {
+  return x
+});
+const union = memo(function unionType(x) {
+  return x.split("|")
+});
+
+const { __of__: __of__$1 } = C;
+const memo$1 = memoizeWith(x => x);
+
+const constructor = memo$1(x => {
+  const oof = x.indexOf(__of__$1);
+  return oof > -1 ? x.slice(0, oof) : x
+});
+
+const { __of__: __of__$2 } = C;
+const memo$2 = memoizeWith(x => x);
+
+const typeChild = memo$2(x => {
+  const oof = x.indexOf(__of__$2);
+  return oof > -1 ? x.slice(oof + 1) : x
+});
+
+const memo$3 = memoizeWith(x => x);
+const compareTypes = memo$3(function _compareTypes(exp, given) {
+  const [expectedUnion, givenUnion] = [exp, given].map(union);
+  const expectedHasUnions = expectedUnion.length > 1;
+  const givenHasUnions = givenUnion.length > 1;
+  const comparisons = expectedUnion.map(typeA =>
+    givenUnion.map(
+      typeB =>
+        // any
+        typeA === "any" ||
+        typeB === "any" ||
+        // exact
+        typeA === typeB ||
+        // 'Number∋number' || 'Number'
+        constructor(typeA) === constructor(typeB) ||
+        // 'Number∋number' === 'number'
+        typeChild(typeA) === typeChild(typeB)
     )
-  }
-  return args
-};
-function pipe$$1() {
-  var args = prepipe(arguments);
-  var piped = innerpipe(args);
-  piped.toString = composedToString(args);
-  return piped
-}
-function compose() {
-  var args = prepipe(arguments, "compose").reverse();
-  var composed = innerpipe(args);
-  composed.toString = composedToString(args, "compose");
-  return composed
-}
-var prop = curry$$1(function (property, o) { return o && property && o[property]; });
-var _keys = Object.keys;
-var keys = _keys;
-var propLength = prop("length");
-var objectLength = pipe$1(keys, propLength);
-var length = function (x) { return (typeof x === "object" ? objectLength(x) : propLength(x)); };
-var flipIncludes = curry$$1(function (list, x) { return list.includes(x); });
-var matchingKeys = curry$$1(
-  function (list, o) { return filter(
-    flipIncludes(list),
-    keys(o)
-  ); }
-);
-var matchingKeyCount = curry$$1(
-  function (list, o) { return pipe$1(
-    matchingKeys(list),
-    length
-  )(o); }
-);
-var expectKArgs = function (expected, args) { return (
-  matchingKeyCount(expected, args) >= Object.keys(expected).length
-); };
-var join = curry$$1(function (y, x) { return x.join(y); });
-var repeat = curry$$1(function (y, x) { return x.repeat(y); });
-var split = curry$$1(function (y, x) { return x.split(y); });
-var map = curry$$1(function (y, x) { return x.map(y); });
-var add = curry$$1(function (y, x) { return x + y; });
-var subtract = curry$$1(function (y, x) { return x - y; });
-var safeJoin = curry$$1(
-  function (joiner, x) { return (
-    x.length > 0 ?
-      joiner(x) :
-      ""
-  ); }
-);
-var wrap = curry$$1(
-  function (x, str) { return (
-    ("" + (x[0]) + str + (x[1]))
-  ); }
-);
-var parenthesize = wrap("()");
-var curlies = wrap("{}");
-var commas = join(",");
-var toStringJoiner = safeJoin(
-  pipe$1(
-    commas,
-    parenthesize
-  )
-);
-var toObjectStringJoiner = pipe$1(
-  safeJoin(pipe$1(
-    commas,
-    curlies,
-    parenthesize
-  ))
-);
-var makeRemainder = curry$$1(function (str, length) { return (
-  length > 0 ?
-    pipe$1(
-      repeat(length),
-      split(""),
-      commas,
-      parenthesize
-    )(str) :
-    ""
-); });
-var fillArray = function (x) {
-  var list = [];
-  while (x > 0) {
-    list.push(--x);
-  }
-  return list.reverse()
-};
-var question = function (x) { return (
-  pipe$1(
-    join(":?,"),
-    add(x.length > 0 ? ":?" : "")
-  )(x)
-); };
-var without = curry$$1(
-  function (x, y) {
-    return y.filter(function (z) { return !(x.indexOf(z) > -1); })
-  }
-);
-var keysWhenKeyNumOrRaw = function (x) { return (x && x.k && x.n ? x.k : x); };
-var makeObjectRemainder = function (objectKeys, argKeys) {
-  if ( objectKeys === void 0 ) { objectKeys = []; }
-  if ( argKeys === void 0 ) { argKeys = []; }
-  return pipe$1(
-  keysWhenKeyNumOrRaw,
-  without(argKeys),
-  question,
-  curlies,
-  parenthesize
-)(objectKeys);
-};
-var LAMDA_REMAINDER = "?";
-var toString = function (fn, args) {
-  if ( args === void 0 ) { args = []; }
-  return function () {
-  var argString = toStringJoiner(args);
-  var remainder = makeRemainder(
-    LAMDA_REMAINDER,
-    fn.length - args.length
   );
-  var name = fn && fn.name || "fn";
-  return ("curry(" + name + ")" + argString + remainder)
-};
-};
-var counter = function (x) { return function () { return x++; }; };
-var makeNumberObjectRemainder = function (number, keys) {
-  var keyLength = keys.length;
-  return pipe$1(
-    subtract(keyLength),
-    fillArray,
-    map(add(keyLength)),
-    question,
-    curlies,
-    parenthesize
-  )(number)
-};
-var makeObjectStringSignature = function (name, obj, keys) {
-  var argString = toObjectStringJoiner(keys);
-  var remainder = makeObjectRemainder(obj, keys);
-  return ("" + name + argString + remainder)
-};
-var makeNumberStringSignature = function (name, number, keys) {
-  var remainder = makeNumberObjectRemainder(number, keys);
-  return pipe$1(
-    map(counter(0)),
-    toObjectStringJoiner,
-    wrap([name, remainder])
-  )(keys)
-};
-var toObjectString = function (fn, curryCondition, args) {
-  if ( curryCondition === void 0 ) { curryCondition = []; }
-  if ( args === void 0 ) { args = {}; }
-  return function () {
-  var argKeys = Object.keys(args);
-  var conditionType = typeof curryCondition;
-  var name = "curry(" + (fn && fn.name || "fn") + ")";
-  if (conditionType === "number") {
-    return makeNumberStringSignature(name, curryCondition, argKeys)
+  const noUnionComparisons = comparisons.reduce(
+    (all, nextCase) => all.concat(nextCase.filter(z => !z).length === 0),
+    []
+  );
+
+  const out = noUnionComparisons.filter(Boolean);
+
+  if (!expectedHasUnions && !givenHasUnions) {
+    return out.length > 0
   }
-  return makeObjectStringSignature(name, curryCondition, argKeys)
-};
-};
-var merge = curry$$1(function (x, y) { return Object.assign({}, x, y); });
-var barfWhen = function (dis) {
-  var o = Object.freeze({
-    keysAreNotAnArray: function (k) {
-      if (!Array.isArray(k)) {
-        throw new TypeError((dis + " expected an array of wanted keys."))
-      }
-      return o
-    },
-    arityIsNotANumber: function (n) {
-      if (typeof n !== "number" || isNaN(n)) {
-        throw new TypeError((dis + " expected to be given a number for arity."))
-      }
-      return o
-    },
-    noFunctionIsGiven: function (fn) {
-      if (typeof fn !== "function") {
-        throw new TypeError((dis + " expected to be given a function to curry."))
-      }
-      return o
-    }
-  });
-  return o
-};
-function curryObjectKN(ref, fn) {
-  var k = ref.k;
-  var n = ref.n;
-  barfWhen("curryObjectKN")
-    .keysAreNotAnArray(k)
-    .arityIsNotANumber(n)
-    .noFunctionIsGiven(fn);
-  function λcurryObjectKN(args) {
-    var joined = function (z) { return λcurryObjectKN(merge(args, z)); };
-    joined.toString = toObjectString(fn, k, args);
-    return (
-      expectKArgs(k, args) || length(args) >= n ?
-        fn(args) :
-        joined
-    )
-  }
-  λcurryObjectKN.toString = toObjectString(fn, k);
-  return λcurryObjectKN
-}
-var curryObjectK = curry$$1(
-  function (keys, fn) {
-    barfWhen("curryObjectK")
-      .keysAreNotAnArray(keys)
-      .noFunctionIsGiven(fn);
-    function λcurryObjectK(args) {
-      var joined = function (z) { return λcurryObjectK(merge(args, z)); };
-      joined.toString = toObjectString(fn, keys, args);
-      return (
-        expectKArgs(keys, args) ?
-          fn(args) :
-          joined
+  const anyValid = comparisons
+    .reduce((a, b) => a.concat(b), [])
+    .reduce((xx, cc) => xx || cc, false);
+  return anyValid
+});
+
+function makeTypechecker(typecheck, useMemoizer = defaultMemoizer) {
+  return memoizeWith(useMemoizer)(function rawMakeTypeChecker(expected, given) {
+    if (!Array.isArray(expected) || !Array.isArray(expected)) {
+      throw new TypeError(
+        "makeTypechecker needs two valid lists of types to run"
       )
     }
-    λcurryObjectK.toString = toObjectString(fn, keys);
-    return λcurryObjectK
-  }
-);
-function curryObjectN(arity, fn) {
-  barfWhen("curryObjectN")
-    .arityIsNotANumber(arity)
-    .noFunctionIsGiven(fn);
-  function λcurryObjectN(args) {
-    var joined = function (z) { return λcurryObjectN(merge(args, z)); };
-    joined.toString = toObjectString(fn, arity, args);
-    return (
-      Object.keys(args).length >= arity ?
-        fn(args) :
-        joined
-    )
-  }
-  λcurryObjectN.toString = toObjectString(fn, arity);
-  return λcurryObjectN
-}
-var remapParameters = function (indices, arr) {
-  var copy = Array.from(arr);
-  if (!copy.length) {
-    return copy
-  }
-  return copy.map(
-    function (x, index) {
-      if (indices.includes(index)) {
-        return copy[indices[index]]
-      }
-      return x
-    }
-  )
-};
-var curryify = function (test) { return function (fn) {
-  if (typeof fn !== "function") {
-    throw new TypeError("Expected to be given a function to curry!")
-  }
-  function curried() {
-    var args = Array.from(arguments);
-    var countNonPlaceholders = function (toCount) {
-      var count = toCount.length;
-      while (!test(toCount[count])) {
-        count--;
-      }
-      return count
-    };
-    var length = some$1(args, test) ? countNonPlaceholders(args) : args.length;
-    function saucy() {
-      var args2 = Array.from(arguments);
-      return curried.apply(this, args.map(
-        function (y) { return (
-          test(y) && args2[0] ?
-            args2.shift() :
-            y
-        ); }
-      ).concat(args2))
-    }
-    saucy.toString = toString(fn, args);
-    return (
-      length >= fn.length ?
-        fn.apply(this, args) :
-        saucy
-    )
-  }
-  curried.toString = toString(fn);
-  return curried
-}; };
-var curry$1 = curryify(function (x) { return x === PLACEHOLDER; });
-var remapArray = curry$1(remapParameters);
-var remap = curry$1(function (indices, fn) {
-  var remapArgs = remapArray(indices);
-  var curried = curry$1(fn);
-  return function remappedFn() {
-    var args = remapArgs(Array.from(arguments));
-    return curried.apply(null, args)
-  }
-});
-var K = function (x) { return function () { return x; }; };
-var I = function (x) { return x; };
-var version = "debug";
-exports.version = version;
-exports.pipe = pipe$$1;
-exports.compose = compose;
-exports.curryObjectK = curryObjectK;
-exports.curryObjectN = curryObjectN;
-exports.curryObjectKN = curryObjectKN;
-exports.curry = curry$1;
-exports.curryify = curryify;
-exports.remap = remap;
-exports.remapArray = remapArray;
-exports.$ = $;
-exports.PLACEHOLDER = PLACEHOLDER;
-exports.K = K;
-exports.I = I;
-});
-unwrapExports$$1(debug);
-var debug_1 = debug.version;
-var debug_2 = debug.pipe;
-var debug_3 = debug.compose;
-var debug_4 = debug.curryObjectK;
-var debug_5 = debug.curryObjectN;
-var debug_6 = debug.curryObjectKN;
-var debug_7 = debug.curry;
-var debug_8 = debug.curryify;
-var debug_9 = debug.remap;
-var debug_10 = debug.remapArray;
-var debug_11 = debug.$;
-var debug_12 = debug.PLACEHOLDER;
-var debug_13 = debug.K;
-var debug_14 = debug.I;
-var entrust0 = function (fn, x) { return x[fn](); };
-var e0$$1 = katsuCurry.curry(entrust0);
-var entrust1 = function (fn, a, x) { return x[fn](a); };
-var e1$$1 = katsuCurry.curry(entrust1);
-var entrust2 = function (fn, a, b, x) { return x[fn](a, b); };
-var e2$$1 = katsuCurry.curry(entrust2);
-var entrust3 = function (fn, a, b, c, x) { return x[fn](a, b, c); };
-var e3 = katsuCurry.curry(entrust3);
-var entrust4 = function (fn, a, b, c, d, x) { return x[fn](a, b, c, d); };
-var e4 = katsuCurry.curry(entrust4);
-var entrust5 = function (fn, a, b, c, d, e, x) { return x[fn](a, b, c, d, e); };
-var e5 = katsuCurry.curry(entrust5);
-var entrust6 = function (fn, a, b, c, d, e, f, x) { return x[fn](a, b, c, d, e, f); };
-var e6 = katsuCurry.curry(entrust6);
-var entrust7 = function (fn, a, b, c, d, e, f, g, x) { return x[fn](a, b, c, d, e, f, g); };
-var e7 = katsuCurry.curry(entrust7);
-var entrust8 = function (fn, a, b, c, d, e, f, g, h, x) { return x[fn](a, b, c, d, e, f, g, h); };
-var e8 = katsuCurry.curry(entrust8);
-var entrust9 = function (fn, a, b, c, d, e, f, g, h, i, x) { return x[fn](a, b, c, d, e, f, g, h, i); };
-var e9 = katsuCurry.curry(entrust9);
-var entrust10 = function (fn, a, b, c, d, e, f, g, h, i, j, x) { return x[fn](
-  a, b, c, d, e, f, g, h, i, j
-); };
-var e10 = katsuCurry.curry(entrust10);
-var entrustN = function (n, method, args, delegatee) {
-  var entrustees = [e0$$1, e1$$1, e2$$1, e3, e4, e5, e6, e7, e8, e9, e10];
-  var params = [method ].concat( args, [delegatee]);
-  return entrustees[n].apply(null, params)
-};
-var eN = katsuCurry.curry(entrustN);
-function entrustD(n, m, a, d) {
-  if (n !== a.length) {
-    throw new Error((m + " expects total args (" + (a.length) + ") to equal the given arity (" + n + ")"))
-  }
-  return entrustN(n, m, a, d)
-}
-var eD = katsuCurry.curry(
-  entrustD
-);
-var custom = function (curry$$1) {
-  var raw = {
-    e0: entrust0,
-    e1: entrust1,
-    e2: entrust2,
-    e3: entrust3,
-    e4: entrust4,
-    e5: entrust5,
-    e6: entrust6,
-    e7: entrust7,
-    e8: entrust8,
-    e9: entrust9,
-    e10: entrust10,
-    eD: entrustD,
-    eN: entrustN
-  };
-  return Object.keys(raw).map(function (k) {
-    var obj;
-    return (( obj = {}, obj[k] = curry$$1(raw[k]), obj ));
-  }).reduce(function (x, y) { return Object.assign({}, x, y); }, {})
-};
-var debug$2 = custom(debug_7);
-var _e0 = debug$2.e0;
-var _e1 = debug$2.e1;
-var _e2 = debug$2.e2;
-var _e3 = debug$2.e3;
-var _e4 = debug$2.e4;
-var _e5 = debug$2.e5;
-var _e6 = debug$2.e6;
-var _e7 = debug$2.e7;
-var _e8 = debug$2.e8;
-var _e9 = debug$2.e9;
-var _e10 = debug$2.e10;
-var _eD = debug$2.eD;
-var _eN = debug$2.eN;
-var e0$1 = _e0;
-var e1$1 = _e1;
-var e2$1 = _e2;
-var e3$1 = _e3;
-var e4$1 = _e4;
-var e5$1 = _e5;
-var e6$1 = _e6;
-var e7$1 = _e7;
-var e8$1 = _e8;
-var e9$1 = _e9;
-var e10$1 = _e10;
-var eN$1 = _eN;
-var eD$1 = _eD;
-exports.e0 = e0$1;
-exports.e1 = e1$1;
-exports.e2 = e2$1;
-exports.e3 = e3$1;
-exports.e4 = e4$1;
-exports.e5 = e5$1;
-exports.e6 = e6$1;
-exports.e7 = e7$1;
-exports.e8 = e8$1;
-exports.e9 = e9$1;
-exports.e10 = e10$1;
-exports.eN = eN$1;
-exports.eD = eD$1;
-});
-unwrapExports(debug_15);
-var debug_16 = debug_15.e0;
-var debug_17 = debug_15.e1;
-var debug_18 = debug_15.e2;
-var debug_19 = debug_15.e3;
-var debug_20 = debug_15.e4;
-var debug_21 = debug_15.e5;
-var debug_22 = debug_15.e6;
-var debug_23 = debug_15.e7;
-var debug_24 = debug_15.e8;
-var debug_25 = debug_15.e9;
-var debug_26 = debug_15.e10;
-var debug_27 = debug_15.eN;
-var debug_28 = debug_15.eD;
+    const returnType = expected[expected.length - 1];
+    const params = expected.slice(0, expected.length - 1);
 
-var debug$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, '__esModule', { value: true });
-var PLACEHOLDER = "🍛";
-var $ = PLACEHOLDER;
-var bindInternal3 = function bindInternal3 (func, thisContext) {
-  return function (a, b, c) {
-    return func.call(thisContext, a, b, c);
-  };
-};
-var some$1 = function fastSome (subject, fn, thisContext) {
-  var length = subject.length,
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    if (iterator(subject[i], i, subject)) {
-      return true;
-    }
-  }
-  return false;
-};
-var curry$$1 = function (fn) {
-  var test = function (x) { return x === PLACEHOLDER; };
-  return function curried() {
-    var arguments$1 = arguments;
-    var argLength = arguments.length;
-    var args = new Array(argLength);
-    for (var i = 0; i < argLength; ++i) {
-      args[i] = arguments$1[i];
-    }
-    var countNonPlaceholders = function (toCount) {
-      var count = toCount.length;
-      while (!test(toCount[count])) {
-        count--;
-      }
-      return count
-    };
-    var length = (
-      some$1(args, test) ?
-        countNonPlaceholders(args) :
-        args.length
-    );
-    function saucy() {
-      var arguments$1 = arguments;
-      var arg2Length = arguments.length;
-      var args2 = new Array(arg2Length);
-      for (var j = 0; j < arg2Length; ++j) {
-        args2[j] = arguments$1[j];
-      }
-      return curried.apply(this, args.map(
-        function (y) { return (
-          test(y) && args2[0] ?
-            args2.shift() :
-            y
-        ); }
-      ).concat(args2))
-    }
-    return (
-      length >= fn.length ?
-        fn.apply(this, args) :
-        saucy
-    )
-  }
-};
-var delegatee = curry$$1(function (method, arg, x) { return (x[method](arg)); });
-var filter = delegatee("filter");
-var innerpipe = function (args) { return function (x) {
-  var first = args[0];
-  var rest = args.slice(1);
-  var current = first(x);
-  for (var a = 0; a < rest.length; a++) {
-    current = rest[a](current);
-  }
-  return current
-}; };
-function pipe$1() {
-  var arguments$1 = arguments;
-  var argLength = arguments.length;
-  var args = new Array(argLength);
-  for (var i = 0; i < argLength; ++i) {
-    args[i] = arguments$1[i];
-  }
-  return innerpipe(args)
+    const results = params
+      .slice(0, given.length)
+      .map(function typeCheckParam(ex, ii) {
+        const actual = typecheck(given[ii]);
+        const success = compareTypes(actual, ex);
+        const outcome = {
+          idx: ii,
+          raw: Object.freeze({ value: given[ii] }),
+          actual,
+          expected: ex,
+          success
+        };
+        return outcome
+      })
+      .reduce(
+        function typeCheckOutcomes(outcome, ent) {
+          const key = ent.success ? "valid" : "invalid";
+          const partial = mash(outcome, {
+            [key]: outcome[key].concat([ent]),
+            rawParams: outcome.rawParams.concat([ent])
+          });
+          return mash(partial, {
+            failures: outcome.failures || partial.invalid.length > 0
+          })
+        },
+        {
+          rawParams: [],
+          invalid: [],
+          valid: [],
+          signature: expected.join(" -> "),
+          params,
+          returnType,
+          given
+        }
+      );
+    return results
+  })
 }
-var composedToString = function (args, name) {
-  if ( args === void 0 ) { args = []; }
-  if ( name === void 0 ) { name = "pipe"; }
-  var stringifyFunctions = function (x) { return (
-    x && x.toString && typeof x.toString === "function" ?
-      x.toString() :
-      "fn"
-  ); };
-  var names = args.map(stringifyFunctions);
-  return function () { return (
-    (name + "(" + (names.join(", ")) + ")")
-  ); }
-};
-var slice = Array.prototype.slice;
-var aintFunction = function (x) { return typeof x !== "function"; };
-var prepipe = function (a, name) {
-  if ( name === void 0 ) { name = "pipe"; }
-  var args = slice.call(a);
-  if (args.filter(aintFunction).length > 0) {
-    throw new Error(
-      (name + " expected all arguments to be functions.")
-    )
+
+function checkParamsWith(checker) {
+  return function checkParams(signature, given) {
+    const checked = makeTypechecker(checker)(signature, given);
+    return !checked.failures
   }
-  return args
-};
-function pipe$$1() {
-  var args = prepipe(arguments);
-  var piped = innerpipe(args);
-  piped.toString = composedToString(args);
-  return piped
 }
-function compose() {
-  var args = prepipe(arguments, "compose").reverse();
-  var composed = innerpipe(args);
-  composed.toString = composedToString(args, "compose");
-  return composed
-}
-var prop = curry$$1(function (property, o) { return o && property && o[property]; });
-var _keys = Object.keys;
-var keys = _keys;
-var propLength = prop("length");
-var objectLength = pipe$1(keys, propLength);
-var length = function (x) { return (typeof x === "object" ? objectLength(x) : propLength(x)); };
-var flipIncludes = curry$$1(function (list, x) { return list.includes(x); });
-var matchingKeys = curry$$1(
-  function (list, o) { return filter(
-    flipIncludes(list),
-    keys(o)
-  ); }
-);
-var matchingKeyCount = curry$$1(
-  function (list, o) { return pipe$1(
-    matchingKeys(list),
-    length
-  )(o); }
-);
-var expectKArgs = function (expected, args) { return (
-  matchingKeyCount(expected, args) >= Object.keys(expected).length
-); };
-var join = curry$$1(function (y, x) { return x.join(y); });
-var repeat = curry$$1(function (y, x) { return x.repeat(y); });
-var split = curry$$1(function (y, x) { return x.split(y); });
-var map = curry$$1(function (y, x) { return x.map(y); });
-var add = curry$$1(function (y, x) { return x + y; });
-var subtract = curry$$1(function (y, x) { return x - y; });
-var safeJoin = curry$$1(
-  function (joiner, x) { return (
-    x.length > 0 ?
-      joiner(x) :
-      ""
-  ); }
-);
-var wrap = curry$$1(
-  function (x, str) { return (
-    ("" + (x[0]) + str + (x[1]))
-  ); }
-);
-var parenthesize = wrap("()");
-var curlies = wrap("{}");
-var commas = join(",");
-var toStringJoiner = safeJoin(
-  pipe$1(
-    commas,
-    parenthesize
-  )
-);
-var toObjectStringJoiner = pipe$1(
-  safeJoin(pipe$1(
-    commas,
-    curlies,
-    parenthesize
-  ))
-);
-var makeRemainder = curry$$1(function (str, length) { return (
-  length > 0 ?
-    pipe$1(
-      repeat(length),
-      split(""),
-      commas,
-      parenthesize
-    )(str) :
-    ""
-); });
-var fillArray = function (x) {
-  var list = [];
-  while (x > 0) {
-    list.push(--x);
-  }
-  return list.reverse()
-};
-var question = function (x) { return (
-  pipe$1(
-    join(":?,"),
-    add(x.length > 0 ? ":?" : "")
-  )(x)
-); };
-var without = curry$$1(
-  function (x, y) {
-    return y.filter(function (z) { return !(x.indexOf(z) > -1); })
-  }
-);
-var keysWhenKeyNumOrRaw = function (x) { return (x && x.k && x.n ? x.k : x); };
-var makeObjectRemainder = function (objectKeys, argKeys) {
-  if ( objectKeys === void 0 ) { objectKeys = []; }
-  if ( argKeys === void 0 ) { argKeys = []; }
-  return pipe$1(
-  keysWhenKeyNumOrRaw,
-  without(argKeys),
-  question,
-  curlies,
-  parenthesize
-)(objectKeys);
-};
-var LAMDA_REMAINDER = "?";
-var toString = function (fn, args) {
-  if ( args === void 0 ) { args = []; }
-  return function () {
-  var argString = toStringJoiner(args);
-  var remainder = makeRemainder(
-    LAMDA_REMAINDER,
-    fn.length - args.length
-  );
-  var name = fn && fn.name || "fn";
-  return ("curry(" + name + ")" + argString + remainder)
-};
-};
-var counter = function (x) { return function () { return x++; }; };
-var makeNumberObjectRemainder = function (number, keys) {
-  var keyLength = keys.length;
-  return pipe$1(
-    subtract(keyLength),
-    fillArray,
-    map(add(keyLength)),
-    question,
-    curlies,
-    parenthesize
-  )(number)
-};
-var makeObjectStringSignature = function (name, obj, keys) {
-  var argString = toObjectStringJoiner(keys);
-  var remainder = makeObjectRemainder(obj, keys);
-  return ("" + name + argString + remainder)
-};
-var makeNumberStringSignature = function (name, number, keys) {
-  var remainder = makeNumberObjectRemainder(number, keys);
-  return pipe$1(
-    map(counter(0)),
-    toObjectStringJoiner,
-    wrap([name, remainder])
-  )(keys)
-};
-var toObjectString = function (fn, curryCondition, args) {
-  if ( curryCondition === void 0 ) { curryCondition = []; }
-  if ( args === void 0 ) { args = {}; }
-  return function () {
-  var argKeys = Object.keys(args);
-  var conditionType = typeof curryCondition;
-  var name = "curry(" + (fn && fn.name || "fn") + ")";
-  if (conditionType === "number") {
-    return makeNumberStringSignature(name, curryCondition, argKeys)
-  }
-  return makeObjectStringSignature(name, curryCondition, argKeys)
-};
-};
-var merge = curry$$1(function (x, y) { return Object.assign({}, x, y); });
-var barfWhen = function (dis) {
-  var o = Object.freeze({
-    keysAreNotAnArray: function (k) {
-      if (!Array.isArray(k)) {
-        throw new TypeError((dis + " expected an array of wanted keys."))
-      }
-      return o
-    },
-    arityIsNotANumber: function (n) {
-      if (typeof n !== "number" || isNaN(n)) {
-        throw new TypeError((dis + " expected to be given a number for arity."))
-      }
-      return o
-    },
-    noFunctionIsGiven: function (fn) {
-      if (typeof fn !== "function") {
-        throw new TypeError((dis + " expected to be given a function to curry."))
-      }
-      return o
+
+function checkReturnWith(checker) {
+  return function checkReturn(outcome) {
+    return function checkReturnTypeValidoutcomeAB(a, b) {
+      const actual = checker(outcome);
+      const expected = makeTypechecker(checker)(a, b).returnType;
+      const compared = compareTypes(expected, actual);
+      return compared
     }
+  }
+}
+
+const { __of__: __of__$3 } = C;
+function system(z) {
+  let constructor = (z && z.constructor && z.constructor.name) || "Global";
+  let type = typeof z;
+  // deal with undefined / null
+  // and the fact that z.constructor.name for boolean is currently Global
+  if (!z) {
+    if (type === "undefined" || type === "object") {
+      type = "nil";
+    } else {
+      constructor = "Boolean";
+    }
+  }
+  return `${constructor}${__of__$3}${type}`
+}
+
+const ARCHETYPES = Object.freeze({
+  string: "String∋string",
+  number: "Number∋number",
+  boolean: "Boolean∋boolean",
+  function: "Function∋function",
+  object: "Object∋object",
+  undefined: "Global∋nil",
+  symbol: "Symbol∋symbol",
+  nil: "Global∋nil"
+});
+
+const { UNION_TYPE_DELIMITER: U, __of__: __of__$4 } = C;
+function unionArchetype(recurse) {
+  return function arch(tt) {
+    if (tt && tt.indexOf && tt.indexOf(U) > -1 && recurse) {
+      return tt.split(U).map(z => unionArchetype(false)(z))
+    }
+    const match = ARCHETYPES[tt];
+    if (match) return match
+    if (tt[0].toUpperCase() === tt[0]) return `${tt}${__of__$4}object`
+    return tt
+  }
+}
+const archetype = unionArchetype(true);
+
+function makeParamMerger(taste) {
+  return function compareParams(aa, bb) {
+    return aa
+      .map(function testGaps(yy) {
+        return taste(yy) && bb[0] ? bb.shift() : yy
+      })
+      .concat(bb)
+  }
+}
+function testCurryGaps(taste) {
+  return function testCurryCapsByTaste(args) {
+    return args.reduce(function doesCurryTasteGood(pp, x) {
+      return taste(x) ? pp : pp + 1
+    }, 0)
+  }
+}
+function some(fn) {
+  return function someInList(x) {
+    return x.some(fn)
+  }
+}
+
+function toString(fn, args = []) {
+  return function functionToString() {
+    return `curry(${fn.name || "fn"})${
+      args.length > 0 ? `(${args.join(`,`)})` : ``
+    }`
+  }
+}
+
+function hmError(name, actual, params) {
+  return `Given ${name}( ${actual &&
+    actual.join(", ")} ) but expected ${name}( ${params
+    .map(z => (Array.isArray(z) ? z.join("|") : z))
+    .slice(0, actual.length)
+    .join(", ")} )`
+}
+
+function defineFunctionWithParameterTest(test) {
+  return function funcfunc({ ts = system, n: givenLength, hm, check }) {
+    if (check) {
+      if (typeof ts !== "function")
+        throw new TypeError("Expected typeSystem to be a function.")
+      if (!hm || !Array.isArray(hm))
+        throw new TypeError("Expected hm to be an array of strings.")
+    }
+    return function currified(fn) {
+      const heat = testCurryGaps(test);
+      const mergeParams = makeParamMerger(test);
+      const isSpicy = some(test);
+      function curried() {
+        const args = Array.from(arguments);
+
+        const nArgs =
+          hm && Array.isArray(hm)
+            ? hm.length - 1
+            : givenLength && typeof givenLength === "number"
+            ? givenLength
+            : fn.length;
+        const length = isSpicy(args) ? heat(args) : args.length;
+        function saucy() {
+          const args2 = Array.from(arguments);
+          return curried.apply(this, mergeParams(args, args2))
+        }
+        saucy.toString = toString(fn, args);
+        if (length >= nArgs) {
+          const result = fn.apply(this, args);
+          if (check) {
+            const tChecker = makeTypechecker(ts)(hm, args);
+            const isValid = checkParamsWith(ts)(hm, args);
+
+            if (!isValid) {
+              const { rawParams, params } = tChecker;
+              throw new TypeError(
+                hmError(
+                  fn.name,
+                  rawParams.map(z => z.actual),
+                  params.map(archetype)
+                )
+              )
+            }
+            const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
+
+            if (!returnTypeValid) {
+              const { returnType } = tChecker;
+              throw new TypeError(
+                `Expected ${fn.name} to return ${archetype(
+                  returnType
+                )} but got ${system(result)}.`
+              )
+            }
+          }
+          return result
+        }
+        return saucy
+      }
+      curried.toString = toString(fn);
+      return curried
+    }
+  }
+}
+
+const { $ } = C;
+
+function DEFAULT_PLACEHOLDER_TEST(x) {
+  return x === $
+}
+
+function fabricate(config) {
+  const { test = DEFAULT_PLACEHOLDER_TEST } = config;
+  const def = defineFunctionWithParameterTest(test);
+  const curry = def(mash(config, { n: false, check: false }));
+  const curryN = curry(function _curryN(nn, fn) {
+    return def(mash(config, { n: nn, check: false }))(fn)
   });
-  return o
-};
-function curryObjectKN(ref, fn) {
-  var k = ref.k;
-  var n = ref.n;
-  barfWhen("curryObjectKN")
-    .keysAreNotAnArray(k)
-    .arityIsNotANumber(n)
-    .noFunctionIsGiven(fn);
-  function λcurryObjectKN(args) {
-    var joined = function (z) { return λcurryObjectKN(merge(args, z)); };
-    joined.toString = toObjectString(fn, k, args);
-    return (
-      expectKArgs(k, args) || length(args) >= n ?
-        fn(args) :
-        joined
+  return { def, curry, curryN }
+}
+fabricate(DEFAULT_PLACEHOLDER_TEST);
+
+function ofConstructor(Ctor) {
+  return function ofConstructorsAndMagic(xx) {
+    return (xx && xx.constructor === Ctor) || xx instanceof Ctor
+  }
+}
+
+function ofType(exp) {
+  return function compareTypeofs(xx) {
+    return typeof xx === exp // eslint-disable-line valid-typeof
+  }
+}
+
+const [
+  _isString,
+  _isNumber,
+  _isFunction,
+  _isBoolean,
+  _isSymbol,
+  _isRawObject
+] = [String, Number, Function, Boolean, Symbol, Object].map(ofConstructor);
+const isUndefined = ofType("undefined");
+const isString = _isString;
+const isNumber = _isNumber;
+const isFunction = _isFunction;
+const isBoolean = _isBoolean;
+const isSymbol = _isSymbol;
+const isRawObject = _isRawObject;
+const isArray = Array.isArray;
+
+const { UNMATCHED } = C;
+function isUnmatched(z) {
+  return z === UNMATCHED
+}
+
+function pipe() {
+  const fns = Array.from(arguments);
+  const nonFuncs = fns.filter(z => typeof z !== "function");
+  if (nonFuncs.length !== 0)
+    throw new TypeError(
+      `Expected to receive functions as arguments, but received: ${nonFuncs
+        .map((a, i) => `[${i}] = ${a}`)
+        .join(" ; ")}`
+    )
+
+  return function piped(x) {
+    const len = fns.length;
+    let idx = 0;
+    let current = x;
+    while (idx < len) {
+      const fn = fns[idx];
+      current = fn(current);
+      idx += 1;
+    }
+    return current
+    /*
+    return fns.reduce(function aToB(prev, fn) {
+      return fn(prev)
+    }, x)
+    */
+  }
+}
+const FUNCTION$2 = pipe;
+const SIGNATURE$2 = ["any", "any"];
+
+function autoCurryUsing(curryN) {
+  return function autoCurry(CC) {
+    return Object.keys(CC)
+      .map(function wrapCurry(fnName) {
+        const fn = CC[fnName];
+        const isBinaryFunctionPlus = typeof fn === "function" && fn.length;
+        return [fnName, isBinaryFunctionPlus ? curryN(fn.length, fn) : fn]
+      })
+      .reduce((agg, [k, v]) => Object.assign({}, agg, { [k]: v }), {})
+  }
+}
+
+function makeAliases(F) {
+  return F.temper(F, {
+    I: F.identity,
+    K: F.constant,
+    PLACEHOLDER: F.$,
+    __: F.$,
+    always: F.constant,
+    entries: F.toPairs,
+    every: F.all,
+    fromEntries: F.fromPairs,
+    merge: F.mash,
+    mergeAll: F.smash,
+    mergeRight: F.jam,
+    sideEffect2: F.binarySideEffect,
+    some: F.any
+  })
+}
+
+function box(bx) {
+  return [bx]
+}
+const FUNCTION$3 = box;
+const SIGNATURE$3 = ["any", "Array"];
+
+function init(xx) {
+  return xx.slice(0, -1)
+}
+const FUNCTION$4 = init;
+const SIGNATURE$4 = ["Array", "Array"];
+
+function tail(xx) {
+  return xx.slice(1)
+}
+const FUNCTION$5 = tail;
+const SIGNATURE$5 = ["Array", "Array"];
+
+function append(whatever, xx) {
+  const copy = [].concat(xx);
+  copy.splice(copy.length, 0, whatever);
+  return copy
+}
+
+const FUNCTION$6 = append;
+const SIGNATURE$6 = ["any", "Array", "Array"];
+
+function prepend(whatever, xx) {
+  const copy = [].concat(xx);
+  copy.splice(0, 0, whatever);
+  return copy
+}
+
+const FUNCTION$7 = prepend;
+const SIGNATURE$7 = ["any", "Array", "Array"];
+
+function adjust(idx, fn, xx) {
+  const copy = [].concat(xx);
+  const relIdx = idx < 0 ? copy.length + idx : idx;
+  copy[relIdx] = fn(copy[relIdx]);
+  return copy
+}
+
+const FUNCTION$8 = adjust;
+const SIGNATURE$8 = ["number", "function", "Array", "Array"];
+
+function update(idx, val, xx) {
+  const copy = [].concat(xx);
+  const relIdx = idx < 0 ? copy.length + idx : idx;
+  copy[relIdx] = val;
+  return copy
+}
+
+const FUNCTION$9 = update;
+const SIGNATURE$9 = ["number", "any", "Array", "Array"];
+
+function inc(xx) {
+  return xx + 1
+}
+const FUNCTION$a = inc;
+const SIGNATURE$a = ["number", "number"];
+
+function dec(xx) {
+  return xx - 1
+}
+const FUNCTION$b = dec;
+const SIGNATURE$b = ["number", "number"];
+
+function call(args) {
+  return args[0].apply(null, args.slice(1))
+}
+const FUNCTION$c = call;
+const SIGNATURE$c = ["Array", "any"];
+
+function mode(arr) {
+  const keymap = {};
+  let idx = 0;
+  let out = -1;
+  let outIdx = -1;
+  while (idx < arr.length) {
+    const value = arr[idx];
+    if (!keymap[value]) keymap[value] = 0;
+    keymap[value] += 1;
+    idx += 1;
+  }
+  idx = 0;
+  const keykey = Object.keys(keymap);
+  while (idx < keykey.length) {
+    const value = keymap[keykey[idx]];
+    if (value > out) {
+      out = value;
+      outIdx = keykey[idx];
+    }
+    idx += 1;
+  }
+  const parsed = parseInt(outIdx);
+  return isNaN(parsed) ? outIdx : parsed
+}
+const FUNCTION$d = mode;
+const SIGNATURE$d = ["Array", "any"];
+
+function complement(fn) {
+  return function subtleComplement() {
+    const args = Array.from(arguments);
+    return !fn.apply(null, args)
+  }
+}
+const FUNCTION$e = complement;
+const SIGNATURE$e = ["function", "function"];
+
+function constant(k) {
+  return function forever() {
+    return k
+  }
+}
+const FUNCTION$f = constant;
+const SIGNATURE$f = ["any", "function"];
+
+function F() {
+  return true
+}
+const FUNCTION$g = F;
+const SIGNATURE$g = ["boolean"];
+
+function first(x) {
+  return x[0]
+}
+const FUNCTION$h = first;
+const SIGNATURE$h = ["Array", "any"];
+
+function fromPairs(ps) {
+  return ps.reduce(function pairing(oo, [ke, va]) {
+    return Object.assign({}, oo, { [ke]: va })
+  }, {})
+}
+const FUNCTION$i = fromPairs;
+const SIGNATURE$i = ["Array", "object"];
+
+function identity(y) {
+  return y
+}
+const FUNCTION$j = identity;
+const SIGNATURE$j = ["any", "any"];
+
+function jam(a, b) {
+  return Object.assign({}, b, a)
+}
+const FUNCTION$k = jam;
+const SIGNATURE$k = ["object", "object", "object"];
+
+function last(x) {
+  return x[x.length - 1]
+}
+const FUNCTION$l = last;
+const SIGNATURE$l = ["Array", "any"];
+
+function length(xx) {
+  return xx && typeof xx === "object" ? Object.keys(xx).length : xx.length
+}
+const FUNCTION$m = length;
+const SIGNATURE$m = ["any", "number|nil"];
+
+const isArray$1 = Array.isArray;
+const keys = Object.keys;
+const freeze = Object.freeze;
+const round = Math.round;
+
+var NATIVE = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  isArray: isArray$1,
+  keys: keys,
+  freeze: freeze,
+  round: round
+});
+
+function not(yy) {
+  return !yy
+}
+const FUNCTION$n = not;
+const SIGNATURE$n = ["any", "boolean"];
+
+function makeIterable(xx) {
+  const isArray = Array.isArray(xx);
+  const isObject = xx && typeof xx === "object";
+
+  if (!isArray && !isObject) {
+    throw new TypeError(
+      "Expected iterable initial value to be either an array or an object."
     )
   }
-  λcurryObjectKN.toString = toObjectString(fn, k);
-  return λcurryObjectKN
+  const len = length(xx);
+  const init = isArray ? Array(len) : {};
+  const xKeys = !isArray && Object.keys(xx);
+  return {
+    length: len,
+    iterate: function iterate(idx) {
+      const key = isArray ? idx : xKeys[idx];
+      return { key, value: xx[key] }
+    },
+    init,
+    isArray
+  }
 }
-var curryObjectK = curry$$1(
-  function (keys, fn) {
-    barfWhen("curryObjectK")
-      .keysAreNotAnArray(keys)
-      .noFunctionIsGiven(fn);
-    function λcurryObjectK(args) {
-      var joined = function (z) { return λcurryObjectK(merge(args, z)); };
-      joined.toString = toObjectString(fn, keys, args);
-      return (
-        expectKArgs(keys, args) ?
-          fn(args) :
-          joined
-      )
-    }
-    λcurryObjectK.toString = toObjectString(fn, keys);
-    return λcurryObjectK
+
+function reverse(xx) {
+  // if (typeof xx.reverse === "function") return xx.reverse()
+  const loop = makeIterable(xx);
+  let idx = loop.length;
+  const out = loop.init;
+  while (idx > -1) {
+    const { value } = loop.iterate(idx);
+    out[loop.length - 1 - idx] = value;
+    idx -= 1;
   }
-);
-function curryObjectN(arity, fn) {
-  barfWhen("curryObjectN")
-    .arityIsNotANumber(arity)
-    .noFunctionIsGiven(fn);
-  function λcurryObjectN(args) {
-    var joined = function (z) { return λcurryObjectN(merge(args, z)); };
-    joined.toString = toObjectString(fn, arity, args);
-    return (
-      Object.keys(args).length >= arity ?
-        fn(args) :
-        joined
-    )
-  }
-  λcurryObjectN.toString = toObjectString(fn, arity);
-  return λcurryObjectN
+  return out
 }
-var remapParameters = function (indices, arr) {
-  var copy = Array.from(arr);
-  if (!copy.length) {
-    return copy
+const FUNCTION$o = reverse;
+const SIGNATURE$o = ["Array", "Array"];
+
+function smash(args) {
+  return args.reduce((agg, xx) => Object.assign({}, agg, xx), {})
+}
+const FUNCTION$p = smash;
+const SIGNATURE$p = ["Array", "object"];
+
+function smooth(x) {
+  return x.filter(Boolean)
+}
+const FUNCTION$q = smooth;
+const SIGNATURE$q = ["Array", "any"];
+
+function T() {
+  return true
+}
+const FUNCTION$r = T;
+const SIGNATURE$r = ["boolean"];
+
+function temper(a, b) {
+  return Object.freeze(Object.assign({}, a, b))
+}
+const FUNCTION$s = temper;
+const SIGNATURE$s = ["object", "object", "object"];
+
+function toLower(z) {
+  return z.toLowerCase()
+}
+const FUNCTION$t = toLower;
+const SIGNATURE$t = ["string", "string"];
+
+function toPairs(oo) {
+  return Object.keys(oo).map(function enpair(ky) {
+    return [ky, oo[ky]]
+  })
+}
+const FUNCTION$u = toPairs;
+const SIGNATURE$u = ["object", "Array"];
+
+function toUpper(z) {
+  return z.toUpperCase()
+}
+const FUNCTION$v = toUpper;
+const SIGNATURE$v = ["string", "string"];
+
+function mean(arr) {
+  let idx = 0;
+  let sum = 0;
+  while (idx < arr.length) {
+    sum += arr[idx];
+    idx += 1;
   }
-  return copy.map(
-    function (x, index) {
-      if (indices.includes(index)) {
-        return copy[indices[index]]
-      }
-      return x
+  return sum / arr.length
+}
+const FUNCTION$w = mean;
+const SIGNATURE$w = ["Array", "number"];
+
+const CORE_WITH_SIGNATURES = [
+  [SIGNATURE$g, FUNCTION$g],
+  [SIGNATURE$r, FUNCTION$r],
+  [SIGNATURE$8, FUNCTION$8],
+  [SIGNATURE$6, FUNCTION$6],
+  [SIGNATURE$3, FUNCTION$3],
+  [SIGNATURE$c, FUNCTION$c],
+  [SIGNATURE$e, FUNCTION$e],
+  [SIGNATURE$f, FUNCTION$f],
+  [SIGNATURE$b, FUNCTION$b],
+  [SIGNATURE$h, FUNCTION$h],
+  [SIGNATURE$i, FUNCTION$i],
+  [SIGNATURE$j, FUNCTION$j],
+  [SIGNATURE$a, FUNCTION$a],
+  [SIGNATURE$k, FUNCTION$k],
+  [SIGNATURE$l, FUNCTION$l],
+  [SIGNATURE$4, FUNCTION$4],
+  [SIGNATURE$5, FUNCTION$5],
+  [SIGNATURE$m, FUNCTION$m],
+  [SIGNATURE, FUNCTION],
+  [SIGNATURE$w, FUNCTION$w],
+  [SIGNATURE$d, FUNCTION$d],
+  [SIGNATURE$1, FUNCTION$1],
+  [SIGNATURE$n, FUNCTION$n],
+  [SIGNATURE$2, FUNCTION$2],
+  [SIGNATURE$7, FUNCTION$7],
+  [SIGNATURE$o, FUNCTION$o],
+  [SIGNATURE$p, FUNCTION$p],
+  [SIGNATURE$q, FUNCTION$q],
+  [SIGNATURE$s, FUNCTION$s],
+  [SIGNATURE$t, FUNCTION$t],
+  [SIGNATURE$u, FUNCTION$u],
+  [SIGNATURE$v, FUNCTION$v],
+  [SIGNATURE$9, FUNCTION$9]
+];
+
+function makeSignedCore(def) {
+  return CORE_WITH_SIGNATURES.reduce(function petition(agg, [hm, fn]) {
+    return FUNCTION(agg, { [fn.name]: def({ hm, check: true })(fn) })
+  }, NATIVE)
+}
+
+function makeSideEffectsFromEnvWithTypes(def) {
+  const sideEffect = def({ check: true, hm: ["function", "any", "any"] })(
+    function _sideEffect(fn, a) {
+      fn(a);
+      return a
     }
+  );
+  const binarySideEffect = def({
+    check: true,
+    hm: ["function", "any", "any", "any"]
+  })(function _binarySideEffect(fn, a, b) {
+    fn(a, b);
+    return b
+  });
+  const trace = binarySideEffect(console.log);
+  const inspect = def({
+    check: true,
+    hm: ["function", "function", "any", "any", "any"]
+  })(function _inspect(fn, look, tag, x) {
+    fn(tag, look(x));
+    return x
+  });
+  return { sideEffect, binarySideEffect, trace, inspect }
+}
+
+function makeAddIndex({ curryN }) {
+  return function addIndex(fn) {
+    return curryN(fn.length, function indexAddedIter() {
+      let idx = 0;
+      const args = Array.prototype.slice.call(arguments, 0);
+      const [origFn] = args;
+      const list = args[args.length - 1];
+      args[0] = function indexAdded() {
+        const result = origFn.apply(
+          this,
+          [].concat(arguments).concat([idx, list])
+        );
+        idx += 1;
+        return result
+      };
+      return fn.apply(this, args)
+    })
+  }
+}
+
+const GET_FUNCTION = makeAddIndex;
+const SIGNATURE$x = ["function", "function"];
+
+function makeChain({ curryN, map, pipe, reduce, concat }) {
+  return curryN(ARITY, function chain(fn, xx) {
+    if (xx && typeof xx.chain === "function") return xx.chain(fn)
+    if (typeof xx === "function") return yy => fn(xx(yy), yy)
+    return pipe(map(fn), reduce(concat, []))(xx)
+  })
+}
+const GET_FUNCTION$1 = makeChain;
+const ARITY = 2;
+const SIGNATURE$y = ["function", "function|Array|object", "function|Array"];
+
+function makePluck({ curryN, map, prop }) {
+  return curryN(ARITY$1, function pluck(kk, xs) {
+    return map(prop(kk), xs)
+  })
+}
+const GET_FUNCTION$2 = makePluck;
+const ARITY$1 = 2;
+const SIGNATURE$z = ["string", "Array|object", "Array|object"];
+
+function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
+  return pipe(
+    sort((a, b) => a - b),
+    xx => pipe(length, dec, divide(2), Math.round, nth($, xx))(xx)
   )
-};
-var curryify = function (test) { return function (fn) {
-  if (typeof fn !== "function") {
-    throw new TypeError("Expected to be given a function to curry!")
-  }
-  function curried() {
-    var args = Array.from(arguments);
-    var countNonPlaceholders = function (toCount) {
-      var count = toCount.length;
-      while (!test(toCount[count])) {
-        count--;
+}
+const GET_FUNCTION$3 = makeMedian;
+const SIGNATURE$A = ["Array", "number"];
+
+function makeFlatten({ isArray, forEach }) {
+  return function flatten(xx) {
+    let idx = 0;
+    const loop = makeIterable(xx);
+    let out = [];
+    while (idx < loop.length) {
+      let { value } = loop.iterate(idx);
+      if (isArray(value)) {
+        value = flatten(value);
+        forEach(x => out.push(x), value);
+      } else {
+        out.push(value);
       }
-      return count
-    };
-    var length = some$1(args, test) ? countNonPlaceholders(args) : args.length;
-    function saucy() {
-      var args2 = Array.from(arguments);
-      return curried.apply(this, args.map(
-        function (y) { return (
-          test(y) && args2[0] ?
-            args2.shift() :
-            y
-        ); }
-      ).concat(args2))
+      idx += 1;
     }
-    saucy.toString = toString(fn, args);
-    return (
-      length >= fn.length ?
-        fn.apply(this, args) :
-        saucy
+    return out
+  }
+}
+const GET_FUNCTION$4 = makeFlatten;
+const SIGNATURE$B = ["Array", "Array"];
+
+function makePredicatesPass({
+  def,
+  pipe,
+  map,
+  flip,
+  any,
+  all,
+  smooth,
+  length,
+  gt
+}) {
+  function predFor(pred) {
+    return def({ check: true, hm: ["Array", "Array", "boolean"] })(
+      function predPass(preds, xx) {
+        return pipe(map(flip(pred)(xx)), smooth, length, gt(0))(preds)
+      }
     )
   }
-  curried.toString = toString(fn);
-  return curried
-}; };
-var curry$1 = curryify(function (x) { return x === PLACEHOLDER; });
-var remapArray = curry$1(remapParameters);
-var remap = curry$1(function (indices, fn) {
-  var remapArgs = remapArray(indices);
-  var curried = curry$1(fn);
-  return function remappedFn() {
-    var args = remapArgs(Array.from(arguments));
-    return curried.apply(null, args)
-  }
-});
-var K = function (x) { return function () { return x; }; };
-var I = function (x) { return x; };
-var version = "debug";
-exports.version = version;
-exports.pipe = pipe$$1;
-exports.compose = compose;
-exports.curryObjectK = curryObjectK;
-exports.curryObjectN = curryObjectN;
-exports.curryObjectKN = curryObjectKN;
-exports.curry = curry$1;
-exports.curryify = curryify;
-exports.remap = remap;
-exports.remapArray = remapArray;
-exports.$ = $;
-exports.PLACEHOLDER = PLACEHOLDER;
-exports.K = K;
-exports.I = I;
-});
-unwrapExports(debug$1);
-var debug_1 = debug$1.version;
-var debug_2 = debug$1.pipe;
-var debug_3 = debug$1.compose;
-var debug_4 = debug$1.curryObjectK;
-var debug_5 = debug$1.curryObjectN;
-var debug_6 = debug$1.curryObjectKN;
-var debug_7 = debug$1.curry;
-var debug_8 = debug$1.curryify;
-var debug_9 = debug$1.remap;
-var debug_10 = debug$1.remapArray;
-var debug_11 = debug$1.$;
-var debug_12 = debug$1.PLACEHOLDER;
-var debug_13 = debug$1.K;
-var debug_14 = debug$1.I;
-
-var __isTypeof = function (type, x) { return type === typeof x; };
-var isTypeof = curry(__isTypeof);
-var isBoolean = isTypeof("boolean");
-var isNumber = isTypeof("number");
-var isFunction = isTypeof("function");
-var isString = isTypeof("string");
-var isNil = function (x) { return x == null; };
-var isObject = isTypeof("object");
-var isArray = Array.isArray;
-var isDistinctObject = function (x) { return !isNil(x) && isObject(x) && !isArray(x); };
-
-var has = function (x, y) { return !!y[x]; };
-var isArray$1 = Array.isArray;
-var __willDelegate = function (method, functor) { return has(method, functor) && !isArray$1(functor); };
-function __delegateFastBinary(method, fast, fn, functor) {
-  return __willDelegate(method, functor)
-    ? functor[method](fn)
-    : fast(functor, fn)
+  return { anyPass: predFor(any), allPass: predFor(all) }
 }
-var delegateFastBinary = curry(__delegateFastBinary);
-function __delegateFastTertiary(method, fast, fn, initial, functor) {
-  return __willDelegate(method, functor)
-    ? functor[method](fn, initial)
-    : fast(functor, fn, initial)
+
+function makeBind({ curryN }) {
+  return curryN(2, function bind(fn, _this) {
+    function bound() {
+      return fn.apply(_this, arguments)
+    }
+    return fn.length > 1 ? curryN(fn.length, bound) : bound
+  })
 }
-var delegateFastTertiary = curry(__delegateFastTertiary);
+const GET_FUNCTION$5 = makeBind;
+const SIGNATURE$C = ["function", "object", "function"];
 
-var reduce$3 = delegateFastTertiary("reduce", reduce$2);
+function makeDifference({ curryN, filter, includes, complement }) {
+  return curryN(ARITY$2, function difference(aa, bb) {
+    return filter(complement(includes(bb)), aa)
+  })
+}
+const GET_FUNCTION$6 = makeDifference;
+const ARITY$2 = 2;
+const SIGNATURE$D = ["Array", "Array", "Array"];
 
-var map = function fastMap (subject, fn, thisContext) {
-  var length = subject.length,
-      result = new Array(length),
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i;
-  for (i = 0; i < length; i++) {
-    result[i] = iterator(subject[i], i, subject);
+function makeFlip({ curryN }) {
+  return function flip(fn) {
+    return curryN(2, function flipped(a, b) {
+      return fn(b, a)
+    })
   }
-  return result;
-};
+}
+const GET_FUNCTION$7 = makeFlip;
+const SIGNATURE$E = ["function", "function"];
 
-var map$1 = function fastMapObject (subject, fn, thisContext) {
-  var keys = Object.keys(subject),
-      length = keys.length,
-      result = {},
-      iterator = thisContext !== undefined ? bindInternal3(fn, thisContext) : fn,
-      i, key;
-  for (i = 0; i < length; i++) {
-    key = keys[i];
-    result[key] = iterator(subject[key], key, subject);
+function makeIsObject({ both, isRawObject }) {
+  return function isObject(x) {
+    return both(isRawObject, Boolean)(x)
   }
-  return result;
-};
+}
+const GET_FUNCTION$8 = makeIsObject;
+const SIGNATURE$F = ["any", "boolean"];
 
-var map$2 = function fastMap (subject, fn, thisContext) {
-  if (subject instanceof Array) {
-    return map(subject, fn, thisContext);
+function makeJ2({ toJSON }) {
+  return toJSON(2)
+}
+const GET_FUNCTION$9 = makeJ2;
+const SIGNATURE$G = ["any", "string"];
+
+function makePathOr({ curryN, reduce }) {
+  return curryN(ARITY$3, function pathOr(dd, ks, src) {
+    return reduce(
+      function walkPathOr(agg, st) {
+        return (agg && agg[st]) || dd
+      },
+      src,
+      ks
+    )
+  })
+}
+const GET_FUNCTION$a = makePathOr;
+const ARITY$3 = 3;
+const SIGNATURE$H = ["any", "Array", "Array|object", "any"];
+
+function makePathOrDerivatives({ equals, is, def, pipe, pathOr }) {
+  // pathOr => {path, pathEq, pathSatisfies, pathIs}
+  // propOr => {prop, propEq, propSatisfies, propIs}
+  function deriveFromAccessor(acc) {
+    return {
+      accIs: def({
+        check: true,
+        hm: ["function", "Array|string", "object", "boolean"]
+      })(function pathIsOfConstructor(J, ks, src) {
+        return pipe(acc(C.UNMATCHED, ks), is(J))(src)
+      }),
+      unsafe: acc(null),
+      eq: def({
+        check: true,
+        hm: ["Array|string", "any", "object", "boolean"]
+      })(function equivalence(ks, ex, src) {
+        return pipe(acc(C.UNMATCHED, ks), equals(ex))(src)
+      }),
+      satisfies: def({
+        check: true,
+        hm: ["function", "Array|string", "object", "boolean"]
+      })(function satisfaction(fn, ks, src) {
+        return pipe(acc(C.UNMATCHED, ks), fn, Boolean)(src)
+      })
+    }
   }
-  else {
-    return map$1(subject, fn, thisContext);
+  const {
+    unsafe: path,
+    eq: pathEq,
+    satisfies: pathSatisfies,
+    accIs: pathIs
+  } = deriveFromAccessor(pathOr);
+  const propOr = def({
+    check: true,
+    hm: ["any", "number|string", "object", "any"]
+  })(function _propOr(dd, key, source) {
+    return pathOr(dd, [key], source)
+  });
+  const {
+    unsafe: prop,
+    eq: propEq,
+    satisfies: propSatisfies,
+    accIs: propIs
+  } = deriveFromAccessor(propOr);
+  return {
+    path,
+    pathEq,
+    pathSatisfies,
+    pathIs,
+    propOr,
+    prop,
+    propEq,
+    propSatisfies,
+    propIs
   }
-};
+}
 
-var __map = function (fn, functor) {
-  if (functor && !Array.isArray(functor) && functor.map) { return functor.map(fn) }
-  return map$2(functor, fn)
-};
-var map$3 = curry(__map);
+function makeReject({ curryN, filter, complement }) {
+  return curryN(ARITY$4, function reject(fn, xx) {
+    return filter(complement(fn), xx)
+  })
+}
+const GET_FUNCTION$b = makeReject;
+const ARITY$4 = 2;
+const SIGNATURE$I = ["function", "object", "object"];
 
-var __ap = function (applicative, functor) {
-  if (functor && functor.ap && isFunction(functor.ap))
-    { return functor.ap(applicative) }
-  if (isFunction(functor)) { return function (x) { return applicative(x)(functor(x)); } }
-  return reduce$3(function (agg, f) { return agg.concat(map$3(f, functor)); }, [], applicative)
-};
-var ap = curry(__ap);
+function makeSymmetricDifference({ curryN }) {
+  return curryN(ARITY$5, function symmetricDifference(aa, bb) {
+    const aLoop = makeIterable(aa);
+    const bLoop = makeIterable(bb);
+    const notBoth = [];
+    let idxA = 0;
+    while (idxA < aLoop.length) {
+      const { value } = aLoop.iterate(idxA);
+      if (!bb.includes(value)) notBoth.push(value);
+      idxA += 1;
+    }
+    let idxB = 0;
+    while (idxB < bLoop.length) {
+      const { value } = bLoop.iterate(idxB);
+      if (!aa.includes(value)) notBoth.push(value);
+      idxB += 1;
+    }
+    return notBoth
+  })
+}
+const GET_FUNCTION$c = makeSymmetricDifference;
+const ARITY$5 = 2;
+const SIGNATURE$J = ["Array", "Array", "Array"];
 
-var __choice = function (cnFn, b, a) { return (cnFn(a, b) ? a : b); };
-var choice = curry(__choice);
+function makeUnion({ uniq, curryN, pipe, concat }) {
+  return curryN(ARITY$6, function union(aa, bb) {
+    return pipe(
+      concat(bb),
+      uniq
+    )(aa)
+  })
+}
+const GET_FUNCTION$d = makeUnion;
+const ARITY$6 = 2;
+const SIGNATURE$K = ["Array", "Array", "Array"];
 
-var __iterate = function (total, fn) {
-  var count = total;
-  var agg = [];
-  if (typeof fn !== "function" || typeof count !== "number") {
-    return agg
+function makeUniq({ reduce }) {
+  return reduce(function unique(agg, xx) {
+    return !agg.includes(xx) ? agg.concat(xx) : agg
+  }, [])
+}
+const GET_FUNCTION$e = makeUniq;
+const SIGNATURE$L = ["Array", "Array"];
+
+function makeIfElseDerivatives({ ifElse, identity, $ }) {
+  return { when: ifElse($, $, identity), unless: ifElse($, identity) }
+}
+const GET_FUNCTION$f = makeIfElseDerivatives;
+
+const derivedFunctionsSortedByIncreasingDependencies = [
+  ["j2", GET_FUNCTION$9, SIGNATURE$G], // toJSON
+  ["addIndex", GET_FUNCTION, SIGNATURE$x], // curryN
+  ["bind", GET_FUNCTION$5, SIGNATURE$C], // curryN
+  ["flip", GET_FUNCTION$7, SIGNATURE$E], // curryN
+  ["__ifElse", GET_FUNCTION$f, false], // ifElse identity
+  ["flatten", GET_FUNCTION$4, SIGNATURE$B], // isArray forEach any
+  ["chain", GET_FUNCTION$1, SIGNATURE$y], // curryN map reduce concat
+  ["reject", GET_FUNCTION$b, SIGNATURE$I], // curryN complement filter
+  ["uniq", GET_FUNCTION$e, SIGNATURE$L], // curryN reduce
+  ["median", GET_FUNCTION$3, SIGNATURE$A], // $ pipe length nth sort divide
+  ["isObject", GET_FUNCTION$8, SIGNATURE$F], // curryN both isRawObject
+  ["union", GET_FUNCTION$d, SIGNATURE$K], // curryN filter includes
+  ["difference", GET_FUNCTION$6, SIGNATURE$D], // curryN complement filter includes
+  ["symmetricDifference", GET_FUNCTION$c, SIGNATURE$J], // curryN difference
+  ["__predicatesPass", makePredicatesPass, false], // curryN all, any flip gt length map smooth pipe
+  ["pathOr", GET_FUNCTION$a, SIGNATURE$H], // curryN reduce
+  ["__pathOrDerivatives", makePathOrDerivatives, false], // curryN equals is pathOr pipe
+  ["pluck", GET_FUNCTION$2, SIGNATURE$z]
+];
+function extendDerived(C) {
+  return C.reduce(
+    function extendFUtility(__F, [name, maker, hm]) {
+      const fn = maker(__F);
+      const multi = name.includes("__");
+      // the Ms count different when baby divides the pie
+      if (!multi) {
+        const safeFn = C.def({ check: true, hm })(fn);
+        return __F.mash(__F, { [name]: safeFn })
+      }
+      return __F.mash(__F, fn)
+    },
+    C,
+    derivedFunctionsSortedByIncreasingDependencies
+  )
+}
+
+function add(b, a) {
+  return a + b
+}
+
+const FUNCTION$x = add;
+const SIGNATURE$M = ["number", "number", "number"];
+
+function find(fn, xx) {
+  let idx = 0;
+  const loop = makeIterable(xx);
+  while (idx < loop.length) {
+    const { value } = loop.iterate(idx);
+    if (fn(value)) {
+      return value
+    }
+    idx += 1;
   }
-  while (count > 0) {
-    count--;
-    agg.push(fn());
+}
+
+const FUNCTION$y = find;
+const SIGNATURE$N = ["function", "object", "any"];
+
+function apply(fn, args) {
+  return fn.apply(null, args)
+}
+const FUNCTION$z = apply;
+const SIGNATURE$O = ["function", "Array", "any"];
+
+function and(a, b) {
+  return a && b
+}
+const FUNCTION$A = and;
+const SIGNATURE$P = ["any", "any", "boolean"];
+
+function any(fn, xx) {
+  let idx = 0;
+  let found = false;
+  const len = length(xx);
+  while (idx < len && !found) {
+    if (fn(xx[idx])) found = true;
+    idx += 1;
   }
-  return agg
-};
-var iterate = curry(__iterate);
+  return found
+}
 
-var __range = function (start, end) {
-  var agg = [];
-  var swap = start < end;
-  var ref = swap ? [start, end] : [end + 1, start + 1];
-  var a = ref[0];
-  var b = ref[1];
-  for (var x = a; x < b; x++) {
-    agg.push(x);
+const FUNCTION$B = any;
+const SIGNATURE$Q = ["function", "object", "boolean"];
+
+function all(fn, xx) {
+  let idx = 0;
+  const loop = makeIterable(xx);
+  let promised = true;
+  while (idx < loop.length && promised) {
+    const { value } = loop.iterate(idx);
+    const good = fn(value);
+    if (!good) promised = false;
+    idx += 1;
   }
-  return swap ? agg : agg.reverse()
-};
-var range = curry(__range);
+  return promised
+}
+const FUNCTION$C = all;
+const SIGNATURE$R = ["function", "Array|object", "boolean"];
 
-var filter$3 = delegateFastBinary("filter", filter$2);
-
-var __reject = function (fn, o) { return filter$3(function (x) { return !fn(x); }, o); };
-var reject = curry(__reject);
-
-var __ternary = function (cn, b, a) { return (cn ? a : b); };
-var ternary = curry(__ternary);
-
-var __triplet = function (cnFn, bFn, aFn, o) { return (cnFn(o) ? aFn(o) : bFn(o)); };
-var triplet = curry(__triplet);
-
-var _keys = Object.keys;
-var _freeze = Object.freeze;
-var _assign = Object.assign;
-var keys = _keys;
-var freeze = _freeze;
-var assign = _assign;
-var entries = function (o) { return pipe(
-    keys,
-    map$3(function (k) { return [k, o[k]]; })
-  )(o); };
-var toPairs = entries;
-var fromPairs = reduce$3(function (agg, ref) {
-  var obj;
-  var k = ref[0];
-  var v = ref[1];
-  return merge(agg, ( obj = {}, obj[k] = v, obj ));
-}, {});
-var __pairwise = function (hoc, fn, o) { return pipe(
-    toPairs,
-    hoc(fn)
-  )(o); };
-var pairwise = curry(__pairwise);
-var __pairwiseObject = function (hoc, fn, o) { return pipe(
-    pairwise(hoc, fn),
-    fromPairs
-  )(o); };
-var pairwiseObject = curry(__pairwiseObject);
-var mapTuples = pairwiseObject(map$3);
-var __mapKeys = function (fn, o) { return mapTuples(function (ref) {
-  var k = ref[0];
-  var v = ref[1];
-  return [fn(k), v];
-  }, o); };
-var mapKeys = curry(__mapKeys);
-var __merge = function (a, b) { return assign({}, a, b); };
-var merge = curry(__merge);
-
-var not = function (x) { return !x; };
-var invert = function (x) { return Object.keys(x).reduce(function (o, key) {
-    var value = x[key];
-    o[value] = o[value] ? o[value].concat(key) : [key];
-    return o
-  }, {}); };
-
-var trim = e0("trim");
-var charAt = e1("charAt");
-var codePointAt = e1("codePointAt");
-var match = curry(function (a, b) {
-  var z = b.match(a);
-  return z === null ? [] : z
-});
-var repeat = curry(function (x, n) {
-  var output = new Array(n);
-  for (var i = 0; i < n; i++) {
-    output[i] = x;
+function ap(a, b) {
+  // S combinator
+  if (isFunction(a) && isFunction(b)) {
+    return function sCombinator(x) {
+      return a(x, b(x))
+    }
   }
-  return output
-});
-var search = e1("search");
-var split = e1("split");
-var endsWithLength = e2("endsWith");
-var __endsWith = function (x, i) {
-  var last = i[i.length - 1];
-  return Array.isArray(x) ? last === x[0] : last === x
-};
-var endsWith = curry(__endsWith);
-var indexOfFromIndex = e2("indexOf");
-var __indexOf = function (toSearch, x) { return indexOfFromIndex(toSearch, 0, x); };
-var indexOf = curry(__indexOf);
-var lastIndexOfFromIndex = e2("lastIndexOf");
-var __lastIndexOf = function (toSearch, x) { return lastIndexOfFromIndex(toSearch, Infinity, x); };
-var lastIndexOf = curry(__lastIndexOf);
-var padEnd = e2("padEnd");
-var padStart = e2("padStart");
-var replace = e2("replace");
-var startsWithFromPosition = e2("startsWith");
-var __startsWith = function (x, i) {
-  var first = i[0];
-  return Array.isArray(x) ? first === x[0] : first === x
-};
-var startsWith = curry(__startsWith);
-var substr = e2("substr");
+  if (!isArray(a) || !isArray(b))
+    throw new TypeError(
+      "Expected to receive an array of functions and an array of values."
+    )
+  if (!a.length || a.filter(isFunction).length !== a.length)
+    throw new TypeError("Expected to receive an array of functions to apply.")
+  return a.reduce(function apReduce(out, fn) {
+    return out.concat(b.map(fn))
+  }, [])
+}
 
-var join = e1("join");
-var concat = curry(function (a, b) { return a.concat(b); });
-var __sort = function (fn, functor) {
-  var copy = Array.from(functor);
+const FUNCTION$D = ap;
+const SIGNATURE$S = ["function|Array", "function|Array", "function|Array"];
+
+function concat(a, b) {
+  return a.concat(b)
+}
+const FUNCTION$E = concat;
+const SIGNATURE$T = ["any", "any", "Array|String"];
+
+function cond(conditions, input) {
+  let idx = 0;
+  let found = false;
+  let match;
+  const len = length(conditions);
+  while (idx < len && !found) {
+    const [test, out] = conditions[idx];
+    if (test(input)) {
+      found = true;
+      match = out(input);
+    }
+    idx += 1;
+  }
+  return match
+}
+
+const FUNCTION$F = cond;
+const SIGNATURE$U = ["Array", "any", "any"];
+
+function divide(b, a) {
+  return a / b
+}
+const FUNCTION$G = divide;
+const SIGNATURE$V = ["number", "number", "number"];
+
+function equals(a, b) {
+  return a === b
+}
+const FUNCTION$H = equals;
+const SIGNATURE$W = ["any", "any", "boolean"];
+
+function filter(fn, xx) {
+  let idx = 0;
+  const loop = makeIterable(xx);
+  const { length, isArray } = loop;
+  const result = isArray ? [] : {};
+  while (idx < length) {
+    const { key, value } = loop.iterate(idx);
+    if (fn(value)) {
+      if (isArray) {
+        result.push(value);
+      } else {
+        result[key] = value;
+      }
+    }
+    idx += 1;
+  }
+  return result
+}
+
+const FUNCTION$I = filter;
+const SIGNATURE$X = ["function", "object", "object"];
+
+function forEach(fn, xx) {
+  let idx = 0;
+  const loop = makeIterable(xx);
+  const { length } = loop;
+  while (idx < length) {
+    const { value } = loop.iterate(idx);
+    fn(value);
+    idx += 1;
+  }
+}
+
+const FUNCTION$J = forEach;
+const SIGNATURE$Y = ["function", "object", "nil"];
+
+function includes(a, b) {
+  return a.includes(b)
+}
+const FUNCTION$K = includes;
+const SIGNATURE$Z = ["Array|string", "Array|string", "boolean"];
+
+function gt(b, a) {
+  return a > b
+}
+const FUNCTION$L = gt;
+const SIGNATURE$_ = ["number", "number", "boolean"];
+
+function gte(b, a) {
+  return a >= b
+}
+const FUNCTION$M = gte;
+const SIGNATURE$$ = ["number", "number", "boolean"];
+
+function join(del, xx) {
+  return xx.join(del)
+}
+
+const FUNCTION$N = join;
+const SIGNATURE$10 = ["string", "Array", "string"];
+
+function lt(b, a) {
+  return a < b
+}
+const FUNCTION$O = lt;
+const SIGNATURE$11 = ["number", "number", "boolean"];
+
+function lte(b, a) {
+  return a <= b
+}
+const FUNCTION$P = lte;
+const SIGNATURE$12 = ["number", "number", "boolean"];
+
+function map(fn, xx) {
+  let idx = 0;
+  const loop = makeIterable(xx);
+  const { length, init } = loop;
+  const result = init;
+  while (idx < length) {
+    const { key, value } = loop.iterate(idx);
+    result[key] = fn(value);
+    idx += 1;
+  }
+  return result
+}
+const SIGNATURE$13 = ["function", "object", "object"];
+const FUNCTION$Q = map;
+
+function max(aa, bb) {
+  return Math.max(aa, bb)
+}
+const FUNCTION$R = max;
+const SIGNATURE$14 = ['number', 'number'];
+
+function min(aa, bb) {
+  return Math.min(aa, bb)
+}
+const FUNCTION$S = min;
+const SIGNATURE$15 = ["number", "number"];
+
+function multiply(b, a) {
+  return a * b
+}
+const FUNCTION$T = multiply;
+const SIGNATURE$16 = ["number", "number", "number"];
+
+function nth(ix, xx) {
+  return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
+}
+
+const FUNCTION$U = nth;
+const SIGNATURE$17 = ["number", "Array", "any"];
+
+function or(a, b) {
+  return a || b
+}
+
+const FUNCTION$V = or;
+const SIGNATURE$18 = ["any", "any", "boolean"];
+
+function range(aa, zz) {
+  const out = [];
+  const down = zz < aa;
+  for (let ix = aa; down ? ix >= zz : ix <= zz; down ? ix-- : ix++) {
+    out.push(ix);
+  }
+  return out
+}
+
+const FUNCTION$W = range;
+const SIGNATURE$19 = ["number", "number", "Array"];
+
+function split(del, xx) {
+  return xx.split(del)
+}
+
+const FUNCTION$X = split;
+const SIGNATURE$1a = ["string", "string", "Array"];
+
+function sort(fn, rr) {
+  const copy = [].concat(rr);
   copy.sort(fn);
   return copy
-};
-var sort = curry(__sort);
-var __difference = function (bList, aList) { return filter$3(function (x) { return !aList.includes(x); }, bList); };
-var difference = curry(__difference);
-var __symmetricDifference = function (a, b) {
-  var ab = difference(a, b);
-  var ba = difference(b, a);
-  return ab.concat(ba)
-};
-var symmetricDifference = curry(__symmetricDifference);
-var __relativeIndex = function (length, index) { return index > -1 ? index : length - Math.abs(index); };
-var relativeIndex = curry(__relativeIndex);
-var __alterIndex = function (index, fn, input) {
-  var i = relativeIndex(input.length, index);
-  var copy = [].concat(input);
-  copy[i] = fn(copy[i]);
-  return copy
-};
-var alterIndex = curry(__alterIndex);
-var alterFirstIndex = alterIndex(0);
-var alterLastIndex = alterIndex(-1);
+}
 
-var __equals = function (a, b) { return a === b; };
-var equals = curry(__equals);
-var __greaterThan = function (b, a) { return a > b; };
-var greaterThan = curry(__greaterThan);
-var __greaterThanOrEqualTo = function (b, a) { return a >= b; };
-var greaterThanOrEqualTo = curry(__greaterThanOrEqualTo);
-var __lessThan = function (b, a) { return a < b; };
-var lessThan = curry(__lessThan);
-var __lessThanOrEqualTo = function (b, a) { return a <= b; };
-var lessThanOrEqualTo = curry(__lessThanOrEqualTo);
-var round = Math.round;
-var __add = function (a, b) { return b + a; };
-var add = curry(__add);
-var __subtract = function (a, b) { return a - b; };
-var subtract = curry(__subtract);
-var __multiply = function (a, b) { return b * a; };
-var multiply = curry(__multiply);
-var __divide = function (a, b) { return a / b; };
-var divide = curry(__divide);
-var __pow = function (a, b) { return Math.pow(b, a); };
-var pow = curry(__pow);
+const FUNCTION$Y = sort;
+const SIGNATURE$1b = ["function", "Array", "Array"];
 
-var __pathOr = function (def, lenses, input) { return reduce$3(function (focus, lens) { return focus[lens] || def; }, input, lenses); };
-var pathOr = curry(__pathOr);
-var __pathSatisfies = function (equiv, pathTo, input) { return pipe(
-    path(pathTo),
-    equiv,
-    Boolean
-  )(input); };
-var pathSatisfies = curry(__pathSatisfies);
-var __propSatisfies = function (equiv, propTo, input) { return pipe(
-    prop(propTo),
-    equiv,
-    Boolean
-  )(input); };
-var propSatisfies = curry(__propSatisfies);
-var path = pathOr(null);
-var __propOr = function (def, property, input) { return pathOr(def, [property], input); };
-var propOr = curry(__propOr);
-var prop = propOr(null);
-var __pathEq = function (lenses, equiv, input) { return pathSatisfies(equals(equiv), lenses, input); };
-var pathEq = curry(__pathEq);
-var __propIs = function (type, property, input) { return pipe(
-    prop(property),
-    function (val) { return (val != null && val.constructor === type) || val instanceof type; },
-    Boolean
-  )(input); };
-var propIs = curry(__propIs);
-var __propEq = function (property, equiv, input) { return pathSatisfies(equals(equiv), [property], input); };
-var propEq = curry(__propEq);
+function subtract(b, a) {
+  return a - b
+}
 
-var random = function (x) {
-	if ( x === void 0 ) x = 1;
-	return Math.round(Math.random() * x);
-};
+const FUNCTION$Z = subtract;
+const SIGNATURE$1c = ["number", "number", "number"];
 
-var floor = function (x) { return Math.floor(Math.random() * x); };
-var floorMin = curry(function (min, x) { return floor(x) + min; });
+function toJSON(indent, x) {
+  return JSON.stringify(x, null, indent)
+}
+const FUNCTION$_ = toJSON;
+const SIGNATURE$1d = ["number", "any", "string"];
 
-var f = /*#__PURE__*/Object.freeze({
-  floor: floor,
-  floorMin: floorMin
-});
+const BINARY_WITH_SIGNATURES = [
+  // infix
+  [SIGNATURE$_, FUNCTION$L],
+  [SIGNATURE$$, FUNCTION$M],
+  [SIGNATURE$11, FUNCTION$O],
+  [SIGNATURE$12, FUNCTION$P],
+  [SIGNATURE$P, FUNCTION$A],
+  [SIGNATURE$W, FUNCTION$H],
+  [SIGNATURE$18, FUNCTION$V],
+  // math
+  [SIGNATURE$1c, FUNCTION$Z],
+  [SIGNATURE$M, FUNCTION$x],
+  [SIGNATURE$V, FUNCTION$G],
+  [SIGNATURE$16, FUNCTION$T],
+  // predicate
+  [SIGNATURE$R, FUNCTION$C],
+  [SIGNATURE$Q, FUNCTION$B],
+  [SIGNATURE$X, FUNCTION$I],
+  [SIGNATURE$N, FUNCTION$y],
+  [SIGNATURE$Y, FUNCTION$J],
+  [SIGNATURE$Z, FUNCTION$K],
+  // folds
+  [SIGNATURE$15, FUNCTION$S],
+  [SIGNATURE$14, FUNCTION$R],
+  [SIGNATURE$S, FUNCTION$D],
+  [SIGNATURE$T, FUNCTION$E],
+  [SIGNATURE$13, FUNCTION$Q],
+  [SIGNATURE$U, FUNCTION$F],
+  [SIGNATURE$O, FUNCTION$z],
+  // accessor
+  [SIGNATURE$17, FUNCTION$U],
+  // generator
+  [SIGNATURE$19, FUNCTION$W],
+  // conversion
+  [SIGNATURE$10, FUNCTION$N],
+  [SIGNATURE$1b, FUNCTION$Y],
+  [SIGNATURE$1a, FUNCTION$X],
+  [SIGNATURE$1d, FUNCTION$_]
+];
 
-var keys$1 = Object.keys;
-var take = curry(function (encase, o) {
-  var obj;
-  if (o && o[0] && o.length) {
-    var found = floor(o.length);
-    var selection = o[found];
-    return !encase ? selection : [selection]
-  }
-  var ks = keys$1(o);
-  var index = floor(ks.length);
-  var key = ks[index];
-  var value = o[key];
-  if (encase) { return ( obj = {}, obj[key] = value, obj ) }
-  return value
-});
-var pick = take(false);
-var grab = take(true);
-var allot = curry(function (howMany, ofThing) { return iterate(howMany, function () { return pick(ofThing); }); }
-);
-
-var t = /*#__PURE__*/Object.freeze({
-  take: take,
-  pick: pick,
-  grab: grab,
-  allot: allot
-});
-
-var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
-var wordSource = curry(function (source, howLong) { return pipe(
-    allot(howLong),
-    join("")
-  )(source); }
-);
-var word = function (x) {
-  if ( x === void 0 ) x = 5;
-  return wordSource(alphabet, x);
-};
-
-var w = /*#__PURE__*/Object.freeze({
-  wordSource: wordSource,
-  word: word
-});
-
-var shuffle = function (list) {
-  var newList = [].concat( list );
-  var start = newList.length;
-  while (start-- > 0) {
-    var index = Math.floor(Math.random() * start + 1);
-    var current = newList[index];
-    var newer = newList[start];
-    newList[index] = newer;
-    newList[start] = current;
-  }
-  return newList
-};
-
-var s = /*#__PURE__*/Object.freeze({
-  shuffle: shuffle
-});
-
-var round$1 = round;
-round$1.toString = function () { return "~(?)"; };
-var random$1 = Object.assign(random, f, t, w, s);
-random$1.toString = function () { return "👾 (?)"; };
-var curry$1 = debug_7;
-curry$1.toString = function () { return "🍛 (?)"; };
-var pipe$1 = debug_2;
-pipe$1.toString = function () { return "🍡 (?)"; };
-var compose$$1 = debug_3;
-compose$$1.toString = function () { return "🙃 🍡 (?)"; };
-var isDistinctObject$1 = isDistinctObject;
-isDistinctObject$1.toString = function () { return "isTrueObject(?)"; };
-var isPOJO$1 = isDistinctObject$1;
-var toPairs$1 = toPairs;
-toPairs$1.toString = function () { return "ᗕ(?)"; };
-var fromPairs$1 = fromPairs;
-fromPairs$1.toString = function () { return "ᗒ(?)"; };
-var isNil$1 = curry$1(isNil);
-isNil$1.toString = function () { return "curry(__isTypeof)(null)(?)"; };
-var trim$1 = debug_16("trim");
-var charAt$1 = debug_17("charAt");
-var codePointAt$1 = debug_17("codePointAt");
-var concat$1 = debug_17("concat");
-var fold = debug_18("fold");
-var fork = debug_18("fork");
-var join$1 = debug_17("join");
-var match$1 = debug_17("match");
-var repeat$1 = debug_17("repeat");
-var search$1 = debug_17("search");
-var split$1 = debug_17("split");
-var padEnd$1 = debug_18("padEnd");
-var padStart$1 = debug_18("padStart");
-var replace$1 = debug_18("replace");
-var substr$1 = debug_18("substr");
-var isTypeof$1 = curry$1(__isTypeof);
-var isBoolean$1 = isTypeof$1("boolean");
-var isNumber$1 = isTypeof$1("number");
-var isFunction$1 = isTypeof$1("function");
-var isString$1 = isTypeof$1("string");
-var isObject$1 = isTypeof$1("object");
-var add$1 = curry$1(__add);
-var alterIndex$1 = curry$1(__alterIndex);
-var ap$1 = curry$1(__ap);
-var choice$1 = curry$1(__choice);
-var difference$1 = curry$1(__difference);
-var divide$1 = curry$1(__divide);
-var endsWith$1 = curry$1(__endsWith);
-var equal$1 = curry$1(__equals);
-var equals$1 = equal$1;
-var indexOf$1 = curry$1(__indexOf);
-var iterate$1 = curry$1(__iterate);
-var lastIndexOf$1 = curry$1(__lastIndexOf);
-var map$4 = curry$1(__map);
-var merge$1 = curry$1(__merge);
-var multiply$1 = curry$1(__multiply);
-var pairwise$1 = curry$1(__pairwise);
-var pairwiseObject$1 = curry$1(__pairwiseObject);
-var pathEq$1 = curry$1(__pathEq);
-var pathOr$1 = curry$1(__pathOr);
-var pathSatisfies$1 = curry$1(__pathSatisfies);
-var path$1 = pathOr$1(null);
-var pow$1 = curry$1(__pow);
-var propEq$1 = curry$1(__propEq);
-var propIs$1 = curry$1(__propIs);
-var propOr$1 = curry$1(__propOr);
-var propSatisfies$1 = curry$1(__propSatisfies);
-var prop$1 = propOr$1(null);
-var range$1 = curry$1(__range);
-var reject$1 = curry$1(__reject);
-var relativeIndex$1 = curry$1(__relativeIndex);
-var sort$1 = curry$1(__sort);
-var startsWith$1 = curry$1(__startsWith);
-var subtract$1 = curry$1(__subtract);
-var symmetricDifference$1 = curry$1(__symmetricDifference);
-var ternary$1 = curry$1(__ternary);
-var triplet$1 = curry$1(__triplet);
-var chain = curry$1(function __chain(fn, functor) {
-  return __delegateFastBinary("chain", _flatMap, fn, functor)
-});
-var flatMap = chain;
-var filter$4 = curry$1(function __filter(fn, functor) {
-  return __delegateFastBinary("filter", filter$2, fn, functor)
-});
-var reduce$4 = curry$1(function __reduce(fn, initial, functor) {
-  return __delegateFastTertiary("reduce", reduce$2, fn, initial, functor)
-});
-var mapTuples$1 = pairwiseObject$1(map$4);
-var mapTuple$1 = mapTuples$1;
-var __mapKeys$1 = function (fn, o) { return mapTuples$1(function (ref) {
-  var k = ref[0];
-  var v = ref[1];
-  return [fn(k), v];
-  }, o); };
-var mapKeys$1 = curry$1(__mapKeys$1);
-var flip = function (fn) { return curry$1(function __flip(a, b) {
-    return fn(b, a)
-  }); };
-flip.toString = function () { return "🙃 🍛 (?)"; };
-var alterLastIndex$1 = alterIndex$1(-1);
-var alterFirstIndex$1 = alterIndex$1(0);
-var invert$1 = invert;
-var not$1 = not;
-var propLength = prop$1("length");
-var length = propLength;
-var objectLength = pipe$1(
-  Object.keys,
-  propLength
-);
-var anyLength = function (x) { return typeof x === "object" ? objectLength(x) : propLength(x); };
-anyLength.toString = function () { return "length(?)"; };
-var which = curry$1(function __which(compare, fn, o) {
-  var arecomp = flip(compare);
-  return triplet$1(
-    Array.isArray,
-    arecomp(fn),
-    pipe$1(
-      Object.keys,
-      arecomp(function (key) { return fn(o[key], key); })
-    ),
-    o
+function extendBinaryWithSignatures(F) {
+  return F.temper(
+    F,
+    BINARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 2, check: true, hm })(fn) })
+    }, {})
   )
-});
-some.toString = function () { return "some"; };
-var some$1 = which(some);
-every.toString = function () { return "every"; };
-var every$1 = which(every);
+}
 
-export { round$1 as round, random$1 as random, curry$1 as curry, pipe$1 as pipe, compose$$1 as compose, isDistinctObject$1 as isDistinctObject, isPOJO$1 as isPOJO, toPairs$1 as toPairs, fromPairs$1 as fromPairs, isNil$1 as isNil, trim$1 as trim, charAt$1 as charAt, codePointAt$1 as codePointAt, concat$1 as concat, fold, fork, join$1 as join, match$1 as match, repeat$1 as repeat, search$1 as search, split$1 as split, padEnd$1 as padEnd, padStart$1 as padStart, replace$1 as replace, substr$1 as substr, isTypeof$1 as isTypeof, isBoolean$1 as isBoolean, isNumber$1 as isNumber, isFunction$1 as isFunction, isString$1 as isString, isObject$1 as isObject, add$1 as add, alterIndex$1 as alterIndex, ap$1 as ap, choice$1 as choice, difference$1 as difference, divide$1 as divide, endsWith$1 as endsWith, equal$1 as equal, equals$1 as equals, indexOf$1 as indexOf, iterate$1 as iterate, lastIndexOf$1 as lastIndexOf, map$4 as map, merge$1 as merge, multiply$1 as multiply, pairwise$1 as pairwise, pairwiseObject$1 as pairwiseObject, pathEq$1 as pathEq, pathOr$1 as pathOr, pathSatisfies$1 as pathSatisfies, path$1 as path, pow$1 as pow, propEq$1 as propEq, propIs$1 as propIs, propOr$1 as propOr, propSatisfies$1 as propSatisfies, prop$1 as prop, range$1 as range, reject$1 as reject, relativeIndex$1 as relativeIndex, sort$1 as sort, startsWith$1 as startsWith, subtract$1 as subtract, symmetricDifference$1 as symmetricDifference, ternary$1 as ternary, triplet$1 as triplet, chain, flatMap, filter$4 as filter, reduce$4 as reduce, mapTuples$1 as mapTuples, mapTuple$1 as mapTuple, mapKeys$1 as mapKeys, flip, alterLastIndex$1 as alterLastIndex, alterFirstIndex$1 as alterFirstIndex, invert$1 as invert, not$1 as not, length, objectLength, anyLength, which, some$1 as some, every$1 as every, keys, assign, freeze, entries, isArray, debug_11 as $, debug_12 as PLACEHOLDER, debug_8 as curryify, debug_4 as curryObjectK, debug_5 as curryObjectN, debug_6 as curryObjectKN, debug_9 as remap, debug_10 as remapArray, debug_13 as K, debug_14 as I };
+function both(aPred, bPred, x) {
+  return aPred(x) && bPred(x)
+}
+const FUNCTION$$ = both;
+const SIGNATURE$1e = ["function", "function", "any", "boolean"];
+
+function either(aPred, bPred, x) {
+  return aPred(x) || bPred(x)
+}
+const FUNCTION$10 = either;
+const SIGNATURE$1f = ["function", "function", "any"];
+
+function reduce(fn, initial, xx) {
+  const loop = makeIterable(xx);
+  let idx = 0;
+  const { length } = loop;
+  let result = initial;
+  while (idx < length) {
+    const { value } = loop.iterate(idx);
+    result = fn(result, value);
+    idx += 1;
+  }
+  return result
+}
+
+const FUNCTION$11 = reduce;
+const SIGNATURE$1g = ["function", "any", "object", "any"];
+
+function slice(aa, bb, xx) {
+  return xx.slice(aa, bb)
+}
+
+const FUNCTION$12 = slice;
+const SIGNATURE$1h = ["number", "number", "object", "object"];
+
+const TERNARY_WITH_SIGNATURES = [
+  [SIGNATURE$1e, FUNCTION$$],
+  [SIGNATURE$1f, FUNCTION$10],
+  [SIGNATURE$1g, FUNCTION$11],
+  [SIGNATURE$1h, FUNCTION$12]
+];
+
+function extendTernaryWithSignatures(F) {
+  return F.temper(
+    F,
+    TERNARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 3, check: true, hm })(fn) })
+    }, {})
+  )
+}
+
+function ifElse(condition, yes, no, xx) {
+  return condition(xx) ? yes(xx) : no(xx)
+}
+
+const FUNCTION$13 = ifElse;
+const SIGNATURE$1i = ["function", "function", "function", "any", "any"];
+
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$1i, FUNCTION$13]];
+
+function extendQuaternaryWithSignatures(F) {
+  return F.temper(
+    F,
+    QUATERNARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
+      return F.mash(agg, { [fn.name]: F.def({ n: 4, check: true, hm })(fn) })
+    }, {})
+  )
+}
+
+function coreWithTypes(config) {
+  return pipe(fabricate, function basicDefinitions({ def, curry, curryN }) {
+    const SIGNED_CORE = makeSignedCore(def);
+    const sideEffectMethods = makeSideEffectsFromEnvWithTypes(def);
+    const autoCurry = autoCurryUsing(curryN);
+    const BASE = SIGNED_CORE.smash([
+      autoCurry(SIGNED_CORE),
+      sideEffectMethods,
+      {
+        memoizeWith,
+        def,
+        curry,
+        curryN,
+        C,
+        $: C.$,
+        is: ofConstructor,
+        isArray,
+        isBoolean,
+        isFunction,
+        isNumber,
+        isRawObject,
+        isString,
+        isSymbol,
+        isUndefined,
+        isUnmatched
+      }
+    ]);
+    return BASE.pipe(
+      extendBinaryWithSignatures,
+      autoCurry,
+      extendTernaryWithSignatures,
+      autoCurry,
+      extendQuaternaryWithSignatures,
+      autoCurry,
+      extendDerived,
+      makeAliases
+    )(BASE)
+  })(config)
+}
+
+const CONFIG = Object.freeze({
+  UNCHECKED: {
+    name: "@@FUTILITY::config.unchecked",
+    ts: () => "any",
+    check: false
+  },
+  CHECKED: {
+    name: "@@FUTILITY::config.checked",
+    ts: system,
+    check: true
+  },
+  AUTO: {
+    name: "@@FUTILITY::config.auto",
+    ts: system,
+    check:
+      /* istanbul ignore next */
+      (typeof process !== "undefined" &&
+        typeof process.env !== "undefined" &&
+        typeof process.env.NODE_ENV !== "undefined" &&
+        process.env.NODE_ENV !== "production") ||
+      /* istanbul ignore next */
+      (typeof window !== "undefined" &&
+        typeof window.__FUTILITY_TYPE_CHECK === "boolean" &&
+        window.__FUTILITY_TYPE_CHECK)
+  }
+});
+
+const FUTILITY = coreWithTypes(CONFIG.CHECKED);
+var debug = FUTILITY.temper(FUTILITY, {
+  custom: coreWithTypes,
+  version: "4.0.0",
+  configuration: CONFIG.CHECKED
+});
+
+export default debug;

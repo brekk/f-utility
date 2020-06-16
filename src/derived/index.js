@@ -1,5 +1,6 @@
 import addIndex from "./addIndex"
 import median from "./median"
+import pluck from "./pluck"
 import chain from "./chain"
 import flatten from "./flatten"
 import __predicatesPass from "./predPass"
@@ -33,7 +34,8 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   symmetricDifference, // curryN difference
   __predicatesPass, // curryN all, any flip gt length map smooth pipe
   pathOr, // curryN reduce
-  __pathOrDerivatives // curryN equals is pathOr pipe
+  __pathOrDerivatives, // curryN equals is pathOr pipe
+  pluck // curryN prop map
 }
 function extendDerived(C) {
   return C.pipe(
