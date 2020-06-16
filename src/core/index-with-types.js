@@ -1,4 +1,6 @@
 import { FUNCTION as box, SIGNATURE as boxSignature } from "./box"
+import { FUNCTION as dissoc, SIGNATURE as dissocSignature } from "./dissoc"
+import { FUNCTION as assoc, SIGNATURE as assocSignature } from "./assoc"
 import { FUNCTION as init, SIGNATURE as initSignature } from "./init"
 import { FUNCTION as tail, SIGNATURE as tailSignature } from "./tail"
 import { FUNCTION as append, SIGNATURE as appendSignature } from "./append"
@@ -53,6 +55,8 @@ const CORE_WITH_SIGNATURES = [
   [TSignature, T],
   [adjustSignature, adjust],
   [appendSignature, append],
+  [assocSignature, assoc],
+  [dissocSignature, dissoc],
   [boxSignature, box],
   [callSignature, call],
   [complementSignature, complement],

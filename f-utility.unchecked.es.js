@@ -435,6 +435,16 @@ function adjust(idx, fn, xx) {
   return copy
 }
 
+function dissoc(key, xx) {
+  const copy = Object.assign({}, xx);
+  delete copy[key];
+  return copy
+}
+
+function assoc(key, toSet, xx) {
+  return Object.assign({}, xx, { [key]: toSet })
+}
+
 function append(whatever, xx) {
   const copy = [].concat(xx);
   copy.splice(copy.length, 0, whatever);
@@ -652,6 +662,8 @@ const CORE = temper(NATIVE, {
   complement,
   constant,
   dec,
+  assoc,
+  dissoc,
   first,
   fromPairs,
   identity,

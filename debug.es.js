@@ -444,17 +444,31 @@ function box(bx) {
 const FUNCTION$3 = box;
 const SIGNATURE$3 = ["any", "Array"];
 
+function dissoc(key, xx) {
+  const copy = Object.assign({}, xx);
+  delete copy[key];
+  return copy
+}
+const FUNCTION$4 = dissoc;
+const SIGNATURE$4 = ["string|number", "object", "object"];
+
+function assoc(key, toSet, xx) {
+  return Object.assign({}, xx, { [key]: toSet })
+}
+const FUNCTION$5 = assoc;
+const SIGNATURE$5 = ["any", "string|number", "object", "object"];
+
 function init(xx) {
   return xx.slice(0, -1)
 }
-const FUNCTION$4 = init;
-const SIGNATURE$4 = ["Array", "Array"];
+const FUNCTION$6 = init;
+const SIGNATURE$6 = ["Array", "Array"];
 
 function tail(xx) {
   return xx.slice(1)
 }
-const FUNCTION$5 = tail;
-const SIGNATURE$5 = ["Array", "Array"];
+const FUNCTION$7 = tail;
+const SIGNATURE$7 = ["Array", "Array"];
 
 function append(whatever, xx) {
   const copy = [].concat(xx);
@@ -462,8 +476,8 @@ function append(whatever, xx) {
   return copy
 }
 
-const FUNCTION$6 = append;
-const SIGNATURE$6 = ["any", "Array", "Array"];
+const FUNCTION$8 = append;
+const SIGNATURE$8 = ["any", "Array", "Array"];
 
 function prepend(whatever, xx) {
   const copy = [].concat(xx);
@@ -471,8 +485,8 @@ function prepend(whatever, xx) {
   return copy
 }
 
-const FUNCTION$7 = prepend;
-const SIGNATURE$7 = ["any", "Array", "Array"];
+const FUNCTION$9 = prepend;
+const SIGNATURE$9 = ["any", "Array", "Array"];
 
 function adjust(idx, fn, xx) {
   const copy = [].concat(xx);
@@ -481,8 +495,8 @@ function adjust(idx, fn, xx) {
   return copy
 }
 
-const FUNCTION$8 = adjust;
-const SIGNATURE$8 = ["number", "function", "Array", "Array"];
+const FUNCTION$a = adjust;
+const SIGNATURE$a = ["number", "function", "Array", "Array"];
 
 function update(idx, val, xx) {
   const copy = [].concat(xx);
@@ -491,26 +505,26 @@ function update(idx, val, xx) {
   return copy
 }
 
-const FUNCTION$9 = update;
-const SIGNATURE$9 = ["number", "any", "Array", "Array"];
+const FUNCTION$b = update;
+const SIGNATURE$b = ["number", "any", "Array", "Array"];
 
 function inc(xx) {
   return xx + 1
 }
-const FUNCTION$a = inc;
-const SIGNATURE$a = ["number", "number"];
+const FUNCTION$c = inc;
+const SIGNATURE$c = ["number", "number"];
 
 function dec(xx) {
   return xx - 1
 }
-const FUNCTION$b = dec;
-const SIGNATURE$b = ["number", "number"];
+const FUNCTION$d = dec;
+const SIGNATURE$d = ["number", "number"];
 
 function call(args) {
   return args[0].apply(null, args.slice(1))
 }
-const FUNCTION$c = call;
-const SIGNATURE$c = ["Array", "any"];
+const FUNCTION$e = call;
+const SIGNATURE$e = ["Array", "any"];
 
 function mode(arr) {
   const keymap = {};
@@ -536,8 +550,8 @@ function mode(arr) {
   const parsed = parseInt(outIdx);
   return isNaN(parsed) ? outIdx : parsed
 }
-const FUNCTION$d = mode;
-const SIGNATURE$d = ["Array", "any"];
+const FUNCTION$f = mode;
+const SIGNATURE$f = ["Array", "any"];
 
 function complement(fn) {
   return function subtleComplement() {
@@ -545,60 +559,60 @@ function complement(fn) {
     return !fn.apply(null, args)
   }
 }
-const FUNCTION$e = complement;
-const SIGNATURE$e = ["function", "function"];
+const FUNCTION$g = complement;
+const SIGNATURE$g = ["function", "function"];
 
 function constant(k) {
   return function forever() {
     return k
   }
 }
-const FUNCTION$f = constant;
-const SIGNATURE$f = ["any", "function"];
+const FUNCTION$h = constant;
+const SIGNATURE$h = ["any", "function"];
 
 function F() {
   return true
 }
-const FUNCTION$g = F;
-const SIGNATURE$g = ["boolean"];
+const FUNCTION$i = F;
+const SIGNATURE$i = ["boolean"];
 
 function first(x) {
   return x[0]
 }
-const FUNCTION$h = first;
-const SIGNATURE$h = ["Array", "any"];
+const FUNCTION$j = first;
+const SIGNATURE$j = ["Array", "any"];
 
 function fromPairs(ps) {
   return ps.reduce(function pairing(oo, [ke, va]) {
     return Object.assign({}, oo, { [ke]: va })
   }, {})
 }
-const FUNCTION$i = fromPairs;
-const SIGNATURE$i = ["Array", "object"];
+const FUNCTION$k = fromPairs;
+const SIGNATURE$k = ["Array", "object"];
 
 function identity(y) {
   return y
 }
-const FUNCTION$j = identity;
-const SIGNATURE$j = ["any", "any"];
+const FUNCTION$l = identity;
+const SIGNATURE$l = ["any", "any"];
 
 function jam(a, b) {
   return Object.assign({}, b, a)
 }
-const FUNCTION$k = jam;
-const SIGNATURE$k = ["object", "object", "object"];
+const FUNCTION$m = jam;
+const SIGNATURE$m = ["object", "object", "object"];
 
 function last(x) {
   return x[x.length - 1]
 }
-const FUNCTION$l = last;
-const SIGNATURE$l = ["Array", "any"];
+const FUNCTION$n = last;
+const SIGNATURE$n = ["Array", "any"];
 
 function length(xx) {
   return xx && typeof xx === "object" ? Object.keys(xx).length : xx.length
 }
-const FUNCTION$m = length;
-const SIGNATURE$m = ["any", "number|nil"];
+const FUNCTION$o = length;
+const SIGNATURE$o = ["any", "number|nil"];
 
 const isArray$1 = Array.isArray;
 const keys = Object.keys;
@@ -616,8 +630,8 @@ var NATIVE = /*#__PURE__*/Object.freeze({
 function not(yy) {
   return !yy
 }
-const FUNCTION$n = not;
-const SIGNATURE$n = ["any", "boolean"];
+const FUNCTION$p = not;
+const SIGNATURE$p = ["any", "boolean"];
 
 function makeIterable(xx) {
   const isArray = Array.isArray(xx);
@@ -654,52 +668,52 @@ function reverse(xx) {
   }
   return out
 }
-const FUNCTION$o = reverse;
-const SIGNATURE$o = ["Array", "Array"];
+const FUNCTION$q = reverse;
+const SIGNATURE$q = ["Array", "Array"];
 
 function smash(args) {
   return args.reduce((agg, xx) => Object.assign({}, agg, xx), {})
 }
-const FUNCTION$p = smash;
-const SIGNATURE$p = ["Array", "object"];
+const FUNCTION$r = smash;
+const SIGNATURE$r = ["Array", "object"];
 
 function smooth(x) {
   return x.filter(Boolean)
 }
-const FUNCTION$q = smooth;
-const SIGNATURE$q = ["Array", "any"];
+const FUNCTION$s = smooth;
+const SIGNATURE$s = ["Array", "any"];
 
 function T() {
   return true
 }
-const FUNCTION$r = T;
-const SIGNATURE$r = ["boolean"];
+const FUNCTION$t = T;
+const SIGNATURE$t = ["boolean"];
 
 function temper(a, b) {
   return Object.freeze(Object.assign({}, a, b))
 }
-const FUNCTION$s = temper;
-const SIGNATURE$s = ["object", "object", "object"];
+const FUNCTION$u = temper;
+const SIGNATURE$u = ["object", "object", "object"];
 
 function toLower(z) {
   return z.toLowerCase()
 }
-const FUNCTION$t = toLower;
-const SIGNATURE$t = ["string", "string"];
+const FUNCTION$v = toLower;
+const SIGNATURE$v = ["string", "string"];
 
 function toPairs(oo) {
   return Object.keys(oo).map(function enpair(ky) {
     return [ky, oo[ky]]
   })
 }
-const FUNCTION$u = toPairs;
-const SIGNATURE$u = ["object", "Array"];
+const FUNCTION$w = toPairs;
+const SIGNATURE$w = ["object", "Array"];
 
 function toUpper(z) {
   return z.toUpperCase()
 }
-const FUNCTION$v = toUpper;
-const SIGNATURE$v = ["string", "string"];
+const FUNCTION$x = toUpper;
+const SIGNATURE$x = ["string", "string"];
 
 function mean(arr) {
   let idx = 0;
@@ -710,43 +724,45 @@ function mean(arr) {
   }
   return sum / arr.length
 }
-const FUNCTION$w = mean;
-const SIGNATURE$w = ["Array", "number"];
+const FUNCTION$y = mean;
+const SIGNATURE$y = ["Array", "number"];
 
 const CORE_WITH_SIGNATURES = [
-  [SIGNATURE$g, FUNCTION$g],
-  [SIGNATURE$r, FUNCTION$r],
-  [SIGNATURE$8, FUNCTION$8],
-  [SIGNATURE$6, FUNCTION$6],
-  [SIGNATURE$3, FUNCTION$3],
-  [SIGNATURE$c, FUNCTION$c],
-  [SIGNATURE$e, FUNCTION$e],
-  [SIGNATURE$f, FUNCTION$f],
-  [SIGNATURE$b, FUNCTION$b],
-  [SIGNATURE$h, FUNCTION$h],
   [SIGNATURE$i, FUNCTION$i],
-  [SIGNATURE$j, FUNCTION$j],
+  [SIGNATURE$t, FUNCTION$t],
   [SIGNATURE$a, FUNCTION$a],
+  [SIGNATURE$8, FUNCTION$8],
+  [SIGNATURE$5, FUNCTION$5],
+  [SIGNATURE$4, FUNCTION$4],
+  [SIGNATURE$3, FUNCTION$3],
+  [SIGNATURE$e, FUNCTION$e],
+  [SIGNATURE$g, FUNCTION$g],
+  [SIGNATURE$h, FUNCTION$h],
+  [SIGNATURE$d, FUNCTION$d],
+  [SIGNATURE$j, FUNCTION$j],
   [SIGNATURE$k, FUNCTION$k],
   [SIGNATURE$l, FUNCTION$l],
-  [SIGNATURE$4, FUNCTION$4],
-  [SIGNATURE$5, FUNCTION$5],
+  [SIGNATURE$c, FUNCTION$c],
   [SIGNATURE$m, FUNCTION$m],
-  [SIGNATURE, FUNCTION],
-  [SIGNATURE$w, FUNCTION$w],
-  [SIGNATURE$d, FUNCTION$d],
-  [SIGNATURE$1, FUNCTION$1],
   [SIGNATURE$n, FUNCTION$n],
-  [SIGNATURE$2, FUNCTION$2],
+  [SIGNATURE$6, FUNCTION$6],
   [SIGNATURE$7, FUNCTION$7],
   [SIGNATURE$o, FUNCTION$o],
+  [SIGNATURE, FUNCTION],
+  [SIGNATURE$y, FUNCTION$y],
+  [SIGNATURE$f, FUNCTION$f],
+  [SIGNATURE$1, FUNCTION$1],
   [SIGNATURE$p, FUNCTION$p],
+  [SIGNATURE$2, FUNCTION$2],
+  [SIGNATURE$9, FUNCTION$9],
   [SIGNATURE$q, FUNCTION$q],
+  [SIGNATURE$r, FUNCTION$r],
   [SIGNATURE$s, FUNCTION$s],
-  [SIGNATURE$t, FUNCTION$t],
   [SIGNATURE$u, FUNCTION$u],
   [SIGNATURE$v, FUNCTION$v],
-  [SIGNATURE$9, FUNCTION$9]
+  [SIGNATURE$w, FUNCTION$w],
+  [SIGNATURE$x, FUNCTION$x],
+  [SIGNATURE$b, FUNCTION$b]
 ];
 
 function makeSignedCore(def) {
@@ -801,7 +817,7 @@ function makeAddIndex({ curryN }) {
 }
 
 const GET_FUNCTION = makeAddIndex;
-const SIGNATURE$x = ["function", "function"];
+const SIGNATURE$z = ["function", "function"];
 
 function makeChain({ curryN, map, pipe, reduce, concat }) {
   return curryN(ARITY, function chain(fn, xx) {
@@ -812,7 +828,7 @@ function makeChain({ curryN, map, pipe, reduce, concat }) {
 }
 const GET_FUNCTION$1 = makeChain;
 const ARITY = 2;
-const SIGNATURE$y = ["function", "function|Array|object", "function|Array"];
+const SIGNATURE$A = ["function", "function|Array|object", "function|Array"];
 
 function makePluck({ curryN, map, prop }) {
   return curryN(ARITY$1, function pluck(kk, xs) {
@@ -821,7 +837,7 @@ function makePluck({ curryN, map, prop }) {
 }
 const GET_FUNCTION$2 = makePluck;
 const ARITY$1 = 2;
-const SIGNATURE$z = ["string", "Array|object", "Array|object"];
+const SIGNATURE$B = ["string", "Array|object", "Array|object"];
 
 function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
   return pipe(
@@ -830,7 +846,7 @@ function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
   )
 }
 const GET_FUNCTION$3 = makeMedian;
-const SIGNATURE$A = ["Array", "number"];
+const SIGNATURE$C = ["Array", "number"];
 
 function makeFlatten({ isArray, forEach }) {
   return function flatten(xx) {
@@ -851,7 +867,7 @@ function makeFlatten({ isArray, forEach }) {
   }
 }
 const GET_FUNCTION$4 = makeFlatten;
-const SIGNATURE$B = ["Array", "Array"];
+const SIGNATURE$D = ["Array", "Array"];
 
 function makePredicatesPass({
   def,
@@ -883,7 +899,7 @@ function makeBind({ curryN }) {
   })
 }
 const GET_FUNCTION$5 = makeBind;
-const SIGNATURE$C = ["function", "object", "function"];
+const SIGNATURE$E = ["function", "object", "function"];
 
 function makeDifference({ curryN, filter, includes, complement }) {
   return curryN(ARITY$2, function difference(aa, bb) {
@@ -892,7 +908,7 @@ function makeDifference({ curryN, filter, includes, complement }) {
 }
 const GET_FUNCTION$6 = makeDifference;
 const ARITY$2 = 2;
-const SIGNATURE$D = ["Array", "Array", "Array"];
+const SIGNATURE$F = ["Array", "Array", "Array"];
 
 function makeFlip({ curryN }) {
   return function flip(fn) {
@@ -902,7 +918,7 @@ function makeFlip({ curryN }) {
   }
 }
 const GET_FUNCTION$7 = makeFlip;
-const SIGNATURE$E = ["function", "function"];
+const SIGNATURE$G = ["function", "function"];
 
 function makeIsObject({ both, isRawObject }) {
   return function isObject(x) {
@@ -910,13 +926,13 @@ function makeIsObject({ both, isRawObject }) {
   }
 }
 const GET_FUNCTION$8 = makeIsObject;
-const SIGNATURE$F = ["any", "boolean"];
+const SIGNATURE$H = ["any", "boolean"];
 
 function makeJ2({ toJSON }) {
   return toJSON(2)
 }
 const GET_FUNCTION$9 = makeJ2;
-const SIGNATURE$G = ["any", "string"];
+const SIGNATURE$I = ["any", "string"];
 
 function makePathOr({ curryN, reduce }) {
   return curryN(ARITY$3, function pathOr(dd, ks, src) {
@@ -931,7 +947,7 @@ function makePathOr({ curryN, reduce }) {
 }
 const GET_FUNCTION$a = makePathOr;
 const ARITY$3 = 3;
-const SIGNATURE$H = ["any", "Array", "Array|object", "any"];
+const SIGNATURE$J = ["any", "Array", "Array|object", "any"];
 
 function makePathOrDerivatives({ equals, is, def, pipe, pathOr }) {
   // pathOr => {path, pathEq, pathSatisfies, pathIs}
@@ -997,7 +1013,7 @@ function makeReject({ curryN, filter, complement }) {
 }
 const GET_FUNCTION$b = makeReject;
 const ARITY$4 = 2;
-const SIGNATURE$I = ["function", "object", "object"];
+const SIGNATURE$K = ["function", "object", "object"];
 
 function makeSymmetricDifference({ curryN }) {
   return curryN(ARITY$5, function symmetricDifference(aa, bb) {
@@ -1021,7 +1037,7 @@ function makeSymmetricDifference({ curryN }) {
 }
 const GET_FUNCTION$c = makeSymmetricDifference;
 const ARITY$5 = 2;
-const SIGNATURE$J = ["Array", "Array", "Array"];
+const SIGNATURE$L = ["Array", "Array", "Array"];
 
 function makeUnion({ uniq, curryN, pipe, concat }) {
   return curryN(ARITY$6, function union(aa, bb) {
@@ -1033,7 +1049,7 @@ function makeUnion({ uniq, curryN, pipe, concat }) {
 }
 const GET_FUNCTION$d = makeUnion;
 const ARITY$6 = 2;
-const SIGNATURE$K = ["Array", "Array", "Array"];
+const SIGNATURE$M = ["Array", "Array", "Array"];
 
 function makeUniq({ reduce }) {
   return reduce(function unique(agg, xx) {
@@ -1041,7 +1057,7 @@ function makeUniq({ reduce }) {
   }, [])
 }
 const GET_FUNCTION$e = makeUniq;
-const SIGNATURE$L = ["Array", "Array"];
+const SIGNATURE$N = ["Array", "Array"];
 
 function makeIfElseDerivatives({ ifElse, identity, $ }) {
   return { when: ifElse($, $, identity), unless: ifElse($, identity) }
@@ -1049,24 +1065,24 @@ function makeIfElseDerivatives({ ifElse, identity, $ }) {
 const GET_FUNCTION$f = makeIfElseDerivatives;
 
 const derivedFunctionsSortedByIncreasingDependencies = [
-  ["j2", GET_FUNCTION$9, SIGNATURE$G], // toJSON
-  ["addIndex", GET_FUNCTION, SIGNATURE$x], // curryN
-  ["bind", GET_FUNCTION$5, SIGNATURE$C], // curryN
-  ["flip", GET_FUNCTION$7, SIGNATURE$E], // curryN
+  ["j2", GET_FUNCTION$9, SIGNATURE$I], // toJSON
+  ["addIndex", GET_FUNCTION, SIGNATURE$z], // curryN
+  ["bind", GET_FUNCTION$5, SIGNATURE$E], // curryN
+  ["flip", GET_FUNCTION$7, SIGNATURE$G], // curryN
   ["__ifElse", GET_FUNCTION$f, false], // ifElse identity
-  ["flatten", GET_FUNCTION$4, SIGNATURE$B], // isArray forEach any
-  ["chain", GET_FUNCTION$1, SIGNATURE$y], // curryN map reduce concat
-  ["reject", GET_FUNCTION$b, SIGNATURE$I], // curryN complement filter
-  ["uniq", GET_FUNCTION$e, SIGNATURE$L], // curryN reduce
-  ["median", GET_FUNCTION$3, SIGNATURE$A], // $ pipe length nth sort divide
-  ["isObject", GET_FUNCTION$8, SIGNATURE$F], // curryN both isRawObject
-  ["union", GET_FUNCTION$d, SIGNATURE$K], // curryN filter includes
-  ["difference", GET_FUNCTION$6, SIGNATURE$D], // curryN complement filter includes
-  ["symmetricDifference", GET_FUNCTION$c, SIGNATURE$J], // curryN difference
+  ["flatten", GET_FUNCTION$4, SIGNATURE$D], // isArray forEach any
+  ["chain", GET_FUNCTION$1, SIGNATURE$A], // curryN map reduce concat
+  ["reject", GET_FUNCTION$b, SIGNATURE$K], // curryN complement filter
+  ["uniq", GET_FUNCTION$e, SIGNATURE$N], // curryN reduce
+  ["median", GET_FUNCTION$3, SIGNATURE$C], // $ pipe length nth sort divide
+  ["isObject", GET_FUNCTION$8, SIGNATURE$H], // curryN both isRawObject
+  ["union", GET_FUNCTION$d, SIGNATURE$M], // curryN filter includes
+  ["difference", GET_FUNCTION$6, SIGNATURE$F], // curryN complement filter includes
+  ["symmetricDifference", GET_FUNCTION$c, SIGNATURE$L], // curryN difference
   ["__predicatesPass", makePredicatesPass, false], // curryN all, any flip gt length map smooth pipe
-  ["pathOr", GET_FUNCTION$a, SIGNATURE$H], // curryN reduce
+  ["pathOr", GET_FUNCTION$a, SIGNATURE$J], // curryN reduce
   ["__pathOrDerivatives", makePathOrDerivatives, false], // curryN equals is pathOr pipe
-  ["pluck", GET_FUNCTION$2, SIGNATURE$z]
+  ["pluck", GET_FUNCTION$2, SIGNATURE$B]
 ];
 function extendDerived(C) {
   return C.reduce(
@@ -1089,8 +1105,8 @@ function add(b, a) {
   return a + b
 }
 
-const FUNCTION$x = add;
-const SIGNATURE$M = ["number", "number", "number"];
+const FUNCTION$z = add;
+const SIGNATURE$O = ["number", "number", "number"];
 
 function find(fn, xx) {
   let idx = 0;
@@ -1104,20 +1120,20 @@ function find(fn, xx) {
   }
 }
 
-const FUNCTION$y = find;
-const SIGNATURE$N = ["function", "object", "any"];
+const FUNCTION$A = find;
+const SIGNATURE$P = ["function", "object", "any"];
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
-const FUNCTION$z = apply;
-const SIGNATURE$O = ["function", "Array", "any"];
+const FUNCTION$B = apply;
+const SIGNATURE$Q = ["function", "Array", "any"];
 
 function and(a, b) {
   return a && b
 }
-const FUNCTION$A = and;
-const SIGNATURE$P = ["any", "any", "boolean"];
+const FUNCTION$C = and;
+const SIGNATURE$R = ["any", "any", "boolean"];
 
 function any(fn, xx) {
   let idx = 0;
@@ -1130,8 +1146,8 @@ function any(fn, xx) {
   return found
 }
 
-const FUNCTION$B = any;
-const SIGNATURE$Q = ["function", "object", "boolean"];
+const FUNCTION$D = any;
+const SIGNATURE$S = ["function", "object", "boolean"];
 
 function all(fn, xx) {
   let idx = 0;
@@ -1145,8 +1161,8 @@ function all(fn, xx) {
   }
   return promised
 }
-const FUNCTION$C = all;
-const SIGNATURE$R = ["function", "Array|object", "boolean"];
+const FUNCTION$E = all;
+const SIGNATURE$T = ["function", "Array|object", "boolean"];
 
 function ap(a, b) {
   // S combinator
@@ -1166,14 +1182,14 @@ function ap(a, b) {
   }, [])
 }
 
-const FUNCTION$D = ap;
-const SIGNATURE$S = ["function|Array", "function|Array", "function|Array"];
+const FUNCTION$F = ap;
+const SIGNATURE$U = ["function|Array", "function|Array", "function|Array"];
 
 function concat(a, b) {
   return a.concat(b)
 }
-const FUNCTION$E = concat;
-const SIGNATURE$T = ["any", "any", "Array|String"];
+const FUNCTION$G = concat;
+const SIGNATURE$V = ["any", "any", "Array|String"];
 
 function cond(conditions, input) {
   let idx = 0;
@@ -1191,20 +1207,20 @@ function cond(conditions, input) {
   return match
 }
 
-const FUNCTION$F = cond;
-const SIGNATURE$U = ["Array", "any", "any"];
+const FUNCTION$H = cond;
+const SIGNATURE$W = ["Array", "any", "any"];
 
 function divide(b, a) {
   return a / b
 }
-const FUNCTION$G = divide;
-const SIGNATURE$V = ["number", "number", "number"];
+const FUNCTION$I = divide;
+const SIGNATURE$X = ["number", "number", "number"];
 
 function equals(a, b) {
   return a === b
 }
-const FUNCTION$H = equals;
-const SIGNATURE$W = ["any", "any", "boolean"];
+const FUNCTION$J = equals;
+const SIGNATURE$Y = ["any", "any", "boolean"];
 
 function filter(fn, xx) {
   let idx = 0;
@@ -1225,8 +1241,8 @@ function filter(fn, xx) {
   return result
 }
 
-const FUNCTION$I = filter;
-const SIGNATURE$X = ["function", "object", "object"];
+const FUNCTION$K = filter;
+const SIGNATURE$Z = ["function", "object", "object"];
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -1239,45 +1255,45 @@ function forEach(fn, xx) {
   }
 }
 
-const FUNCTION$J = forEach;
-const SIGNATURE$Y = ["function", "object", "nil"];
+const FUNCTION$L = forEach;
+const SIGNATURE$_ = ["function", "object", "nil"];
 
 function includes(a, b) {
   return a.includes(b)
 }
-const FUNCTION$K = includes;
-const SIGNATURE$Z = ["Array|string", "Array|string", "boolean"];
+const FUNCTION$M = includes;
+const SIGNATURE$$ = ["Array|string", "Array|string", "boolean"];
 
 function gt(b, a) {
   return a > b
 }
-const FUNCTION$L = gt;
-const SIGNATURE$_ = ["number", "number", "boolean"];
+const FUNCTION$N = gt;
+const SIGNATURE$10 = ["number", "number", "boolean"];
 
 function gte(b, a) {
   return a >= b
 }
-const FUNCTION$M = gte;
-const SIGNATURE$$ = ["number", "number", "boolean"];
+const FUNCTION$O = gte;
+const SIGNATURE$11 = ["number", "number", "boolean"];
 
 function join(del, xx) {
   return xx.join(del)
 }
 
-const FUNCTION$N = join;
-const SIGNATURE$10 = ["string", "Array", "string"];
+const FUNCTION$P = join;
+const SIGNATURE$12 = ["string", "Array", "string"];
 
 function lt(b, a) {
   return a < b
 }
-const FUNCTION$O = lt;
-const SIGNATURE$11 = ["number", "number", "boolean"];
+const FUNCTION$Q = lt;
+const SIGNATURE$13 = ["number", "number", "boolean"];
 
 function lte(b, a) {
   return a <= b
 }
-const FUNCTION$P = lte;
-const SIGNATURE$12 = ["number", "number", "boolean"];
+const FUNCTION$R = lte;
+const SIGNATURE$14 = ["number", "number", "boolean"];
 
 function map(fn, xx) {
   let idx = 0;
@@ -1291,40 +1307,40 @@ function map(fn, xx) {
   }
   return result
 }
-const SIGNATURE$13 = ["function", "object", "object"];
-const FUNCTION$Q = map;
+const SIGNATURE$15 = ["function", "object", "object"];
+const FUNCTION$S = map;
 
 function max(aa, bb) {
   return Math.max(aa, bb)
 }
-const FUNCTION$R = max;
-const SIGNATURE$14 = ['number', 'number'];
+const FUNCTION$T = max;
+const SIGNATURE$16 = ['number', 'number'];
 
 function min(aa, bb) {
   return Math.min(aa, bb)
 }
-const FUNCTION$S = min;
-const SIGNATURE$15 = ["number", "number"];
+const FUNCTION$U = min;
+const SIGNATURE$17 = ["number", "number"];
 
 function multiply(b, a) {
   return a * b
 }
-const FUNCTION$T = multiply;
-const SIGNATURE$16 = ["number", "number", "number"];
+const FUNCTION$V = multiply;
+const SIGNATURE$18 = ["number", "number", "number"];
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
-const FUNCTION$U = nth;
-const SIGNATURE$17 = ["number", "Array", "any"];
+const FUNCTION$W = nth;
+const SIGNATURE$19 = ["number", "Array", "any"];
 
 function or(a, b) {
   return a || b
 }
 
-const FUNCTION$V = or;
-const SIGNATURE$18 = ["any", "any", "boolean"];
+const FUNCTION$X = or;
+const SIGNATURE$1a = ["any", "any", "boolean"];
 
 function range(aa, zz) {
   const out = [];
@@ -1335,15 +1351,15 @@ function range(aa, zz) {
   return out
 }
 
-const FUNCTION$W = range;
-const SIGNATURE$19 = ["number", "number", "Array"];
+const FUNCTION$Y = range;
+const SIGNATURE$1b = ["number", "number", "Array"];
 
 function split(del, xx) {
   return xx.split(del)
 }
 
-const FUNCTION$X = split;
-const SIGNATURE$1a = ["string", "string", "Array"];
+const FUNCTION$Z = split;
+const SIGNATURE$1c = ["string", "string", "Array"];
 
 function sort(fn, rr) {
   const copy = [].concat(rr);
@@ -1351,60 +1367,60 @@ function sort(fn, rr) {
   return copy
 }
 
-const FUNCTION$Y = sort;
-const SIGNATURE$1b = ["function", "Array", "Array"];
+const FUNCTION$_ = sort;
+const SIGNATURE$1d = ["function", "Array", "Array"];
 
 function subtract(b, a) {
   return a - b
 }
 
-const FUNCTION$Z = subtract;
-const SIGNATURE$1c = ["number", "number", "number"];
+const FUNCTION$$ = subtract;
+const SIGNATURE$1e = ["number", "number", "number"];
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
-const FUNCTION$_ = toJSON;
-const SIGNATURE$1d = ["number", "any", "string"];
+const FUNCTION$10 = toJSON;
+const SIGNATURE$1f = ["number", "any", "string"];
 
 const BINARY_WITH_SIGNATURES = [
   // infix
+  [SIGNATURE$10, FUNCTION$N],
+  [SIGNATURE$11, FUNCTION$O],
+  [SIGNATURE$13, FUNCTION$Q],
+  [SIGNATURE$14, FUNCTION$R],
+  [SIGNATURE$R, FUNCTION$C],
+  [SIGNATURE$Y, FUNCTION$J],
+  [SIGNATURE$1a, FUNCTION$X],
+  // math
+  [SIGNATURE$1e, FUNCTION$$],
+  [SIGNATURE$O, FUNCTION$z],
+  [SIGNATURE$X, FUNCTION$I],
+  [SIGNATURE$18, FUNCTION$V],
+  // predicate
+  [SIGNATURE$T, FUNCTION$E],
+  [SIGNATURE$S, FUNCTION$D],
+  [SIGNATURE$Z, FUNCTION$K],
+  [SIGNATURE$P, FUNCTION$A],
   [SIGNATURE$_, FUNCTION$L],
   [SIGNATURE$$, FUNCTION$M],
-  [SIGNATURE$11, FUNCTION$O],
-  [SIGNATURE$12, FUNCTION$P],
-  [SIGNATURE$P, FUNCTION$A],
-  [SIGNATURE$W, FUNCTION$H],
-  [SIGNATURE$18, FUNCTION$V],
-  // math
-  [SIGNATURE$1c, FUNCTION$Z],
-  [SIGNATURE$M, FUNCTION$x],
-  [SIGNATURE$V, FUNCTION$G],
-  [SIGNATURE$16, FUNCTION$T],
-  // predicate
-  [SIGNATURE$R, FUNCTION$C],
-  [SIGNATURE$Q, FUNCTION$B],
-  [SIGNATURE$X, FUNCTION$I],
-  [SIGNATURE$N, FUNCTION$y],
-  [SIGNATURE$Y, FUNCTION$J],
-  [SIGNATURE$Z, FUNCTION$K],
   // folds
-  [SIGNATURE$15, FUNCTION$S],
-  [SIGNATURE$14, FUNCTION$R],
-  [SIGNATURE$S, FUNCTION$D],
-  [SIGNATURE$T, FUNCTION$E],
-  [SIGNATURE$13, FUNCTION$Q],
-  [SIGNATURE$U, FUNCTION$F],
-  [SIGNATURE$O, FUNCTION$z],
-  // accessor
   [SIGNATURE$17, FUNCTION$U],
-  // generator
+  [SIGNATURE$16, FUNCTION$T],
+  [SIGNATURE$U, FUNCTION$F],
+  [SIGNATURE$V, FUNCTION$G],
+  [SIGNATURE$15, FUNCTION$S],
+  [SIGNATURE$W, FUNCTION$H],
+  [SIGNATURE$Q, FUNCTION$B],
+  // accessor
   [SIGNATURE$19, FUNCTION$W],
-  // conversion
-  [SIGNATURE$10, FUNCTION$N],
+  // generator
   [SIGNATURE$1b, FUNCTION$Y],
-  [SIGNATURE$1a, FUNCTION$X],
-  [SIGNATURE$1d, FUNCTION$_]
+  // conversion
+  [SIGNATURE$12, FUNCTION$P],
+  [SIGNATURE$1d, FUNCTION$_],
+  [SIGNATURE$1c, FUNCTION$Z],
+  [SIGNATURE$1f, FUNCTION$10]
 ];
 
 function extendBinaryWithSignatures(F) {
@@ -1419,14 +1435,14 @@ function extendBinaryWithSignatures(F) {
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
-const FUNCTION$$ = both;
-const SIGNATURE$1e = ["function", "function", "any", "boolean"];
+const FUNCTION$11 = both;
+const SIGNATURE$1g = ["function", "function", "any", "boolean"];
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-const FUNCTION$10 = either;
-const SIGNATURE$1f = ["function", "function", "any"];
+const FUNCTION$12 = either;
+const SIGNATURE$1h = ["function", "function", "any"];
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -1441,21 +1457,21 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$11 = reduce;
-const SIGNATURE$1g = ["function", "any", "object", "any"];
+const FUNCTION$13 = reduce;
+const SIGNATURE$1i = ["function", "any", "object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$12 = slice;
-const SIGNATURE$1h = ["number", "number", "object", "object"];
+const FUNCTION$14 = slice;
+const SIGNATURE$1j = ["number", "number", "object", "object"];
 
 const TERNARY_WITH_SIGNATURES = [
-  [SIGNATURE$1e, FUNCTION$$],
-  [SIGNATURE$1f, FUNCTION$10],
   [SIGNATURE$1g, FUNCTION$11],
-  [SIGNATURE$1h, FUNCTION$12]
+  [SIGNATURE$1h, FUNCTION$12],
+  [SIGNATURE$1i, FUNCTION$13],
+  [SIGNATURE$1j, FUNCTION$14]
 ];
 
 function extendTernaryWithSignatures(F) {
@@ -1471,10 +1487,10 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$13 = ifElse;
-const SIGNATURE$1i = ["function", "function", "function", "any", "any"];
+const FUNCTION$15 = ifElse;
+const SIGNATURE$1k = ["function", "function", "function", "any", "any"];
 
-const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$1i, FUNCTION$13]];
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$1k, FUNCTION$15]];
 
 function extendQuaternaryWithSignatures(F) {
   return F.temper(

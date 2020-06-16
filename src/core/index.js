@@ -4,6 +4,8 @@ import F from "./F"
 import T from "./T"
 import init from "./init"
 import adjust from "./adjust"
+import dissoc from "./dissoc"
+import assoc from "./assoc"
 import append from "./append"
 import box from "./box"
 import call from "./call"
@@ -43,6 +45,8 @@ export const CORE = temper(NATIVE, {
   complement,
   constant,
   dec,
+  assoc,
+  dissoc,
   first,
   fromPairs,
   identity,
