@@ -10,6 +10,7 @@ function findIndex(fn, xx) {
     }
     idx += 1
   }
+  return -1
 }
 
 export const FUNCTION = findIndex

@@ -9,4 +9,4 @@ export function startsWith(needle, haystack) {
 export default startsWith
 export const FUNCTION = startsWith
 export const ARITY = 2
-export const SIGNATURE = ["Array|string", "Array|string", "boolean"]
+export const SIGNATURE = ["object|string", "object|string", "boolean"]

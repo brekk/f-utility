@@ -1,5 +1,5 @@
 export function hasIn(pp, xx) {
-  return xx in pp
+  return pp in xx
 }
 
 export default hasIn

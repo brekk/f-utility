@@ -1,7 +1,7 @@
-export function makePick({ pickBy, includes }) {
-  return function pick(kk, xx) {
+export function makePick({ pickBy, includes, curryN }) {
+  return curryN(ARITY, function pick(kk, xx) {
     return pickBy(includes(kk), xx)
-  }
+  })
 }
 
 export default makePick

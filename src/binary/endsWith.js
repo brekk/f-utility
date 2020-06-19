@@ -9,4 +9,4 @@ export function endsWith(needle, haystack) {
 export default endsWith
 export const FUNCTION = endsWith
 export const ARITY = 2
-export const SIGNATURE = ["Array|string", "Array|string", "boolean"]
+export const SIGNATURE = ["object|string", "object|string", "boolean"]
