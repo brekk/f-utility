@@ -12,7 +12,10 @@ export function makeAliases(F) {
     mergeAll: F.smash,
     mergeRight: F.jam,
     sideEffect2: F.binarySideEffect,
-    some: F.any
+    some: F.any,
+    sortBy: F.sort,
+    tap: F.sideEffect,
+    head: F.first
   })
 }
 

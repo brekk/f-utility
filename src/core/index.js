@@ -2,34 +2,59 @@ import * as NATIVE from "./native"
 
 import F from "./F"
 import T from "./T"
-import init from "./init"
 import adjust from "./adjust"
-import dissoc from "./dissoc"
-import assoc from "./assoc"
 import append from "./append"
+import assoc from "./assoc"
 import box from "./box"
 import call from "./call"
 import complement from "./complement"
+import compose from "./compose"
 import constant from "./constant"
 import dec from "./dec"
+import dissoc from "./dissoc"
+import drop from "./drop"
+import dropLast from "./dropLast"
+import empty from "./empty"
+import findIndex from "./findIndex"
+import findLast from "./findLast"
+import findLastIndex from "./findLastIndex"
 import first from "./first"
 import fromPairs from "./fromPairs"
 import identity from "./identity"
 import inc from "./inc"
+import init from "./init"
+import invert from "./invert"
+import invertObj from "./invertObj"
 import jam from "./jam"
-import tail from "./tail"
+import juxt from "./juxt"
+import keysIn from "./keysIn"
 import last from "./last"
 import length from "./length"
 import mash from "./mash"
-import mode from "./mode"
 import mean from "./mean"
+import mode from "./mode"
+import move from "./move"
+import negate from "./negate"
 import not from "./not"
+import nthArg from "./nthArg"
+import objOf from "./objOf"
+import once from "./once"
+import pair from "./pair"
+import partial from "./partial"
+import partialRight from "./partialRight"
 import pipe from "./pipe"
 import prepend from "./prepend"
+import repeat from "./repeat"
 import reverse from "./reverse"
 import smash from "./smash"
 import smooth from "./smooth"
+import splitAt from "./splitAt"
+import sum from "./sum"
+import tail from "./tail"
+import take from "./take"
+import takeLast from "./takeLast"
 import temper from "./temper"
+import regexTest from "./regexTest"
 import toLower from "./toLower"
 import toPairs from "./toPairs"
 import toUpper from "./toUpper"
@@ -40,32 +65,57 @@ export const CORE = temper(NATIVE, {
   T,
   adjust,
   append,
+  assoc,
   box,
   call,
   complement,
+  compose,
   constant,
   dec,
-  assoc,
   dissoc,
+  drop,
+  dropLast,
+  empty,
+  findIndex,
+  findLast,
+  findLastIndex,
   first,
   fromPairs,
   identity,
   inc,
-  jam,
-  tail,
   init,
+  invert,
+  invertObj,
+  jam,
+  juxt,
+  keysIn,
   last,
   length,
   mash,
   mean,
   mode,
+  move,
+  negate,
   not,
+  nthArg,
+  objOf,
+  once,
+  pair,
+  partial,
+  partialRight,
   pipe,
   prepend,
+  repeat,
   reverse,
   smash,
   smooth,
+  splitAt,
+  sum,
+  tail,
+  take,
+  takeLast,
   temper,
+  test: regexTest,
   toLower,
   toPairs,
   toUpper,

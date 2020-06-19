@@ -16,12 +16,30 @@ import symmetricDifference from "./symmetricDifference"
 import union from "./union"
 import uniq from "./uniq"
 import __ifElse from "./ifElse-derivatives"
+import eqProps from "./eqProps"
+import groupBy from "./groupBy"
+import intersection from "./intersection"
+import isEmpty from "./isEmpty"
+import lift from "./lift"
+import liftN from "./liftN"
+import omit from "./omit"
+import pick from "./pick"
+import props from "./props"
+import thunkify from "./thunkify"
 
 const derivedFunctionsSortedByIncreasingDependencies = {
   j2, // toJSON
   addIndex, // curryN
+  omit, // complement pickBy includes
+  pick, // pickBy includes
   bind, // curryN
   flip, // curryN
+  liftN, // curryN reduce ap map
+  lift, // lift
+  thunkify, // curryN
+  groupBy, // curryN objOf mash reduce
+  intersection, // curryN uniq concat
+  isEmpty, // equals empty
   __ifElse, // ifElse identity
   flatten, // isArray forEach any
   chain, // curryN map reduce concat
@@ -35,6 +53,8 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   __predicatesPass, // curryN all, any flip gt length map smooth pipe
   pathOr, // curryN reduce
   __pathOrDerivatives, // curryN equals is pathOr pipe
+  props, // curryN pipe ap prop box map
+  eqProps, // curryN pipe map prop equals
   pluck // curryN prop map
 }
 function extendDerived(C) {

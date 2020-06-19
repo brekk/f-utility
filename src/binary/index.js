@@ -1,3 +1,14 @@
+import { FUNCTION as applyTo } from "./applyTo"
+import { FUNCTION as endsWith } from "./endsWith"
+import { FUNCTION as findIndex } from "./findIndex"
+import { FUNCTION as hasIn } from "./hasIn"
+import { FUNCTION as identical } from "./identical"
+import { FUNCTION as indexOf } from "./indexOf"
+import { FUNCTION as lastIndexOf } from "./lastIndexOf"
+import { FUNCTION as match } from "./match"
+import { FUNCTION as none } from "./none"
+import { FUNCTION as pickBy } from "./pickBy"
+import { FUNCTION as startsWith } from "./startsWith"
 import { FUNCTION as add } from "./add"
 import { FUNCTION as find } from "./find"
 import { FUNCTION as apply } from "./apply"
@@ -31,42 +42,46 @@ import { FUNCTION as toJSON } from "./toJSON"
 
 export function extendBinary(F) {
   const BINARY = {
-    // infix
-    gt,
-    gte,
-    lt,
-    lte,
-    and,
-    equals,
-    or,
-    // math
-    subtract,
     add,
-    divide,
-    multiply,
-    // predicate
     all,
+    and,
     any,
+    ap,
+    apply,
+    applyTo,
+    concat,
+    cond,
+    divide,
+    endsWith,
+    equals,
     filter,
     find,
+    findIndex,
     forEach,
+    gt,
+    gte,
+    hasIn,
+    identical,
     includes,
-    // folds
+    indexOf,
+    join,
+    lastIndexOf,
+    lt,
+    lte,
+    map,
+    match,
     max,
     min,
-    apply,
-    ap,
-    concat,
-    map,
-    join,
-    cond,
-    // accessor
+    multiply,
+    none,
     nth,
-    // generator
+    or,
+    pickBy,
     range,
-    // conversion
     sort,
     split,
+    startsWith,
+    subtract,
     toJSON
   }
   return F.temper(F, BINARY)

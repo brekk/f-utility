@@ -1,4 +1,30 @@
 import {
+  GET_FUNCTION as eqProps,
+  SIGNATURE as eqPropsSignature
+} from "./eqProps"
+import {
+  GET_FUNCTION as groupBy,
+  SIGNATURE as groupBySignature
+} from "./groupBy"
+import {
+  GET_FUNCTION as intersection,
+  SIGNATURE as intersectionSignature
+} from "./intersection"
+import {
+  GET_FUNCTION as isEmpty,
+  SIGNATURE as isEmptySignature
+} from "./isEmpty"
+import { GET_FUNCTION as lift, SIGNATURE as liftSignature } from "./lift"
+import { GET_FUNCTION as liftN, SIGNATURE as liftNSignature } from "./liftN"
+import { GET_FUNCTION as omit, SIGNATURE as omitSignature } from "./omit"
+import { GET_FUNCTION as pick, SIGNATURE as pickSignature } from "./pick"
+import { GET_FUNCTION as props, SIGNATURE as propsSignature } from "./props"
+import {
+  GET_FUNCTION as thunkify,
+  SIGNATURE as thunkifySignature
+} from "./thunkify"
+
+import {
   GET_FUNCTION as addIndex,
   SIGNATURE as addIndexSignature
 } from "./addIndex"
@@ -35,8 +61,18 @@ import { GET_FUNCTION as __ifElse } from "./ifElse-derivatives"
 const derivedFunctionsSortedByIncreasingDependencies = [
   ["j2", j2, j2Signature], // toJSON
   ["addIndex", addIndex, addIndexSignature], // curryN
+  ["omit", omit, omitSignature], // complement pickBy includes
+  ["pick", pick, pickSignature], // pickBy includes
+
   ["bind", bind, bindSignature], // curryN
   ["flip", flip, flipSignature], // curryN
+  ["liftN", liftN, liftNSignature], // curryN reduce ap map
+  ["lift", lift, liftSignature], // lift
+  ["thunkify", thunkify, thunkifySignature], // curryN
+  ["groupBy", groupBy, groupBySignature], // curryN objOf mash reduce
+  ["intersection", intersection, intersectionSignature], // curryN uniq concat
+  ["isEmpty", isEmpty, isEmptySignature], // equals empty
+
   ["__ifElse", __ifElse, false], // ifElse identity
   ["flatten", flatten, flattenSignature], // isArray forEach any
   ["chain", chain, chainSignature], // curryN map reduce concat
@@ -50,6 +86,8 @@ const derivedFunctionsSortedByIncreasingDependencies = [
   ["__predicatesPass", __predicatesPass, false], // curryN all, any flip gt length map smooth pipe
   ["pathOr", pathOr, pathOrSignature], // curryN reduce
   ["__pathOrDerivatives", __pathOrDerivatives, false], // curryN equals is pathOr pipe
+  ["props", props, propsSignature],
+  ["eqProps", eqProps, eqPropsSignature],
   ["pluck", pluck, pluckSignature]
 ]
 function extendDerived(C) {

@@ -1,3 +1,18 @@
+import { FUNCTION as applyTo, SIGNATURE as 𝒮applyTo } from "./applyTo"
+import { FUNCTION as endsWith, SIGNATURE as 𝒮endsWith } from "./endsWith"
+import { FUNCTION as findIndex, SIGNATURE as 𝒮findIndex } from "./findIndex"
+import { FUNCTION as hasIn, SIGNATURE as 𝒮hasIn } from "./hasIn"
+import { FUNCTION as identical, SIGNATURE as 𝒮identical } from "./identical"
+import { FUNCTION as indexOf, SIGNATURE as 𝒮indexOf } from "./indexOf"
+import {
+  FUNCTION as lastIndexOf,
+  SIGNATURE as 𝒮lastIndexOf
+} from "./lastIndexOf"
+import { FUNCTION as match, SIGNATURE as 𝒮match } from "./match"
+import { FUNCTION as none, SIGNATURE as 𝒮none } from "./none"
+import { FUNCTION as pickBy, SIGNATURE as 𝒮pickBy } from "./pickBy"
+import { FUNCTION as startsWith, SIGNATURE as 𝒮startsWith } from "./startsWith"
+
 import { FUNCTION as add, SIGNATURE as 𝒮add } from "./add"
 import { FUNCTION as find, SIGNATURE as 𝒮find } from "./find"
 import { FUNCTION as apply, SIGNATURE as 𝒮apply } from "./apply"
@@ -30,42 +45,46 @@ import { FUNCTION as subtract, SIGNATURE as 𝒮subtract } from "./subtract"
 import { FUNCTION as toJSON, SIGNATURE as 𝒮toJSON } from "./toJSON"
 
 const BINARY_WITH_SIGNATURES = [
-  // infix
-  [𝒮gt, gt],
-  [𝒮gte, gte],
-  [𝒮lt, lt],
-  [𝒮lte, lte],
-  [𝒮and, and],
-  [𝒮equals, equals],
-  [𝒮or, or],
-  // math
-  [𝒮subtract, subtract],
   [𝒮add, add],
-  [𝒮divide, divide],
-  [𝒮multiply, multiply],
-  // predicate
   [𝒮all, all],
+  [𝒮and, and],
   [𝒮any, any],
+  [𝒮ap, ap],
+  [𝒮apply, apply],
+  [𝒮applyTo, applyTo],
+  [𝒮concat, concat],
+  [𝒮cond, cond],
+  [𝒮divide, divide],
+  [𝒮endsWith, endsWith],
+  [𝒮equals, equals],
   [𝒮filter, filter],
   [𝒮find, find],
+  [𝒮findIndex, findIndex],
   [𝒮forEach, forEach],
+  [𝒮gt, gt],
+  [𝒮gte, gte],
+  [𝒮hasIn, hasIn],
+  [𝒮identical, identical],
   [𝒮includes, includes],
-  // folds
-  [𝒮min, min],
-  [𝒮max, max],
-  [𝒮ap, ap],
-  [𝒮concat, concat],
-  [𝒮map, map],
-  [𝒮cond, cond],
-  [𝒮apply, apply],
-  // accessor
-  [𝒮nth, nth],
-  // generator
-  [𝒮range, range],
-  // conversion
+  [𝒮indexOf, indexOf],
   [𝒮join, join],
+  [𝒮lastIndexOf, lastIndexOf],
+  [𝒮lt, lt],
+  [𝒮lte, lte],
+  [𝒮map, map],
+  [𝒮match, match],
+  [𝒮max, max],
+  [𝒮min, min],
+  [𝒮multiply, multiply],
+  [𝒮none, none],
+  [𝒮nth, nth],
+  [𝒮or, or],
+  [𝒮pickBy, pickBy],
+  [𝒮range, range],
   [𝒮sort, sort],
   [𝒮split, split],
+  [𝒮startsWith, startsWith],
+  [𝒮subtract, subtract],
   [𝒮toJSON, toJSON]
 ]
 

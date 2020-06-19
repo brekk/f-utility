@@ -1,3 +1,50 @@
+import { FUNCTION as compose, SIGNATURE as composeSignature } from "./compose"
+import { FUNCTION as drop, SIGNATURE as dropSignature } from "./drop"
+import {
+  FUNCTION as dropLast,
+  SIGNATURE as dropLastSignature
+} from "./dropLast"
+import { FUNCTION as empty, SIGNATURE as emptySignature } from "./empty"
+import {
+  FUNCTION as findLast,
+  SIGNATURE as findLastSignature
+} from "./findLast"
+import {
+  FUNCTION as findLastIndex,
+  SIGNATURE as findLastIndexSignature
+} from "./findLastIndex"
+import {
+  FUNCTION as findIndex,
+  SIGNATURE as findIndexSignature
+} from "./findIndex"
+import { FUNCTION as invert, SIGNATURE as invertSignature } from "./invert"
+import {
+  FUNCTION as invertObj,
+  SIGNATURE as invertObjSignature
+} from "./invertObj"
+import { FUNCTION as juxt, SIGNATURE as juxtSignature } from "./juxt"
+import { FUNCTION as keysIn, SIGNATURE as keysInSignature } from "./keysIn"
+import { FUNCTION as move, SIGNATURE as moveSignature } from "./move"
+import { FUNCTION as negate, SIGNATURE as negateSignature } from "./negate"
+import { FUNCTION as nthArg, SIGNATURE as nthArgSignature } from "./nthArg"
+import { FUNCTION as objOf, SIGNATURE as objOfSignature } from "./objOf"
+import { FUNCTION as once, SIGNATURE as onceSignature } from "./once"
+import { FUNCTION as pair, SIGNATURE as pairSignature } from "./pair"
+import { FUNCTION as partial, SIGNATURE as partialSignature } from "./partial"
+import {
+  FUNCTION as partialRight,
+  SIGNATURE as partialRightSignature
+} from "./partialRight"
+import { FUNCTION as repeat, SIGNATURE as repeatSignature } from "./repeat"
+import { FUNCTION as splitAt, SIGNATURE as splitAtSignature } from "./splitAt"
+import { FUNCTION as sum, SIGNATURE as sumSignature } from "./sum"
+import { FUNCTION as take, SIGNATURE as takeSignature } from "./take"
+import {
+  FUNCTION as takeLast,
+  SIGNATURE as takeLastSignature
+} from "./takeLast"
+import { FUNCTION as regexTest, SIGNATURE as regexTestSignature } from "./regexTest"
+
 import { FUNCTION as box, SIGNATURE as boxSignature } from "./box"
 import { FUNCTION as dissoc, SIGNATURE as dissocSignature } from "./dissoc"
 import { FUNCTION as assoc, SIGNATURE as assocSignature } from "./assoc"
@@ -56,32 +103,57 @@ const CORE_WITH_SIGNATURES = [
   [adjustSignature, adjust],
   [appendSignature, append],
   [assocSignature, assoc],
-  [dissocSignature, dissoc],
   [boxSignature, box],
   [callSignature, call],
   [complementSignature, complement],
+  [composeSignature, compose],
   [constantSignature, constant],
   [decSignature, dec],
+  [dissocSignature, dissoc],
+  [dropLastSignature, dropLast],
+  [dropSignature, drop],
+  [emptySignature, empty],
+  [findIndexSignature, findIndex],
+  [findLastIndexSignature, findLastIndex],
+  [findLastSignature, findLast],
   [firstSignature, first],
   [fromPairsSignature, fromPairs],
   [identitySignature, identity],
   [incSignature, inc],
-  [jamSignature, jam],
-  [lastSignature, last],
   [initSignature, init],
-  [tailSignature, tail],
+  [invertObjSignature, invertObj],
+  [invertSignature, invert],
+  [jamSignature, jam],
+  [juxtSignature, juxt],
+  [keysInSignature, keysIn],
+  [lastSignature, last],
   [lengthSignature, length],
   [mashSignature, mash],
   [meanSignature, mean],
-  [modeSignature, mode],
   [memoizeWithSignature, memoizeWith],
+  [modeSignature, mode],
+  [moveSignature, move],
+  [negateSignature, negate],
   [notSignature, not],
+  [nthArgSignature, nthArg],
+  [objOfSignature, objOf],
+  [onceSignature, once],
+  [pairSignature, pair],
+  [partialRightSignature, partialRight],
+  [partialSignature, partial],
   [pipeSignature, pipe],
   [prependSignature, prepend],
+  [repeatSignature, repeat],
   [reverseSignature, reverse],
   [smashSignature, smash],
   [smoothSignature, smooth],
+  [splitAtSignature, splitAt],
+  [sumSignature, sum],
+  [tailSignature, tail],
+  [takeLastSignature, takeLast],
+  [takeSignature, take],
   [temperSignature, temper],
+  [regexTestSignature, regexTest],
   [toLowerSignature, toLower],
   [toPairsSignature, toPairs],
   [toUpperSignature, toUpper],
