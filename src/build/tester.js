@@ -6,7 +6,7 @@ export function testFunctionForBuild(build) {
   return function ____test(name, injectable) {
     test(
       `${name} [ENV: ${
-        build === F ? "production" : build === D ? "debug" : "default"
+        build === F ? "production" : "debug" // build === D ? "debug" : "default"
       }]`,
       injectable(build)
     )

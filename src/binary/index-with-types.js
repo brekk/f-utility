@@ -1,6 +1,10 @@
 import { FUNCTION as applyTo, SIGNATURE as 𝒮applyTo } from "./applyTo"
 import { FUNCTION as endsWith, SIGNATURE as 𝒮endsWith } from "./endsWith"
 import { FUNCTION as findIndex, SIGNATURE as 𝒮findIndex } from "./findIndex"
+import {
+  FUNCTION as findLastIndex,
+  SIGNATURE as 𝒮findLastIndex
+} from "./findLastIndex"
 import { FUNCTION as hasIn, SIGNATURE as 𝒮hasIn } from "./hasIn"
 import { FUNCTION as identical, SIGNATURE as 𝒮identical } from "./identical"
 import { FUNCTION as indexOf, SIGNATURE as 𝒮indexOf } from "./indexOf"
@@ -15,6 +19,7 @@ import { FUNCTION as startsWith, SIGNATURE as 𝒮startsWith } from "./startsWit
 
 import { FUNCTION as add, SIGNATURE as 𝒮add } from "./add"
 import { FUNCTION as find, SIGNATURE as 𝒮find } from "./find"
+import { FUNCTION as findLast, SIGNATURE as 𝒮findLast } from "./findLast"
 import { FUNCTION as apply, SIGNATURE as 𝒮apply } from "./apply"
 import { FUNCTION as and, SIGNATURE as 𝒮and } from "./and"
 import { FUNCTION as any, SIGNATURE as 𝒮any } from "./any"
@@ -59,7 +64,9 @@ const BINARY_WITH_SIGNATURES = [
   [𝒮equals, equals],
   [𝒮filter, filter],
   [𝒮find, find],
+  [𝒮findLast, findLast],
   [𝒮findIndex, findIndex],
+  [𝒮findLastIndex, findLastIndex],
   [𝒮forEach, forEach],
   [𝒮gt, gt],
   [𝒮gte, gte],

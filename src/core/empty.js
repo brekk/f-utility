@@ -2,12 +2,15 @@ import { typeSystem, isFunction } from "$types/index"
 
 const EMPTY_LOOKUPS = Object.freeze({
   "String∋string": "",
-  "Array∋array": [],
+  "Array∋object": [],
   "Object∋object": {}
 })
 export function empty(xx) {
-  if (xx && isFunction(xx.empty)) return xx.empty()
-  return EMPTY_LOOKUPS[typeSystem(xx)]
+  if (xx && isFunction(xx.empty)) {
+    return xx.empty()
+  }
+  const tt = typeSystem(xx)
+  return EMPTY_LOOKUPS[tt]
 }
 
 export default empty

@@ -5,18 +5,6 @@ import {
   SIGNATURE as dropLastSignature
 } from "./dropLast"
 import { FUNCTION as empty, SIGNATURE as emptySignature } from "./empty"
-import {
-  FUNCTION as findLast,
-  SIGNATURE as findLastSignature
-} from "./findLast"
-import {
-  FUNCTION as findLastIndex,
-  SIGNATURE as findLastIndexSignature
-} from "./findLastIndex"
-import {
-  FUNCTION as findIndex,
-  SIGNATURE as findIndexSignature
-} from "./findIndex"
 import { FUNCTION as invert, SIGNATURE as invertSignature } from "./invert"
 import {
   FUNCTION as invertObj,
@@ -43,7 +31,10 @@ import {
   FUNCTION as takeLast,
   SIGNATURE as takeLastSignature
 } from "./takeLast"
-import { FUNCTION as regexTest, SIGNATURE as regexTestSignature } from "./regexTest"
+import {
+  FUNCTION as regexTest,
+  SIGNATURE as regexTestSignature
+} from "./regexTest"
 
 import { FUNCTION as box, SIGNATURE as boxSignature } from "./box"
 import { FUNCTION as dissoc, SIGNATURE as dissocSignature } from "./dissoc"
@@ -113,9 +104,6 @@ const CORE_WITH_SIGNATURES = [
   [dropLastSignature, dropLast],
   [dropSignature, drop],
   [emptySignature, empty],
-  [findIndexSignature, findIndex],
-  [findLastIndexSignature, findLastIndex],
-  [findLastSignature, findLast],
   [firstSignature, first],
   [fromPairsSignature, fromPairs],
   [identitySignature, identity],

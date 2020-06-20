@@ -1,6 +1,6 @@
-function makeDifference({ curryN, filter, includes, complement }) {
+function makeDifference({ curryN, filter, flip, includes, complement }) {
   return curryN(ARITY, function difference(aa, bb) {
-    return filter(complement(includes(bb)), aa)
+    return filter(complement(flip(includes)(bb)), aa)
   })
 }
 

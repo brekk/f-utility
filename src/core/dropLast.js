@@ -10,4 +10,4 @@ export function dropLast(xx, src) {
 export default dropLast
 export const FUNCTION = dropLast
 export const ARITY = 2
-export const SIGNATURE = ["number", "Array", "Array"]
+export const SIGNATURE = ["number", "Array|object", "any"]

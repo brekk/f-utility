@@ -5,4 +5,4 @@ export function match(rx, str) {
 export default match
 export const FUNCTION = match
 export const ARITY = 2
-export const SIGNATURE = ["RegExp", "string", "boolean"]
+export const SIGNATURE = ["RegExp", "string", "Array|nil"]

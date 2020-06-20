@@ -6,9 +6,9 @@ export function invert(xx) {
   let idx = 0
   while (idx < loop.length) {
     const { key, value } = loop.iterate(idx)
-    const current = out[value]
+    const current = out[value] || false
     const isArr = Array.isArray(current)
-    out.value =
+    out[value] =
       current && isArr
         ? current.concat(key)
         : current && !isArr

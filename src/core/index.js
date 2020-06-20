@@ -15,9 +15,6 @@ import dissoc from "./dissoc"
 import drop from "./drop"
 import dropLast from "./dropLast"
 import empty from "./empty"
-import findIndex from "./findIndex"
-import findLast from "./findLast"
-import findLastIndex from "./findLastIndex"
 import first from "./first"
 import fromPairs from "./fromPairs"
 import identity from "./identity"
@@ -76,9 +73,6 @@ export const CORE = temper(NATIVE, {
   drop,
   dropLast,
   empty,
-  findIndex,
-  findLast,
-  findLastIndex,
   first,
   fromPairs,
   identity,

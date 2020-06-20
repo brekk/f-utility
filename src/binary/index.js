@@ -1,6 +1,7 @@
 import { FUNCTION as applyTo } from "./applyTo"
 import { FUNCTION as endsWith } from "./endsWith"
 import { FUNCTION as findIndex } from "./findIndex"
+import { FUNCTION as findLastIndex } from "./findLastIndex"
 import { FUNCTION as hasIn } from "./hasIn"
 import { FUNCTION as identical } from "./identical"
 import { FUNCTION as indexOf } from "./indexOf"
@@ -11,6 +12,7 @@ import { FUNCTION as pickBy } from "./pickBy"
 import { FUNCTION as startsWith } from "./startsWith"
 import { FUNCTION as add } from "./add"
 import { FUNCTION as find } from "./find"
+import { FUNCTION as findLast } from "./findLast"
 import { FUNCTION as apply } from "./apply"
 import { FUNCTION as and } from "./and"
 import { FUNCTION as any } from "./any"
@@ -56,7 +58,9 @@ export function extendBinary(F) {
     equals,
     filter,
     find,
+    findLast,
     findIndex,
+    findLastIndex,
     forEach,
     gt,
     gte,
