@@ -10,7 +10,9 @@ export function empty(xx) {
     return xx.empty()
   }
   const tt = typeSystem(xx)
-  return EMPTY_LOOKUPS[tt]
+  const matched = EMPTY_LOOKUPS[tt]
+  if (typeof matched === "undefined") return undefined
+  return matched
 }
 
 export default empty

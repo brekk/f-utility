@@ -8,4 +8,4 @@ export function partialRight(fn, args1) {
 export default partialRight
 export const FUNCTION = partialRight
 export const ARITY = 2
-export const SIGNATURE = ["any", "any", "Array"]
+export const SIGNATURE = ["any", "Array", "function"]

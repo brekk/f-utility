@@ -2,9 +2,11 @@ export function makeLiftN({ curryN, reduce, ap, map }) {
   return curryN(2, function liftN(arity, fn) {
     const lifted = curryN(arity, fn)
     return curryN(arity, function liftedN() {
-      const aa = arguments[0]
-      const bz = Array.prototype.slice.call(arguments, 1)
-      return reduce(ap, map(lifted, aa), bz)
+      return reduce(
+        ap,
+        map(lifted, arguments[0]),
+        Array.prototype.slice.call(arguments, 1)
+      )
     })
   })
 }

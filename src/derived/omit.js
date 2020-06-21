@@ -1,6 +1,6 @@
-export function makeOmit({ curryN, complement, pickBy, includes }) {
+export function makeOmit({ curryN, pickBy, includes }) {
   return curryN(ARITY, function omit(kk, xx) {
-    return pickBy(complement(includes)(kk), xx)
+    return pickBy((v, k) => !includes(k, kk), xx)
   })
 }
 

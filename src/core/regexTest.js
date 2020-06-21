@@ -1,5 +1,5 @@
 export function regexTest(rg, str) {
-  return str.test(rg)
+  return rg.test(str)
 }
 export default regexTest
 export const FUNCTION = regexTest

@@ -15,6 +15,10 @@ exam("snapshot", F => () => {
   )(F)
   expect(sortedSnapKeys).toMatchSnapshot()
 })
+exam("shared interface", F => () => {
+  const getMethods = F.pipe(F.filter(F.is(Function)), F.keys)
+  expect(F.intersection(getMethods(F), getMethods(R))).toMatchSnapshot()
+})
 
 /* eslint-disable func-style */
 exam("f-utility vs. ramda", F => () => {

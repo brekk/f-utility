@@ -8,4 +8,4 @@ export function takeLast(nn, xx) {
 export default takeLast
 export const FUNCTION = takeLast
 export const ARITY = 2
-export const SIGNATURE = ["number", "Array|string", "Array|string"]
+export const SIGNATURE = ["number", "object|string", "object|string"]

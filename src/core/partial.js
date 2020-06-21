@@ -8,4 +8,4 @@ export function partial(fn, args1) {
 export default partial
 export const FUNCTION = partial
 export const ARITY = 2
-export const SIGNATURE = ["any", "any", "Array"]
+export const SIGNATURE = ["any", "any", "function"]

@@ -30,7 +30,6 @@ import thunkify from "./thunkify"
 const derivedFunctionsSortedByIncreasingDependencies = {
   j2, // toJSON
   addIndex, // curryN
-  omit, // complement pickBy includes
   pick, // pickBy includes
   bind, // curryN
   flip, // curryN
@@ -38,13 +37,14 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   lift, // lift
   thunkify, // curryN
   groupBy, // curryN objOf mash reduce
-  intersection, // curryN uniq concat
   isEmpty, // equals empty
   __ifElse, // ifElse identity
   flatten, // isArray forEach any
   chain, // curryN map reduce concat
   reject, // curryN complement filter
+  omit, // complement pickBy includes
   uniq, // curryN reduce
+  intersection, // curryN uniq concat
   isObject, // curryN both isRawObject
   median, // $ pipe length nth sort divide
   union, // curryN filter includes

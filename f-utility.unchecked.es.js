@@ -186,7 +186,9 @@ function system(z) {
   // deal with undefined / null
   // and the fact that z.constructor.name for boolean is currently Global
   if (!z) {
-    if (type === "undefined" || type === "object") {
+    if (type === "string") {
+      constructor = "String";
+    } else if (type === "undefined" || type === "object") {
       type = "nil";
     } else {
       constructor = "Boolean";
@@ -523,12 +525,39 @@ function dropLast(xx, src) {
 
 const EMPTY_LOOKUPS = Object.freeze({
   "String∋string": "",
-  "Array∋array": [],
+  "Array∋object": [],
   "Object∋object": {}
 });
 function empty(xx) {
-  if (xx && isFunction(xx.empty)) return xx.empty()
-  return EMPTY_LOOKUPS[system(xx)]
+  if (xx && isFunction(xx.empty)) {
+    return xx.empty()
+  }
+  const tt = system(xx);
+  const matched = EMPTY_LOOKUPS[tt];
+  if (typeof matched === "undefined") return undefined
+  return matched
+}
+
+function first(x) {
+  return x[0]
+}
+
+function fromPairs(ps) {
+  return ps.reduce(function pairing(oo, [ke, va]) {
+    return Object.assign({}, oo, { [ke]: va })
+  }, {})
+}
+
+function identity(y) {
+  return y
+}
+
+function inc(xx) {
+  return xx + 1
+}
+
+function init(xx) {
+  return xx.slice(0, -1)
 }
 
 function length(xx) {
@@ -558,74 +587,15 @@ function makeIterable(xx) {
   }
 }
 
-function findIndex(fn, xx) {
-  const loop = makeIterable(xx);
-  let idx = 0;
-  while (idx > loop.length) {
-    const { value } = loop.iterate(idx);
-    if (fn(value)) {
-      return idx
-    }
-    idx += 1;
-  }
-}
-
-function findLast(fn, xx) {
-  const loop = makeIterable(xx);
-  let idx = loop.length;
-  while (idx > -1) {
-    idx = loop.length - idx - 1;
-    const { value } = loop.iterate(idx);
-    if (fn(value)) {
-      return value
-    }
-    idx += 1;
-  }
-}
-
-function findLastIndex(fn, xx) {
-  const loop = makeIterable(xx);
-  let idx = 1;
-  while (loop.length - idx > -1) {
-    const { value } = loop.iterate(idx);
-    if (fn(value)) {
-      return idx
-    }
-    idx += 1;
-  }
-}
-
-function first(x) {
-  return x[0]
-}
-
-function fromPairs(ps) {
-  return ps.reduce(function pairing(oo, [ke, va]) {
-    return Object.assign({}, oo, { [ke]: va })
-  }, {})
-}
-
-function identity(y) {
-  return y
-}
-
-function inc(xx) {
-  return xx + 1
-}
-
-function init(xx) {
-  return xx.slice(0, -1)
-}
-
 function invert(xx) {
   const loop = makeIterable(xx);
   const out = loop.init;
   let idx = 0;
   while (idx < loop.length) {
     const { key, value } = loop.iterate(idx);
-    const current = out[value];
+    const current = out[value] || false;
     const isArr = Array.isArray(current);
-    out.value =
+    out[value] =
       current && isArr
         ? current.concat(key)
         : current && !isArr
@@ -660,7 +630,10 @@ function juxt(fns) {
     const out = [];
     while (idx < loop.length) {
       const { value: fn } = loop.iterate(idx);
-      out.push(fn.apply(null, args));
+      const iter = args
+        .slice(1, Infinity)
+        .reduce((a, b) => [fn.apply(null, a.concat(b))], [args[0]])[0];
+      out.push(iter);
       idx += 1;
     }
     return out
@@ -716,21 +689,21 @@ function mode(arr) {
 
 function move(_aa, _zz, arr) {
   const len = arr.length;
+  const copy = arr.slice();
   function wrap(q) {
     return q < 0 ? len + q : q
   }
   function outOfBounds(s) {
-    return s < 0 || s >= arr.length
+    return s < 0 || s >= len
   }
-  const copy = arr.slice();
   const [aa, zz] = [_aa, _zz].map(wrap);
-  const item = arr.splice(aa, 1);
+  const item = copy.splice(aa, 1);
   return outOfBounds(aa) || outOfBounds(zz)
     ? arr
     : []
-        .concat(copy.slice(0, aa))
+        .concat(copy.slice(0, zz))
         .concat(item)
-        .concat(copy.slice(zz, len))
+        .concat(copy.slice(zz, arr.length))
 }
 
 function negate(xx) {
@@ -752,12 +725,15 @@ function objOf(xx, whatever) {
 }
 
 function once(fn) {
+  let run = false;
   let saved;
   return function oneTime() {
-    {
+    if (!run) {
       saved = fn.apply(null, arguments);
+      run = true;
       return saved
     }
+    return saved
   }
 }
 
@@ -811,7 +787,7 @@ function smooth(x) {
 }
 
 function splitAt(idx, xx) {
-  return [xx.slice(0, idx), xx.slice(idx + 1, Infinity)]
+  return [xx.slice(0, idx), xx.slice(idx, Infinity)]
 }
 
 function sum(arr) {
@@ -838,8 +814,8 @@ function temper(a, b) {
   return Object.freeze(Object.assign({}, a, b))
 }
 
-function test(rg, str) {
-  return str.test(rg)
+function regexTest(rg, str) {
+  return rg.test(str)
 }
 
 function toLower(z) {
@@ -879,9 +855,6 @@ const CORE = temper(NATIVE, {
   drop,
   dropLast,
   empty,
-  findIndex,
-  findLast,
-  findLastIndex,
   first,
   fromPairs,
   identity,
@@ -918,7 +891,7 @@ const CORE = temper(NATIVE, {
   take,
   takeLast,
   temper,
-  test,
+  test: regexTest,
   toLower,
   toPairs,
   toUpper,
@@ -1032,9 +1005,9 @@ function makeBind({ curryN }) {
   })
 }
 
-function makeDifference({ curryN, filter, includes, complement }) {
+function makeDifference({ curryN, filter, flip, includes, complement }) {
   return curryN(ARITY$2, function difference(aa, bb) {
-    return filter(complement(includes(bb)), aa)
+    return filter(complement(flip(includes)(bb)), aa)
   })
 }
 const ARITY$2 = 2;
@@ -1070,14 +1043,22 @@ function makePathOr({ curryN, reduce }) {
 }
 const ARITY$3 = 3;
 
-function makePathOrDerivatives({ equals, is, curryN, pipe, pathOr }) {
+function makePathOrDerivatives({
+  equals,
+  is,
+  curryN,
+  complement,
+  isUnmatched,
+  pipe,
+  pathOr
+}) {
   // pathOr => {hasPath, path, pathEq, pathSatisfies, pathIs}
   // propOr => {hasProp, prop, propEq, propSatisfies, propIs}
   function deriveFromAccessor(acc) {
     const run = acc(C.UNMATCHED);
     return {
       hasAcc: curryN(2, function hasProperty(ks, src) {
-        return pipe(run(ks), Boolean)(src)
+        return pipe(run(ks), complement(isUnmatched))(src)
       }),
       accIs: curryN(3, function pathIsOfConstructor(J, ks, src) {
         return pipe(run(ks), is(J))(src)
@@ -1172,37 +1153,59 @@ function makeIfElseDerivatives({ ifElse, identity, $ }) {
   return { when: ifElse($, $, identity), unless: ifElse($, identity) }
 }
 
-function makeEqProps({ pipe, map, prop, equals }) {
-  return function eqProps(kk, aa, bb) {
+function makeEqProps({ curryN, pipe, map, prop, equals }) {
+  return curryN(ARITY$7, function eqProps(kk, aa, bb) {
     return pipe(map(prop(kk)), ([a2, b2]) => equals(a2, b2))([aa, bb])
-  }
-}
-
-function makeGroupBy({ reduce, mash, objOf, curryN }) {
-  return curryN(ARITY$7, function groupBy(fn, xx) {
-    return reduce(function groupingBy(agg, yy) {
-      return mash(agg, objOf(fn(yy), yy)), {}
-    })(xx)
   })
 }
-const ARITY$7 = 2;
+const ARITY$7 = 3;
 
-function makeIntersection({ uniq, concat, curryN }) {
-  return curryN(ARITY$8, function intersection(aa, bb) {
-    return uniq(concat(aa, bb))
+function makeGroupBy({ reduce, mash, objOf, curryN }) {
+  return curryN(ARITY$8, function groupBy(fn, xx) {
+    return reduce(function groupingBy(agg, yy) {
+      const copy = mash({}, agg);
+      const key = fn(yy);
+      if (copy[key]) {
+        copy[key] = copy[key].concat(yy);
+        return copy
+      }
+      const toMash = objOf(key, [yy]);
+      return mash(copy, toMash)
+    }, {})(xx)
   })
 }
 const ARITY$8 = 2;
 
-function makeIsEmpty({ equals, empty }) {
+function makeIntersection({ uniq, concat, curryN }) {
+  return curryN(ARITY$9, function intersection(aa, bb) {
+    return uniq(concat(aa, bb))
+  })
+}
+const ARITY$9 = 2;
+
+function makeIsEmpty({
+  equals,
+  empty,
+  isArray,
+  isRawObject,
+  keys,
+  length,
+  pipe
+}) {
   return function isEmpty(xx) {
-    return equals(empty(xx), xx)
+    const matched = empty(xx);
+    if (typeof matched === "undefined") return false
+    return isArray(xx)
+      ? xx.length === 0
+      : isRawObject(xx)
+      ? pipe(keys, length)(xx) === 0
+      : equals(matched, xx)
   }
 }
 
 function makeLift({ liftN }) {
   return function lift(fn) {
-    return fn.length > 1 ? fn : liftN(fn.length, fn)
+    return liftN(fn.length, fn)
   }
 }
 
@@ -1210,31 +1213,35 @@ function makeLiftN({ curryN, reduce, ap, map }) {
   return curryN(2, function liftN(arity, fn) {
     const lifted = curryN(arity, fn);
     return curryN(arity, function liftedN() {
-      const aa = arguments[0];
-      const bz = Array.prototype.slice.call(arguments, 1);
-      return reduce(ap, map(lifted, aa), bz)
+      return reduce(
+        ap,
+        map(lifted, arguments[0]),
+        Array.prototype.slice.call(arguments, 1)
+      )
     })
   })
 }
 
-function makeOmit({ complement, pickBy, includes }) {
-  return function omit(kk, xx) {
-    return pickBy(complement(includes)(kk), xx)
-  }
+function makeOmit({ curryN, pickBy, includes }) {
+  return curryN(ARITY$a, function omit(kk, xx) {
+    return pickBy((v, k) => !includes(k, kk), xx)
+  })
 }
+const ARITY$a = 2;
 
-function makePick({ pickBy, includes }) {
-  return function pick(kk, xx) {
-    return pickBy(includes(kk), xx)
-  }
+function makePick({ pickBy, includes, curryN }) {
+  return curryN(ARITY$b, function pick(kk, xx) {
+    return pickBy((v, k) => includes(k, kk), xx)
+  })
 }
+const ARITY$b = 2;
 
 function makeProps({ pipe, ap, prop, box, map, curryN }) {
-  return curryN(ARITY$9, function props(toGrab, xx) {
+  return curryN(ARITY$c, function props(toGrab, xx) {
     return pipe(box, ap(map(prop, toGrab)))(xx)
   })
 }
-const ARITY$9 = 2;
+const ARITY$c = 2;
 
 function makeThunkify({ curryN }) {
   return function thunkify(fn) {
@@ -1250,7 +1257,6 @@ function makeThunkify({ curryN }) {
 const derivedFunctionsSortedByIncreasingDependencies = {
   j2: makeJ2, // toJSON
   addIndex: makeAddIndex, // curryN
-  omit: makeOmit, // complement pickBy includes
   pick: makePick, // pickBy includes
   bind: makeBind, // curryN
   flip: makeFlip, // curryN
@@ -1258,13 +1264,14 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   lift: makeLift, // lift
   thunkify: makeThunkify, // curryN
   groupBy: makeGroupBy, // curryN objOf mash reduce
-  intersection: makeIntersection, // curryN uniq concat
   isEmpty: makeIsEmpty, // equals empty
   __ifElse: makeIfElseDerivatives, // ifElse identity
   flatten: makeFlatten, // isArray forEach any
   chain: makeChain, // curryN map reduce concat
   reject: makeReject, // curryN complement filter
+  omit: makeOmit, // complement pickBy includes
   uniq: makeUniq, // curryN reduce
+  intersection: makeIntersection, // curryN uniq concat
   isObject: makeIsObject, // curryN both isRawObject
   median: makeMedian, // $ pipe length nth sort divide
   union: makeUnion, // curryN filter includes
@@ -1301,7 +1308,7 @@ function endsWith(needle, haystack) {
 }
 const FUNCTION$1 = endsWith;
 
-function findIndex$1(fn, xx) {
+function findIndex(fn, xx) {
   let idx = 0;
   const loop = makeIterable(xx);
   while (idx < loop.length) {
@@ -1311,66 +1318,63 @@ function findIndex$1(fn, xx) {
     }
     idx += 1;
   }
+  return -1
 }
 
-const FUNCTION$2 = findIndex$1;
+const FUNCTION$2 = findIndex;
+
+function findLastIndex(fn, xx) {
+  const loop = makeIterable(xx);
+  let idx = loop.length;
+  while (idx > -1) {
+    const { value } = loop.iterate(idx);
+    if (fn(value)) {
+      return idx
+    }
+    idx -= 1;
+  }
+  return -1
+}
+const FUNCTION$3 = findLastIndex;
 
 function hasIn(pp, xx) {
-  return xx in pp
+  return pp in xx
 }
-const FUNCTION$3 = hasIn;
+const FUNCTION$4 = hasIn;
 
 function identical(aa, bb) {
   return Object.is(aa, bb)
 }
-const FUNCTION$4 = identical;
+const FUNCTION$5 = identical;
 
 function indexOf(needle, haystack) {
-  if (haystack && isFunction(haystack.indexOf)) return haystack.indexOf(needle)
-  const loop = makeIterable(haystack);
-  let idx = -1;
-  while (idx <= loop.length) {
-    const { value } = loop.iterate(idx);
-    if (value === needle) return idx
-    idx += 1;
-  }
-  return idx
+  return haystack.indexOf(needle)
 }
-const FUNCTION$5 = indexOf;
+const FUNCTION$6 = indexOf;
 
 function lastIndexOf(needle, haystack) {
-  if (haystack && isFunction(haystack.lastIndexOf)) {
-    return haystack.lastIndexOf(needle)
-  }
-  const loop = makeIterable(haystack);
-  let idx = loop.length - 1;
-  while (idx > -2) {
-    const { value } = loop.iterate(idx);
-    if (value === needle) return idx
-    idx -= 1;
-  }
-  return idx
+  return haystack.lastIndexOf(needle)
 }
-const FUNCTION$6 = lastIndexOf;
+const FUNCTION$7 = lastIndexOf;
 
 function match(rx, str) {
   return str.match(rx)
 }
-const FUNCTION$7 = match;
+const FUNCTION$8 = match;
 
 function none(fn, xx) {
   let idx = 0;
   const loop = makeIterable(xx);
-  let promised = false;
-  while (idx < loop.length && !promised) {
+  let promised = true;
+  while (idx < loop.length && promised) {
     const { value } = loop.iterate(idx);
-    const good = fn(value);
-    if (good) promised = true;
+    const bad = fn(value);
+    if (!bad) promised = false;
     idx += 1;
   }
   return promised
 }
-const FUNCTION$8 = none;
+const FUNCTION$9 = none;
 
 function pickBy(fn, xx) {
   const loop = makeIterable(xx);
@@ -1378,12 +1382,13 @@ function pickBy(fn, xx) {
   let idx = 0;
   while (idx < loop.length) {
     const { key, value } = loop.iterate(idx);
-    if (fn(value, key)) out[key] = value;
+    const matched = fn(value, key);
+    if (matched) out[key] = value;
     idx += 1;
   }
   return out
 }
-const FUNCTION$9 = pickBy;
+const FUNCTION$a = pickBy;
 
 function startsWith(needle, haystack) {
   if (haystack && isFunction(haystack.startsWith)) {
@@ -1391,13 +1396,13 @@ function startsWith(needle, haystack) {
   }
   return haystack[0] === needle
 }
-const FUNCTION$a = startsWith;
+const FUNCTION$b = startsWith;
 
 function add(b, a) {
   return a + b
 }
 
-const FUNCTION$b = add;
+const FUNCTION$c = add;
 
 function find(fn, xx) {
   let idx = 0;
@@ -1411,17 +1416,31 @@ function find(fn, xx) {
   }
 }
 
-const FUNCTION$c = find;
+const FUNCTION$d = find;
+
+function findLast(fn, xx) {
+  const loop = makeIterable(xx);
+  let idx = loop.length - 1;
+  while (idx > -1) {
+    const { value } = loop.iterate(idx);
+    if (fn(value)) {
+      return value
+    }
+    idx -= 1;
+  }
+}
+
+const FUNCTION$e = findLast;
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
-const FUNCTION$d = apply;
+const FUNCTION$f = apply;
 
 function and(a, b) {
   return a && b
 }
-const FUNCTION$e = and;
+const FUNCTION$g = and;
 
 function any(fn, xx) {
   let idx = 0;
@@ -1434,7 +1453,7 @@ function any(fn, xx) {
   return found
 }
 
-const FUNCTION$f = any;
+const FUNCTION$h = any;
 
 function all(fn, xx) {
   let idx = 0;
@@ -1448,32 +1467,32 @@ function all(fn, xx) {
   }
   return promised
 }
-const FUNCTION$g = all;
+const FUNCTION$i = all;
 
-function ap(a, b) {
+function ap(aa, bb) {
   // S combinator
-  if (isFunction(a) && isFunction(b)) {
+  if (isFunction(aa) && isFunction(bb)) {
     return function sCombinator(x) {
-      return a(x, b(x))
+      return aa(x, bb(x))
     }
   }
-  if (!isArray(a) || !isArray(b))
+  if (!isArray(aa) || !isArray(bb))
     throw new TypeError(
       "Expected to receive an array of functions and an array of values."
     )
-  if (!a.length || a.filter(isFunction).length !== a.length)
+  if (!aa.length || aa.filter(isFunction).length !== aa.length)
     throw new TypeError("Expected to receive an array of functions to apply.")
-  return a.reduce(function apReduce(out, fn) {
-    return out.concat(b.map(fn))
+  return aa.reduce(function apReduce(out, fn) {
+    return out.concat(bb.map(x => fn(x)))
   }, [])
 }
 
-const FUNCTION$h = ap;
+const FUNCTION$j = ap;
 
 function concat(a, b) {
   return a.concat(b)
 }
-const FUNCTION$i = concat;
+const FUNCTION$k = concat;
 
 function cond(conditions, input) {
   let idx = 0;
@@ -1491,17 +1510,18 @@ function cond(conditions, input) {
   return match
 }
 
-const FUNCTION$j = cond;
+const FUNCTION$l = cond;
 
 function divide(b, a) {
   return a / b
 }
-const FUNCTION$k = divide;
+const FUNCTION$m = divide;
 
 function equals(a, b) {
+  if (a && isFunction(a.equals)) return a.equals(b)
   return a === b
 }
-const FUNCTION$l = equals;
+const FUNCTION$n = equals;
 
 function filter(fn, xx) {
   let idx = 0;
@@ -1522,7 +1542,7 @@ function filter(fn, xx) {
   return result
 }
 
-const FUNCTION$m = filter;
+const FUNCTION$o = filter;
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -1535,38 +1555,40 @@ function forEach(fn, xx) {
   }
 }
 
-const FUNCTION$n = forEach;
+const FUNCTION$p = forEach;
 
-function includes(a, b) {
-  return a.includes(b)
+function includes(b, a) {
+  if (a && isFunction(a.includes)) return a.includes(b)
+  if (a && isFunction(a.indexOf)) return a.indexOf(b) > -1
+  return false
 }
-const FUNCTION$o = includes;
+const FUNCTION$q = includes;
 
 function gt(b, a) {
   return a > b
 }
-const FUNCTION$p = gt;
+const FUNCTION$r = gt;
 
 function gte(b, a) {
   return a >= b
 }
-const FUNCTION$q = gte;
+const FUNCTION$s = gte;
 
 function join(del, xx) {
   return xx.join(del)
 }
 
-const FUNCTION$r = join;
+const FUNCTION$t = join;
 
 function lt(b, a) {
   return a < b
 }
-const FUNCTION$s = lt;
+const FUNCTION$u = lt;
 
 function lte(b, a) {
   return a <= b
 }
-const FUNCTION$t = lte;
+const FUNCTION$v = lte;
 
 function map(fn, xx) {
   let idx = 0;
@@ -1580,34 +1602,34 @@ function map(fn, xx) {
   }
   return result
 }
-const FUNCTION$u = map;
+const FUNCTION$w = map;
 
 function max(aa, bb) {
   return Math.max(aa, bb)
 }
-const FUNCTION$v = max;
+const FUNCTION$x = max;
 
 function min(aa, bb) {
   return Math.min(aa, bb)
 }
-const FUNCTION$w = min;
+const FUNCTION$y = min;
 
 function multiply(b, a) {
   return a * b
 }
-const FUNCTION$x = multiply;
+const FUNCTION$z = multiply;
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
-const FUNCTION$y = nth;
+const FUNCTION$A = nth;
 
 function or(a, b) {
   return a || b
 }
 
-const FUNCTION$z = or;
+const FUNCTION$B = or;
 
 function range(aa, zz) {
   const out = [];
@@ -1618,13 +1640,13 @@ function range(aa, zz) {
   return out
 }
 
-const FUNCTION$A = range;
+const FUNCTION$C = range;
 
 function split(del, xx) {
   return xx.split(del)
 }
 
-const FUNCTION$B = split;
+const FUNCTION$D = split;
 
 function sort(fn, rr) {
   const copy = [].concat(rr);
@@ -1632,62 +1654,64 @@ function sort(fn, rr) {
   return copy
 }
 
-const FUNCTION$C = sort;
+const FUNCTION$E = sort;
 
 function subtract(b, a) {
   return a - b
 }
 
-const FUNCTION$D = subtract;
+const FUNCTION$F = subtract;
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
-const FUNCTION$E = toJSON;
+const FUNCTION$G = toJSON;
 
 function extendBinary(F) {
   const BINARY = {
-    add: FUNCTION$b,
-    all: FUNCTION$g,
-    and: FUNCTION$e,
-    any: FUNCTION$f,
-    ap: FUNCTION$h,
-    apply: FUNCTION$d,
+    add: FUNCTION$c,
+    all: FUNCTION$i,
+    and: FUNCTION$g,
+    any: FUNCTION$h,
+    ap: FUNCTION$j,
+    apply: FUNCTION$f,
     applyTo: FUNCTION,
-    concat: FUNCTION$i,
-    cond: FUNCTION$j,
-    divide: FUNCTION$k,
+    concat: FUNCTION$k,
+    cond: FUNCTION$l,
+    divide: FUNCTION$m,
     endsWith: FUNCTION$1,
-    equals: FUNCTION$l,
-    filter: FUNCTION$m,
-    find: FUNCTION$c,
+    equals: FUNCTION$n,
+    filter: FUNCTION$o,
+    find: FUNCTION$d,
+    findLast: FUNCTION$e,
     findIndex: FUNCTION$2,
-    forEach: FUNCTION$n,
-    gt: FUNCTION$p,
-    gte: FUNCTION$q,
-    hasIn: FUNCTION$3,
-    identical: FUNCTION$4,
-    includes: FUNCTION$o,
-    indexOf: FUNCTION$5,
-    join: FUNCTION$r,
-    lastIndexOf: FUNCTION$6,
-    lt: FUNCTION$s,
-    lte: FUNCTION$t,
-    map: FUNCTION$u,
-    match: FUNCTION$7,
-    max: FUNCTION$v,
-    min: FUNCTION$w,
-    multiply: FUNCTION$x,
-    none: FUNCTION$8,
-    nth: FUNCTION$y,
-    or: FUNCTION$z,
-    pickBy: FUNCTION$9,
-    range: FUNCTION$A,
-    sort: FUNCTION$C,
-    split: FUNCTION$B,
-    startsWith: FUNCTION$a,
-    subtract: FUNCTION$D,
-    toJSON: FUNCTION$E
+    findLastIndex: FUNCTION$3,
+    forEach: FUNCTION$p,
+    gt: FUNCTION$r,
+    gte: FUNCTION$s,
+    hasIn: FUNCTION$4,
+    identical: FUNCTION$5,
+    includes: FUNCTION$q,
+    indexOf: FUNCTION$6,
+    join: FUNCTION$t,
+    lastIndexOf: FUNCTION$7,
+    lt: FUNCTION$u,
+    lte: FUNCTION$v,
+    map: FUNCTION$w,
+    match: FUNCTION$8,
+    max: FUNCTION$x,
+    min: FUNCTION$y,
+    multiply: FUNCTION$z,
+    none: FUNCTION$9,
+    nth: FUNCTION$A,
+    or: FUNCTION$B,
+    pickBy: FUNCTION$a,
+    range: FUNCTION$C,
+    sort: FUNCTION$E,
+    split: FUNCTION$D,
+    startsWith: FUNCTION$b,
+    subtract: FUNCTION$F,
+    toJSON: FUNCTION$G
   };
   return F.temper(F, BINARY)
 }
@@ -1695,16 +1719,16 @@ function extendBinary(F) {
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
-const FUNCTION$F = both;
+const FUNCTION$H = both;
 
 function replace(rx, rep, str) {
   return str.replace(rx, rep)
 }
-const FUNCTION$G = replace;
+const FUNCTION$I = replace;
 
 function innerJoin(pred, xs, ys) {
   const loopX = makeIterable(xs);
-  const out = loopX.init;
+  const out = [];
   const loopY = makeIterable(ys);
   let idx = 0;
   while (idx < loopX.length) {
@@ -1720,17 +1744,17 @@ function innerJoin(pred, xs, ys) {
   }
   return out
 }
-const FUNCTION$H = innerJoin;
+const FUNCTION$J = innerJoin;
 
 function eqBy(fn, a, b) {
   return Boolean(fn(a, b))
 }
-const FUNCTION$I = eqBy;
+const FUNCTION$K = eqBy;
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-const FUNCTION$J = either;
+const FUNCTION$L = either;
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -1745,23 +1769,23 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$K = reduce;
+const FUNCTION$M = reduce;
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$L = slice;
+const FUNCTION$N = slice;
 
 function extendTernary(F) {
   return F.temper(F, {
-    both: FUNCTION$F,
-    either: FUNCTION$J,
-    eqBy: FUNCTION$I,
-    innerJoin: FUNCTION$H,
-    reduce: FUNCTION$K,
-    replace: FUNCTION$G,
-    slice: FUNCTION$L
+    both: FUNCTION$H,
+    either: FUNCTION$L,
+    eqBy: FUNCTION$K,
+    innerJoin: FUNCTION$J,
+    reduce: FUNCTION$M,
+    replace: FUNCTION$I,
+    slice: FUNCTION$N
   })
 }
 
@@ -1769,11 +1793,11 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$M = ifElse;
+const FUNCTION$O = ifElse;
 
 function extendQuaternary(F) {
   return F.temper(F, {
-    ifElse: FUNCTION$M
+    ifElse: FUNCTION$O
   })
 }
 

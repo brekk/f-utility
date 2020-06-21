@@ -8,4 +8,4 @@ export function take(nn, xx) {
 export default take
 export const FUNCTION = take
 export const ARITY = 2
-export const SIGNATURE = ["number", "Array|string", "Array|string"]
+export const SIGNATURE = ["number", "object|string", "object|string"]

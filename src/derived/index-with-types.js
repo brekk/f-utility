@@ -61,7 +61,6 @@ import { GET_FUNCTION as __ifElse } from "./ifElse-derivatives"
 const derivedFunctionsSortedByIncreasingDependencies = [
   ["j2", j2, j2Signature], // toJSON
   ["addIndex", addIndex, addIndexSignature], // curryN
-  ["omit", omit, omitSignature], // complement pickBy includes
   ["pick", pick, pickSignature], // pickBy includes
 
   ["bind", bind, bindSignature], // curryN
@@ -70,14 +69,15 @@ const derivedFunctionsSortedByIncreasingDependencies = [
   ["lift", lift, liftSignature], // lift
   ["thunkify", thunkify, thunkifySignature], // curryN
   ["groupBy", groupBy, groupBySignature], // curryN objOf mash reduce
-  ["intersection", intersection, intersectionSignature], // curryN uniq concat
   ["isEmpty", isEmpty, isEmptySignature], // equals empty
 
   ["__ifElse", __ifElse, false], // ifElse identity
   ["flatten", flatten, flattenSignature], // isArray forEach any
   ["chain", chain, chainSignature], // curryN map reduce concat
   ["reject", reject, rejectSignature], // curryN complement filter
+  ["omit", omit, omitSignature], // complement pickBy includes
   ["uniq", uniq, uniqSignature], // curryN reduce
+  ["intersection", intersection, intersectionSignature], // curryN uniq concat
   ["median", median, medianSignature], // $ pipe length nth sort divide
   ["isObject", isObject, isObjectSignature], // curryN both isRawObject
   ["union", union, unionSignature], // curryN filter includes

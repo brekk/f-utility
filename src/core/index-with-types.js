@@ -150,7 +150,9 @@ const CORE_WITH_SIGNATURES = [
 
 export function makeSignedCore(def) {
   return CORE_WITH_SIGNATURES.reduce(function petition(agg, [hm, fn]) {
-    return mash(agg, { [fn.name]: def({ hm, check: true })(fn) })
+    return mash(agg, {
+      [fn.name === "regexTest" ? "test" : fn.name]: def({ hm, check: true })(fn)
+    })
   }, NATIVE)
 }
 

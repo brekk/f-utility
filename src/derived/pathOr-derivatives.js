@@ -1,12 +1,20 @@
 import C from "$core/constants"
-function makePathOrDerivatives({ equals, is, curryN, pipe, pathOr }) {
+function makePathOrDerivatives({
+  equals,
+  is,
+  curryN,
+  complement,
+  isUnmatched,
+  pipe,
+  pathOr
+}) {
   // pathOr => {hasPath, path, pathEq, pathSatisfies, pathIs}
   // propOr => {hasProp, prop, propEq, propSatisfies, propIs}
   function deriveFromAccessor(acc) {
     const run = acc(C.UNMATCHED)
     return {
       hasAcc: curryN(2, function hasProperty(ks, src) {
-        return pipe(run(ks), Boolean)(src)
+        return pipe(run(ks), complement(isUnmatched))(src)
       }),
       accIs: curryN(3, function pathIsOfConstructor(J, ks, src) {
         return pipe(run(ks), is(J))(src)

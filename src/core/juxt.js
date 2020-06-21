@@ -8,7 +8,10 @@ export function juxt(fns) {
     const out = []
     while (idx < loop.length) {
       const { value: fn } = loop.iterate(idx)
-      out.push(fn.apply(null, args))
+      const iter = args
+        .slice(1, Infinity)
+        .reduce((a, b) => [fn.apply(null, a.concat(b))], [args[0]])[0]
+      out.push(iter)
       idx += 1
     }
     return out

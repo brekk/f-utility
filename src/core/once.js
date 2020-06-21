@@ -4,6 +4,7 @@ export function once(fn) {
   return function oneTime() {
     if (!run) {
       saved = fn.apply(null, arguments)
+      run = true
       return saved
     }
     return saved

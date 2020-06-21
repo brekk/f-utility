@@ -1,6 +1,20 @@
-export function makeIsEmpty({ equals, empty }) {
+export function makeIsEmpty({
+  equals,
+  empty,
+  isArray,
+  isRawObject,
+  keys,
+  length,
+  pipe
+}) {
   return function isEmpty(xx) {
-    return equals(empty(xx), xx)
+    const matched = empty(xx)
+    if (typeof matched === "undefined") return false
+    return isArray(xx)
+      ? xx.length === 0
+      : isRawObject(xx)
+      ? pipe(keys, length)(xx) === 0
+      : equals(matched, xx)
   }
 }
 export default makeIsEmpty

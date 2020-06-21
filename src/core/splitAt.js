@@ -1,5 +1,5 @@
 export function splitAt(idx, xx) {
-  return [xx.slice(0, idx), xx.slice(idx + 1, Infinity)]
+  return [xx.slice(0, idx), xx.slice(idx, Infinity)]
 }
 export default splitAt
 export const FUNCTION = splitAt

@@ -5,7 +5,8 @@ export function pickBy(fn, xx) {
   let idx = 0
   while (idx < loop.length) {
     const { key, value } = loop.iterate(idx)
-    if (fn(value, key)) out[key] = value
+    const matched = fn(value, key)
+    if (matched) out[key] = value
     idx += 1
   }
   return out

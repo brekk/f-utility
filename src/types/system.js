@@ -6,7 +6,9 @@ export function system(z) {
   // deal with undefined / null
   // and the fact that z.constructor.name for boolean is currently Global
   if (!z) {
-    if (type === "undefined" || type === "object") {
+    if (type === "string") {
+      constructor = "String"
+    } else if (type === "undefined" || type === "object") {
       type = "nil"
     } else {
       constructor = "Boolean"
