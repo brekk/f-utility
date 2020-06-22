@@ -245,10 +245,10 @@ function some(fn) {
 }
 
 function toString(fn, args = []) {
-  return function functionToString() {
-    return `curry(${fn.name || "fn"})${
-      args.length > 0 ? `(${args.join(`,`)})` : ``
-    }`
+  return function functionToString(rawName) {
+    return rawName
+      ? fn
+      : `curry(${fn})${args.length > 0 ? `(${args.join(`,`)})` : ``}`
   }
 }
 
@@ -268,14 +268,19 @@ function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
+    let nArgs;
     return function currified(fn) {
+      const fnName =
+        fn && typeof fn.arity !== "undefined" && typeof fn.hm !== "undefined"
+          ? fn.toString(true)
+          : fn.name;
       const heat = testCurryGaps(test);
       const mergeParams = makeParamMerger(test);
       const isSpicy = some(test);
       function curried() {
         const args = Array.from(arguments);
 
-        const nArgs =
+        nArgs =
           hm && Array.isArray(hm)
             ? hm.length - 1
             : givenLength && typeof givenLength === "number"
@@ -286,7 +291,9 @@ function defineFunctionWithParameterTest(test) {
           const args2 = Array.from(arguments);
           return curried.apply(this, mergeParams(args, args2))
         }
-        saucy.toString = toString(fn, args);
+        saucy.toString = toString(fnName, args);
+        saucy.arity = nArgs;
+        saucy.hm = hm;
         if (length >= nArgs) {
           const result = fn.apply(this, args);
           if (check) {
@@ -297,7 +304,7 @@ function defineFunctionWithParameterTest(test) {
               const { rawParams, params } = tChecker;
               throw new TypeError(
                 hmError(
-                  fn.name,
+                  fnName,
                   rawParams.map(z => z.actual),
                   params.map(archetype)
                 )
@@ -308,7 +315,7 @@ function defineFunctionWithParameterTest(test) {
             if (!returnTypeValid) {
               const { returnType } = tChecker;
               throw new TypeError(
-                `Expected ${fn.name} to return ${archetype(
+                `Expected ${fnName} to return ${archetype(
                   returnType
                 )} but got ${system(result)}.`
               )
@@ -318,7 +325,9 @@ function defineFunctionWithParameterTest(test) {
         }
         return saucy
       }
-      curried.toString = toString(fn);
+      curried.toString = toString(fnName);
+      curried.arity = nArgs;
+      curried.hm = hm;
       return curried
     }
   }
@@ -411,6 +420,7 @@ function makeAliases(F) {
 
 const isArray$1 = Array.isArray;
 const keys = Object.keys;
+const values = Object.values;
 const freeze = Object.freeze;
 const round = Math.round;
 function trim(xx) {
@@ -421,6 +431,7 @@ var NATIVE = /*#__PURE__*/Object.freeze({
   __proto__: null,
   isArray: isArray$1,
   keys: keys,
+  values: values,
   freeze: freeze,
   round: round,
   trim: trim
@@ -927,17 +938,37 @@ function makeSideEffectsFromEnv(curry) {
   return { sideEffect, binarySideEffect, trace, inspect }
 }
 
+function makeApplySpecN({ isFunction, keys, curryN, apply }) {
+  function mapper(fn, xx) {
+    if (!xx) return
+    return keys(xx).reduce((agg, k) => {
+      agg[k] = fn(xx[k]);
+      return agg
+    }, {})
+  }
+  return curryN(2, function applySpecN(givenArity, spec) {
+    const applied = mapper(
+      v => (isFunction(v) ? v : applySpecN(givenArity, v)),
+      spec
+    );
+    return curryN(givenArity, function specificationApplication() {
+      const args = Array.from(arguments);
+      return mapper(f => apply(f, args), applied)
+    })
+  })
+}
+
 function makeAddIndex({ curryN }) {
   return function addIndex(fn) {
     return curryN(fn.length, function indexAddedIter() {
       let idx = 0;
-      const args = Array.prototype.slice.call(arguments, 0);
+      const args = [].slice.call(arguments, 0);
       const [origFn] = args;
       const list = args[args.length - 1];
       args[0] = function indexAdded() {
         const result = origFn.apply(
           this,
-          [].concat(arguments).concat([idx, list])
+          [].concat([].slice.call(arguments, 0)).concat([idx, list])
         );
         idx += 1;
         return result
@@ -1294,7 +1325,8 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   __pathOrDerivatives: makePathOrDerivatives, // curryN equals is pathOr pipe
   props: makeProps, // curryN pipe ap prop box map
   eqProps: makeEqProps, // curryN pipe map prop equals
-  pluck: makePluck // curryN prop map
+  pluck: makePluck, // curryN prop map
+  applySpecN: makeApplySpecN
 };
 function extendDerived(C) {
   return C.pipe(

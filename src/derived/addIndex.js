@@ -2,13 +2,13 @@ function makeAddIndex({ curryN }) {
   return function addIndex(fn) {
     return curryN(fn.length, function indexAddedIter() {
       let idx = 0
-      const args = Array.prototype.slice.call(arguments, 0)
+      const args = [].slice.call(arguments, 0)
       const [origFn] = args
       const list = args[args.length - 1]
       args[0] = function indexAdded() {
         const result = origFn.apply(
           this,
-          [].concat(arguments).concat([idx, list])
+          [].concat([].slice.call(arguments, 0)).concat([idx, list])
         )
         idx += 1
         return result

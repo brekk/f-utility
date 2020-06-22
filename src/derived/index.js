@@ -1,3 +1,4 @@
+import applySpecN from "./applySpecN"
 import addIndex from "./addIndex"
 import median from "./median"
 import pluck from "./pluck"
@@ -55,7 +56,8 @@ const derivedFunctionsSortedByIncreasingDependencies = {
   __pathOrDerivatives, // curryN equals is pathOr pipe
   props, // curryN pipe ap prop box map
   eqProps, // curryN pipe map prop equals
-  pluck // curryN prop map
+  pluck, // curryN prop map
+  applySpecN
 }
 function extendDerived(C) {
   return C.pipe(

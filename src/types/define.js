@@ -27,10 +27,10 @@ function some(fn) {
 }
 
 export function toString(fn, args = []) {
-  return function functionToString() {
-    return `curry(${fn.name || "fn"})${
-      args.length > 0 ? `(${args.join(`,`)})` : ``
-    }`
+  return function functionToString(rawName) {
+    return rawName
+      ? fn
+      : `curry(${fn})${args.length > 0 ? `(${args.join(`,`)})` : ``}`
   }
 }
 
@@ -50,14 +50,19 @@ export function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
+    let nArgs
     return function currified(fn) {
+      const fnName =
+        fn && typeof fn.arity !== "undefined" && typeof fn.hm !== "undefined"
+          ? fn.toString(true)
+          : fn.name
       const heat = testCurryGaps(test)
       const mergeParams = makeParamMerger(test)
       const isSpicy = some(test)
       function curried() {
         const args = Array.from(arguments)
 
-        const nArgs =
+        nArgs =
           hm && Array.isArray(hm)
             ? hm.length - 1
             : givenLength && typeof givenLength === "number"
@@ -68,7 +73,9 @@ export function defineFunctionWithParameterTest(test) {
           const args2 = Array.from(arguments)
           return curried.apply(this, mergeParams(args, args2))
         }
-        saucy.toString = toString(fn, args)
+        saucy.toString = toString(fnName, args)
+        saucy.arity = nArgs
+        saucy.hm = hm
         if (length >= nArgs) {
           const result = fn.apply(this, args)
           if (check) {
@@ -79,7 +86,7 @@ export function defineFunctionWithParameterTest(test) {
               const { rawParams, params } = tChecker
               throw new TypeError(
                 hmError(
-                  fn.name,
+                  fnName,
                   rawParams.map(z => z.actual),
                   params.map(archetype)
                 )
@@ -90,7 +97,7 @@ export function defineFunctionWithParameterTest(test) {
             if (!returnTypeValid) {
               const { returnType } = tChecker
               throw new TypeError(
-                `Expected ${fn.name} to return ${archetype(
+                `Expected ${fnName} to return ${archetype(
                   returnType
                 )} but got ${typeSystem(result)}.`
               )
@@ -100,7 +107,9 @@ export function defineFunctionWithParameterTest(test) {
         }
         return saucy
       }
-      curried.toString = toString(fn)
+      curried.toString = toString(fnName)
+      curried.arity = nArgs
+      curried.hm = hm
       return curried
     }
   }

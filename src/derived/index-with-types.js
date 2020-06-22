@@ -1,4 +1,8 @@
 import {
+  GET_FUNCTION as applySpecN,
+  SIGNATURE as applySpecNSignature
+} from "./applySpecN"
+import {
   GET_FUNCTION as eqProps,
   SIGNATURE as eqPropsSignature
 } from "./eqProps"
@@ -88,7 +92,8 @@ const derivedFunctionsSortedByIncreasingDependencies = [
   ["__pathOrDerivatives", __pathOrDerivatives, false], // curryN equals is pathOr pipe
   ["props", props, propsSignature],
   ["eqProps", eqProps, eqPropsSignature],
-  ["pluck", pluck, pluckSignature]
+  ["pluck", pluck, pluckSignature],
+  ["applySpecN", applySpecN, applySpecNSignature]
 ]
 function extendDerived(C) {
   return C.reduce(
