@@ -798,10 +798,6 @@ function smash(args) {
   return args.reduce((agg, xx) => Object.assign({}, agg, xx), {})
 }
 
-function smooth(x) {
-  return x.filter(Boolean)
-}
-
 function splitAt(idx, xx) {
   return [xx.slice(0, idx), xx.slice(idx, Infinity)]
 }
@@ -906,7 +902,6 @@ const CORE = weld(NATIVE, {
   repeat,
   reverse,
   smash,
-  smooth,
   splitAt,
   sum,
   product,
@@ -940,7 +935,6 @@ function makeSideEffectsFromEnv(curry) {
 
 function makeApplySpecN({ isFunction, keys, curryN, apply }) {
   function mapper(fn, xx) {
-    if (!xx) return
     return keys(xx).reduce((agg, k) => {
       agg[k] = fn(xx[k]);
       return agg
@@ -1297,7 +1291,14 @@ function makeThunkify({ curryN }) {
   }
 }
 
+function makeSmooth({ filter }) {
+  return function smooth(x) {
+    return filter(Boolean, x)
+  }
+}
+
 const derivedFunctionsSortedByIncreasingDependencies = {
+  smooth: makeSmooth,
   j2: makeJ2, // toJSON
   addIndex: makeAddIndex, // curryN
   pick: makePick, // pickBy includes

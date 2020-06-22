@@ -1,3 +1,4 @@
+import { GET_FUNCTION as smooth, SIGNATURE as smoothSignature } from "./smooth"
 import {
   GET_FUNCTION as applySpecN,
   SIGNATURE as applySpecNSignature
@@ -63,6 +64,7 @@ import { GET_FUNCTION as uniq, SIGNATURE as uniqSignature } from "./uniq"
 import { GET_FUNCTION as __ifElse } from "./ifElse-derivatives"
 
 const derivedFunctionsSortedByIncreasingDependencies = [
+  ["smooth", smooth, smoothSignature],
   ["j2", j2, j2Signature], // toJSON
   ["addIndex", addIndex, addIndexSignature], // curryN
   ["pick", pick, pickSignature], // pickBy includes

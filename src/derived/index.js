@@ -27,8 +27,10 @@ import omit from "./omit"
 import pick from "./pick"
 import props from "./props"
 import thunkify from "./thunkify"
+import smooth from "./smooth"
 
 const derivedFunctionsSortedByIncreasingDependencies = {
+  smooth,
   j2, // toJSON
   addIndex, // curryN
   pick, // pickBy includes

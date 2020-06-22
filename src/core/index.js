@@ -44,7 +44,6 @@ import prepend from "./prepend"
 import repeat from "./repeat"
 import reverse from "./reverse"
 import smash from "./smash"
-import smooth from "./smooth"
 import splitAt from "./splitAt"
 import product from "./product"
 import sum from "./sum"
@@ -103,7 +102,6 @@ export const CORE = weld(NATIVE, {
   repeat,
   reverse,
   smash,
-  smooth,
   splitAt,
   sum,
   product,

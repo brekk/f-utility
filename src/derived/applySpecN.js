@@ -1,6 +1,5 @@
 export function makeApplySpecN({ isFunction, keys, curryN, apply }) {
   function mapper(fn, xx) {
-    if (!xx) return
     return keys(xx).reduce((agg, k) => {
       agg[k] = fn(xx[k])
       return agg

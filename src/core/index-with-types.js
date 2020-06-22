@@ -81,7 +81,6 @@ import { FUNCTION as not, SIGNATURE as notSignature } from "./not"
 import { FUNCTION as pipe, SIGNATURE as pipeSignature } from "./pipe"
 import { FUNCTION as reverse, SIGNATURE as reverseSignature } from "./reverse"
 import { FUNCTION as smash, SIGNATURE as smashSignature } from "./smash"
-import { FUNCTION as smooth, SIGNATURE as smoothSignature } from "./smooth"
 import { FUNCTION as T, SIGNATURE as TSignature } from "./T"
 import { FUNCTION as weld, SIGNATURE as weldSignature } from "./weld"
 import { FUNCTION as toLower, SIGNATURE as toLowerSignature } from "./toLower"
@@ -135,7 +134,6 @@ const CORE_WITH_SIGNATURES = [
   [repeatSignature, repeat],
   [reverseSignature, reverse],
   [smashSignature, smash],
-  [smoothSignature, smooth],
   [splitAtSignature, splitAt],
   [sumSignature, sum],
   [productSignature, product],
