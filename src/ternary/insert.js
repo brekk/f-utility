@@ -1,7 +1,9 @@
 export function insert(ind, ins, what) {
-  return [].concat(what.slice(0, ind), ins, what.slice(ind, Infinity))
+  const copy = [].concat(what)
+  copy.splice(ind, 0, ins)
+  return copy
 }
 export default insert
 export const FUNCTION = insert
 export const ARITY = 3
-export const SIGNATURE = ["number", "any", "Array"]
+export const SIGNATURE = ["number", "any", "Array", "Array"]

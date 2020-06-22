@@ -2075,16 +2075,31 @@ const FUNCTION$1E = innerJoin;
 const SIGNATURE$23 = ["function", "Array", "Array", "Array"];
 
 function insert(ind, ins, what) {
-  return [].concat(what.slice(0, ind), ins, what.slice(ind, Infinity))
+  const copy = [].concat(what);
+  copy.splice(ind, 0, ins);
+  return copy
 }
 const FUNCTION$1F = insert;
-const SIGNATURE$24 = ["number", "any", "Array"];
+const SIGNATURE$24 = ["number", "any", "Array", "Array"];
+
+function insertAll(ind, ins, what) {
+  return [].concat(
+    // one
+    what.slice(0, ind),
+    // two
+    ins,
+    // three
+    what.slice(ind, Infinity)
+  )
+}
+const FUNCTION$1G = insertAll;
+const SIGNATURE$25 = ["number", "any", "Array", "Array"];
 
 function replace(rx, rep, str) {
   return str.replace(rx, rep)
 }
-const FUNCTION$1G = replace;
-const SIGNATURE$25 = ["RegExp|string", "string", "string", "string"];
+const FUNCTION$1H = replace;
+const SIGNATURE$26 = ["RegExp|string", "string", "string", "string"];
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -2099,15 +2114,15 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$1H = reduce;
-const SIGNATURE$26 = ["function", "any", "object", "any"];
+const FUNCTION$1I = reduce;
+const SIGNATURE$27 = ["function", "any", "object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$1I = slice;
-const SIGNATURE$27 = ["number", "number", "object", "object"];
+const FUNCTION$1J = slice;
+const SIGNATURE$28 = ["number", "number", "object", "object"];
 
 const TERNARY_WITH_SIGNATURES = [
   [SIGNATURE$20, FUNCTION$1B],
@@ -2115,9 +2130,10 @@ const TERNARY_WITH_SIGNATURES = [
   [SIGNATURE$22, FUNCTION$1D],
   [SIGNATURE$23, FUNCTION$1E],
   [SIGNATURE$24, FUNCTION$1F],
-  [SIGNATURE$26, FUNCTION$1H],
   [SIGNATURE$25, FUNCTION$1G],
-  [SIGNATURE$27, FUNCTION$1I]
+  [SIGNATURE$27, FUNCTION$1I],
+  [SIGNATURE$26, FUNCTION$1H],
+  [SIGNATURE$28, FUNCTION$1J]
 ];
 
 function extendTernaryWithSignatures(F) {
@@ -2133,10 +2149,10 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$1J = ifElse;
-const SIGNATURE$28 = ["function", "function", "function", "any", "any"];
+const FUNCTION$1K = ifElse;
+const SIGNATURE$29 = ["function", "function", "function", "any", "any"];
 
-const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$28, FUNCTION$1J]];
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$29, FUNCTION$1K]];
 
 function extendQuaternaryWithSignatures(F) {
   return F.weld(

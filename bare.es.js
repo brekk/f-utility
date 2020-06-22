@@ -1798,19 +1798,33 @@ function innerJoin(pred, xs, ys) {
 const FUNCTION$K = innerJoin;
 
 function insert(ind, ins, what) {
-  return [].concat(what.slice(0, ind), ins, what.slice(ind, Infinity))
+  const copy = [].concat(what);
+  copy.splice(ind, 0, ins);
+  return copy
 }
 const FUNCTION$L = insert;
+
+function insertAll(ind, ins, what) {
+  return [].concat(
+    // one
+    what.slice(0, ind),
+    // two
+    ins,
+    // three
+    what.slice(ind, Infinity)
+  )
+}
+const FUNCTION$M = insertAll;
 
 function eqBy(fn, a, b) {
   return Boolean(fn(a, b))
 }
-const FUNCTION$M = eqBy;
+const FUNCTION$N = eqBy;
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-const FUNCTION$N = either;
+const FUNCTION$O = either;
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -1825,24 +1839,25 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$O = reduce;
+const FUNCTION$P = reduce;
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$P = slice;
+const FUNCTION$Q = slice;
 
 function extendTernary(F) {
   return F.weld(F, {
     both: FUNCTION$I,
-    either: FUNCTION$N,
-    eqBy: FUNCTION$M,
+    either: FUNCTION$O,
+    eqBy: FUNCTION$N,
     innerJoin: FUNCTION$K,
     insert: FUNCTION$L,
-    reduce: FUNCTION$O,
+    insertAll: FUNCTION$M,
+    reduce: FUNCTION$P,
     replace: FUNCTION$J,
-    slice: FUNCTION$P
+    slice: FUNCTION$Q
   })
 }
 
@@ -1850,11 +1865,11 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$Q = ifElse;
+const FUNCTION$R = ifElse;
 
 function extendQuaternary(F) {
   return F.weld(F, {
-    ifElse: FUNCTION$Q
+    ifElse: FUNCTION$R
   })
 }
 

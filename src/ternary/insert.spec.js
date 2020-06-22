@@ -5,9 +5,9 @@ exam("insert", F => () => {
   expect(F.insert(2, "xyz".split(""), [1, 2, 3, 4])).toEqual([
     1,
     2,
-    "x",
+    ["x",
     "y",
-    "z",
+    "z"],
     3,
     4
   ])
