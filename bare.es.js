@@ -268,19 +268,19 @@ function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
-    let nArgs;
     return function currified(fn) {
       const fnName =
-        fn && typeof fn.arity !== "undefined" && typeof fn.hm !== "undefined"
+        fn && typeof fn.hm !== "undefined"
           ? fn.toString(true)
-          : fn.name;
+          : fn.name
+          ? fn.name
+          : "fn";
       const heat = testCurryGaps(test);
       const mergeParams = makeParamMerger(test);
       const isSpicy = some(test);
       function curried() {
         const args = Array.from(arguments);
-
-        nArgs =
+        const nArgs =
           hm && Array.isArray(hm)
             ? hm.length - 1
             : givenLength && typeof givenLength === "number"
@@ -292,7 +292,6 @@ function defineFunctionWithParameterTest(test) {
           return curried.apply(this, mergeParams(args, args2))
         }
         saucy.toString = toString(fnName, args);
-        saucy.arity = nArgs;
         saucy.hm = hm;
         if (length >= nArgs) {
           const result = fn.apply(this, args);
@@ -326,7 +325,6 @@ function defineFunctionWithParameterTest(test) {
         return saucy
       }
       curried.toString = toString(fnName);
-      curried.arity = nArgs;
       curried.hm = hm;
       return curried
     }
