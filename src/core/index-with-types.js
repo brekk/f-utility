@@ -26,6 +26,7 @@ import {
 import { FUNCTION as repeat, SIGNATURE as repeatSignature } from "./repeat"
 import { FUNCTION as splitAt, SIGNATURE as splitAtSignature } from "./splitAt"
 import { FUNCTION as sum, SIGNATURE as sumSignature } from "./sum"
+import { FUNCTION as product, SIGNATURE as productSignature } from "./product"
 import { FUNCTION as take, SIGNATURE as takeSignature } from "./take"
 import {
   FUNCTION as takeLast,
@@ -82,7 +83,7 @@ import { FUNCTION as reverse, SIGNATURE as reverseSignature } from "./reverse"
 import { FUNCTION as smash, SIGNATURE as smashSignature } from "./smash"
 import { FUNCTION as smooth, SIGNATURE as smoothSignature } from "./smooth"
 import { FUNCTION as T, SIGNATURE as TSignature } from "./T"
-import { FUNCTION as temper, SIGNATURE as temperSignature } from "./temper"
+import { FUNCTION as weld, SIGNATURE as weldSignature } from "./weld"
 import { FUNCTION as toLower, SIGNATURE as toLowerSignature } from "./toLower"
 import { FUNCTION as toPairs, SIGNATURE as toPairsSignature } from "./toPairs"
 import { FUNCTION as toUpper, SIGNATURE as toUpperSignature } from "./toUpper"
@@ -137,10 +138,11 @@ const CORE_WITH_SIGNATURES = [
   [smoothSignature, smooth],
   [splitAtSignature, splitAt],
   [sumSignature, sum],
+  [productSignature, product],
   [tailSignature, tail],
   [takeLastSignature, takeLast],
   [takeSignature, take],
-  [temperSignature, temper],
+  [weldSignature, weld],
   [regexTestSignature, regexTest],
   [toLowerSignature, toLower],
   [toPairsSignature, toPairs],

@@ -1,12 +1,12 @@
 import OLD from "f-utility"
 import R from "ramda"
-import PKG from "../package.json"
+// import PKG from "../package.json"
 import exam from "$build/tester"
 /* const OLD = require("../old-f-utility") */
 
-exam("version", F => () => {
-  expect(F.version).toEqual(PKG.version)
-})
+// exam("version", F => () => {
+//   expect(F.version).toEqual(PKG.version)
+// })
 exam("snapshot", F => () => {
   const sortedSnapKeys = F.pipe(
     F.filter(F.is(Function)),

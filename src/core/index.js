@@ -46,18 +46,19 @@ import reverse from "./reverse"
 import smash from "./smash"
 import smooth from "./smooth"
 import splitAt from "./splitAt"
+import product from "./product"
 import sum from "./sum"
 import tail from "./tail"
 import take from "./take"
 import takeLast from "./takeLast"
-import temper from "./temper"
+import weld from "./weld"
 import regexTest from "./regexTest"
 import toLower from "./toLower"
 import toPairs from "./toPairs"
 import toUpper from "./toUpper"
 import update from "./update"
 
-export const CORE = temper(NATIVE, {
+export const CORE = weld(NATIVE, {
   F,
   T,
   adjust,
@@ -105,10 +106,11 @@ export const CORE = temper(NATIVE, {
   smooth,
   splitAt,
   sum,
+  product,
   tail,
   take,
   takeLast,
-  temper,
+  weld,
   test: regexTest,
   toLower,
   toPairs,

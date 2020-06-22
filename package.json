@@ -1,6 +1,6 @@
 {
   "name": "f-utility",
-  "version": "4.0.0",
+  "version": "3.6.0",
   "description": "functional utilities",
   "license": "ISC",
   "repository": "brekk/f-utility",
@@ -19,6 +19,14 @@
     "precommit": "nps precommit",
     "prepublishOnly": "nps prepublishOnly"
   },
+  "files": [
+    "debug.js",
+    "debug.*.js",
+    "bare.js",
+    "bare.*.js",
+    "f-utility.js",
+    "f-utility.*.js"
+  ],
   "keywords": [
     "functional programming",
     "functional",

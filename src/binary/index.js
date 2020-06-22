@@ -3,6 +3,7 @@ import { FUNCTION as endsWith } from "./endsWith"
 import { FUNCTION as findIndex } from "./findIndex"
 import { FUNCTION as findLastIndex } from "./findLastIndex"
 import { FUNCTION as hasIn } from "./hasIn"
+import { FUNCTION as has } from "./has"
 import { FUNCTION as identical } from "./identical"
 import { FUNCTION as indexOf } from "./indexOf"
 import { FUNCTION as lastIndexOf } from "./lastIndexOf"
@@ -65,6 +66,7 @@ export function extendBinary(F) {
     gt,
     gte,
     hasIn,
+    has,
     identical,
     includes,
     indexOf,
@@ -88,7 +90,7 @@ export function extendBinary(F) {
     subtract,
     toJSON
   }
-  return F.temper(F, BINARY)
+  return F.weld(F, BINARY)
 }
 
 export default extendBinary

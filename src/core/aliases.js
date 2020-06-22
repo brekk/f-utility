@@ -1,5 +1,5 @@
 export function makeAliases(F) {
-  return F.temper(F, {
+  return F.weld(F, {
     I: F.identity,
     K: F.constant,
     PLACEHOLDER: F.$,
@@ -15,7 +15,8 @@ export function makeAliases(F) {
     some: F.any,
     sortBy: F.sort,
     tap: F.sideEffect,
-    head: F.first
+    head: F.first,
+    of: F.box
   })
 }
 

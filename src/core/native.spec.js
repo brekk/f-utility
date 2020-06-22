@@ -13,3 +13,6 @@ exam("freeze", F => () => {
     frozen.b = -1
   }).toThrow()
 })
+exam("trim", F => () => {
+  expect(F.trim("                      dope          ")).toEqual("dope")
+})

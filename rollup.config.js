@@ -55,7 +55,7 @@ const buildFor = input => {
   const name = input.includes("debug")
     ? "debug"
     : input.includes("production")
-    ? "f-utility.unchecked"
+    ? "bare"
     : "f-utility"
   return [
     {

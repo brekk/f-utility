@@ -6,6 +6,7 @@ import {
   SIGNATURE as 𝒮findLastIndex
 } from "./findLastIndex"
 import { FUNCTION as hasIn, SIGNATURE as 𝒮hasIn } from "./hasIn"
+import { FUNCTION as has, SIGNATURE as 𝒮has } from "./has"
 import { FUNCTION as identical, SIGNATURE as 𝒮identical } from "./identical"
 import { FUNCTION as indexOf, SIGNATURE as 𝒮indexOf } from "./indexOf"
 import {
@@ -71,6 +72,7 @@ const BINARY_WITH_SIGNATURES = [
   [𝒮gt, gt],
   [𝒮gte, gte],
   [𝒮hasIn, hasIn],
+  [𝒮has, has],
   [𝒮identical, identical],
   [𝒮includes, includes],
   [𝒮indexOf, indexOf],
@@ -96,7 +98,7 @@ const BINARY_WITH_SIGNATURES = [
 ]
 
 export function extendBinaryWithSignatures(F) {
-  return F.temper(
+  return F.weld(
     F,
     BINARY_WITH_SIGNATURES.reduce((agg, [hm, fn]) => {
       return F.mash(agg, { [fn.name]: F.def({ n: 2, check: true, hm })(fn) })
