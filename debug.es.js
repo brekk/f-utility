@@ -296,8 +296,10 @@ function defineFunctionWithParameterTest(test) {
           const args2 = Array.from(arguments);
           return curried.apply(this, mergeParams(args, args2))
         }
-        saucy.toString = toString(fnName, args);
-        saucy.hm = hm;
+        if (check) {
+          saucy.toString = toString(fnName, args);
+          saucy.hm = hm;
+        }
         if (length >= nArgs) {
           const result = fn.apply(this, args);
           if (check) {
@@ -329,8 +331,10 @@ function defineFunctionWithParameterTest(test) {
         }
         return saucy
       }
-      curried.toString = toString(fnName);
-      curried.hm = hm;
+      if (check) {
+        curried.toString = toString(fnName);
+        curried.hm = hm;
+      }
       return curried
     }
   }
