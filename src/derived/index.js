@@ -1,3 +1,4 @@
+import orDefault from "./orDefault"
 import applySpecN from "./applySpecN"
 import addIndex from "./addIndex"
 import median from "./median"
@@ -30,6 +31,7 @@ import thunkify from "./thunkify"
 import smooth from "./smooth"
 
 const derivedFunctionsSortedByIncreasingDependencies = {
+  orDefault,
   smooth,
   j2, // toJSON
   addIndex, // curryN

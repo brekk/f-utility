@@ -2,6 +2,7 @@ import { fabricate } from "./module"
 import C from "$core/constants"
 import memoizeWith from "$core/memoize-with"
 import {
+  isNil,
   is,
   isArray,
   isBoolean,
@@ -47,7 +48,8 @@ function coreWithTypes(config) {
         isString,
         isSymbol,
         isUndefined,
-        isUnmatched
+        isUnmatched,
+        isNil
       }
     ])
     return BASE.pipe(

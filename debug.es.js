@@ -264,9 +264,32 @@ function hmError(name, actual, params) {
     .slice(0, actual.length)
     .join(", ")} )`
 }
+const rLine = /\n {4}at (\w+) \((.*):(\d+):(\d+)\)/g;
+const blacklist = ["null", "curried", "saucy"];
+
+function cleaned(e) {
+  if (e && e.stack) {
+    const { stack } = e;
+    e.stack = stack.replace(rLine, (match, fn, file, line, head, offset) => {
+      const loc = `(${file}:${line}:${head})`;
+      return blacklist.includes(fn)
+        ? ""
+        : `\n\t-> ${fn === "piped" ? "pipe" : fn} ${
+            file.includes("f-utility") ? "" : loc
+          }`
+    });
+  }
+  return e
+}
 
 function defineFunctionWithParameterTest(test) {
-  return function funcfunc({ ts = system, n: givenLength, hm, check }) {
+  return function funcfunc({
+    ts = system,
+    n: givenLength,
+    hm,
+    check,
+    tryCatch = () => {}
+  }) {
     if (check) {
       if (typeof ts !== "function")
         throw new TypeError("Expected typeSystem to be a function.")
@@ -301,7 +324,12 @@ function defineFunctionWithParameterTest(test) {
           saucy.hm = hm;
         }
         if (length >= nArgs) {
-          const result = fn.apply(this, args);
+          let result;
+          try {
+            result = fn.apply(this, args);
+          } catch (e) {
+            throw cleaned(e)
+          }
           if (check) {
             const tChecker = makeTypechecker(ts)(hm, args);
             const isValid = checkParamsWith(ts)(hm, args);
@@ -385,6 +413,9 @@ const isBoolean = _isBoolean;
 const isSymbol = _isSymbol;
 const isRawObject = _isRawObject;
 const isArray = Array.isArray;
+function isNil(xx) {
+  return typeof xx === "undefined" || (typeof xx === "object" && !xx)
+}
 
 const { UNMATCHED } = C;
 function isUnmatched(z) {
@@ -1072,13 +1103,22 @@ function makeSideEffectsFromEnvWithTypes(def) {
   return { sideEffect, binarySideEffect, trace, inspect }
 }
 
+function makeOrDefault({ curryN }) {
+  return curryN(ARITY, function orDefault(def, given) {
+    return given || def
+  })
+}
+const GET_FUNCTION = makeOrDefault;
+const ARITY = 2;
+const SIGNATURE$V = ["any", "any", "any"];
+
 function makeSmooth({ filter }) {
   return function smooth(x) {
     return filter(Boolean, x)
   }
 }
-const GET_FUNCTION = makeSmooth;
-const SIGNATURE$V = ["object", "any"];
+const GET_FUNCTION$1 = makeSmooth;
+const SIGNATURE$W = ["object", "any"];
 
 function makeApplySpecN({ isFunction, keys, curryN, apply }) {
   function mapper(fn, xx) {
@@ -1098,20 +1138,20 @@ function makeApplySpecN({ isFunction, keys, curryN, apply }) {
     })
   })
 }
-const GET_FUNCTION$1 = makeApplySpecN;
-const SIGNATURE$W = ["number", "object", "function"];
+const GET_FUNCTION$2 = makeApplySpecN;
+const SIGNATURE$X = ["number", "object", "function"];
 
 function makeEqProps({ curryN, pipe, map, prop, equals }) {
-  return curryN(ARITY, function eqProps(kk, aa, bb) {
+  return curryN(ARITY$1, function eqProps(kk, aa, bb) {
     return pipe(map(prop(kk)), ([a2, b2]) => equals(a2, b2))([aa, bb])
   })
 }
-const GET_FUNCTION$2 = makeEqProps;
-const ARITY = 3;
-const SIGNATURE$X = ["string", "object", "object", "boolean"];
+const GET_FUNCTION$3 = makeEqProps;
+const ARITY$1 = 3;
+const SIGNATURE$Y = ["string", "object", "object", "boolean"];
 
 function makeGroupBy({ reduce, mash, objOf, curryN }) {
-  return curryN(ARITY$1, function groupBy(fn, xx) {
+  return curryN(ARITY$2, function groupBy(fn, xx) {
     return reduce(function groupingBy(agg, yy) {
       const copy = mash({}, agg);
       const key = fn(yy);
@@ -1124,18 +1164,18 @@ function makeGroupBy({ reduce, mash, objOf, curryN }) {
     }, {})(xx)
   })
 }
-const GET_FUNCTION$3 = makeGroupBy;
-const ARITY$1 = 2;
-const SIGNATURE$Y = ["function", "Array", "object"];
+const GET_FUNCTION$4 = makeGroupBy;
+const ARITY$2 = 2;
+const SIGNATURE$Z = ["function", "Array", "object"];
 
 function makeIntersection({ uniq, concat, curryN }) {
-  return curryN(ARITY$2, function intersection(aa, bb) {
+  return curryN(ARITY$3, function intersection(aa, bb) {
     return uniq(concat(aa, bb))
   })
 }
-const GET_FUNCTION$4 = makeIntersection;
-const ARITY$2 = 2;
-const SIGNATURE$Z = ["Array", "Array", "Array"];
+const GET_FUNCTION$5 = makeIntersection;
+const ARITY$3 = 2;
+const SIGNATURE$_ = ["Array", "Array", "Array"];
 
 function makeIsEmpty({
   equals,
@@ -1156,16 +1196,16 @@ function makeIsEmpty({
       : equals(matched, xx)
   }
 }
-const GET_FUNCTION$5 = makeIsEmpty;
-const SIGNATURE$_ = ["any", "boolean"];
+const GET_FUNCTION$6 = makeIsEmpty;
+const SIGNATURE$$ = ["any", "boolean"];
 
 function makeLift({ liftN }) {
   return function lift(fn) {
     return liftN(fn.length, fn)
   }
 }
-const GET_FUNCTION$6 = makeLift;
-const SIGNATURE$$ = ["function", "function"];
+const GET_FUNCTION$7 = makeLift;
+const SIGNATURE$10 = ["function", "function"];
 
 function makeLiftN({ curryN, reduce, ap, map }) {
   return curryN(2, function liftN(arity, fn) {
@@ -1179,35 +1219,35 @@ function makeLiftN({ curryN, reduce, ap, map }) {
     })
   })
 }
-const GET_FUNCTION$7 = makeLiftN;
-const SIGNATURE$10 = ["number", "function", "function"];
+const GET_FUNCTION$8 = makeLiftN;
+const SIGNATURE$11 = ["number", "function", "function"];
 
 function makeOmit({ curryN, pickBy, includes }) {
-  return curryN(ARITY$3, function omit(kk, xx) {
+  return curryN(ARITY$4, function omit(kk, xx) {
     return pickBy((v, k) => !includes(k, kk), xx)
   })
 }
-const GET_FUNCTION$8 = makeOmit;
-const ARITY$3 = 2;
-const SIGNATURE$11 = ["Array", "object", "object"];
-
-function makePick({ pickBy, includes, curryN }) {
-  return curryN(ARITY$4, function pick(kk, xx) {
-    return pickBy((v, k) => includes(k, kk), xx)
-  })
-}
-const GET_FUNCTION$9 = makePick;
+const GET_FUNCTION$9 = makeOmit;
 const ARITY$4 = 2;
 const SIGNATURE$12 = ["Array", "object", "object"];
 
+function makePick({ pickBy, includes, curryN }) {
+  return curryN(ARITY$5, function pick(kk, xx) {
+    return pickBy((v, k) => includes(k, kk), xx)
+  })
+}
+const GET_FUNCTION$a = makePick;
+const ARITY$5 = 2;
+const SIGNATURE$13 = ["Array", "object", "object"];
+
 function makeProps({ pipe, ap, prop, box, map, curryN }) {
-  return curryN(ARITY$5, function props(toGrab, xx) {
+  return curryN(ARITY$6, function props(toGrab, xx) {
     return pipe(box, ap(map(prop, toGrab)))(xx)
   })
 }
-const GET_FUNCTION$a = makeProps;
-const ARITY$5 = 2;
-const SIGNATURE$13 = ["Array", "object", "Array"];
+const GET_FUNCTION$b = makeProps;
+const ARITY$6 = 2;
+const SIGNATURE$14 = ["Array", "object", "Array"];
 
 function makeThunkify({ curryN }) {
   return function thunkify(fn) {
@@ -1219,8 +1259,8 @@ function makeThunkify({ curryN }) {
     })
   }
 }
-const GET_FUNCTION$b = makeThunkify;
-const SIGNATURE$14 = ["function", "function"];
+const GET_FUNCTION$c = makeThunkify;
+const SIGNATURE$15 = ["function", "function"];
 
 function makeAddIndex({ curryN }) {
   return function addIndex(fn) {
@@ -1242,28 +1282,28 @@ function makeAddIndex({ curryN }) {
   }
 }
 
-const GET_FUNCTION$c = makeAddIndex;
-const SIGNATURE$15 = ["function", "function"];
+const GET_FUNCTION$d = makeAddIndex;
+const SIGNATURE$16 = ["function", "function"];
 
 function makeChain({ curryN, map, pipe, reduce, concat }) {
-  return curryN(ARITY$6, function chain(fn, xx) {
+  return curryN(ARITY$7, function chain(fn, xx) {
     if (xx && typeof xx.chain === "function") return xx.chain(fn)
     if (typeof xx === "function") return yy => fn(xx(yy), yy)
     return pipe(map(fn), reduce(concat, []))(xx)
   })
 }
-const GET_FUNCTION$d = makeChain;
-const ARITY$6 = 2;
-const SIGNATURE$16 = ["function", "function|Array|object", "function|Array"];
+const GET_FUNCTION$e = makeChain;
+const ARITY$7 = 2;
+const SIGNATURE$17 = ["function", "function|Array|object", "function|Array"];
 
 function makePluck({ curryN, map, prop }) {
-  return curryN(ARITY$7, function pluck(kk, xs) {
+  return curryN(ARITY$8, function pluck(kk, xs) {
     return map(prop(kk), xs)
   })
 }
-const GET_FUNCTION$e = makePluck;
-const ARITY$7 = 2;
-const SIGNATURE$17 = ["string", "Array|object", "Array|object"];
+const GET_FUNCTION$f = makePluck;
+const ARITY$8 = 2;
+const SIGNATURE$18 = ["string", "Array|object", "Array|object"];
 
 function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
   return pipe(
@@ -1271,8 +1311,8 @@ function makeMedian({ $, dec, pipe, length, nth, sort, divide }) {
     xx => pipe(length, dec, divide(2), Math.round, nth($, xx))(xx)
   )
 }
-const GET_FUNCTION$f = makeMedian;
-const SIGNATURE$18 = ["Array", "number"];
+const GET_FUNCTION$g = makeMedian;
+const SIGNATURE$19 = ["Array", "number"];
 
 function makeFlatten({ isArray, forEach }) {
   return function flatten(xx) {
@@ -1292,8 +1332,8 @@ function makeFlatten({ isArray, forEach }) {
     return out
   }
 }
-const GET_FUNCTION$g = makeFlatten;
-const SIGNATURE$19 = ["Array", "Array"];
+const GET_FUNCTION$h = makeFlatten;
+const SIGNATURE$1a = ["Array", "Array"];
 
 function makePredicatesPass({
   def,
@@ -1324,17 +1364,17 @@ function makeBind({ curryN }) {
     return fn.length > 1 ? curryN(fn.length, bound) : bound
   })
 }
-const GET_FUNCTION$h = makeBind;
-const SIGNATURE$1a = ["function", "object", "function"];
+const GET_FUNCTION$i = makeBind;
+const SIGNATURE$1b = ["function", "object", "function"];
 
 function makeDifference({ curryN, filter, flip, includes, complement }) {
-  return curryN(ARITY$8, function difference(aa, bb) {
+  return curryN(ARITY$9, function difference(aa, bb) {
     return filter(complement(flip(includes)(bb)), aa)
   })
 }
-const GET_FUNCTION$i = makeDifference;
-const ARITY$8 = 2;
-const SIGNATURE$1b = ["Array", "Array", "Array"];
+const GET_FUNCTION$j = makeDifference;
+const ARITY$9 = 2;
+const SIGNATURE$1c = ["Array", "Array", "Array"];
 
 function makeFlip({ curryN }) {
   return function flip(fn) {
@@ -1343,25 +1383,25 @@ function makeFlip({ curryN }) {
     })
   }
 }
-const GET_FUNCTION$j = makeFlip;
-const SIGNATURE$1c = ["function", "function"];
+const GET_FUNCTION$k = makeFlip;
+const SIGNATURE$1d = ["function", "function"];
 
 function makeIsObject({ both, isRawObject }) {
   return function isObject(x) {
     return both(isRawObject, Boolean)(x)
   }
 }
-const GET_FUNCTION$k = makeIsObject;
-const SIGNATURE$1d = ["any", "boolean"];
+const GET_FUNCTION$l = makeIsObject;
+const SIGNATURE$1e = ["any", "boolean"];
 
 function makeJ2({ toJSON }) {
   return toJSON(2)
 }
-const GET_FUNCTION$l = makeJ2;
-const SIGNATURE$1e = ["any", "string"];
+const GET_FUNCTION$m = makeJ2;
+const SIGNATURE$1f = ["any", "string"];
 
 function makePathOr({ curryN, reduce }) {
-  return curryN(ARITY$9, function pathOr(dd, ks, src) {
+  return curryN(ARITY$a, function pathOr(dd, ks, src) {
     return reduce(
       function walkPathOr(agg, st) {
         return (agg && agg[st]) || dd
@@ -1371,9 +1411,9 @@ function makePathOr({ curryN, reduce }) {
     )
   })
 }
-const GET_FUNCTION$m = makePathOr;
-const ARITY$9 = 3;
-const SIGNATURE$1f = ["any", "Array", "Array|object", "any"];
+const GET_FUNCTION$n = makePathOr;
+const ARITY$a = 3;
+const SIGNATURE$1g = ["any", "Array", "any", "any"];
 
 function makePathOrDerivatives({
   equals,
@@ -1389,28 +1429,28 @@ function makePathOrDerivatives({
   function deriveFromAccessor(acc) {
     const run = acc(C.UNMATCHED);
     return {
-      hasAcc: def({ check: true, hm: ["Array|string", "object", "boolean"] })(
-        function hasProperty(ks, src) {
+      hasAcc: def({ check: true, hm: ["Array|string", "any", "boolean"] })(
+        function _hasPath(ks, src) {
           return pipe(run(ks), complement(isUnmatched))(src)
         }
       ),
       accIs: def({
         check: true,
-        hm: ["function", "Array|string", "object", "boolean"]
-      })(function pathIsOfConstructor(J, ks, src) {
+        hm: ["function", "function", "any", "boolean"]
+      })(function _pathIs(J, ks, src) {
         return pipe(run(ks), is(J))(src)
       }),
       unsafe: acc(null),
       eq: def({
         check: true,
-        hm: ["Array|string", "any", "object", "boolean"]
-      })(function equivalence(ks, ex, src) {
+        hm: ["Array|string", "any", "any", "boolean"]
+      })(function _pathEq(ks, ex, src) {
         return pipe(run(ks), equals(ex))(src)
       }),
       satisfies: def({
         check: true,
-        hm: ["function", "Array|string", "object", "boolean"]
-      })(function satisfaction(fn, ks, src) {
+        hm: ["function", "Array|string", "any", "boolean"]
+      })(function _pathSatisfies(fn, ks, src) {
         return pipe(run(ks), fn, Boolean)(src)
       })
     }
@@ -1424,7 +1464,7 @@ function makePathOrDerivatives({
   } = deriveFromAccessor(pathOr);
   const propOr = def({
     check: true,
-    hm: ["any", "number|string", "object", "any"]
+    hm: ["any", "number|string", "any", "any"]
   })(function _propOr(dd, key, source) {
     return pathOr(dd, [key], source)
   });
@@ -1451,16 +1491,16 @@ function makePathOrDerivatives({
 }
 
 function makeReject({ curryN, filter, complement }) {
-  return curryN(ARITY$a, function reject(fn, xx) {
+  return curryN(ARITY$b, function reject(fn, xx) {
     return filter(complement(fn), xx)
   })
 }
-const GET_FUNCTION$n = makeReject;
-const ARITY$a = 2;
-const SIGNATURE$1g = ["function", "object", "object"];
+const GET_FUNCTION$o = makeReject;
+const ARITY$b = 2;
+const SIGNATURE$1h = ["function", "object", "object"];
 
 function makeSymmetricDifference({ curryN }) {
-  return curryN(ARITY$b, function symmetricDifference(aa, bb) {
+  return curryN(ARITY$c, function symmetricDifference(aa, bb) {
     const aLoop = makeIterable(aa);
     const bLoop = makeIterable(bb);
     const notBoth = [];
@@ -1479,68 +1519,69 @@ function makeSymmetricDifference({ curryN }) {
     return notBoth
   })
 }
-const GET_FUNCTION$o = makeSymmetricDifference;
-const ARITY$b = 2;
-const SIGNATURE$1h = ["Array", "Array", "Array"];
+const GET_FUNCTION$p = makeSymmetricDifference;
+const ARITY$c = 2;
+const SIGNATURE$1i = ["Array", "Array", "Array"];
 
 function makeUnion({ uniq, curryN, pipe, concat }) {
-  return curryN(ARITY$c, function union(aa, bb) {
+  return curryN(ARITY$d, function union(aa, bb) {
     return pipe(
       concat(bb),
       uniq
     )(aa)
   })
 }
-const GET_FUNCTION$p = makeUnion;
-const ARITY$c = 2;
-const SIGNATURE$1i = ["Array", "Array", "Array"];
+const GET_FUNCTION$q = makeUnion;
+const ARITY$d = 2;
+const SIGNATURE$1j = ["Array", "Array", "Array"];
 
 function makeUniq({ reduce }) {
   return reduce(function unique(agg, xx) {
     return !agg.includes(xx) ? agg.concat(xx) : agg
   }, [])
 }
-const GET_FUNCTION$q = makeUniq;
-const SIGNATURE$1j = ["Array", "Array"];
+const GET_FUNCTION$r = makeUniq;
+const SIGNATURE$1k = ["Array", "Array"];
 
 function makeIfElseDerivatives({ ifElse, identity, $ }) {
   return { when: ifElse($, $, identity), unless: ifElse($, identity) }
 }
-const GET_FUNCTION$r = makeIfElseDerivatives;
+const GET_FUNCTION$s = makeIfElseDerivatives;
 
 const derivedFunctionsSortedByIncreasingDependencies = [
-  ["smooth", GET_FUNCTION, SIGNATURE$V],
-  ["j2", GET_FUNCTION$l, SIGNATURE$1e], // toJSON
-  ["addIndex", GET_FUNCTION$c, SIGNATURE$15], // curryN
-  ["pick", GET_FUNCTION$9, SIGNATURE$12], // pickBy includes
+  ['orDefault', GET_FUNCTION, SIGNATURE$V],
+  ["smooth", GET_FUNCTION$1, SIGNATURE$W],
+  ["j2", GET_FUNCTION$m, SIGNATURE$1f], // toJSON
+  ["addIndex", GET_FUNCTION$d, SIGNATURE$16], // curryN
+  ["pick", GET_FUNCTION$a, SIGNATURE$13], // pickBy includes
 
-  ["bind", GET_FUNCTION$h, SIGNATURE$1a], // curryN
-  ["flip", GET_FUNCTION$j, SIGNATURE$1c], // curryN
-  ["liftN", GET_FUNCTION$7, SIGNATURE$10], // curryN reduce ap map
-  ["lift", GET_FUNCTION$6, SIGNATURE$$], // lift
-  ["thunkify", GET_FUNCTION$b, SIGNATURE$14], // curryN
-  ["groupBy", GET_FUNCTION$3, SIGNATURE$Y], // curryN objOf mash reduce
-  ["isEmpty", GET_FUNCTION$5, SIGNATURE$_], // equals empty
+  ["bind", GET_FUNCTION$i, SIGNATURE$1b], // curryN
+  ["flip", GET_FUNCTION$k, SIGNATURE$1d], // curryN
+  ["liftN", GET_FUNCTION$8, SIGNATURE$11], // curryN reduce ap map
+  ["lift", GET_FUNCTION$7, SIGNATURE$10], // lift
+  ["thunkify", GET_FUNCTION$c, SIGNATURE$15], // curryN
+  ["groupBy", GET_FUNCTION$4, SIGNATURE$Z], // curryN objOf mash reduce
+  ["isEmpty", GET_FUNCTION$6, SIGNATURE$$], // equals empty
 
-  ["__ifElse", GET_FUNCTION$r, false], // ifElse identity
-  ["flatten", GET_FUNCTION$g, SIGNATURE$19], // isArray forEach any
-  ["chain", GET_FUNCTION$d, SIGNATURE$16], // curryN map reduce concat
-  ["reject", GET_FUNCTION$n, SIGNATURE$1g], // curryN complement filter
-  ["omit", GET_FUNCTION$8, SIGNATURE$11], // complement pickBy includes
-  ["uniq", GET_FUNCTION$q, SIGNATURE$1j], // curryN reduce
-  ["intersection", GET_FUNCTION$4, SIGNATURE$Z], // curryN uniq concat
-  ["median", GET_FUNCTION$f, SIGNATURE$18], // $ pipe length nth sort divide
-  ["isObject", GET_FUNCTION$k, SIGNATURE$1d], // curryN both isRawObject
-  ["union", GET_FUNCTION$p, SIGNATURE$1i], // curryN filter includes
-  ["difference", GET_FUNCTION$i, SIGNATURE$1b], // curryN complement filter includes
-  ["symmetricDifference", GET_FUNCTION$o, SIGNATURE$1h], // curryN difference
+  ["__ifElse", GET_FUNCTION$s, false], // ifElse identity
+  ["flatten", GET_FUNCTION$h, SIGNATURE$1a], // isArray forEach any
+  ["chain", GET_FUNCTION$e, SIGNATURE$17], // curryN map reduce concat
+  ["reject", GET_FUNCTION$o, SIGNATURE$1h], // curryN complement filter
+  ["omit", GET_FUNCTION$9, SIGNATURE$12], // complement pickBy includes
+  ["uniq", GET_FUNCTION$r, SIGNATURE$1k], // curryN reduce
+  ["intersection", GET_FUNCTION$5, SIGNATURE$_], // curryN uniq concat
+  ["median", GET_FUNCTION$g, SIGNATURE$19], // $ pipe length nth sort divide
+  ["isObject", GET_FUNCTION$l, SIGNATURE$1e], // curryN both isRawObject
+  ["union", GET_FUNCTION$q, SIGNATURE$1j], // curryN filter includes
+  ["difference", GET_FUNCTION$j, SIGNATURE$1c], // curryN complement filter includes
+  ["symmetricDifference", GET_FUNCTION$p, SIGNATURE$1i], // curryN difference
   ["__predicatesPass", makePredicatesPass, false], // curryN all, any flip gt length map smooth pipe
-  ["pathOr", GET_FUNCTION$m, SIGNATURE$1f], // curryN reduce
+  ["pathOr", GET_FUNCTION$n, SIGNATURE$1g], // curryN reduce
   ["__pathOrDerivatives", makePathOrDerivatives, false], // curryN equals is pathOr pipe
-  ["props", GET_FUNCTION$a, SIGNATURE$13],
-  ["eqProps", GET_FUNCTION$2, SIGNATURE$X],
-  ["pluck", GET_FUNCTION$e, SIGNATURE$17],
-  ["applySpecN", GET_FUNCTION$1, SIGNATURE$W]
+  ["props", GET_FUNCTION$b, SIGNATURE$14],
+  ["eqProps", GET_FUNCTION$3, SIGNATURE$Y],
+  ["pluck", GET_FUNCTION$f, SIGNATURE$18],
+  ["applySpecN", GET_FUNCTION$2, SIGNATURE$X]
 ];
 function extendDerived(C) {
   return C.reduce(
@@ -1564,7 +1605,7 @@ function applyTo(xx, fn) {
 }
 
 const FUNCTION$V = applyTo;
-const SIGNATURE$1k = ["any", "function", "any"];
+const SIGNATURE$1l = ["any", "function", "any"];
 
 function endsWith(needle, haystack) {
   if (haystack && isFunction(haystack.endsWith)) {
@@ -1573,7 +1614,7 @@ function endsWith(needle, haystack) {
   return haystack[haystack.length - 1] === needle
 }
 const FUNCTION$W = endsWith;
-const SIGNATURE$1l = ["object|string", "object|string", "boolean"];
+const SIGNATURE$1m = ["object|string", "object|string", "boolean"];
 
 function findIndex(fn, xx) {
   let idx = 0;
@@ -1589,7 +1630,7 @@ function findIndex(fn, xx) {
 }
 
 const FUNCTION$X = findIndex;
-const SIGNATURE$1m = ["function", "object", "any"];
+const SIGNATURE$1n = ["function", "object", "any"];
 
 function findLastIndex(fn, xx) {
   const loop = makeIterable(xx);
@@ -1604,43 +1645,43 @@ function findLastIndex(fn, xx) {
   return -1
 }
 const FUNCTION$Y = findLastIndex;
-const SIGNATURE$1n = ["function", "object", "any"];
+const SIGNATURE$1o = ["function", "object", "any"];
 
 function hasIn(pp, xx) {
   return pp in xx
 }
 const FUNCTION$Z = hasIn;
-const SIGNATURE$1o = ["string", "object", "boolean"];
+const SIGNATURE$1p = ["string", "object", "boolean"];
 
 function has(pp, xx) {
   return xx && typeof xx[pp] !== "undefined"
 }
 const FUNCTION$_ = has;
-const SIGNATURE$1p = ["string", "object", "boolean"];
+const SIGNATURE$1q = ["string", "object", "boolean"];
 
 function identical(aa, bb) {
   return Object.is(aa, bb)
 }
 const FUNCTION$$ = identical;
-const SIGNATURE$1q = ["any", "any", "boolean"];
+const SIGNATURE$1r = ["any", "any", "boolean"];
 
 function indexOf(needle, haystack) {
   return haystack.indexOf(needle)
 }
 const FUNCTION$10 = indexOf;
-const SIGNATURE$1r = ["any", "string|object", "number"];
+const SIGNATURE$1s = ["any", "string|object", "number"];
 
 function lastIndexOf(needle, haystack) {
   return haystack.lastIndexOf(needle)
 }
 const FUNCTION$11 = lastIndexOf;
-const SIGNATURE$1s = ["any", "string|object", "number"];
+const SIGNATURE$1t = ["any", "string|object", "number"];
 
 function match(rx, str) {
   return str.match(rx)
 }
 const FUNCTION$12 = match;
-const SIGNATURE$1t = ["RegExp", "string", "Array|nil"];
+const SIGNATURE$1u = ["RegExp", "string", "Array|nil"];
 
 function none(fn, xx) {
   let idx = 0;
@@ -1655,7 +1696,7 @@ function none(fn, xx) {
   return promised
 }
 const FUNCTION$13 = none;
-const SIGNATURE$1u = ["function", "Array|object", "boolean"];
+const SIGNATURE$1v = ["function", "Array|object", "boolean"];
 
 function pickBy(fn, xx) {
   const loop = makeIterable(xx);
@@ -1670,7 +1711,7 @@ function pickBy(fn, xx) {
   return out
 }
 const FUNCTION$14 = pickBy;
-const SIGNATURE$1v = ["function", "object", "object"];
+const SIGNATURE$1w = ["function", "object", "object"];
 
 function startsWith(needle, haystack) {
   if (haystack && isFunction(haystack.startsWith)) {
@@ -1679,14 +1720,14 @@ function startsWith(needle, haystack) {
   return haystack[0] === needle
 }
 const FUNCTION$15 = startsWith;
-const SIGNATURE$1w = ["object|string", "object|string", "boolean"];
+const SIGNATURE$1x = ["object|string", "object|string", "boolean"];
 
 function add(b, a) {
   return a + b
 }
 
 const FUNCTION$16 = add;
-const SIGNATURE$1x = ["number", "number", "number"];
+const SIGNATURE$1y = ["number", "number", "number"];
 
 function find(fn, xx) {
   let idx = 0;
@@ -1701,7 +1742,7 @@ function find(fn, xx) {
 }
 
 const FUNCTION$17 = find;
-const SIGNATURE$1y = ["function", "object", "any"];
+const SIGNATURE$1z = ["function", "object", "any"];
 
 function findLast(fn, xx) {
   const loop = makeIterable(xx);
@@ -1716,19 +1757,19 @@ function findLast(fn, xx) {
 }
 
 const FUNCTION$18 = findLast;
-const SIGNATURE$1z = ["function", "object", "any|nil"];
+const SIGNATURE$1A = ["function", "object", "any|nil"];
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
 const FUNCTION$19 = apply;
-const SIGNATURE$1A = ["function", "Array", "any"];
+const SIGNATURE$1B = ["function", "Array", "any"];
 
 function and(a, b) {
   return a && b
 }
 const FUNCTION$1a = and;
-const SIGNATURE$1B = ["any", "any", "boolean"];
+const SIGNATURE$1C = ["any", "any", "boolean"];
 
 function any(fn, xx) {
   let idx = 0;
@@ -1742,7 +1783,7 @@ function any(fn, xx) {
 }
 
 const FUNCTION$1b = any;
-const SIGNATURE$1C = ["function", "object", "boolean"];
+const SIGNATURE$1D = ["function", "object", "boolean"];
 
 function all(fn, xx) {
   let idx = 0;
@@ -1757,7 +1798,7 @@ function all(fn, xx) {
   return promised
 }
 const FUNCTION$1c = all;
-const SIGNATURE$1D = ["function", "Array|object", "boolean"];
+const SIGNATURE$1E = ["function", "Array|object", "boolean"];
 
 function ap(aa, bb) {
   // S combinator
@@ -1778,13 +1819,13 @@ function ap(aa, bb) {
 }
 
 const FUNCTION$1d = ap;
-const SIGNATURE$1E = ["function|Array", "function|Array", "function|Array"];
+const SIGNATURE$1F = ["function|Array", "function|Array", "function|Array"];
 
 function concat(a, b) {
   return a.concat(b)
 }
 const FUNCTION$1e = concat;
-const SIGNATURE$1F = ["any", "any", "Array|String"];
+const SIGNATURE$1G = ["any", "any", "Array|String"];
 
 function cond(conditions, input) {
   let idx = 0;
@@ -1803,20 +1844,20 @@ function cond(conditions, input) {
 }
 
 const FUNCTION$1f = cond;
-const SIGNATURE$1G = ["Array", "any", "any"];
+const SIGNATURE$1H = ["Array", "any", "any"];
 
 function divide(b, a) {
   return a / b
 }
 const FUNCTION$1g = divide;
-const SIGNATURE$1H = ["number", "number", "number"];
+const SIGNATURE$1I = ["number", "number", "number"];
 
 function equals(a, b) {
   if (a && isFunction(a.equals)) return a.equals(b)
   return a === b
 }
 const FUNCTION$1h = equals;
-const SIGNATURE$1I = ["any", "any", "boolean"];
+const SIGNATURE$1J = ["any", "any", "boolean"];
 
 function filter(fn, xx) {
   let idx = 0;
@@ -1838,7 +1879,7 @@ function filter(fn, xx) {
 }
 
 const FUNCTION$1i = filter;
-const SIGNATURE$1J = ["function", "object", "object"];
+const SIGNATURE$1K = ["function", "object", "object"];
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -1852,7 +1893,7 @@ function forEach(fn, xx) {
 }
 
 const FUNCTION$1j = forEach;
-const SIGNATURE$1K = ["function", "object", "nil"];
+const SIGNATURE$1L = ["function", "object", "nil"];
 
 function includes(b, a) {
   if (a && isFunction(a.includes)) return a.includes(b)
@@ -1860,38 +1901,38 @@ function includes(b, a) {
   return false
 }
 const FUNCTION$1k = includes;
-const SIGNATURE$1L = ["object|string", "object|string", "boolean"];
+const SIGNATURE$1M = ["object|string", "object|string", "boolean"];
 
 function gt(b, a) {
   return a > b
 }
 const FUNCTION$1l = gt;
-const SIGNATURE$1M = ["number", "number", "boolean"];
+const SIGNATURE$1N = ["number", "number", "boolean"];
 
 function gte(b, a) {
   return a >= b
 }
 const FUNCTION$1m = gte;
-const SIGNATURE$1N = ["number", "number", "boolean"];
+const SIGNATURE$1O = ["number", "number", "boolean"];
 
 function join(del, xx) {
   return xx.join(del)
 }
 
 const FUNCTION$1n = join;
-const SIGNATURE$1O = ["string", "Array", "string"];
+const SIGNATURE$1P = ["string", "Array", "string"];
 
 function lt(b, a) {
   return a < b
 }
 const FUNCTION$1o = lt;
-const SIGNATURE$1P = ["number", "number", "boolean"];
+const SIGNATURE$1Q = ["number", "number", "boolean"];
 
 function lte(b, a) {
   return a <= b
 }
 const FUNCTION$1p = lte;
-const SIGNATURE$1Q = ["number", "number", "boolean"];
+const SIGNATURE$1R = ["number", "number", "boolean"];
 
 function map(fn, xx) {
   let idx = 0;
@@ -1905,40 +1946,40 @@ function map(fn, xx) {
   }
   return result
 }
-const SIGNATURE$1R = ["function", "object", "object"];
+const SIGNATURE$1S = ["function", "object", "object"];
 const FUNCTION$1q = map;
 
 function max(aa, bb) {
   return Math.max(aa, bb)
 }
 const FUNCTION$1r = max;
-const SIGNATURE$1S = ['number', 'number'];
+const SIGNATURE$1T = ['number', 'number'];
 
 function min(aa, bb) {
   return Math.min(aa, bb)
 }
 const FUNCTION$1s = min;
-const SIGNATURE$1T = ["number", "number"];
+const SIGNATURE$1U = ["number", "number"];
 
 function multiply(b, a) {
   return a * b
 }
 const FUNCTION$1t = multiply;
-const SIGNATURE$1U = ["number", "number", "number"];
+const SIGNATURE$1V = ["number", "number", "number"];
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
 const FUNCTION$1u = nth;
-const SIGNATURE$1V = ["number", "Array", "any"];
+const SIGNATURE$1W = ["number", "Array", "any"];
 
 function or(a, b) {
   return a || b
 }
 
 const FUNCTION$1v = or;
-const SIGNATURE$1W = ["any", "any", "boolean"];
+const SIGNATURE$1X = ["any", "any", "boolean"];
 
 function range(aa, zz) {
   const out = [];
@@ -1950,14 +1991,14 @@ function range(aa, zz) {
 }
 
 const FUNCTION$1w = range;
-const SIGNATURE$1X = ["number", "number", "Array"];
+const SIGNATURE$1Y = ["number", "number", "Array"];
 
 function split(del, xx) {
   return xx.split(del)
 }
 
 const FUNCTION$1x = split;
-const SIGNATURE$1Y = ["string", "string", "Array"];
+const SIGNATURE$1Z = ["string", "string", "Array"];
 
 function sort(fn, rr) {
   const copy = [].concat(rr);
@@ -1966,66 +2007,66 @@ function sort(fn, rr) {
 }
 
 const FUNCTION$1y = sort;
-const SIGNATURE$1Z = ["function", "Array", "Array"];
+const SIGNATURE$1_ = ["function", "Array", "Array"];
 
 function subtract(b, a) {
   return a - b
 }
 
 const FUNCTION$1z = subtract;
-const SIGNATURE$1_ = ["number", "number", "number"];
+const SIGNATURE$1$ = ["number", "number", "number"];
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
 const FUNCTION$1A = toJSON;
-const SIGNATURE$1$ = ["number", "any", "string"];
+const SIGNATURE$20 = ["number", "any", "string"];
 
 const BINARY_WITH_SIGNATURES = [
-  [SIGNATURE$1x, FUNCTION$16],
-  [SIGNATURE$1D, FUNCTION$1c],
-  [SIGNATURE$1B, FUNCTION$1a],
-  [SIGNATURE$1C, FUNCTION$1b],
-  [SIGNATURE$1E, FUNCTION$1d],
-  [SIGNATURE$1A, FUNCTION$19],
-  [SIGNATURE$1k, FUNCTION$V],
-  [SIGNATURE$1F, FUNCTION$1e],
-  [SIGNATURE$1G, FUNCTION$1f],
-  [SIGNATURE$1H, FUNCTION$1g],
-  [SIGNATURE$1l, FUNCTION$W],
-  [SIGNATURE$1I, FUNCTION$1h],
-  [SIGNATURE$1J, FUNCTION$1i],
-  [SIGNATURE$1y, FUNCTION$17],
-  [SIGNATURE$1z, FUNCTION$18],
-  [SIGNATURE$1m, FUNCTION$X],
-  [SIGNATURE$1n, FUNCTION$Y],
-  [SIGNATURE$1K, FUNCTION$1j],
-  [SIGNATURE$1M, FUNCTION$1l],
-  [SIGNATURE$1N, FUNCTION$1m],
-  [SIGNATURE$1o, FUNCTION$Z],
-  [SIGNATURE$1p, FUNCTION$_],
-  [SIGNATURE$1q, FUNCTION$$],
-  [SIGNATURE$1L, FUNCTION$1k],
-  [SIGNATURE$1r, FUNCTION$10],
-  [SIGNATURE$1O, FUNCTION$1n],
-  [SIGNATURE$1s, FUNCTION$11],
-  [SIGNATURE$1P, FUNCTION$1o],
-  [SIGNATURE$1Q, FUNCTION$1p],
-  [SIGNATURE$1R, FUNCTION$1q],
-  [SIGNATURE$1t, FUNCTION$12],
-  [SIGNATURE$1S, FUNCTION$1r],
-  [SIGNATURE$1T, FUNCTION$1s],
-  [SIGNATURE$1U, FUNCTION$1t],
-  [SIGNATURE$1u, FUNCTION$13],
-  [SIGNATURE$1V, FUNCTION$1u],
-  [SIGNATURE$1W, FUNCTION$1v],
-  [SIGNATURE$1v, FUNCTION$14],
-  [SIGNATURE$1X, FUNCTION$1w],
-  [SIGNATURE$1Z, FUNCTION$1y],
-  [SIGNATURE$1Y, FUNCTION$1x],
-  [SIGNATURE$1w, FUNCTION$15],
-  [SIGNATURE$1_, FUNCTION$1z],
-  [SIGNATURE$1$, FUNCTION$1A]
+  [SIGNATURE$1y, FUNCTION$16],
+  [SIGNATURE$1E, FUNCTION$1c],
+  [SIGNATURE$1C, FUNCTION$1a],
+  [SIGNATURE$1D, FUNCTION$1b],
+  [SIGNATURE$1F, FUNCTION$1d],
+  [SIGNATURE$1B, FUNCTION$19],
+  [SIGNATURE$1l, FUNCTION$V],
+  [SIGNATURE$1G, FUNCTION$1e],
+  [SIGNATURE$1H, FUNCTION$1f],
+  [SIGNATURE$1I, FUNCTION$1g],
+  [SIGNATURE$1m, FUNCTION$W],
+  [SIGNATURE$1J, FUNCTION$1h],
+  [SIGNATURE$1K, FUNCTION$1i],
+  [SIGNATURE$1z, FUNCTION$17],
+  [SIGNATURE$1A, FUNCTION$18],
+  [SIGNATURE$1n, FUNCTION$X],
+  [SIGNATURE$1o, FUNCTION$Y],
+  [SIGNATURE$1L, FUNCTION$1j],
+  [SIGNATURE$1N, FUNCTION$1l],
+  [SIGNATURE$1O, FUNCTION$1m],
+  [SIGNATURE$1p, FUNCTION$Z],
+  [SIGNATURE$1q, FUNCTION$_],
+  [SIGNATURE$1r, FUNCTION$$],
+  [SIGNATURE$1M, FUNCTION$1k],
+  [SIGNATURE$1s, FUNCTION$10],
+  [SIGNATURE$1P, FUNCTION$1n],
+  [SIGNATURE$1t, FUNCTION$11],
+  [SIGNATURE$1Q, FUNCTION$1o],
+  [SIGNATURE$1R, FUNCTION$1p],
+  [SIGNATURE$1S, FUNCTION$1q],
+  [SIGNATURE$1u, FUNCTION$12],
+  [SIGNATURE$1T, FUNCTION$1r],
+  [SIGNATURE$1U, FUNCTION$1s],
+  [SIGNATURE$1V, FUNCTION$1t],
+  [SIGNATURE$1v, FUNCTION$13],
+  [SIGNATURE$1W, FUNCTION$1u],
+  [SIGNATURE$1X, FUNCTION$1v],
+  [SIGNATURE$1w, FUNCTION$14],
+  [SIGNATURE$1Y, FUNCTION$1w],
+  [SIGNATURE$1_, FUNCTION$1y],
+  [SIGNATURE$1Z, FUNCTION$1x],
+  [SIGNATURE$1x, FUNCTION$15],
+  [SIGNATURE$1$, FUNCTION$1z],
+  [SIGNATURE$20, FUNCTION$1A]
 ];
 
 function extendBinaryWithSignatures(F) {
@@ -2041,19 +2082,19 @@ function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
 const FUNCTION$1B = both;
-const SIGNATURE$20 = ["function", "function", "any", "boolean"];
+const SIGNATURE$21 = ["function", "function", "any", "boolean"];
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
 const FUNCTION$1C = either;
-const SIGNATURE$21 = ["function", "function", "any"];
+const SIGNATURE$22 = ["function", "function", "any"];
 
 function eqBy(fn, a, b) {
   return Boolean(fn(a, b))
 }
 const FUNCTION$1D = eqBy;
-const SIGNATURE$22 = ["function", "any", "any", "boolean"];
+const SIGNATURE$23 = ["function", "any", "any", "boolean"];
 
 function innerJoin(pred, xs, ys) {
   const loopX = makeIterable(xs);
@@ -2074,7 +2115,7 @@ function innerJoin(pred, xs, ys) {
   return out
 }
 const FUNCTION$1E = innerJoin;
-const SIGNATURE$23 = ["function", "Array", "Array", "Array"];
+const SIGNATURE$24 = ["function", "Array", "Array", "Array"];
 
 function insert(ind, ins, what) {
   const copy = [].concat(what);
@@ -2082,7 +2123,7 @@ function insert(ind, ins, what) {
   return copy
 }
 const FUNCTION$1F = insert;
-const SIGNATURE$24 = ["number", "any", "Array", "Array"];
+const SIGNATURE$25 = ["number", "any", "Array", "Array"];
 
 function insertAll(ind, ins, what) {
   return [].concat(
@@ -2095,13 +2136,13 @@ function insertAll(ind, ins, what) {
   )
 }
 const FUNCTION$1G = insertAll;
-const SIGNATURE$25 = ["number", "any", "Array", "Array"];
+const SIGNATURE$26 = ["number", "any", "Array", "Array"];
 
 function replace(rx, rep, str) {
   return str.replace(rx, rep)
 }
 const FUNCTION$1H = replace;
-const SIGNATURE$26 = ["RegExp|string", "string", "string", "string"];
+const SIGNATURE$27 = ["RegExp|string", "string", "string", "string"];
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -2117,25 +2158,25 @@ function reduce(fn, initial, xx) {
 }
 
 const FUNCTION$1I = reduce;
-const SIGNATURE$27 = ["function", "any", "object", "any"];
+const SIGNATURE$28 = ["function", "any", "object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
 const FUNCTION$1J = slice;
-const SIGNATURE$28 = ["number", "number", "object", "object"];
+const SIGNATURE$29 = ["number", "number", "object", "object"];
 
 const TERNARY_WITH_SIGNATURES = [
-  [SIGNATURE$20, FUNCTION$1B],
-  [SIGNATURE$21, FUNCTION$1C],
-  [SIGNATURE$22, FUNCTION$1D],
-  [SIGNATURE$23, FUNCTION$1E],
-  [SIGNATURE$24, FUNCTION$1F],
-  [SIGNATURE$25, FUNCTION$1G],
-  [SIGNATURE$27, FUNCTION$1I],
-  [SIGNATURE$26, FUNCTION$1H],
-  [SIGNATURE$28, FUNCTION$1J]
+  [SIGNATURE$21, FUNCTION$1B],
+  [SIGNATURE$22, FUNCTION$1C],
+  [SIGNATURE$23, FUNCTION$1D],
+  [SIGNATURE$24, FUNCTION$1E],
+  [SIGNATURE$25, FUNCTION$1F],
+  [SIGNATURE$26, FUNCTION$1G],
+  [SIGNATURE$28, FUNCTION$1I],
+  [SIGNATURE$27, FUNCTION$1H],
+  [SIGNATURE$29, FUNCTION$1J]
 ];
 
 function extendTernaryWithSignatures(F) {
@@ -2152,9 +2193,9 @@ function ifElse(condition, yes, no, xx) {
 }
 
 const FUNCTION$1K = ifElse;
-const SIGNATURE$29 = ["function", "function", "function", "any", "any"];
+const SIGNATURE$2a = ["function", "function", "function", "any", "any"];
 
-const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$29, FUNCTION$1K]];
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$2a, FUNCTION$1K]];
 
 function extendQuaternaryWithSignatures(F) {
   return F.weld(
@@ -2189,7 +2230,8 @@ function coreWithTypes(config) {
         isString,
         isSymbol,
         isUndefined,
-        isUnmatched
+        isUnmatched,
+        isNil
       }
     ]);
     return BASE.pipe(

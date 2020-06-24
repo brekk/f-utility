@@ -13,4 +13,4 @@ function makePathOr({ curryN, reduce }) {
 export default makePathOr
 export const GET_FUNCTION = makePathOr
 export const ARITY = 3
-export const SIGNATURE = ["any", "Array", "Array|object", "any"]
+export const SIGNATURE = ["any", "Array", "any", "any"]

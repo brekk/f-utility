@@ -13,17 +13,17 @@ function makePathOrDerivatives({
   function deriveFromAccessor(acc) {
     const run = acc(C.UNMATCHED)
     return {
-      hasAcc: curryN(2, function hasProperty(ks, src) {
+      hasAcc: curryN(2, function _hasPath(ks, src) {
         return pipe(run(ks), complement(isUnmatched))(src)
       }),
-      accIs: curryN(3, function pathIsOfConstructor(J, ks, src) {
+      accIs: curryN(3, function _pathIs(J, ks, src) {
         return pipe(run(ks), is(J))(src)
       }),
       unsafe: acc(null),
-      eq: curryN(3, function equivalence(ks, ex, src) {
+      eq: curryN(3, function _pathEq(ks, ex, src) {
         return pipe(run(ks), equals(ex))(src)
       }),
-      satisfies: curryN(3, function satisfaction(fn, ks, src) {
+      satisfies: curryN(3, function _pathSatisifes(fn, ks, src) {
         return pipe(run(ks), fn, Boolean)(src)
       })
     }

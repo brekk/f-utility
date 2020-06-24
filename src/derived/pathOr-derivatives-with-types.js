@@ -13,28 +13,28 @@ function makePathOrDerivatives({
   function deriveFromAccessor(acc) {
     const run = acc(C.UNMATCHED)
     return {
-      hasAcc: def({ check: true, hm: ["Array|string", "object", "boolean"] })(
-        function hasProperty(ks, src) {
+      hasAcc: def({ check: true, hm: ["Array|string", "any", "boolean"] })(
+        function _hasPath(ks, src) {
           return pipe(run(ks), complement(isUnmatched))(src)
         }
       ),
       accIs: def({
         check: true,
-        hm: ["function", "Array|string", "object", "boolean"]
-      })(function pathIsOfConstructor(J, ks, src) {
+        hm: ["function", "function", "any", "boolean"]
+      })(function _pathIs(J, ks, src) {
         return pipe(run(ks), is(J))(src)
       }),
       unsafe: acc(null),
       eq: def({
         check: true,
-        hm: ["Array|string", "any", "object", "boolean"]
-      })(function equivalence(ks, ex, src) {
+        hm: ["Array|string", "any", "any", "boolean"]
+      })(function _pathEq(ks, ex, src) {
         return pipe(run(ks), equals(ex))(src)
       }),
       satisfies: def({
         check: true,
-        hm: ["function", "Array|string", "object", "boolean"]
-      })(function satisfaction(fn, ks, src) {
+        hm: ["function", "Array|string", "any", "boolean"]
+      })(function _pathSatisfies(fn, ks, src) {
         return pipe(run(ks), fn, Boolean)(src)
       })
     }
@@ -48,7 +48,7 @@ function makePathOrDerivatives({
   } = deriveFromAccessor(pathOr)
   const propOr = def({
     check: true,
-    hm: ["any", "number|string", "object", "any"]
+    hm: ["any", "number|string", "any", "any"]
   })(function _propOr(dd, key, source) {
     return pathOr(dd, [key], source)
   })

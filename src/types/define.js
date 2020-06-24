@@ -41,9 +41,32 @@ export function hmError(name, actual, params) {
     .slice(0, actual.length)
     .join(", ")} )`
 }
+const rLine = /\n {4}at (\w+) \((.*):(\d+):(\d+)\)/g
+const blacklist = ["null", "curried", "saucy"]
+
+export function cleaned(e) {
+  if (e && e.stack) {
+    const { stack } = e
+    e.stack = stack.replace(rLine, (match, fn, file, line, head, offset) => {
+      const loc = `(${file}:${line}:${head})`
+      return blacklist.includes(fn)
+        ? ""
+        : `\n\t-> ${fn === "piped" ? "pipe" : fn} ${
+            file.includes("f-utility") ? "" : loc
+          }`
+    })
+  }
+  return e
+}
 
 export function defineFunctionWithParameterTest(test) {
-  return function funcfunc({ ts = typeSystem, n: givenLength, hm, check }) {
+  return function funcfunc({
+    ts = typeSystem,
+    n: givenLength,
+    hm,
+    check,
+    tryCatch = () => {}
+  }) {
     if (check) {
       if (typeof ts !== "function")
         throw new TypeError("Expected typeSystem to be a function.")
@@ -78,7 +101,12 @@ export function defineFunctionWithParameterTest(test) {
           saucy.hm = hm
         }
         if (length >= nArgs) {
-          const result = fn.apply(this, args)
+          let result
+          try {
+            result = fn.apply(this, args)
+          } catch (e) {
+            throw cleaned(e)
+          }
           if (check) {
             const tChecker = makeTypechecker(ts)(hm, args)
             const isValid = checkParamsWith(ts)(hm, args)
