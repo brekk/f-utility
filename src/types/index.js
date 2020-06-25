@@ -18,3 +18,4 @@ export { ofType } from "./ofType"
 export { system as typeSystem } from "./system"
 export { checkParamsWith } from "./check-params"
 export { checkReturnWith } from "./check-return"
+export { cleanErrorStackFor } from './define'

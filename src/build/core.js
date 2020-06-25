@@ -3,6 +3,7 @@ import C from "$core/constants"
 import memoizeWith from "$core/memoize-with"
 import {
   is,
+  isNil,
   isArray,
   isBoolean,
   isFunction,
@@ -11,7 +12,8 @@ import {
   isString,
   isSymbol,
   isUndefined,
-  isUnmatched
+  isUnmatched,
+  cleanErrorStackFor
 } from "$types/index"
 import autoCurryWith from "$core/auto-curry"
 import addAliases from "$core/aliases"
@@ -49,7 +51,9 @@ function core(config) {
         isString,
         isSymbol,
         isUndefined,
-        isUnmatched
+        isUnmatched,
+        isNil,
+        cleanErrorStackFor
       }
     ])
     return BASE.pipe(

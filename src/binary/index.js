@@ -1,3 +1,4 @@
+import { FUNCTION as tryCatch } from "./tryCatch"
 import { FUNCTION as applyTo } from "./applyTo"
 import { FUNCTION as endsWith } from "./endsWith"
 import { FUNCTION as findIndex } from "./findIndex"
@@ -88,7 +89,8 @@ export function extendBinary(F) {
     split,
     startsWith,
     subtract,
-    toJSON
+    toJSON,
+    tryCatch
   }
   return F.weld(F, BINARY)
 }

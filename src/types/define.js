@@ -41,22 +41,39 @@ export function hmError(name, actual, params) {
     .slice(0, actual.length)
     .join(", ")} )`
 }
-const rLine = /\n {4}at (\w+) \((.*):(\d+):(\d+)\)/g
-const blacklist = ["null", "curried", "saucy"]
+const rLine = /\n\s+at ((\w\.?)+) \((.*)\)/g
+const BLACKLIST = ["null", "curried", "saucy"]
 
-export function cleaned(e) {
-  if (e && e.stack) {
-    const { stack } = e
-    e.stack = stack.replace(rLine, (match, fn, file, line, head, offset) => {
-      const loc = `(${file}:${line}:${head})`
-      return blacklist.includes(fn)
-        ? ""
-        : `\n\t-> ${fn === "piped" ? "pipe" : fn} ${
-            file.includes("f-utility") ? "" : loc
-          }`
-    })
+export function cleanErrorStackFor({
+  blacklist = BLACKLIST,
+  files = ["f-utility"],
+  prefix: pp = "F"
+}) {
+  return function cleanStack(e) {
+    if (e && e.stack) {
+      const { stack } = e
+      let once = false
+      e.stack = stack.replace(rLine, (match, fn, __file) => {
+        const file = __file.replace(/:\d+:\d+/, "")
+
+        console.log(">>>", fn, "@>>@>@", file, "!!!!!!!", __file)
+        const loc = `(${file})`
+        const isHighlight = files.includes(file)
+        const badFunction = blacklist.includes(fn)
+        console.log("isHighlight", isHighlight, "badFunction?", badFunction)
+        const newline = !once ? "\n\t" : ""
+        once = true
+        return isHighlight && !badFunction
+          ? `${newline}-> ${fn === "piped" ? `${pp}.pipe` : `${pp}.` + fn} ${
+              isHighlight ? "" : loc
+            }`
+          : badFunction
+          ? ""
+          : match
+      })
+    }
+    return e
   }
-  return e
 }
 
 export function defineFunctionWithParameterTest(test) {
@@ -65,7 +82,8 @@ export function defineFunctionWithParameterTest(test) {
     n: givenLength,
     hm,
     check,
-    tryCatch = () => {}
+    tryCatch,
+    cleanErrors = true
   }) {
     if (check) {
       if (typeof ts !== "function")
@@ -73,74 +91,83 @@ export function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
+    const __cleanStack = cleanErrorStackFor({})
     return function currified(fn) {
-      const fnName =
-        fn && typeof fn.hm !== "undefined"
-          ? fn.toString(true)
-          : fn.name
-          ? fn.name
-          : "fn"
-      const heat = testCurryGaps(test)
-      const mergeParams = makeParamMerger(test)
-      const isSpicy = some(test)
-      function curried() {
-        const args = Array.from(arguments)
-        const nArgs =
-          hm && Array.isArray(hm)
-            ? hm.length - 1
-            : givenLength && typeof givenLength === "number"
-            ? givenLength
-            : fn.length
-        const length = isSpicy(args) ? heat(args) : args.length
-        function saucy() {
-          const args2 = Array.from(arguments)
-          return curried.apply(this, mergeParams(args, args2))
-        }
-        if (check) {
-          saucy.toString = toString(fnName, args)
-          saucy.hm = hm
-        }
-        if (length >= nArgs) {
-          let result
-          try {
-            result = fn.apply(this, args)
-          } catch (e) {
-            throw cleaned(e)
+      try {
+        const fnName =
+          fn && typeof fn.hm !== "undefined"
+            ? fn.toString(true)
+            : fn.name
+            ? fn.name
+            : "fn"
+        const heat = testCurryGaps(test)
+        const mergeParams = makeParamMerger(test)
+        const isSpicy = some(test)
+        /* eslint-disable-next-line no-inner-declarations */
+        function curried() {
+          const args = Array.from(arguments)
+          const nArgs =
+            hm && Array.isArray(hm)
+              ? hm.length - 1
+              : givenLength && typeof givenLength === "number"
+              ? givenLength
+              : fn.length
+          const length = isSpicy(args) ? heat(args) : args.length
+          function saucy() {
+            const args2 = Array.from(arguments)
+            return curried.apply(this, mergeParams(args, args2))
           }
           if (check) {
-            const tChecker = makeTypechecker(ts)(hm, args)
-            const isValid = checkParamsWith(ts)(hm, args)
-
-            if (!isValid) {
-              const { rawParams, params } = tChecker
-              throw new TypeError(
-                hmError(
-                  fnName,
-                  rawParams.map(z => z.actual),
-                  params.map(archetype)
-                )
-              )
-            }
-            const returnTypeValid = checkReturnWith(ts)(result)(hm, args)
-
-            if (!returnTypeValid) {
-              const { returnType } = tChecker
-              throw new TypeError(
-                `Expected ${fnName} to return ${archetype(
-                  returnType
-                )} but got ${typeSystem(result)}.`
-              )
-            }
+            saucy.toString = toString(fnName, args)
+            saucy.hm = hm
           }
-          return result
+          if (length >= nArgs) {
+            let result
+            try {
+              result = fn.apply(this, args)
+            } catch (e) {
+              throw cleanErrors ? __cleanStack(e) : e
+            }
+            if (check) {
+              const tChecker = makeTypechecker(ts)(hm, args)
+              const isValid = checkParamsWith(ts)(hm, args)
+
+              if (!isValid) {
+                const { rawParams, params } = tChecker
+                throw new TypeError(
+                  hmError(
+                    fnName,
+                    rawParams.map(z => z.actual),
+                    params.map(archetype)
+                  )
+                )
+              }
+              const returnTypeValid = checkReturnWith(ts)(result)(hm, args)
+
+              if (!returnTypeValid) {
+                const { returnType } = tChecker
+                throw new TypeError(
+                  `Expected ${fnName} to return ${archetype(
+                    returnType
+                  )} but got ${typeSystem(result)}.`
+                )
+              }
+            }
+            return result
+          }
+          return saucy
         }
-        return saucy
+        if (check) {
+          curried.toString = toString(fnName)
+          curried.hm = hm
+        }
+        return curried
+      } catch (e) {
+        if (typeof tryCatch === "function") {
+          return tryCatch(e)
+        }
+        throw e
       }
-      if (check) {
-        curried.toString = toString(fnName)
-        curried.hm = hm
-      }
-      return curried
     }
   }
 }

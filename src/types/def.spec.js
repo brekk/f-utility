@@ -1,4 +1,10 @@
 import exam from "$build/tester"
+exam("cleanErrorStackFor", F => () => {
+  const e = new Error("It's an error!")
+  console.log("ROBBIE E", e)
+  const f = F.cleanErrorStackFor({})(e)
+  expect(f.stack).toEqual("")
+})
 /* eslint-disable func-style */
 exam("def", F => () => {
   const abc = (a, b, c) => a + b / c

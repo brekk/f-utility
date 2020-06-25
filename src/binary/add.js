@@ -4,4 +4,4 @@ function add(b, a) {
 
 export const FUNCTION = add
 export const ARITY = 2
-export const SIGNATURE = ["number", "number", "number"]
+export const SIGNATURE = ["number|string", "number|string", "number|string"]

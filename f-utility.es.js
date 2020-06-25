@@ -264,22 +264,39 @@ function hmError(name, actual, params) {
     .slice(0, actual.length)
     .join(", ")} )`
 }
-const rLine = /\n {4}at (\w+) \((.*):(\d+):(\d+)\)/g;
-const blacklist = ["null", "curried", "saucy"];
+const rLine = /\n\s+at ((\w\.?)+) \((.*)\)/g;
+const BLACKLIST = ["null", "curried", "saucy"];
 
-function cleaned(e) {
-  if (e && e.stack) {
-    const { stack } = e;
-    e.stack = stack.replace(rLine, (match, fn, file, line, head, offset) => {
-      const loc = `(${file}:${line}:${head})`;
-      return blacklist.includes(fn)
-        ? ""
-        : `\n\t-> ${fn === "piped" ? "pipe" : fn} ${
-            file.includes("f-utility") ? "" : loc
-          }`
-    });
+function cleanErrorStackFor({
+  blacklist = BLACKLIST,
+  files = ["f-utility"],
+  prefix: pp = "F"
+}) {
+  return function cleanStack(e) {
+    if (e && e.stack) {
+      const { stack } = e;
+      let once = false;
+      e.stack = stack.replace(rLine, (match, fn, __file) => {
+        const file = __file.replace(/:\d+:\d+/, "");
+
+        console.log(">>>", fn, "@>>@>@", file, "!!!!!!!", __file);
+        const loc = `(${file})`;
+        const isHighlight = files.includes(file);
+        const badFunction = blacklist.includes(fn);
+        console.log("isHighlight", isHighlight, "badFunction?", badFunction);
+        const newline = !once ? "\n\t" : "";
+        once = true;
+        return isHighlight && !badFunction
+          ? `${newline}-> ${fn === "piped" ? `${pp}.pipe` : `${pp}.` + fn} ${
+              isHighlight ? "" : loc
+            }`
+          : badFunction
+          ? ""
+          : match
+      });
+    }
+    return e
   }
-  return e
 }
 
 function defineFunctionWithParameterTest(test) {
@@ -288,7 +305,8 @@ function defineFunctionWithParameterTest(test) {
     n: givenLength,
     hm,
     check,
-    tryCatch = () => {}
+    tryCatch,
+    cleanErrors = true
   }) {
     if (check) {
       if (typeof ts !== "function")
@@ -296,74 +314,83 @@ function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
+    const __cleanStack = cleanErrorStackFor({});
     return function currified(fn) {
-      const fnName =
-        fn && typeof fn.hm !== "undefined"
-          ? fn.toString(true)
-          : fn.name
-          ? fn.name
-          : "fn";
-      const heat = testCurryGaps(test);
-      const mergeParams = makeParamMerger(test);
-      const isSpicy = some(test);
-      function curried() {
-        const args = Array.from(arguments);
-        const nArgs =
-          hm && Array.isArray(hm)
-            ? hm.length - 1
-            : givenLength && typeof givenLength === "number"
-            ? givenLength
-            : fn.length;
-        const length = isSpicy(args) ? heat(args) : args.length;
-        function saucy() {
-          const args2 = Array.from(arguments);
-          return curried.apply(this, mergeParams(args, args2))
-        }
-        if (check) {
-          saucy.toString = toString(fnName, args);
-          saucy.hm = hm;
-        }
-        if (length >= nArgs) {
-          let result;
-          try {
-            result = fn.apply(this, args);
-          } catch (e) {
-            throw cleaned(e)
+      try {
+        const fnName =
+          fn && typeof fn.hm !== "undefined"
+            ? fn.toString(true)
+            : fn.name
+            ? fn.name
+            : "fn";
+        const heat = testCurryGaps(test);
+        const mergeParams = makeParamMerger(test);
+        const isSpicy = some(test);
+        /* eslint-disable-next-line no-inner-declarations */
+        function curried() {
+          const args = Array.from(arguments);
+          const nArgs =
+            hm && Array.isArray(hm)
+              ? hm.length - 1
+              : givenLength && typeof givenLength === "number"
+              ? givenLength
+              : fn.length;
+          const length = isSpicy(args) ? heat(args) : args.length;
+          function saucy() {
+            const args2 = Array.from(arguments);
+            return curried.apply(this, mergeParams(args, args2))
           }
           if (check) {
-            const tChecker = makeTypechecker(ts)(hm, args);
-            const isValid = checkParamsWith(ts)(hm, args);
-
-            if (!isValid) {
-              const { rawParams, params } = tChecker;
-              throw new TypeError(
-                hmError(
-                  fnName,
-                  rawParams.map(z => z.actual),
-                  params.map(archetype)
-                )
-              )
-            }
-            const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
-
-            if (!returnTypeValid) {
-              const { returnType } = tChecker;
-              throw new TypeError(
-                `Expected ${fnName} to return ${archetype(
-                  returnType
-                )} but got ${system(result)}.`
-              )
-            }
+            saucy.toString = toString(fnName, args);
+            saucy.hm = hm;
           }
-          return result
+          if (length >= nArgs) {
+            let result;
+            try {
+              result = fn.apply(this, args);
+            } catch (e) {
+              throw cleanErrors ? __cleanStack(e) : e
+            }
+            if (check) {
+              const tChecker = makeTypechecker(ts)(hm, args);
+              const isValid = checkParamsWith(ts)(hm, args);
+
+              if (!isValid) {
+                const { rawParams, params } = tChecker;
+                throw new TypeError(
+                  hmError(
+                    fnName,
+                    rawParams.map(z => z.actual),
+                    params.map(archetype)
+                  )
+                )
+              }
+              const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
+
+              if (!returnTypeValid) {
+                const { returnType } = tChecker;
+                throw new TypeError(
+                  `Expected ${fnName} to return ${archetype(
+                    returnType
+                  )} but got ${system(result)}.`
+                )
+              }
+            }
+            return result
+          }
+          return saucy
         }
-        return saucy
+        if (check) {
+          curried.toString = toString(fnName);
+          curried.hm = hm;
+        }
+        return curried
+      } catch (e) {
+        if (typeof tryCatch === "function") {
+          return tryCatch(e)
+        }
+        throw e
       }
-      if (check) {
-        curried.toString = toString(fnName);
-        curried.hm = hm;
-      }
-      return curried
     }
   }
 }
@@ -1103,9 +1130,9 @@ function makeSideEffectsFromEnvWithTypes(def) {
   return { sideEffect, binarySideEffect, trace, inspect }
 }
 
-function makeOrDefault({ curryN }) {
+function makeOrDefault({ curryN, isNil, isUnmatched }) {
   return curryN(ARITY, function orDefault(def, given) {
-    return given || def
+    return isNil(given) || isUnmatched(given) ? def : given
   })
 }
 const GET_FUNCTION = makeOrDefault;
@@ -1436,7 +1463,7 @@ function makePathOrDerivatives({
       ),
       accIs: def({
         check: true,
-        hm: ["function", "function", "any", "boolean"]
+        hm: ["function", "Array|string", "any", "boolean"]
       })(function _pathIs(J, ks, src) {
         return pipe(run(ks), is(J))(src)
       }),
@@ -1600,12 +1627,24 @@ function extendDerived(C) {
   )
 }
 
+function tryCatch(tryer, catcher) {
+  return function safetyCatch() {
+    try {
+      return tryer.apply(null, arguments)
+    } catch (e) {
+      return catcher(e)
+    }
+  }
+}
+const FUNCTION$V = tryCatch;
+const SIGNATURE$1l = ["function", "function", "function"];
+
 function applyTo(xx, fn) {
   return fn(xx)
 }
 
-const FUNCTION$V = applyTo;
-const SIGNATURE$1l = ["any", "function", "any"];
+const FUNCTION$W = applyTo;
+const SIGNATURE$1m = ["any", "function", "any"];
 
 function endsWith(needle, haystack) {
   if (haystack && isFunction(haystack.endsWith)) {
@@ -1613,8 +1652,8 @@ function endsWith(needle, haystack) {
   }
   return haystack[haystack.length - 1] === needle
 }
-const FUNCTION$W = endsWith;
-const SIGNATURE$1m = ["object|string", "object|string", "boolean"];
+const FUNCTION$X = endsWith;
+const SIGNATURE$1n = ["object|string", "object|string", "boolean"];
 
 function findIndex(fn, xx) {
   let idx = 0;
@@ -1629,8 +1668,8 @@ function findIndex(fn, xx) {
   return -1
 }
 
-const FUNCTION$X = findIndex;
-const SIGNATURE$1n = ["function", "object", "any"];
+const FUNCTION$Y = findIndex;
+const SIGNATURE$1o = ["function", "object", "any"];
 
 function findLastIndex(fn, xx) {
   const loop = makeIterable(xx);
@@ -1644,44 +1683,44 @@ function findLastIndex(fn, xx) {
   }
   return -1
 }
-const FUNCTION$Y = findLastIndex;
-const SIGNATURE$1o = ["function", "object", "any"];
+const FUNCTION$Z = findLastIndex;
+const SIGNATURE$1p = ["function", "object", "any"];
 
 function hasIn(pp, xx) {
   return pp in xx
 }
-const FUNCTION$Z = hasIn;
-const SIGNATURE$1p = ["string", "object", "boolean"];
+const FUNCTION$_ = hasIn;
+const SIGNATURE$1q = ["string", "object", "boolean"];
 
 function has(pp, xx) {
   return xx && typeof xx[pp] !== "undefined"
 }
-const FUNCTION$_ = has;
-const SIGNATURE$1q = ["string", "object", "boolean"];
+const FUNCTION$$ = has;
+const SIGNATURE$1r = ["string", "object", "boolean"];
 
 function identical(aa, bb) {
   return Object.is(aa, bb)
 }
-const FUNCTION$$ = identical;
-const SIGNATURE$1r = ["any", "any", "boolean"];
+const FUNCTION$10 = identical;
+const SIGNATURE$1s = ["any", "any", "boolean"];
 
 function indexOf(needle, haystack) {
   return haystack.indexOf(needle)
 }
-const FUNCTION$10 = indexOf;
-const SIGNATURE$1s = ["any", "string|object", "number"];
+const FUNCTION$11 = indexOf;
+const SIGNATURE$1t = ["any", "string|object", "number"];
 
 function lastIndexOf(needle, haystack) {
   return haystack.lastIndexOf(needle)
 }
-const FUNCTION$11 = lastIndexOf;
-const SIGNATURE$1t = ["any", "string|object", "number"];
+const FUNCTION$12 = lastIndexOf;
+const SIGNATURE$1u = ["any", "string|object", "number"];
 
 function match(rx, str) {
   return str.match(rx)
 }
-const FUNCTION$12 = match;
-const SIGNATURE$1u = ["RegExp", "string", "Array|nil"];
+const FUNCTION$13 = match;
+const SIGNATURE$1v = ["RegExp", "string", "Array|nil"];
 
 function none(fn, xx) {
   let idx = 0;
@@ -1695,8 +1734,8 @@ function none(fn, xx) {
   }
   return promised
 }
-const FUNCTION$13 = none;
-const SIGNATURE$1v = ["function", "Array|object", "boolean"];
+const FUNCTION$14 = none;
+const SIGNATURE$1w = ["function", "Array|object", "boolean"];
 
 function pickBy(fn, xx) {
   const loop = makeIterable(xx);
@@ -1710,8 +1749,8 @@ function pickBy(fn, xx) {
   }
   return out
 }
-const FUNCTION$14 = pickBy;
-const SIGNATURE$1w = ["function", "object", "object"];
+const FUNCTION$15 = pickBy;
+const SIGNATURE$1x = ["function", "object", "object"];
 
 function startsWith(needle, haystack) {
   if (haystack && isFunction(haystack.startsWith)) {
@@ -1719,15 +1758,15 @@ function startsWith(needle, haystack) {
   }
   return haystack[0] === needle
 }
-const FUNCTION$15 = startsWith;
-const SIGNATURE$1x = ["object|string", "object|string", "boolean"];
+const FUNCTION$16 = startsWith;
+const SIGNATURE$1y = ["object|string", "object|string", "boolean"];
 
 function add(b, a) {
   return a + b
 }
 
-const FUNCTION$16 = add;
-const SIGNATURE$1y = ["number", "number", "number"];
+const FUNCTION$17 = add;
+const SIGNATURE$1z = ["number|string", "number|string", "number|string"];
 
 function find(fn, xx) {
   let idx = 0;
@@ -1741,8 +1780,8 @@ function find(fn, xx) {
   }
 }
 
-const FUNCTION$17 = find;
-const SIGNATURE$1z = ["function", "object", "any"];
+const FUNCTION$18 = find;
+const SIGNATURE$1A = ["function", "object", "any"];
 
 function findLast(fn, xx) {
   const loop = makeIterable(xx);
@@ -1756,20 +1795,20 @@ function findLast(fn, xx) {
   }
 }
 
-const FUNCTION$18 = findLast;
-const SIGNATURE$1A = ["function", "object", "any|nil"];
+const FUNCTION$19 = findLast;
+const SIGNATURE$1B = ["function", "object", "any|nil"];
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
-const FUNCTION$19 = apply;
-const SIGNATURE$1B = ["function", "Array", "any"];
+const FUNCTION$1a = apply;
+const SIGNATURE$1C = ["function", "Array", "any"];
 
 function and(a, b) {
   return a && b
 }
-const FUNCTION$1a = and;
-const SIGNATURE$1C = ["any", "any", "boolean"];
+const FUNCTION$1b = and;
+const SIGNATURE$1D = ["any", "any", "boolean"];
 
 function any(fn, xx) {
   let idx = 0;
@@ -1782,8 +1821,8 @@ function any(fn, xx) {
   return found
 }
 
-const FUNCTION$1b = any;
-const SIGNATURE$1D = ["function", "object", "boolean"];
+const FUNCTION$1c = any;
+const SIGNATURE$1E = ["function", "object", "boolean"];
 
 function all(fn, xx) {
   let idx = 0;
@@ -1797,8 +1836,8 @@ function all(fn, xx) {
   }
   return promised
 }
-const FUNCTION$1c = all;
-const SIGNATURE$1E = ["function", "Array|object", "boolean"];
+const FUNCTION$1d = all;
+const SIGNATURE$1F = ["function", "Array|object", "boolean"];
 
 function ap(aa, bb) {
   // S combinator
@@ -1818,14 +1857,14 @@ function ap(aa, bb) {
   }, [])
 }
 
-const FUNCTION$1d = ap;
-const SIGNATURE$1F = ["function|Array", "function|Array", "function|Array"];
+const FUNCTION$1e = ap;
+const SIGNATURE$1G = ["function|Array", "function|Array", "function|Array"];
 
 function concat(a, b) {
   return a.concat(b)
 }
-const FUNCTION$1e = concat;
-const SIGNATURE$1G = ["any", "any", "Array|String"];
+const FUNCTION$1f = concat;
+const SIGNATURE$1H = ["any", "any", "Array|String"];
 
 function cond(conditions, input) {
   let idx = 0;
@@ -1843,21 +1882,21 @@ function cond(conditions, input) {
   return match
 }
 
-const FUNCTION$1f = cond;
-const SIGNATURE$1H = ["Array", "any", "any"];
+const FUNCTION$1g = cond;
+const SIGNATURE$1I = ["Array", "any", "any"];
 
 function divide(b, a) {
   return a / b
 }
-const FUNCTION$1g = divide;
-const SIGNATURE$1I = ["number", "number", "number"];
+const FUNCTION$1h = divide;
+const SIGNATURE$1J = ["number", "number", "number"];
 
 function equals(a, b) {
   if (a && isFunction(a.equals)) return a.equals(b)
   return a === b
 }
-const FUNCTION$1h = equals;
-const SIGNATURE$1J = ["any", "any", "boolean"];
+const FUNCTION$1i = equals;
+const SIGNATURE$1K = ["any", "any", "boolean"];
 
 function filter(fn, xx) {
   let idx = 0;
@@ -1878,8 +1917,8 @@ function filter(fn, xx) {
   return result
 }
 
-const FUNCTION$1i = filter;
-const SIGNATURE$1K = ["function", "object", "object"];
+const FUNCTION$1j = filter;
+const SIGNATURE$1L = ["function", "object", "object"];
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -1892,47 +1931,47 @@ function forEach(fn, xx) {
   }
 }
 
-const FUNCTION$1j = forEach;
-const SIGNATURE$1L = ["function", "object", "nil"];
+const FUNCTION$1k = forEach;
+const SIGNATURE$1M = ["function", "object", "nil"];
 
 function includes(b, a) {
   if (a && isFunction(a.includes)) return a.includes(b)
   if (a && isFunction(a.indexOf)) return a.indexOf(b) > -1
   return false
 }
-const FUNCTION$1k = includes;
-const SIGNATURE$1M = ["object|string", "object|string", "boolean"];
+const FUNCTION$1l = includes;
+const SIGNATURE$1N = ["object|string", "object|string", "boolean"];
 
 function gt(b, a) {
   return a > b
 }
-const FUNCTION$1l = gt;
-const SIGNATURE$1N = ["number", "number", "boolean"];
+const FUNCTION$1m = gt;
+const SIGNATURE$1O = ["number", "number", "boolean"];
 
 function gte(b, a) {
   return a >= b
 }
-const FUNCTION$1m = gte;
-const SIGNATURE$1O = ["number", "number", "boolean"];
+const FUNCTION$1n = gte;
+const SIGNATURE$1P = ["number", "number", "boolean"];
 
 function join(del, xx) {
   return xx.join(del)
 }
 
-const FUNCTION$1n = join;
-const SIGNATURE$1P = ["string", "Array", "string"];
+const FUNCTION$1o = join;
+const SIGNATURE$1Q = ["string", "Array", "string"];
 
 function lt(b, a) {
   return a < b
 }
-const FUNCTION$1o = lt;
-const SIGNATURE$1Q = ["number", "number", "boolean"];
+const FUNCTION$1p = lt;
+const SIGNATURE$1R = ["number", "number", "boolean"];
 
 function lte(b, a) {
   return a <= b
 }
-const FUNCTION$1p = lte;
-const SIGNATURE$1R = ["number", "number", "boolean"];
+const FUNCTION$1q = lte;
+const SIGNATURE$1S = ["number", "number", "boolean"];
 
 function map(fn, xx) {
   let idx = 0;
@@ -1946,40 +1985,40 @@ function map(fn, xx) {
   }
   return result
 }
-const SIGNATURE$1S = ["function", "object", "object"];
-const FUNCTION$1q = map;
+const SIGNATURE$1T = ["function", "object", "object"];
+const FUNCTION$1r = map;
 
 function max(aa, bb) {
   return Math.max(aa, bb)
 }
-const FUNCTION$1r = max;
-const SIGNATURE$1T = ['number', 'number'];
+const FUNCTION$1s = max;
+const SIGNATURE$1U = ['number', 'number'];
 
 function min(aa, bb) {
   return Math.min(aa, bb)
 }
-const FUNCTION$1s = min;
-const SIGNATURE$1U = ["number", "number"];
+const FUNCTION$1t = min;
+const SIGNATURE$1V = ["number", "number"];
 
 function multiply(b, a) {
   return a * b
 }
-const FUNCTION$1t = multiply;
-const SIGNATURE$1V = ["number", "number", "number"];
+const FUNCTION$1u = multiply;
+const SIGNATURE$1W = ["number", "number", "number"];
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
-const FUNCTION$1u = nth;
-const SIGNATURE$1W = ["number", "Array", "any"];
+const FUNCTION$1v = nth;
+const SIGNATURE$1X = ["number", "Array", "any"];
 
 function or(a, b) {
   return a || b
 }
 
-const FUNCTION$1v = or;
-const SIGNATURE$1X = ["any", "any", "boolean"];
+const FUNCTION$1w = or;
+const SIGNATURE$1Y = ["any", "any", "boolean"];
 
 function range(aa, zz) {
   const out = [];
@@ -1990,15 +2029,15 @@ function range(aa, zz) {
   return out
 }
 
-const FUNCTION$1w = range;
-const SIGNATURE$1Y = ["number", "number", "Array"];
+const FUNCTION$1x = range;
+const SIGNATURE$1Z = ["number", "number", "Array"];
 
 function split(del, xx) {
   return xx.split(del)
 }
 
-const FUNCTION$1x = split;
-const SIGNATURE$1Z = ["string", "string", "Array"];
+const FUNCTION$1y = split;
+const SIGNATURE$1_ = ["string", "string", "Array"];
 
 function sort(fn, rr) {
   const copy = [].concat(rr);
@@ -2006,67 +2045,68 @@ function sort(fn, rr) {
   return copy
 }
 
-const FUNCTION$1y = sort;
-const SIGNATURE$1_ = ["function", "Array", "Array"];
+const FUNCTION$1z = sort;
+const SIGNATURE$1$ = ["function", "Array", "Array"];
 
 function subtract(b, a) {
   return a - b
 }
 
-const FUNCTION$1z = subtract;
-const SIGNATURE$1$ = ["number", "number", "number"];
+const FUNCTION$1A = subtract;
+const SIGNATURE$20 = ["number", "number", "number"];
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
-const FUNCTION$1A = toJSON;
-const SIGNATURE$20 = ["number", "any", "string"];
+const FUNCTION$1B = toJSON;
+const SIGNATURE$21 = ["number", "any", "string"];
 
 const BINARY_WITH_SIGNATURES = [
-  [SIGNATURE$1y, FUNCTION$16],
-  [SIGNATURE$1E, FUNCTION$1c],
-  [SIGNATURE$1C, FUNCTION$1a],
-  [SIGNATURE$1D, FUNCTION$1b],
+  [SIGNATURE$1z, FUNCTION$17],
   [SIGNATURE$1F, FUNCTION$1d],
-  [SIGNATURE$1B, FUNCTION$19],
-  [SIGNATURE$1l, FUNCTION$V],
+  [SIGNATURE$1D, FUNCTION$1b],
+  [SIGNATURE$1E, FUNCTION$1c],
   [SIGNATURE$1G, FUNCTION$1e],
+  [SIGNATURE$1C, FUNCTION$1a],
+  [SIGNATURE$1m, FUNCTION$W],
   [SIGNATURE$1H, FUNCTION$1f],
   [SIGNATURE$1I, FUNCTION$1g],
-  [SIGNATURE$1m, FUNCTION$W],
   [SIGNATURE$1J, FUNCTION$1h],
-  [SIGNATURE$1K, FUNCTION$1i],
-  [SIGNATURE$1z, FUNCTION$17],
-  [SIGNATURE$1A, FUNCTION$18],
   [SIGNATURE$1n, FUNCTION$X],
-  [SIGNATURE$1o, FUNCTION$Y],
+  [SIGNATURE$1K, FUNCTION$1i],
   [SIGNATURE$1L, FUNCTION$1j],
-  [SIGNATURE$1N, FUNCTION$1l],
-  [SIGNATURE$1O, FUNCTION$1m],
+  [SIGNATURE$1A, FUNCTION$18],
+  [SIGNATURE$1B, FUNCTION$19],
+  [SIGNATURE$1o, FUNCTION$Y],
   [SIGNATURE$1p, FUNCTION$Z],
+  [SIGNATURE$1M, FUNCTION$1k],
+  [SIGNATURE$1O, FUNCTION$1m],
+  [SIGNATURE$1P, FUNCTION$1n],
   [SIGNATURE$1q, FUNCTION$_],
   [SIGNATURE$1r, FUNCTION$$],
-  [SIGNATURE$1M, FUNCTION$1k],
   [SIGNATURE$1s, FUNCTION$10],
-  [SIGNATURE$1P, FUNCTION$1n],
+  [SIGNATURE$1N, FUNCTION$1l],
   [SIGNATURE$1t, FUNCTION$11],
   [SIGNATURE$1Q, FUNCTION$1o],
+  [SIGNATURE$1u, FUNCTION$12],
   [SIGNATURE$1R, FUNCTION$1p],
   [SIGNATURE$1S, FUNCTION$1q],
-  [SIGNATURE$1u, FUNCTION$12],
   [SIGNATURE$1T, FUNCTION$1r],
+  [SIGNATURE$1v, FUNCTION$13],
   [SIGNATURE$1U, FUNCTION$1s],
   [SIGNATURE$1V, FUNCTION$1t],
-  [SIGNATURE$1v, FUNCTION$13],
   [SIGNATURE$1W, FUNCTION$1u],
-  [SIGNATURE$1X, FUNCTION$1v],
   [SIGNATURE$1w, FUNCTION$14],
+  [SIGNATURE$1X, FUNCTION$1v],
   [SIGNATURE$1Y, FUNCTION$1w],
-  [SIGNATURE$1_, FUNCTION$1y],
-  [SIGNATURE$1Z, FUNCTION$1x],
   [SIGNATURE$1x, FUNCTION$15],
+  [SIGNATURE$1Z, FUNCTION$1x],
   [SIGNATURE$1$, FUNCTION$1z],
-  [SIGNATURE$20, FUNCTION$1A]
+  [SIGNATURE$1_, FUNCTION$1y],
+  [SIGNATURE$1y, FUNCTION$16],
+  [SIGNATURE$20, FUNCTION$1A],
+  [SIGNATURE$21, FUNCTION$1B],
+  [SIGNATURE$1l, FUNCTION$V]
 ];
 
 function extendBinaryWithSignatures(F) {
@@ -2081,20 +2121,20 @@ function extendBinaryWithSignatures(F) {
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
-const FUNCTION$1B = both;
-const SIGNATURE$21 = ["function", "function", "any", "boolean"];
+const FUNCTION$1C = both;
+const SIGNATURE$22 = ["function", "function", "any", "boolean"];
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-const FUNCTION$1C = either;
-const SIGNATURE$22 = ["function", "function", "any"];
+const FUNCTION$1D = either;
+const SIGNATURE$23 = ["function", "function", "any"];
 
 function eqBy(fn, a, b) {
   return Boolean(fn(a, b))
 }
-const FUNCTION$1D = eqBy;
-const SIGNATURE$23 = ["function", "any", "any", "boolean"];
+const FUNCTION$1E = eqBy;
+const SIGNATURE$24 = ["function", "any", "any", "boolean"];
 
 function innerJoin(pred, xs, ys) {
   const loopX = makeIterable(xs);
@@ -2114,16 +2154,16 @@ function innerJoin(pred, xs, ys) {
   }
   return out
 }
-const FUNCTION$1E = innerJoin;
-const SIGNATURE$24 = ["function", "Array", "Array", "Array"];
+const FUNCTION$1F = innerJoin;
+const SIGNATURE$25 = ["function", "Array", "Array", "Array"];
 
 function insert(ind, ins, what) {
   const copy = [].concat(what);
   copy.splice(ind, 0, ins);
   return copy
 }
-const FUNCTION$1F = insert;
-const SIGNATURE$25 = ["number", "any", "Array", "Array"];
+const FUNCTION$1G = insert;
+const SIGNATURE$26 = ["number", "any", "Array", "Array"];
 
 function insertAll(ind, ins, what) {
   return [].concat(
@@ -2135,14 +2175,14 @@ function insertAll(ind, ins, what) {
     what.slice(ind, Infinity)
   )
 }
-const FUNCTION$1G = insertAll;
-const SIGNATURE$26 = ["number", "any", "Array", "Array"];
+const FUNCTION$1H = insertAll;
+const SIGNATURE$27 = ["number", "any", "Array", "Array"];
 
 function replace(rx, rep, str) {
   return str.replace(rx, rep)
 }
-const FUNCTION$1H = replace;
-const SIGNATURE$27 = ["RegExp|string", "string", "string", "string"];
+const FUNCTION$1I = replace;
+const SIGNATURE$28 = ["RegExp|string", "string", "string", "string"];
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -2157,26 +2197,26 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$1I = reduce;
-const SIGNATURE$28 = ["function", "any", "object", "any"];
+const FUNCTION$1J = reduce;
+const SIGNATURE$29 = ["function", "any", "object", "any"];
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$1J = slice;
-const SIGNATURE$29 = ["number", "number", "object", "object"];
+const FUNCTION$1K = slice;
+const SIGNATURE$2a = ["number", "number", "object", "object"];
 
 const TERNARY_WITH_SIGNATURES = [
-  [SIGNATURE$21, FUNCTION$1B],
   [SIGNATURE$22, FUNCTION$1C],
   [SIGNATURE$23, FUNCTION$1D],
   [SIGNATURE$24, FUNCTION$1E],
   [SIGNATURE$25, FUNCTION$1F],
   [SIGNATURE$26, FUNCTION$1G],
-  [SIGNATURE$28, FUNCTION$1I],
   [SIGNATURE$27, FUNCTION$1H],
-  [SIGNATURE$29, FUNCTION$1J]
+  [SIGNATURE$29, FUNCTION$1J],
+  [SIGNATURE$28, FUNCTION$1I],
+  [SIGNATURE$2a, FUNCTION$1K]
 ];
 
 function extendTernaryWithSignatures(F) {
@@ -2192,10 +2232,10 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$1K = ifElse;
-const SIGNATURE$2a = ["function", "function", "function", "any", "any"];
+const FUNCTION$1L = ifElse;
+const SIGNATURE$2b = ["function", "function", "function", "any", "any"];
 
-const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$2a, FUNCTION$1K]];
+const QUATERNARY_WITH_SIGNATURES = [[SIGNATURE$2b, FUNCTION$1L]];
 
 function extendQuaternaryWithSignatures(F) {
   return F.weld(
@@ -2231,7 +2271,8 @@ function coreWithTypes(config) {
         isSymbol,
         isUndefined,
         isUnmatched,
-        isNil
+        isNil,
+        cleanErrorStackFor
       }
     ]);
     return BASE.pipe(

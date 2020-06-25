@@ -20,7 +20,7 @@ function makePathOrDerivatives({
       ),
       accIs: def({
         check: true,
-        hm: ["function", "function", "any", "boolean"]
+        hm: ["function", "Array|string", "any", "boolean"]
       })(function _pathIs(J, ks, src) {
         return pipe(run(ks), is(J))(src)
       }),

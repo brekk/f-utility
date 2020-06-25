@@ -1,6 +1,6 @@
-export function makeOrDefault({ curryN }) {
+export function makeOrDefault({ curryN, isNil, isUnmatched }) {
   return curryN(ARITY, function orDefault(def, given) {
-    return given || def
+    return isNil(given) || isUnmatched(given) ? def : given
   })
 }
 

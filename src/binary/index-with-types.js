@@ -1,3 +1,4 @@
+import { FUNCTION as tryCatch, SIGNATURE as 𝒮tryCatch } from "./tryCatch"
 import { FUNCTION as applyTo, SIGNATURE as 𝒮applyTo } from "./applyTo"
 import { FUNCTION as endsWith, SIGNATURE as 𝒮endsWith } from "./endsWith"
 import { FUNCTION as findIndex, SIGNATURE as 𝒮findIndex } from "./findIndex"
@@ -94,7 +95,8 @@ const BINARY_WITH_SIGNATURES = [
   [𝒮split, split],
   [𝒮startsWith, startsWith],
   [𝒮subtract, subtract],
-  [𝒮toJSON, toJSON]
+  [𝒮toJSON, toJSON],
+  [𝒮tryCatch, tryCatch]
 ]
 
 export function extendBinaryWithSignatures(F) {

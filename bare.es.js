@@ -259,22 +259,39 @@ function hmError(name, actual, params) {
     .slice(0, actual.length)
     .join(", ")} )`
 }
-const rLine = /\n {4}at (\w+) \((.*):(\d+):(\d+)\)/g;
-const blacklist = ["null", "curried", "saucy"];
+const rLine = /\n\s+at ((\w\.?)+) \((.*)\)/g;
+const BLACKLIST = ["null", "curried", "saucy"];
 
-function cleaned(e) {
-  if (e && e.stack) {
-    const { stack } = e;
-    e.stack = stack.replace(rLine, (match, fn, file, line, head, offset) => {
-      const loc = `(${file}:${line}:${head})`;
-      return blacklist.includes(fn)
-        ? ""
-        : `\n\t-> ${fn === "piped" ? "pipe" : fn} ${
-            file.includes("f-utility") ? "" : loc
-          }`
-    });
+function cleanErrorStackFor({
+  blacklist = BLACKLIST,
+  files = ["f-utility"],
+  prefix: pp = "F"
+}) {
+  return function cleanStack(e) {
+    if (e && e.stack) {
+      const { stack } = e;
+      let once = false;
+      e.stack = stack.replace(rLine, (match, fn, __file) => {
+        const file = __file.replace(/:\d+:\d+/, "");
+
+        console.log(">>>", fn, "@>>@>@", file, "!!!!!!!", __file);
+        const loc = `(${file})`;
+        const isHighlight = files.includes(file);
+        const badFunction = blacklist.includes(fn);
+        console.log("isHighlight", isHighlight, "badFunction?", badFunction);
+        const newline = !once ? "\n\t" : "";
+        once = true;
+        return isHighlight && !badFunction
+          ? `${newline}-> ${fn === "piped" ? `${pp}.pipe` : `${pp}.` + fn} ${
+              isHighlight ? "" : loc
+            }`
+          : badFunction
+          ? ""
+          : match
+      });
+    }
+    return e
   }
-  return e
 }
 
 function defineFunctionWithParameterTest(test) {
@@ -283,7 +300,8 @@ function defineFunctionWithParameterTest(test) {
     n: givenLength,
     hm,
     check,
-    tryCatch = () => {}
+    tryCatch,
+    cleanErrors = true
   }) {
     if (check) {
       if (typeof ts !== "function")
@@ -291,74 +309,83 @@ function defineFunctionWithParameterTest(test) {
       if (!hm || !Array.isArray(hm))
         throw new TypeError("Expected hm to be an array of strings.")
     }
+    const __cleanStack = cleanErrorStackFor({});
     return function currified(fn) {
-      const fnName =
-        fn && typeof fn.hm !== "undefined"
-          ? fn.toString(true)
-          : fn.name
-          ? fn.name
-          : "fn";
-      const heat = testCurryGaps(test);
-      const mergeParams = makeParamMerger(test);
-      const isSpicy = some(test);
-      function curried() {
-        const args = Array.from(arguments);
-        const nArgs =
-          hm && Array.isArray(hm)
-            ? hm.length - 1
-            : givenLength && typeof givenLength === "number"
-            ? givenLength
-            : fn.length;
-        const length = isSpicy(args) ? heat(args) : args.length;
-        function saucy() {
-          const args2 = Array.from(arguments);
-          return curried.apply(this, mergeParams(args, args2))
-        }
-        if (check) {
-          saucy.toString = toString(fnName, args);
-          saucy.hm = hm;
-        }
-        if (length >= nArgs) {
-          let result;
-          try {
-            result = fn.apply(this, args);
-          } catch (e) {
-            throw cleaned(e)
+      try {
+        const fnName =
+          fn && typeof fn.hm !== "undefined"
+            ? fn.toString(true)
+            : fn.name
+            ? fn.name
+            : "fn";
+        const heat = testCurryGaps(test);
+        const mergeParams = makeParamMerger(test);
+        const isSpicy = some(test);
+        /* eslint-disable-next-line no-inner-declarations */
+        function curried() {
+          const args = Array.from(arguments);
+          const nArgs =
+            hm && Array.isArray(hm)
+              ? hm.length - 1
+              : givenLength && typeof givenLength === "number"
+              ? givenLength
+              : fn.length;
+          const length = isSpicy(args) ? heat(args) : args.length;
+          function saucy() {
+            const args2 = Array.from(arguments);
+            return curried.apply(this, mergeParams(args, args2))
           }
           if (check) {
-            const tChecker = makeTypechecker(ts)(hm, args);
-            const isValid = checkParamsWith(ts)(hm, args);
-
-            if (!isValid) {
-              const { rawParams, params } = tChecker;
-              throw new TypeError(
-                hmError(
-                  fnName,
-                  rawParams.map(z => z.actual),
-                  params.map(archetype)
-                )
-              )
-            }
-            const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
-
-            if (!returnTypeValid) {
-              const { returnType } = tChecker;
-              throw new TypeError(
-                `Expected ${fnName} to return ${archetype(
-                  returnType
-                )} but got ${system(result)}.`
-              )
-            }
+            saucy.toString = toString(fnName, args);
+            saucy.hm = hm;
           }
-          return result
+          if (length >= nArgs) {
+            let result;
+            try {
+              result = fn.apply(this, args);
+            } catch (e) {
+              throw cleanErrors ? __cleanStack(e) : e
+            }
+            if (check) {
+              const tChecker = makeTypechecker(ts)(hm, args);
+              const isValid = checkParamsWith(ts)(hm, args);
+
+              if (!isValid) {
+                const { rawParams, params } = tChecker;
+                throw new TypeError(
+                  hmError(
+                    fnName,
+                    rawParams.map(z => z.actual),
+                    params.map(archetype)
+                  )
+                )
+              }
+              const returnTypeValid = checkReturnWith(ts)(result)(hm, args);
+
+              if (!returnTypeValid) {
+                const { returnType } = tChecker;
+                throw new TypeError(
+                  `Expected ${fnName} to return ${archetype(
+                    returnType
+                  )} but got ${system(result)}.`
+                )
+              }
+            }
+            return result
+          }
+          return saucy
         }
-        return saucy
+        if (check) {
+          curried.toString = toString(fnName);
+          curried.hm = hm;
+        }
+        return curried
+      } catch (e) {
+        if (typeof tryCatch === "function") {
+          return tryCatch(e)
+        }
+        throw e
       }
-      if (check) {
-        curried.toString = toString(fnName);
-        curried.hm = hm;
-      }
-      return curried
     }
   }
 }
@@ -408,6 +435,9 @@ const isBoolean = _isBoolean;
 const isSymbol = _isSymbol;
 const isRawObject = _isRawObject;
 const isArray = Array.isArray;
+function isNil(xx) {
+  return typeof xx === "undefined" || (typeof xx === "object" && !xx)
+}
 
 const { UNMATCHED } = C;
 function isUnmatched(z) {
@@ -963,9 +993,9 @@ function makeSideEffectsFromEnv(curry) {
   return { sideEffect, binarySideEffect, trace, inspect }
 }
 
-function makeOrDefault({ curryN }) {
+function makeOrDefault({ curryN, isNil, isUnmatched }) {
   return curryN(ARITY, function orDefault(def, given) {
-    return given || def
+    return isNil(given) || isUnmatched(given) ? def : given
   })
 }
 const ARITY = 2;
@@ -1377,11 +1407,22 @@ function extendDerived(C) {
   )(derivedFunctionsSortedByIncreasingDependencies)
 }
 
+function tryCatch(tryer, catcher) {
+  return function safetyCatch() {
+    try {
+      return tryer.apply(null, arguments)
+    } catch (e) {
+      return catcher(e)
+    }
+  }
+}
+const FUNCTION = tryCatch;
+
 function applyTo(xx, fn) {
   return fn(xx)
 }
 
-const FUNCTION = applyTo;
+const FUNCTION$1 = applyTo;
 
 function endsWith(needle, haystack) {
   if (haystack && isFunction(haystack.endsWith)) {
@@ -1389,7 +1430,7 @@ function endsWith(needle, haystack) {
   }
   return haystack[haystack.length - 1] === needle
 }
-const FUNCTION$1 = endsWith;
+const FUNCTION$2 = endsWith;
 
 function findIndex(fn, xx) {
   let idx = 0;
@@ -1404,7 +1445,7 @@ function findIndex(fn, xx) {
   return -1
 }
 
-const FUNCTION$2 = findIndex;
+const FUNCTION$3 = findIndex;
 
 function findLastIndex(fn, xx) {
   const loop = makeIterable(xx);
@@ -1418,37 +1459,37 @@ function findLastIndex(fn, xx) {
   }
   return -1
 }
-const FUNCTION$3 = findLastIndex;
+const FUNCTION$4 = findLastIndex;
 
 function hasIn(pp, xx) {
   return pp in xx
 }
-const FUNCTION$4 = hasIn;
+const FUNCTION$5 = hasIn;
 
 function has(pp, xx) {
   return xx && typeof xx[pp] !== "undefined"
 }
-const FUNCTION$5 = has;
+const FUNCTION$6 = has;
 
 function identical(aa, bb) {
   return Object.is(aa, bb)
 }
-const FUNCTION$6 = identical;
+const FUNCTION$7 = identical;
 
 function indexOf(needle, haystack) {
   return haystack.indexOf(needle)
 }
-const FUNCTION$7 = indexOf;
+const FUNCTION$8 = indexOf;
 
 function lastIndexOf(needle, haystack) {
   return haystack.lastIndexOf(needle)
 }
-const FUNCTION$8 = lastIndexOf;
+const FUNCTION$9 = lastIndexOf;
 
 function match(rx, str) {
   return str.match(rx)
 }
-const FUNCTION$9 = match;
+const FUNCTION$a = match;
 
 function none(fn, xx) {
   let idx = 0;
@@ -1462,7 +1503,7 @@ function none(fn, xx) {
   }
   return promised
 }
-const FUNCTION$a = none;
+const FUNCTION$b = none;
 
 function pickBy(fn, xx) {
   const loop = makeIterable(xx);
@@ -1476,7 +1517,7 @@ function pickBy(fn, xx) {
   }
   return out
 }
-const FUNCTION$b = pickBy;
+const FUNCTION$c = pickBy;
 
 function startsWith(needle, haystack) {
   if (haystack && isFunction(haystack.startsWith)) {
@@ -1484,13 +1525,13 @@ function startsWith(needle, haystack) {
   }
   return haystack[0] === needle
 }
-const FUNCTION$c = startsWith;
+const FUNCTION$d = startsWith;
 
 function add(b, a) {
   return a + b
 }
 
-const FUNCTION$d = add;
+const FUNCTION$e = add;
 
 function find(fn, xx) {
   let idx = 0;
@@ -1504,7 +1545,7 @@ function find(fn, xx) {
   }
 }
 
-const FUNCTION$e = find;
+const FUNCTION$f = find;
 
 function findLast(fn, xx) {
   const loop = makeIterable(xx);
@@ -1518,17 +1559,17 @@ function findLast(fn, xx) {
   }
 }
 
-const FUNCTION$f = findLast;
+const FUNCTION$g = findLast;
 
 function apply(fn, args) {
   return fn.apply(null, args)
 }
-const FUNCTION$g = apply;
+const FUNCTION$h = apply;
 
 function and(a, b) {
   return a && b
 }
-const FUNCTION$h = and;
+const FUNCTION$i = and;
 
 function any(fn, xx) {
   let idx = 0;
@@ -1541,7 +1582,7 @@ function any(fn, xx) {
   return found
 }
 
-const FUNCTION$i = any;
+const FUNCTION$j = any;
 
 function all(fn, xx) {
   let idx = 0;
@@ -1555,7 +1596,7 @@ function all(fn, xx) {
   }
   return promised
 }
-const FUNCTION$j = all;
+const FUNCTION$k = all;
 
 function ap(aa, bb) {
   // S combinator
@@ -1575,12 +1616,12 @@ function ap(aa, bb) {
   }, [])
 }
 
-const FUNCTION$k = ap;
+const FUNCTION$l = ap;
 
 function concat(a, b) {
   return a.concat(b)
 }
-const FUNCTION$l = concat;
+const FUNCTION$m = concat;
 
 function cond(conditions, input) {
   let idx = 0;
@@ -1598,18 +1639,18 @@ function cond(conditions, input) {
   return match
 }
 
-const FUNCTION$m = cond;
+const FUNCTION$n = cond;
 
 function divide(b, a) {
   return a / b
 }
-const FUNCTION$n = divide;
+const FUNCTION$o = divide;
 
 function equals(a, b) {
   if (a && isFunction(a.equals)) return a.equals(b)
   return a === b
 }
-const FUNCTION$o = equals;
+const FUNCTION$p = equals;
 
 function filter(fn, xx) {
   let idx = 0;
@@ -1630,7 +1671,7 @@ function filter(fn, xx) {
   return result
 }
 
-const FUNCTION$p = filter;
+const FUNCTION$q = filter;
 
 function forEach(fn, xx) {
   let idx = 0;
@@ -1643,40 +1684,40 @@ function forEach(fn, xx) {
   }
 }
 
-const FUNCTION$q = forEach;
+const FUNCTION$r = forEach;
 
 function includes(b, a) {
   if (a && isFunction(a.includes)) return a.includes(b)
   if (a && isFunction(a.indexOf)) return a.indexOf(b) > -1
   return false
 }
-const FUNCTION$r = includes;
+const FUNCTION$s = includes;
 
 function gt(b, a) {
   return a > b
 }
-const FUNCTION$s = gt;
+const FUNCTION$t = gt;
 
 function gte(b, a) {
   return a >= b
 }
-const FUNCTION$t = gte;
+const FUNCTION$u = gte;
 
 function join(del, xx) {
   return xx.join(del)
 }
 
-const FUNCTION$u = join;
+const FUNCTION$v = join;
 
 function lt(b, a) {
   return a < b
 }
-const FUNCTION$v = lt;
+const FUNCTION$w = lt;
 
 function lte(b, a) {
   return a <= b
 }
-const FUNCTION$w = lte;
+const FUNCTION$x = lte;
 
 function map(fn, xx) {
   let idx = 0;
@@ -1690,34 +1731,34 @@ function map(fn, xx) {
   }
   return result
 }
-const FUNCTION$x = map;
+const FUNCTION$y = map;
 
 function max(aa, bb) {
   return Math.max(aa, bb)
 }
-const FUNCTION$y = max;
+const FUNCTION$z = max;
 
 function min(aa, bb) {
   return Math.min(aa, bb)
 }
-const FUNCTION$z = min;
+const FUNCTION$A = min;
 
 function multiply(b, a) {
   return a * b
 }
-const FUNCTION$A = multiply;
+const FUNCTION$B = multiply;
 
 function nth(ix, xx) {
   return ix < 0 && xx.length + ix ? xx[xx.length + ix] : xx[ix]
 }
 
-const FUNCTION$B = nth;
+const FUNCTION$C = nth;
 
 function or(a, b) {
   return a || b
 }
 
-const FUNCTION$C = or;
+const FUNCTION$D = or;
 
 function range(aa, zz) {
   const out = [];
@@ -1728,13 +1769,13 @@ function range(aa, zz) {
   return out
 }
 
-const FUNCTION$D = range;
+const FUNCTION$E = range;
 
 function split(del, xx) {
   return xx.split(del)
 }
 
-const FUNCTION$E = split;
+const FUNCTION$F = split;
 
 function sort(fn, rr) {
   const copy = [].concat(rr);
@@ -1742,65 +1783,66 @@ function sort(fn, rr) {
   return copy
 }
 
-const FUNCTION$F = sort;
+const FUNCTION$G = sort;
 
 function subtract(b, a) {
   return a - b
 }
 
-const FUNCTION$G = subtract;
+const FUNCTION$H = subtract;
 
 function toJSON(indent, x) {
   return JSON.stringify(x, null, indent)
 }
-const FUNCTION$H = toJSON;
+const FUNCTION$I = toJSON;
 
 function extendBinary(F) {
   const BINARY = {
-    add: FUNCTION$d,
-    all: FUNCTION$j,
-    and: FUNCTION$h,
-    any: FUNCTION$i,
-    ap: FUNCTION$k,
-    apply: FUNCTION$g,
-    applyTo: FUNCTION,
-    concat: FUNCTION$l,
-    cond: FUNCTION$m,
-    divide: FUNCTION$n,
-    endsWith: FUNCTION$1,
-    equals: FUNCTION$o,
-    filter: FUNCTION$p,
-    find: FUNCTION$e,
-    findLast: FUNCTION$f,
-    findIndex: FUNCTION$2,
-    findLastIndex: FUNCTION$3,
-    forEach: FUNCTION$q,
-    gt: FUNCTION$s,
-    gte: FUNCTION$t,
-    hasIn: FUNCTION$4,
-    has: FUNCTION$5,
-    identical: FUNCTION$6,
-    includes: FUNCTION$r,
-    indexOf: FUNCTION$7,
-    join: FUNCTION$u,
-    lastIndexOf: FUNCTION$8,
-    lt: FUNCTION$v,
-    lte: FUNCTION$w,
-    map: FUNCTION$x,
-    match: FUNCTION$9,
-    max: FUNCTION$y,
-    min: FUNCTION$z,
-    multiply: FUNCTION$A,
-    none: FUNCTION$a,
-    nth: FUNCTION$B,
-    or: FUNCTION$C,
-    pickBy: FUNCTION$b,
-    range: FUNCTION$D,
-    sort: FUNCTION$F,
-    split: FUNCTION$E,
-    startsWith: FUNCTION$c,
-    subtract: FUNCTION$G,
-    toJSON: FUNCTION$H
+    add: FUNCTION$e,
+    all: FUNCTION$k,
+    and: FUNCTION$i,
+    any: FUNCTION$j,
+    ap: FUNCTION$l,
+    apply: FUNCTION$h,
+    applyTo: FUNCTION$1,
+    concat: FUNCTION$m,
+    cond: FUNCTION$n,
+    divide: FUNCTION$o,
+    endsWith: FUNCTION$2,
+    equals: FUNCTION$p,
+    filter: FUNCTION$q,
+    find: FUNCTION$f,
+    findLast: FUNCTION$g,
+    findIndex: FUNCTION$3,
+    findLastIndex: FUNCTION$4,
+    forEach: FUNCTION$r,
+    gt: FUNCTION$t,
+    gte: FUNCTION$u,
+    hasIn: FUNCTION$5,
+    has: FUNCTION$6,
+    identical: FUNCTION$7,
+    includes: FUNCTION$s,
+    indexOf: FUNCTION$8,
+    join: FUNCTION$v,
+    lastIndexOf: FUNCTION$9,
+    lt: FUNCTION$w,
+    lte: FUNCTION$x,
+    map: FUNCTION$y,
+    match: FUNCTION$a,
+    max: FUNCTION$z,
+    min: FUNCTION$A,
+    multiply: FUNCTION$B,
+    none: FUNCTION$b,
+    nth: FUNCTION$C,
+    or: FUNCTION$D,
+    pickBy: FUNCTION$c,
+    range: FUNCTION$E,
+    sort: FUNCTION$G,
+    split: FUNCTION$F,
+    startsWith: FUNCTION$d,
+    subtract: FUNCTION$H,
+    toJSON: FUNCTION$I,
+    tryCatch: FUNCTION
   };
   return F.weld(F, BINARY)
 }
@@ -1808,12 +1850,12 @@ function extendBinary(F) {
 function both(aPred, bPred, x) {
   return aPred(x) && bPred(x)
 }
-const FUNCTION$I = both;
+const FUNCTION$J = both;
 
 function replace(rx, rep, str) {
   return str.replace(rx, rep)
 }
-const FUNCTION$J = replace;
+const FUNCTION$K = replace;
 
 function innerJoin(pred, xs, ys) {
   const loopX = makeIterable(xs);
@@ -1833,14 +1875,14 @@ function innerJoin(pred, xs, ys) {
   }
   return out
 }
-const FUNCTION$K = innerJoin;
+const FUNCTION$L = innerJoin;
 
 function insert(ind, ins, what) {
   const copy = [].concat(what);
   copy.splice(ind, 0, ins);
   return copy
 }
-const FUNCTION$L = insert;
+const FUNCTION$M = insert;
 
 function insertAll(ind, ins, what) {
   return [].concat(
@@ -1852,17 +1894,17 @@ function insertAll(ind, ins, what) {
     what.slice(ind, Infinity)
   )
 }
-const FUNCTION$M = insertAll;
+const FUNCTION$N = insertAll;
 
 function eqBy(fn, a, b) {
   return Boolean(fn(a, b))
 }
-const FUNCTION$N = eqBy;
+const FUNCTION$O = eqBy;
 
 function either(aPred, bPred, x) {
   return aPred(x) || bPred(x)
 }
-const FUNCTION$O = either;
+const FUNCTION$P = either;
 
 function reduce(fn, initial, xx) {
   const loop = makeIterable(xx);
@@ -1877,25 +1919,25 @@ function reduce(fn, initial, xx) {
   return result
 }
 
-const FUNCTION$P = reduce;
+const FUNCTION$Q = reduce;
 
 function slice(aa, bb, xx) {
   return xx.slice(aa, bb)
 }
 
-const FUNCTION$Q = slice;
+const FUNCTION$R = slice;
 
 function extendTernary(F) {
   return F.weld(F, {
-    both: FUNCTION$I,
-    either: FUNCTION$O,
-    eqBy: FUNCTION$N,
-    innerJoin: FUNCTION$K,
-    insert: FUNCTION$L,
-    insertAll: FUNCTION$M,
-    reduce: FUNCTION$P,
-    replace: FUNCTION$J,
-    slice: FUNCTION$Q
+    both: FUNCTION$J,
+    either: FUNCTION$P,
+    eqBy: FUNCTION$O,
+    innerJoin: FUNCTION$L,
+    insert: FUNCTION$M,
+    insertAll: FUNCTION$N,
+    reduce: FUNCTION$Q,
+    replace: FUNCTION$K,
+    slice: FUNCTION$R
   })
 }
 
@@ -1903,11 +1945,11 @@ function ifElse(condition, yes, no, xx) {
   return condition(xx) ? yes(xx) : no(xx)
 }
 
-const FUNCTION$R = ifElse;
+const FUNCTION$S = ifElse;
 
 function extendQuaternary(F) {
   return F.weld(F, {
-    ifElse: FUNCTION$R
+    ifElse: FUNCTION$S
   })
 }
 
@@ -1938,7 +1980,9 @@ function core(config) {
         isString,
         isSymbol,
         isUndefined,
-        isUnmatched
+        isUnmatched,
+        isNil,
+        cleanErrorStackFor
       }
     ]);
     return BASE.pipe(
